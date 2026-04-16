@@ -9,28 +9,31 @@
             --primary: #00ff41; --bg: #050505; --text: #e0e0e0; --accent: #ff003c;
         }
         body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; overflow-x: hidden; }
-        
-        /* Фон с эффектом частиц */
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.5; }
 
         .container { max-width: 900px; margin: 0 auto; padding: 60px 20px; text-align: center; }
         .glitch { font-size: clamp(2rem, 8vw, 3.5rem); font-weight: bold; color: var(--primary); text-shadow: 0 0 15px var(--primary); letter-spacing: 8px; margin-bottom: 5px; }
         
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px; }
-        .stat-card { border: 1px solid rgba(0, 255, 65, 0.2); padding: 20px; background: rgba(0,0,0,0.5); }
+        .stat-card { border: 1px solid rgba(0, 255, 65, 0.2); padding: 20px; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); }
         .stat-value { font-size: 1.8rem; color: var(--primary); display: block; }
         .stat-label { font-size: 0.7rem; letter-spacing: 2px; opacity: 0.6; text-transform: uppercase; }
 
         .box { margin-top: 40px; padding: 30px; text-align: left; border-left: 3px solid var(--primary); background: rgba(255,255,255,0.02); }
+        .box.tokenomics { border-left-color: #008cff; background: rgba(0, 140, 255, 0.02); }
         .box.fuel { border-left-color: var(--accent); background: rgba(255,0,60,0.01); }
 
         .roadmap { margin-top: 50px; text-align: left; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; }
-        .roadmap-step { margin-bottom: 15px; font-size: 0.9rem; }
+        .roadmap-step { margin-bottom: 15px; font-size: 0.9rem; border-bottom: 1px solid rgba(0, 255, 65, 0.05); padding-bottom: 10px; }
         .roadmap-step span { color: var(--primary); font-weight: bold; margin-right: 10px; }
 
-        .timer-box { margin-top: 50px; padding: 20px; border: 1px dashed var(--primary); display: inline-block; }
-        .btn { display: inline-block; margin-top: 30px; padding: 12px 35px; border: 1px solid var(--primary); color: var(--primary); text-decoration: none; text-transform: uppercase; letter-spacing: 3px; font-weight: bold; }
+        .timer-box { margin-top: 50px; padding: 20px; border: 1px dashed var(--primary); display: inline-block; background: rgba(0, 255, 65, 0.05); }
+        
+        .social-btns { margin-top: 30px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn { display: inline-block; padding: 12px 30px; border: 1px solid var(--primary); color: var(--primary); text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; }
         .btn:hover { background: var(--primary); color: black; box-shadow: 0 0 20px var(--primary); }
+        .btn.x-btn { border-color: white; color: white; }
+        .btn.x-btn:hover { background: white; color: black; box-shadow: 0 0 20px white; }
     </style>
 </head>
 <body>
@@ -38,54 +41,62 @@
 
     <div class="container">
         <div class="glitch">FAST PROTOCOL</div>
-        <p style="opacity: 0.5; letter-spacing: 4px; font-size: 0.8rem;">[ SYSTEM STATUS: ONLINE ]</p>
+        <p style="opacity: 0.5; letter-spacing: 4px; font-size: 0.8rem;">[ INFRASTRUCTURE BY MOONRABBIT ]</p>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <span class="stat-value" id="node-count">17185</span>
+                <span class="stat-value" id="node-count">17205</span>
                 <span class="stat-label">Core Unit Power</span>
             </div>
             <div class="stat-card">
                 <span class="stat-value">AAA</span>
-                <span class="stat-label">Mint Fuel</span>
+                <span class="stat-label">Main Fuel</span>
             </div>
             <div class="stat-card">
                 <span class="stat-value">1.0B</span>
-                <span class="stat-label">Total Supply</span>
+                <span class="stat-label">Supply Cap</span>
             </div>
         </div>
 
         <div class="box">
-            <h2 style="color: var(--primary);">> Sniper Engine V4.1.7</h2>
-            <p>Ликвидность нового поколения на базе <strong>Absolute Raw API</strong>. Алгоритмы <strong>Iron Core</strong> обеспечивают стабильность и защиту капитала в каждой транзакции.</p>
+            <h2 style="color: var(--primary); font-size: 1rem;">> Utility: Speed & Liquidity</h2>
+            <p>FAST — это не просто блокчейн, это <strong>Velocity Layer</strong>. <br>
+            • Мгновенный арбитраж между DEX-площадками. <br>
+            • Минимальные комиссии для холдеров AAA. <br>
+            • Приоритетный доступ к ликвидному пулу для участников Titan Core.</p>
         </div>
 
-        <div class="box fuel">
-            <h2 style="color: var(--accent);">> Fuel Phase: AAA Combustion</h2>
-            <p>Запуск сети FAST инициируется через дефляционное сжигание токенов AAA. Это создает уникальную связь между мощностью сети и ценностью актива.</p>
+        <div class="box tokenomics">
+            <h2 style="color: #008cff; font-size: 1rem;">> Tokenomics: The FAST Cycle</h2>
+            <p><strong>Total Supply:</strong> 1,000,000,000 FAST. <br>
+            <strong>Mechanism:</strong> 30% — Экосистема, 20% — Ликвидность, 50% — Whitelist для AAA & Titan майнеров. <br>
+            <strong>Burn:</strong> Каждая транзакция FAST сжигает часть AAA, уменьшая предложение.</p>
         </div>
 
         <div class="roadmap">
-            <h2 style="font-size: 1rem;">> The Leap: Roadmap</h2>
-            <div class="roadmap-step"><span>01</span> Security Audit: AAA Phase [COMPLETED]</div>
-            <div class="roadmap-step"><span>02</span> Factory Activation [IN PROGRESS]</div>
-            <div class="roadmap-step"><span>03</span> FAST Protocol Launch [LOCKED]</div>
+            <h2 style="font-size: 1rem;">> Roadmap 2026</h2>
+            <div class="roadmap-step"><span>Q2</span> Security Audit & AAA Engine Polish [DONE]</div>
+            <div class="roadmap-step"><span>Q2</span> Factory Activation & Whitelist Distribution [IN PROGRESS]</div>
+            <div class="roadmap-step"><span>Q3</span> FAST Mainnet Launch & Dex-Liquidity Pool [LOCKED]</div>
+            <div class="roadmap-step"><span>Q4</span> Cross-Chain Bridge & Sniper Engine Public Access [LOCKED]</div>
         </div>
 
         <div class="timer-box">
-            DEPLOYING IN: <span id="timer" style="color: var(--primary); font-weight: bold;">--d --h --m --s</span>
+            FACTORY DEPLOYMENT: <span id="timer" style="color: var(--primary); font-weight: bold;">--d --h --m --s</span>
         </div>
 
-        <br>
-        <a href="https://t.me" class="btn">Join Telegram</a>
+        <div class="social-btns">
+            <a href="https://t.me" class="btn">Telegram Group</a>
+            <a href="https://x.com" class="btn x-btn">X / Twitter</a>
+        </div>
     </div>
 
     <script>
-        // Таймер
         function updateTimer() {
             const targetDate = new Date("May 15, 2026 00:00:00").getTime();
             const now = new Date().getTime();
             const diff = targetDate - now;
+            if (diff < 0) return;
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -94,19 +105,29 @@
         }
         setInterval(updateTimer, 1000); updateTimer();
 
-        // Простая анимация частиц на фоне
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         let particles = [];
-        for(let i=0; i<50; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2});
+        for(let i=0; i<80; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*3, v: Math.random()*0.5+0.2});
         function draw() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.fillStyle = '#00ff41';
-            particles.forEach(p => {
-                ctx.fillRect(p.x, p.y, p.s, p.s);
-                p.y -= 0.5; if(p.y < 0) p.y = canvas.height;
+            particles.forEach((p, i) => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.s, 0, Math.PI*2);
+                ctx.fill();
+                p.y -= p.v; if(p.y < 0) p.y = canvas.height;
+                // Линии между частицами
+                particles.forEach((p2, j) => {
+                    let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if(dist < 100) {
+                        ctx.strokeStyle = `rgba(0, 255, 65, ${1 - dist/100})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+                    }
+                });
             });
             requestAnimationFrame(draw);
         }
