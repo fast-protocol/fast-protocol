@@ -6,9 +6,10 @@
     <title>FAST Protocol | Powered by Titan Core</title>
     <style>
         :root {
-            --primary: #00ff41; /* Цвет терминала "Матрица" */
+            --primary: #00ff41; 
             --bg: #050505;
             --text: #e0e0e0;
+            --accent: #ff003c;
         }
 
         body {
@@ -19,150 +20,173 @@
             overflow-x: hidden;
         }
 
-        /* Анимированный фон с частицами */
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 60px 20px;
             text-align: center;
         }
 
         .glitch {
-            font-size: 4rem;
+            font-size: clamp(2rem, 8vw, 4rem);
             font-weight: bold;
             text-transform: uppercase;
             color: var(--primary);
-            text-shadow: 0 0 10px var(--primary);
+            text-shadow: 0 0 15px var(--primary);
             margin-bottom: 10px;
+            letter-spacing: 10px;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin-top: 50px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--primary);
+            background: rgba(0, 255, 65, 0.02);
+            border: 1px solid rgba(0, 255, 65, 0.3);
             padding: 30px;
-            border-radius: 5px;
+            border-radius: 2px;
             transition: 0.3s;
+            text-align: left;
         }
 
         .stat-card:hover {
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+            background: rgba(0, 255, 65, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
         }
 
         .stat-value {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: var(--primary);
             display: block;
+            margin-bottom: 5px;
         }
 
         .stat-label {
             text-transform: uppercase;
             letter-spacing: 2px;
-            font-size: 0.9rem;
-            opacity: 0.7;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .engine-box {
+            margin-top: 50px;
+            padding: 30px;
+            border-left: 3px solid var(--primary);
+            background: rgba(255,255,255,0.02);
+            text-align: left;
+        }
+
+        .fuel-box {
+            margin-top: 25px;
+            padding: 30px;
+            border-left: 3px solid var(--accent);
+            background: rgba(255,0,60,0.02);
+            text-align: left;
         }
 
         .countdown {
             margin-top: 60px;
-            font-size: 1.5rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 30px;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            color: var(--primary);
         }
 
         .btn {
             display: inline-block;
             margin-top: 40px;
-            padding: 15px 40px;
+            padding: 15px 45px;
             border: 1px solid var(--primary);
             color: var(--primary);
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            transition: 0.5s;
+            letter-spacing: 5px;
+            font-weight: bold;
+            transition: 0.4s;
         }
 
         .btn:hover {
             background: var(--primary);
             color: black;
+            box-shadow: 0 0 30px var(--primary);
         }
+
+        h2 { text-transform: uppercase; letter-spacing: 3px; font-size: 1.2rem; }
+        p { line-height: 1.6; opacity: 0.8; font-size: 0.95rem; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="glitch">FAST PROTOCOL</div>
-        <p style="letter-spacing: 5px;">BEYOND THE SPEED OF TRUST</p>
+        <p style="opacity: 0.5;">[ SYSTEM STATUS: OPERATIONAL ]</p>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <span class="stat-value" id="titan-count">17135</span>
+                <span class="stat-value" id="titan-count">17175</span>
                 <span class="stat-label">Titan Core Nodes</span>
             </div>
             <div class="stat-card">
-                <span class="stat-value">1,000,000,000</span>
+                <span class="stat-value">1.0B</span>
                 <span class="stat-label">Total Supply</span>
             </div>
             <div class="stat-card">
                 <span class="stat-value">AAA</span>
-                <span class="stat-label">Burn Fuel Active</span>
+                <span class="stat-label">Primary Fuel</span>
             </div>
         </div>
 
-        <div class="countdown">
-            LAUNCHING IN: <span id="timer" style="color: var(--primary);">29d 06h 00m</span>
+        <div class="engine-box">
+            <h2>> The Sniper Engine V4.1.7</h2>
+            <p>Алгоритмическая ликвидность на базе <strong>Absolute Raw</strong> API V5. Технология <strong>Iron Core</strong> обеспечивает защиту капитала холдеров через автоматическую систему безубыточности.</p>
         </div>
 
-        <a href="#" class="btn">Whitelist Access</a>
+        <div class="fuel-box">
+            <h2 style="color: var(--accent);">> Fuel Phase: AAA Combustion</h2>
+            <p>Экосистема FAST активируется через сжигание токенов AAA. Каждая транзакция в сети приближает дефицит и рост ценности основного актива.</p>
+        </div>
+
+        <div class="countdown">
+            DEPLOYING IN: <span id="timer">--d --h --m --s</span>
+        </div>
+
+        <a href="#" class="btn">Get Whitelist</a>
     </div>
 
-<script>
-    // 1. Живой таймер до Factory
-    function updateTimer() {
-        const targetDate = new Date("May 15, 2026 00:00:00").getTime();
-        const now = new Date().getTime();
-        const diff = targetDate - now;
+    <script>
+        function updateTimer() {
+            const targetDate = new Date("May 15, 2026 00:00:00").getTime();
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            if (diff < 0) return;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+        setInterval(updateTimer, 1000);
 
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        function animateValue(id, start, end, duration) {
+            let obj = document.getElementById(id);
+            let range = end - start;
+            let current = start;
+            let step = duration / range;
+            let timer = setInterval(() => {
+                current++;
+                obj.innerHTML = current;
+                if (current == end) clearInterval(timer);
+            }, step);
+        }
 
-        document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }
-    setInterval(updateTimer, 1000);
-
-    // 2. Анимация счетчика Титана
-    function animateValue(id, start, end, duration) {
-        let obj = document.getElementById(id);
-        let range = end - start;
-        let minTimer = 50;
-        let step = Math.abs(Math.floor(duration / range));
-        let timer = setInterval(() => {
-            start++;
-            obj.innerHTML = start;
-            if (start == end) clearInterval(timer);
-        }, Math.max(step, minTimer));
-    }
-    
-    // Запускаем анимацию при загрузке (от 17000 до твоего текущего значения)
-    window.onload = () => {
-        animateValue("titan-count", 17000, 17145, 2000);
-        updateTimer();
-    };
-</script>
+        window.onload = () => {
+            animateValue("titan-count", 17000, 17175, 1500);
+            updateTimer();
+        };
+    </script>
 </body>
 </html>
