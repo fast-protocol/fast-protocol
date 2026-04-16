@@ -129,9 +129,40 @@
         <a href="#" class="btn">Whitelist Access</a>
     </div>
 
-    <script>
-        // Скрипт для живого таймера (добавим логику в следующем шаге)
-        console.log("FAST Engine Initialized...");
-    </script>
+<script>
+    // 1. Живой таймер до Factory
+    function updateTimer() {
+        const targetDate = new Date("May 15, 2026 00:00:00").getTime();
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+    setInterval(updateTimer, 1000);
+
+    // 2. Анимация счетчика Титана
+    function animateValue(id, start, end, duration) {
+        let obj = document.getElementById(id);
+        let range = end - start;
+        let minTimer = 50;
+        let step = Math.abs(Math.floor(duration / range));
+        let timer = setInterval(() => {
+            start++;
+            obj.innerHTML = start;
+            if (start == end) clearInterval(timer);
+        }, Math.max(step, minTimer));
+    }
+    
+    // Запускаем анимацию при загрузке (от 17000 до твоего текущего значения)
+    window.onload = () => {
+        animateValue("titan-count", 17000, 17145, 2000);
+        updateTimer();
+    };
+</script>
 </body>
 </html>
