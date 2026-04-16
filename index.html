@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAST Protocol | Powered by Titan Core</title>
+    <style>
+        :root {
+            --primary: #00ff41; /* Цвет терминала "Матрица" */
+            --bg: #050505;
+            --text: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Анимированный фон с частицами */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .glitch {
+            font-size: 4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 50px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--primary);
+            padding: 30px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .countdown {
+            margin-top: 60px;
+            font-size: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 40px;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: 0.5s;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="glitch">FAST PROTOCOL</div>
+        <p style="letter-spacing: 5px;">BEYOND THE SPEED OF TRUST</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-value" id="titan-count">17135</span>
+                <span class="stat-label">Titan Core Nodes</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">1,000,000,000</span>
+                <span class="stat-label">Total Supply</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">AAA</span>
+                <span class="stat-label">Burn Fuel Active</span>
+            </div>
+        </div>
+
+        <div class="countdown">
+            LAUNCHING IN: <span id="timer" style="color: var(--primary);">29d 06h 00m</span>
+        </div>
+
+        <a href="#" class="btn">Whitelist Access</a>
+    </div>
+
+    <script>
+        // Скрипт для живого таймера (добавим логику в следующем шаге)
+        console.log("FAST Engine Initialized...");
+    </script>
+</body>
+</html>
