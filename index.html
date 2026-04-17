@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAST Protocol | Neo-Finance Core</title>
+    <title>FAST Protocol | Velocity Layer</title>
     <style>
         :root {
             --primary: #00ff41; --bg: #050505; --text: #e0e0e0; --accent: #ff003c;
@@ -20,7 +20,6 @@
         .stat-label { font-size: 0.7rem; letter-spacing: 2px; opacity: 0.6; text-transform: uppercase; }
 
         .box { margin-top: 40px; padding: 30px; text-align: left; border-left: 3px solid var(--primary); background: rgba(255,255,255,0.02); }
-        .box.tokenomics { border-left-color: #008cff; background: rgba(0, 140, 255, 0.02); }
         .box.fuel { border-left-color: var(--accent); background: rgba(255,0,60,0.01); }
 
         .roadmap { margin-top: 50px; text-align: left; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; }
@@ -31,9 +30,7 @@
         
         .social-btns { margin-top: 30px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
         .btn { display: inline-block; padding: 12px 30px; border: 1px solid var(--primary); color: var(--primary); text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; }
-        .btn:hover { background: var(--primary); color: black; box-shadow: 0 0 20px var(--primary); }
-        .btn.x-btn { border-color: white; color: white; }
-        .btn.x-btn:hover { background: white; color: black; box-shadow: 0 0 20px white; }
+        .btn:hover { background: var(--primary); color: black; box-shadow: 0 0 25px var(--primary); }
     </style>
 </head>
 <body>
@@ -41,44 +38,38 @@
 
     <div class="container">
         <div class="glitch">FAST PROTOCOL</div>
-        <p style="opacity: 0.5; letter-spacing: 4px; font-size: 0.8rem;">[ INFRASTRUCTURE BY MOONRABBIT ]</p>
+        <p style="opacity: 0.5; letter-spacing: 4px; font-size: 0.8rem;">[ THE VELOCITY LAYER FOR AAA ]</p>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <span class="stat-value" id="node-count">17205</span>
+                <span class="stat-value" id="node-count">17735</span>
                 <span class="stat-label">Core Unit Power</span>
             </div>
             <div class="stat-card">
                 <span class="stat-value">AAA</span>
-                <span class="stat-label">Main Fuel</span>
+                <span class="stat-label">Primary Fuel</span>
             </div>
             <div class="stat-card">
-                <span class="stat-value">1.0B</span>
-                <span class="stat-label">Supply Cap</span>
+                <span class="stat-value">26 Days</span>
+                <span class="stat-label">To Factory</span>
             </div>
         </div>
 
         <div class="box">
-            <h2 style="color: var(--primary); font-size: 1rem;">> Utility: Speed & Liquidity</h2>
-            <p>FAST — это не просто блокчейн, это <strong>Velocity Layer</strong>. <br>
-            • Мгновенный арбитраж между DEX-площадками. <br>
-            • Минимальные комиссии для холдеров AAA. <br>
-            • Приоритетный доступ к ликвидному пулу для участников Titan Core.</p>
+            <h2 style="color: var(--primary); font-size: 1rem;">> Absolute Raw Technology</h2>
+            <p>Direct V5 core integration providing sub-millisecond execution for the AAA ecosystem. Zero latency. Pure velocity.</p>
         </div>
 
-        <div class="box tokenomics">
-            <h2 style="color: #008cff; font-size: 1rem;">> Tokenomics: The FAST Cycle</h2>
-            <p><strong>Total Supply:</strong> 1,000,000,000 FAST. <br>
-            <strong>Mechanism:</strong> 30% — Экосистема, 20% — Ликвидность, 50% — Whitelist для AAA & Titan майнеров. <br>
-            <strong>Burn:</strong> Каждая транзакция FAST сжигает часть AAA, уменьшая предложение.</p>
+        <div class="box fuel">
+            <h2 style="color: var(--accent); font-size: 1rem;">> Deflationary Loop</h2>
+            <p>FAST is minted through AAA combustion. Every transaction on the Velocity Layer reduces the total supply of AAA, creating a mathematical inevitability of growth.</p>
         </div>
 
         <div class="roadmap">
             <h2 style="font-size: 1rem;">> Roadmap 2026</h2>
-            <div class="roadmap-step"><span>Q2</span> Security Audit & AAA Engine Polish [DONE]</div>
-            <div class="roadmap-step"><span>Q2</span> Factory Activation & Whitelist Distribution [IN PROGRESS]</div>
-            <div class="roadmap-step"><span>Q3</span> FAST Mainnet Launch & Dex-Liquidity Pool [LOCKED]</div>
-            <div class="roadmap-step"><span>Q4</span> Cross-Chain Bridge & Sniper Engine Public Access [LOCKED]</div>
+            <div class="roadmap-step"><span>Q2</span> Infrastructure Audit [COMPLETED]</div>
+            <div class="roadmap-step"><span>Q2</span> Factory Activation & AAA Burning [IN PROGRESS]</div>
+            <div class="roadmap-step"><span>Q3</span> FAST Mainnet Deployment [LOCKED]</div>
         </div>
 
         <div class="timer-box">
@@ -86,14 +77,13 @@
         </div>
 
         <div class="social-btns">
-            <a href="https://t.me" class="btn">Telegram Group</a>
-            <a href="https://x.com" class="btn x-btn">X / Twitter</a>
+            <a href="https://t.me" class="btn">Join FAST Telegram</a>
         </div>
     </div>
 
     <script>
         function updateTimer() {
-            const targetDate = new Date("May 15, 2026 00:00:00").getTime();
+            const targetDate = new Date("May 14, 2026 00:00:00").getTime(); // Скорректировано под 26 дней
             const now = new Date().getTime();
             const diff = targetDate - now;
             if (diff < 0) return;
@@ -115,11 +105,8 @@
             ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.fillStyle = '#00ff41';
             particles.forEach((p, i) => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.s, 0, Math.PI*2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
                 p.y -= p.v; if(p.y < 0) p.y = canvas.height;
-                // Линии между частицами
                 particles.forEach((p2, j) => {
                     let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                     if(dist < 100) {
@@ -133,5 +120,7 @@
         }
         draw();
     </script>
+</body>
+</html>
 </body>
 </html>
