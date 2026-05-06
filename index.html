@@ -3,41 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAST Protocol | The Predator</title>
+    <title>FAST Protocol | System Status</title>
     <style>
         :root {
-            --primary: #00ff41; --bg: #050505; --text: #e0e0e0; --accent: #ff003c; --glow: rgba(0, 255, 65, 0.4);
+            --primary: #00ff41; --bg: #050505; --text: #e0e0e0; --accent: #ff003c; --glow: rgba(0, 255, 65, 0.3);
         }
         body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; overflow-x: hidden; }
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; }
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.15; }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 60px 20px; text-align: center; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; text-align: center; }
+        .glitch { font-size: 3rem; font-weight: bold; color: var(--primary); text-shadow: 0 0 15px var(--primary); letter-spacing: 10px; margin-bottom: 20px; }
         
-        .glitch { font-size: clamp(2rem, 8vw, 3.5rem); font-weight: bold; color: var(--primary); text-shadow: 0 0 15px var(--primary); letter-spacing: 8px; margin-bottom: 10px; }
+        /* Стилизация картинки-отчета */
+        .status-image-container { 
+            position: relative; margin: 30px 0; border: 1px solid rgba(0, 255, 65, 0.2);
+            box-shadow: 0 0 40px var(--glow); line-height: 0; overflow: hidden;
+        }
+        .status-image-container img { width: 100%; height: auto; display: block; filter: brightness(1.1) contrast(1.1); }
         
-        .tagline { background: var(--accent); color: white; display: inline-block; padding: 5px 15px; font-weight: bold; letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase; box-shadow: 0 0 15px var(--accent); margin-bottom: 30px; }
+        /* Эффект сканирующей линии поверх картинки */
+        .scanline {
+            width: 100%; height: 2px; background: rgba(0, 255, 65, 0.3);
+            position: absolute; top: 0; left: 0; z-index: 2;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
-        .stat-card { border: 1px solid rgba(0, 255, 65, 0.2); padding: 20px; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); transition: 0.3s; }
-        .stat-card:hover { border-color: var(--primary); box-shadow: 0 0 20px var(--glow); }
-        .stat-value { font-size: 1.8rem; color: var(--primary); display: block; font-weight: bold; }
-        .stat-label { font-size: 0.7rem; letter-spacing: 2px; opacity: 0.6; text-transform: uppercase; }
+        .box { margin-top: 30px; padding: 25px; text-align: left; border-left: 3px solid var(--accent); background: rgba(255, 0, 60, 0.02); }
+        .box h2 { color: var(--accent); font-size: 1rem; margin-top: 0; letter-spacing: 2px; }
 
-        .burn-section { margin-top: 50px; padding: 30px; background: rgba(255, 0, 60, 0.03); border: 1px solid rgba(255, 0, 60, 0.1); text-align: left; }
-        .burn-step { display: flex; align-items: center; margin-bottom: 20px; }
-        .burn-icon { width: 40px; height: 40px; border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; margin-right: 20px; color: var(--accent); font-weight: bold; flex-shrink: 0; }
-        .burn-text b { color: var(--accent); }
-
-        .box { margin-top: 40px; padding: 30px; text-align: left; border-left: 3px solid var(--primary); background: rgba(0, 255, 65, 0.02); }
-
-        .roadmap { margin-top: 50px; text-align: left; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; }
-        .roadmap-step { margin-bottom: 15px; font-size: 0.9rem; border-bottom: 1px solid rgba(0, 255, 65, 0.05); padding-bottom: 10px; }
-        .roadmap-step span { color: var(--primary); font-weight: bold; margin-right: 10px; }
-
-        .timer-box { margin-top: 50px; padding: 25px; border: 1px dashed var(--primary); display: inline-block; background: rgba(0, 255, 65, 0.05); color: var(--primary); font-weight: bold; letter-spacing: 2px; }
+        .timer-box { 
+            margin-top: 40px; padding: 20px; border: 1px dashed var(--primary); 
+            display: inline-block; background: rgba(0, 255, 65, 0.05); color: var(--primary); 
+            font-weight: bold; letter-spacing: 2px; 
+        }
         
-        .social-btns { margin-top: 30px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .btn { display: inline-block; padding: 12px 30px; border: 1px solid var(--primary); color: var(--primary); text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; box-shadow: 0 0 5px var(--glow); }
+        .social-btns { margin-top: 40px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn { 
+            display: inline-block; padding: 12px 35px; border: 1px solid var(--primary); 
+            color: var(--primary); text-decoration: none; text-transform: uppercase; 
+            letter-spacing: 2px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; 
+        }
         .btn:hover { background: var(--primary); color: black; box-shadow: 0 0 25px var(--primary); }
     </style>
 </head>
@@ -46,57 +52,25 @@
 
     <div class="container">
         <div class="glitch">FAST PROTOCOL</div>
-        <div class="tagline">[ THE PREDATOR OF AAA ECOSYSTEM ]</div>
+        <p style="opacity: 0.6; letter-spacing: 3px; font-size: 0.8rem;">[ SECTOR ANALYSIS // SYSTEM STABLE ]</p>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-value">17,735</span>
-                <span class="stat-label">Distributed Node Units</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value">100%</span>
-                <span class="stat-label">AAA Extraction Rate</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value" id="days-left">9 Days</span>
-                <span class="stat-label">To Activation</span>
-            </div>
-        </div>
-
-        <div class="burn-section">
-            <h2 style="color: var(--accent); font-size: 1.1rem; margin-top: 0;">> THE AAA INCINERATION PROCESS</h2>
-            <div class="burn-step">
-                <div class="burn-icon">01</div>
-                <div class="burn-text"><b>ABSORPTION:</b> Protocol identifies idle AAA liquidity within the Moon Rabbit ecosystem.</div>
-            </div>
-            <div class="burn-step">
-                <div class="burn-icon">02</div>
-                <div class="burn-text"><b>COMBUSTION:</b> 100% of AAA tokens used for acquisition are sent to the <b>NULL ADDRESS</b>. Permanently.</div>
-            </div>
-            <div class="burn-step">
-                <div class="burn-icon">03</div>
-                <div class="burn-text"><b>FORGING:</b> New $FAST units are minted into the Velocity Layer, backed by the destroyed assets.</div>
-            </div>
+        <!-- БЛОК С КАРТИНКОЙ -->
+        <div class="status-image-container">
+            <div class="scanline"></div>
+            <img src="status.png" alt="FAST Protocol Status Report">
         </div>
 
         <div class="box">
-            <h2 style="color: var(--primary); font-size: 1rem; text-transform: uppercase;">> Predator Logic</h2>
-            <p>While meme-coins bark, FAST executes. We have built an infrastructure designed to survive market volatility by consuming the very inflation that kills others.</p>
-        </div>
-
-        <div class="roadmap">
-            <h2 style="font-size: 1rem;">> Current Vector</h2>
-            <div class="roadmap-step"><span>Q2</span> Infrastructure Stress-Test [STABLE]</div>
-            <div class="roadmap-step" style="border-left: 2px solid var(--accent); padding-left: 10px;"><span>Q2</span> Moon Rabbit Factory Awakening [IN PROGRESS]</div>
-            <div class="roadmap-step"><span>Q3</span> Scarcity-Driven Mainnet [LOCKED]</div>
+            <h2>> THE PREDATOR LOGIC</h2>
+            <p>Our autonomous engines have finished mapping liquidity sectors. Every $FAST unit forged results in the permanent incineration of $AAA tokens. Total scarcity is not a goal; it is an inevitability.</p>
         </div>
 
         <div class="timer-box">
-            FACTORY DEPLOYMENT: <span id="timer">--d --h --m --s</span>
+            NEXT PHASE IN: <span id="timer">--d --h --m --s</span>
         </div>
 
         <div class="social-btns">
-            <a href="https://t.me" class="btn">Telegram Channel</a>
+            <a href="https://t.me" class="btn">Telegram</a>
             <a href="https://x.com" class="btn">Twitter / X</a>
         </div>
     </div>
@@ -106,26 +80,23 @@
             const targetDate = new Date("May 14, 2026 00:00:00").getTime();
             const now = new Date().getTime();
             const diff = targetDate - now;
-            if (diff < 0) { document.getElementById("timer").innerHTML = "ACTIVE"; return; }
+            if (diff < 0) { document.getElementById("timer").innerHTML = "DEPLOYED"; return; }
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
             document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-            document.getElementById("days-left").innerHTML = `${days} Days`;
         }
         setInterval(updateTimer, 1000); updateTimer();
 
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         let particles = [];
-        for(let i=0; i<70; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2.5, v: Math.random()*0.4+0.1});
+        for(let i=0; i<50; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2, v: Math.random()*0.2+0.1});
         function draw() {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = '#00ff41';
-            particles.forEach((p) => {
+            ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = '#00ff41';
+            particles.forEach(p => {
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
                 p.y -= p.v; if(p.y < 0) p.y = canvas.height;
             });
