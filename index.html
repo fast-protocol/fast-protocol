@@ -9,27 +9,25 @@
             --primary: #00ff41; --bg: #050505; --text: #e0e0e0; --accent: #ff003c; --glow: rgba(0, 255, 65, 0.3);
         }
         body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; overflow-x: hidden; }
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.15; }
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; width: 100vw; height: 100vh; }
 
         .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; text-align: center; }
-        .glitch { font-size: 3rem; font-weight: bold; color: var(--primary); text-shadow: 0 0 15px var(--primary); letter-spacing: 10px; margin-bottom: 20px; }
+        .glitch { font-size: clamp(2rem, 8vw, 3.5rem); font-weight: bold; color: var(--primary); text-shadow: 0 0 15px var(--primary); letter-spacing: 10px; margin-bottom: 20px; }
         
-        /* Стилизация картинки-отчета */
         .status-image-container { 
             position: relative; margin: 30px 0; border: 1px solid rgba(0, 255, 65, 0.2);
-            box-shadow: 0 0 40px var(--glow); line-height: 0; overflow: hidden;
+            box-shadow: 0 0 40px var(--glow); line-height: 0; overflow: hidden; background: #000;
         }
         .status-image-container img { width: 100%; height: auto; display: block; filter: brightness(1.1) contrast(1.1); }
         
-        /* Эффект сканирующей линии поверх картинки */
         .scanline {
-            width: 100%; height: 2px; background: rgba(0, 255, 65, 0.3);
+            width: 100%; height: 2px; background: rgba(0, 255, 65, 0.4);
             position: absolute; top: 0; left: 0; z-index: 2;
             animation: scan 4s linear infinite;
         }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-        .box { margin-top: 30px; padding: 25px; text-align: left; border-left: 3px solid var(--accent); background: rgba(255, 0, 60, 0.02); }
+        .box { margin-top: 30px; padding: 25px; text-align: left; border-left: 3px solid var(--accent); background: rgba(255, 0, 60, 0.03); }
         .box h2 { color: var(--accent); font-size: 1rem; margin-top: 0; letter-spacing: 2px; }
 
         .timer-box { 
@@ -54,10 +52,10 @@
         <div class="glitch">FAST PROTOCOL</div>
         <p style="opacity: 0.6; letter-spacing: 3px; font-size: 0.8rem;">[ SECTOR ANALYSIS // SYSTEM STABLE ]</p>
 
-        <!-- БЛОК С КАРТИНКОЙ -->
         <div class="status-image-container">
             <div class="scanline"></div>
-            <img src="./status.png" alt="FAST Protocol Status Report">
+            <!-- Относительный путь для GitHub Pages -->
+            <img src="./status.png" alt="FAST Status Report">
         </div>
 
         <div class="box">
@@ -76,6 +74,7 @@
     </div>
 
     <script>
+        // ТАЙМЕР
         function updateTimer() {
             const targetDate = new Date("May 14, 2026 00:00:00").getTime();
             const now = new Date().getTime();
@@ -89,16 +88,35 @@
         }
         setInterval(updateTimer, 1000); updateTimer();
 
+        // АНИМАЦИЯ ЗВЕЗД (Восстановлено)
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
         let particles = [];
-        for(let i=0; i<50; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2, v: Math.random()*0.2+0.1});
+        for(let i=0; i<70; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                s: Math.random() * 2,
+                v: Math.random() * 0.5 + 0.1
+            });
+        }
+
         function draw() {
-            ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = '#00ff41';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff41';
             particles.forEach(p => {
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
-                p.y -= p.v; if(p.y < 0) p.y = canvas.height;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+                ctx.fill();
+                p.y -= p.v; 
+                if (p.y < 0) p.y = canvas.height;
             });
             requestAnimationFrame(draw);
         }
