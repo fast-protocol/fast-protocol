@@ -82,8 +82,8 @@ async def init_exchange():
     """Связь с BingX через зашифрованный канал"""
     # Архитектор, вставь свои ключи сюда
     return ccxt.bingx({
-        'apiKey': 'JalqlQMGxo0HNxVgkCDcvik47vAUDYkv8ZlChntsXDt4OjHDRTRG5W56F0aKJoK9Z8hNA8ADGvKyOlbhRDOA',
-        'secret': 'DeA2h64PM8KtfQZ4wQcUvIPUt3LgjunjYCLJVHqnIL8PtHLgDmef7oJNHxYEy00cO9OswsI4wg4WBwCFa9v0A',
+        'apiKey': '',
+        'secret': '',
         'enableRateLimit': True,
         'options': {
             'defaultType': 'swap', 
