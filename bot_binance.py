@@ -231,11 +231,13 @@ async def check_signal(exchange, symbol):
         cur_p = memory.prices.get(symbol, df['c'].iloc[-1])
 
         # 2. Боллинджер и Ширина
-        ma20 = df['c'].rolling(20).mean().iloc[-1]
-        std = df['c'].rolling(20).std().iloc[-1]
-        upper = ma20 + (std * 2.1)
-        lower = ma20 - (std * 2.1)
-        width = (upper - lower) / ma20 * 100
+        ma_period = dna.get('m_per', 20)
+        ma_mult = dna.get('m_mult', 2.1)
+        ma = df['c'].rolling(ma_period).mean().iloc[-1]
+        std = df['c'].rolling(ma_period).std().iloc[-1]
+        upper = ma + (std * ma_mult)
+        lower = ma - (std * ma_mult)
+        width = (upper - lower) / ma * 100
 
         # 3. Фильтры безопасности (Анти-Шторм + Анти-Шип)
         if not (dna.get('min_w', 0.8) <= width <= dna.get('width', 2.0)): return None
