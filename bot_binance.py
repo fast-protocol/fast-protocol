@@ -25,8 +25,10 @@ SAFE_LEVERAGE_LIMIT = 20    # Жесткий лимит до июня 2026
 
 class GlobalMemory:
     def __init__(self):
-        self.last_mode_change = 0  # Время последнего переключения
+        self.mode = "STABLE"
         self.pending_mode = "STABLE"
+        self.change_timer = 0
+        self.last_mode_change = 0  # Время последнего переключения
         self.prices = {}
         self.active_pos = {}
         self.dna_fleet = {}    # Сюда будет грузиться активный режим
