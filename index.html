@@ -3,124 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAST Protocol | System Status</title>
+    <title>FAST PROTOCOL | Control Center</title>
     <style>
-        :root {
-            --primary: #00ff41; --bg: #050505; --text: #e0e0e0; --accent: #ff003c; --glow: rgba(0, 255, 65, 0.3);
-        } 
-        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; overflow-x: hidden; }
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; width: 100vw; height: 100vh; }
-
-        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; text-align: center; }
-        .glitch { font-size: clamp(2rem, 8vw, 3.5rem); font-weight: bold; color: var(--primary); text-shadow: 0 0 15px var(--primary); letter-spacing: 10px; margin-bottom: 20px; }
+        :root { --neon-green: #00ff41; --dark-bg: #050505; }
+        body, html { margin: 0; padding: 0; background: var(--dark-bg); color: var(--neon-green); font-family: 'Courier New', monospace; overflow-x: hidden; }
         
-        .status-image-container { 
-            position: relative; margin: 30px 0; border: 1px solid rgba(0, 255, 65, 0.2);
-            box-shadow: 0 0 40px var(--glow); line-height: 0; overflow: hidden; background: #000;
-        }
-        .status-image-container img { width: 100%; height: auto; display: block; filter: brightness(1.1) contrast(1.1); }
-        
-        .scanline {
-            width: 100%; height: 2px; background: rgba(0, 255, 65, 0.4);
-            position: absolute; top: 0; left: 0; z-index: 2;
-            animation: scan 4s linear infinite;
-        }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        /* Background Animation */
+        .matrix-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; z-index: -1; pointer-events: none; }
 
-        .box { margin-top: 30px; padding: 25px; text-align: left; border-left: 3px solid var(--accent); background: rgba(255, 0, 60, 0.03); }
-        .box h2 { color: var(--accent); font-size: 1rem; margin-top: 0; letter-spacing: 2px; }
+        .dashboard { display: flex; justify-content: space-between; align-items: stretch; height: 100vh; padding: 20px; box-sizing: border-box; gap: 20px; }
 
-        .timer-box { 
-            margin-top: 40px; padding: 20px; border: 1px dashed var(--primary); 
-            display: inline-block; background: rgba(0, 255, 65, 0.05); color: var(--primary); 
-            font-weight: bold; letter-spacing: 2px; 
-        }
+        /* Sidebars */
+        .sidebar { width: 280px; border: 1px solid rgba(0, 255, 65, 0.3); background: rgba(0, 0, 0, 0.8); padding: 15px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 0 20px rgba(0, 255, 65, 0.1); position: relative; overflow: hidden; }
+        .sidebar::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--neon-green); animation: scan 4s linear infinite; }
+
+        /* Main View */
+        .main-view { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        .main-view img { max-width: 100%; max-height: 80vh; border: 1px solid var(--neon-green); box-shadow: 0 0 50px rgba(0, 255, 65, 0.2); border-radius: 10px; }
+
+        /* Telemetry Elements */
+        .label { font-size: 10px; opacity: 0.7; text-transform: uppercase; }
+        .value { font-size: 18px; margin-bottom: 5px; text-shadow: 0 0 5px var(--neon-green); }
+        .status-active { color: var(--neon-green); animation: pulse 2s infinite; }
         
-        .social-btns { margin-top: 40px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .btn { 
-            display: inline-block; padding: 12px 35px; border: 1px solid var(--primary); 
-            color: var(--primary); text-decoration: none; text-transform: uppercase; 
-            letter-spacing: 2px; font-weight: bold; transition: 0.3s; font-size: 0.8rem; 
-        }
-        .btn:hover { background: var(--primary); color: black; box-shadow: 0 0 25px var(--primary); }
+        .log-box { font-size: 11px; height: 150px; overflow: hidden; line-height: 1.4; opacity: 0.8; }
+        .heartbeat { width: 100%; height: 40px; stroke: var(--neon-green); fill: none; stroke-width: 2; }
+
+        @keyframes scan { 0% { top: -100%; } 100% { top: 200%; } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
-    <canvas id="bg-canvas"></canvas>
 
-    <div class="container">
-        <div class="glitch">FAST PROTOCOL</div>
-        <p style="opacity: 0.6; letter-spacing: 3px; font-size: 0.8rem;">[ SECTOR ANALYSIS // SYSTEM STABLE ]</p>
+    <canvas id="matrix" class="matrix-bg"></canvas>
 
-        <div class="status-image-container">
-            <div class="scanline"></div>
-            <!-- Относительный путь для GitHub Pages -->
-            <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/status.png" alt="FAST Status Report">
+    <div class="dashboard">
+        <!-- LEFT SIDEBAR: System Intel -->
+        <div class="sidebar">
+            <div class="status-box">
+                <div class="label">System Status</div>
+                <div class="value status-active">● ACTIVE</div>
+            </div>
+
+            <div>
+                <div class="label">Market Regime</div>
+                <div id="regime" class="value">STABLE</div>
+            </div>
+
+            <div>
+                <div class="label">Network Pulse</div>
+                <svg class="heartbeat" viewBox="0 0 100 40">
+                    <polyline points="0,20 10,20 15,10 25,30 35,20 100,20">
+                        <animate attributeName="points" dur="1s" repeatCount="indefinite"
+                            values="0,20 10,20 15,10 25,30 35,20 100,20; 0,20 10,20 15,5 25,35 35,20 100,20; 0,20 10,20 15,10 25,30 35,20 100,20" />
+                    </polyline>
+                </svg>
+            </div>
+
+            <div class="log-box" id="system-logs">
+                [SYSTEM] Initializing hunter...<br>
+                [WS] Connection secured...<br>
+                [SCAN] Monitoring 74 sectors...<br>
+            </div>
         </div>
 
-        <div class="box">
-            <h2>> THE PREDATOR LOGIC</h2>
-            <p>Our autonomous engines have finished mapping liquidity sectors. Every $FAST unit forged results in the permanent incineration of $AAA tokens. Total scarcity is not a goal; it is an inevitability.</p>
+        <!-- CENTER: The Engine -->
+        <div class="main-view">
+            <h1 style="font-size: 14px; letter-spacing: 5px;">FAST PROTOCOL :: GLOBAL ENGINE</h1>
+            <!-- Замени 'engine.jpg' на имя твоего файла с картинкой двигателя -->
+            <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/engine.png" alt="FAST ENGINE">
+            <p style="margin-top: 20px; font-size: 12px; opacity: 0.6;">SCARCITY INEVITABLE | LIQUIDITY ABSORPTION ACTIVE</p>
         </div>
 
-        <div class="timer-box">
-            NEXT PHASE IN: <span id="timer">--d --h --m --s</span>
-        </div>
+        <!-- RIGHT SIDEBAR: Assets Intel -->
+        <div class="sidebar">
+            <div>
+                <div class="label">BTC/USDT Target</div>
+                <div class="value" id="btc-price">$79,942.50</div>
+            </div>
 
-        <div class="social-btns">
-            <a href="https://t.me" class="btn">Telegram</a>
-            <a href="https://x.com" class="btn">Twitter / X</a>
+            <div>
+                <div class="label">AAA Burn Status</div>
+                <div class="value" style="color: #ffd700;">ACCELERATING</div>
+            </div>
+
+            <div style="flex-grow: 1;">
+                <div class="label">Hunter Activity</div>
+                <div class="log-box" id="activity-logs" style="color: #00ff41;">
+                    > Scanning BTC depth...<br>
+                    > AAA liquidity pool detected...<br>
+                    > Analyzing volatility spikes...<br>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid rgba(0,255,65,0.3); padding-top: 10px;">
+                <div class="label">Operation Mode</div>
+                <div class="value" style="font-size: 14px;">LIMIT-CASCADE V3.9</div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ТАЙМЕР
-        function updateTimer() {
-            const targetDate = new Date("May 14, 2026 00:00:00").getTime();
-            const now = new Date().getTime();
-            const diff = targetDate - now;
-            if (diff < 0) { document.getElementById("timer").innerHTML = "DEPLOYED"; return; }
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-        }
-        setInterval(updateTimer, 1000); updateTimer();
-
-        // АНИМАЦИЯ ЗВЕЗД (Восстановлено)
-        const canvas = document.getElementById('bg-canvas');
+        // Matrix Background Effect
+        const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
 
-        let particles = [];
-        for(let i=0; i<70; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                s: Math.random() * 2,
-                v: Math.random() * 0.5 + 0.1
-            });
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff41'; ctx.font = fontSize + 'px monospace';
+            for (let i = 0; drops.length > i; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
         }
- 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ff41';
-            particles.forEach(p => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
-                ctx.fill();
-                p.y -= p.v; 
-                if (p.y < 0) p.y = canvas.height;
-            });
-            requestAnimationFrame(draw);
-        }
-        draw();
+        setInterval(drawMatrix, 50);
+
+        // Simulated Live Logs
+        const sysLogs = document.getElementById('system-logs');
+        const actLogs = document.getElementById('activity-logs');
+        const messages = ["[SCAN] BTC channel stable", "[INFO] No noise detected", "[HUNTER] Analyzing retest...", "[SYSTEM] Cache cleared"];
+        
+        setInterval(() => {
+            const newLog = document.createElement('div');
+            newLog.innerHTML = `> ${messages[Math.floor(Math.random() * messages.length)]}`;
+            sysLogs.prepend(newLog);
+            if(sysLogs.children.length > 8) sysLogs.removeChild(sysLogs.lastChild);
+        }, 3000);
     </script>
 </body>
 </html>
