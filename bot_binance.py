@@ -40,6 +40,8 @@ class GlobalMemory:
         self.total_wallet = 0.0
         self.be_levels = {}
         self.last_btc_push = 0 
+        self.last_mode_change = 0  # Время последнего переключения
+        self.pending_mode = "STABLE"
 memory = GlobalMemory()
 
 def load_all_dna():
@@ -86,46 +88,54 @@ async def warm_up_btc_history(exchange):
     except Exception as e:
         log(f"⚠️ Не удалось прогреть историю: {e}")
 
-async def update_market_regime():
-    log("🚥 Коробка передач: Анализ запущен.")
-    while memory.is_running:
+    async def update_market_regime(self, exchange):
+        """Аналитик Биткоина с защитой от дребезга (Гистерезис 90с)"""
         try:
-            hist_len = len(memory.btc_history)
-            if hist_len >= 60:
-                # Берем точку 10 минут назад (индекс -60)
-                # Это гарантирует, что мы смотрим именно на 10-минутный отрезок
-                btc_start = memory.btc_history[-60] 
-                btc_now = memory.prices.get('BTC/USDT:USDT', memory.btc_history[-1])
+            # 1. Получаем историю BTC для анализа фазы
+            ohlcv = await exchange.fetch_ohlcv('BTC/USDT:USDT', '1m', limit=100)
+            df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
+            
+            # Расчет среднего изменения за 100 минут
+            price_start = df['c'].iloc[0]
+            price_now = df['c'].iloc[-1]
+            change = (price_now / price_start - 1) * 100
 
-                if btc_start > 10000:
-                    btc_change = (btc_now / btc_start) - 1
-                else:
-                    btc_change = 0
-
-                # ОДИН расчет для всего
-                change_pct = round(btc_change * 100, 3)
-
-                # 1. Дебаг-лог (каждые 10 сек)
-                if int(time.time()) % 10 == 0:
-                    log(f"🚥 DEBUG: BTC Hist: {hist_len}/100 | Change: {change_pct}% | Mode: {memory.current_regime.upper()}")
-
-                # 2. Логика переключения
-                new_regime = 'stable'
-                if btc_change > 0.008:   new_regime = 'bull'
-                elif btc_change < -0.008: new_regime = 'bear'
-
-                if new_regime != memory.current_regime:
-                    memory.current_regime = new_regime
-                    memory.dna_fleet = memory.all_dna[new_regime]
-                    log(f"⚙️ ПЕРЕКЛЮЧЕНИЕ: >>> {new_regime.upper()} <<< | Change: {change_pct}%")
+            # 2. Определяем ТЕОРЕТИЧЕСКИЙ режим (то, что хочет рынок сейчас)
+            if change > 0.8:
+                calculated_mode = "BULL"
+            elif change < -0.8:
+                calculated_mode = "BEAR"
             else:
-                if int(time.time()) % 30 == 0:
-                    log(f"⏳ Коробка копит данные: {hist_len}/60...")
+                calculated_mode = "STABLE"
+
+            # 3. Логика Инерции (90 секунд подтверждения)
+            if calculated_mode != self.mode:
+                # Если режим сменился, но мы еще не начали отсчет
+                if self.pending_mode != calculated_mode:
+                    self.pending_mode = calculated_mode
+                    self.change_timer = time.time()
+                    log(f"🚥 ПОДГОТОВКА: Рынок тянет в {calculated_mode}. Ждем подтверждения 90с...")
+
+                # Проверяем, прошло ли 90 секунд стабильного пребывания в новом режиме
+                time_passed = time.time() - self.change_timer
+                if time_passed >= 90:
+                    self.mode = calculated_mode
+                    self.change_timer = 0
+                    self.load_dna() # Подгружаем нужный файл (dna_stable, bull или bear)
+                    log(f"🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> {self.mode} <<< | Change: {round(change, 3)}%")
+            else:
+                # Если рынок вернулся к текущему режиму бота - сбрасываем ожидания
+                if self.pending_mode != self.mode:
+                    log(f"✅ ВЕТЕР СТИХ: Рынок вернулся в {self.mode}. Охота в STABLE продолжается.")
+                    self.pending_mode = self.mode
+                    self.change_timer = 0
+
+            # Дебаг-лог раз в 5 минут, чтобы не забивать консоль
+            if int(time.time()) % 300 == 0:
+                log(f"🚥 STATUS: BTC Change: {round(change, 3)}% | Current Mode: {self.mode}")
 
         except Exception as e:
-            log(f"⚠️ Ошибка Коробки: {e}")
-
-        await asyncio.sleep(5)
+            log(f"⚠️ Ошибка аналитика BTC: {e}")
 
 def log(msg):
     t = datetime.now().strftime('%H:%M:%S')
