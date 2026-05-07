@@ -91,19 +91,20 @@ async def warm_up_btc_history(exchange):
         log(f"⚠️ Не удалось прогреть историю: {e}")
         
 async def update_market_regime(exchange):
-    """Аналитик Биткоина: Полноценная версия с инерцией 90с"""
+    """Аналитик Биткоина с инерцией 90с и бесконечным циклом V19.5"""
+    log("🚥 Аналитик BTC запущен (Защита от дребезга 90с активна)")
     while memory.is_running:
         try:
-            # 1. Получаем историю BTC
+            # 1. Получаем историю BTC для анализа фазы
             ohlcv = await exchange.fetch_ohlcv('BTC/USDT:USDT', '1m', limit=100)
             df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
             
-            # --- ИСПРАВЛЕНИЕ №1: Индекс [0] ---
-            price_start = df['c'].iloc[0] 
+            # Расчет изменения: Берем первую свечу [0] и последнюю [-1]
+            price_start = df['c'].iloc[0]
             price_now = df['c'].iloc[-1]
             change = (price_now / price_start - 1) * 100
 
-            # 2. Логика определения режима
+            # 2. Определяем ТЕОРЕТИЧЕСКИЙ режим (calculated_mode)
             if change > 0.8:
                 calculated_mode = "BULL"
             elif change < -0.8:
@@ -111,34 +112,37 @@ async def update_market_regime(exchange):
             else:
                 calculated_mode = "STABLE"
 
-            # 3. Гистерезис (Инерция)
+            # 3. Логика Инерции (используем memory)
             if calculated_mode != memory.mode:
+                # Если рынок тянет в новый режим, а мы еще не начали ждать
                 if memory.pending_mode != calculated_mode:
                     memory.pending_mode = calculated_mode
                     memory.change_timer = time.time()
-                    log(f"🚥 ПОДГОТОВКА: Рынок тянет в {calculated_mode}. Ожидание подтверждения 90с...")
+                    log(f"🚥 ПОДГОТОВКА: BTC тянет в {calculated_mode}. Ждем подтверждения 90с...")
 
-                # Проверка таймера
-                if time.time() - memory.change_timer >= 90:
+                # Если 90 секунд стабильно держится новый режим - переключаем
+                time_passed = time.time() - memory.change_timer
+                if time_passed >= 90:
                     memory.mode = calculated_mode
                     memory.change_timer = 0
+                    memory.current_regime = calculated_mode.lower()
                     
-                    # --- ИСПРАВЛЕНИЕ №2: Имя функции load_all_dna ---
-                    memory.load_all_dna() 
+                    # Загружаем соответствующие ДНК файлы
+                    load_all_dna() 
                     
                     log(f"🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> {memory.mode} <<< | Trend: {round(change, 3)}%")
             else:
-                # Если рынок успокоился и вернулся в текущий режим
+                # Если рынок вернулся к нашему текущему режиму - сбрасываем ожидание
                 if memory.pending_mode != memory.mode:
                     log(f"✅ ВЕТЕР СТИХ: BTC вернулся в норму. Остаемся в {memory.mode}.")
                     memory.pending_mode = memory.mode
                     memory.change_timer = 0
 
-            # Полезный дебаг раз в 5 минут (как в оригинале)
+            # Редкий лог статуса (раз в 5 минут)
             if int(time.time()) % 300 < 20:
-                log(f"🚥 DEBUG: BTC Hist: {len(df)}/100 | Change: {round(change, 3)}% | Mode: {memory.mode}")
+                log(f"🚥 STATUS: BTC Change: {round(change, 3)}% | Current Mode: {memory.mode}")
 
-            await asyncio.sleep(20) # Пауза цикла
+            await asyncio.sleep(20) # Пауза между проверками 20 секунд
 
         except Exception as e:
             log(f"⚠️ Ошибка аналитика BTC: {e}")
