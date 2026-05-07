@@ -161,63 +161,55 @@ async def check_signal(exchange, symbol):
         if df['v'].iloc[-1] <= 0: return None
 
         if is_buy or is_sell:
-            return {'symbol': symbol, 'side': 'buy' if is_buy else 'sell', 'price': cur_p, 'dna': dna}
+            return {'symbol': symbol, 'side': 'buy' if is_buy else 'sell', 'price': cur_p, 'dna': dna, 'open_p': df['o'].iloc[-1]}
     except: pass
     return None
 
 async def execute_entry(exchange, res):
-    """Вход в импульс: Версия V19.2 [STABLE-ROUTING]"""
+    """Вход по Лимитке (Retest) + Авто-TPSL"""
     symbol, side, price, dna = res['symbol'], res['side'], res['price'], res['dna']
     try:
-        # 1. Установка плеча (Специфика BingX)
-        side_for_lev = 'LONG' if side == 'buy' else 'SHORT'
-        try:
-            await exchange.set_leverage(LEVERAGE, symbol, {'side': side_for_lev})
+        # 1. Расчет цены Ретеста (Середина между Open и Trigger)
+        # Мы передадим ohlcv в res через check_signal для точности
+        open_p = res['open_p']
+        limit_price = (open_p + price) / 2
+        limit_price = float(exchange.price_to_precision(symbol, limit_price))
+
+        # 2. Плечо и расчет объема
+        try: await exchange.set_leverage(LEVERAGE, symbol)
         except: pass
-
-        # 2. Расчет объема (учитываем RISK_GEAR и RESERVE_CASH)
-        slots_free = MAX_SLOTS - memory.slots_occupied
-        available_now = memory.available
         
-        # Оставляем "воздух" для комиссий
-        safe_margin = (available_now - RESERVE_CASH) if available_now > RESERVE_CASH else 0
-        margin_per_slot = (safe_margin / (slots_free if slots_free > 0 else 1)) * RISK_GEAR
-        
-        if margin_per_slot <= 0:
-            # log(f"⚠️ Ожидание маржи для {symbol}...")
-            return
-
-        amount = (margin_per_slot * LEVERAGE) / price
-        # Критично: Приведение к точности биржи
-        amount = float(exchange.amount_to_precision(symbol, amount))
+        margin = (memory.available / (MAX_SLOTS - memory.slots_occupied)) * RISK_GEAR
+        if margin > RESERVE_CASH: margin -= RESERVE_CASH
+        amount = float(exchange.amount_to_precision(symbol, (margin * LEVERAGE) / limit_price))
 
         if amount <= 0: return
 
-        log(f"🚀 ИМПУЛЬС: {symbol} {side.upper()} | Vol: {amount} | Bal: ${round(memory.wallet, 2)}")
-
-        # 3. Создание ордера (Ультимативные параметры)
+        # 3. Параметры TPSL (привязка к позиции для BingX)
+        tp_price = limit_price * (1 + dna['tp1']) if side == 'buy' else limit_price * (1 - dna['tp1'])
+        sl_price = limit_price * (1 + dna['sl']) if side == 'buy' else limit_price * (1 - dna['sl'])
+        
         params = {
-            'spot': False,      # Говорим CCXT: это фьючерс
-            'type': 'DIRECT',   # Говорим BingX: исполняй сразу
+            'stopLoss': float(exchange.price_to_precision(symbol, sl_price)),
+            'takeProfit': float(exchange.price_to_precision(symbol, tp_price)),
+            'spot': False
         }
 
-        order = await exchange.create_market_order(symbol, side, amount, params)
+        log(f"🕸️ ЛОВУШКА: {symbol} {side.upper()} на {limit_price} | TP: {round(tp_price,4)} | SL: {round(sl_price,4)}")
+
+        # Отправляем лимитный ордер со встроенным TPSL
+        order = await exchange.create_order(symbol, 'limit', side, amount, limit_price, params)
 
         if order:
             memory.active_pos[symbol] = {
-                'side': side,
-                'price': price,
-                'vol': amount,
-                'dna': dna,
-                'custom_sl': dna['sl']
+                'side': side, 'price': limit_price, 'vol': amount, 
+                'dna': dna, 'order_id': order['id']
             }
-            memory.tp_fixed[symbol] = False
             memory.entry_times[symbol] = time.time()
             memory.slots_occupied += 1
-            log(f"✅ Позиция {symbol} успешно зафиксирована.")
 
     except Exception as e:
-        log(f"❌ Критическая ошибка входа {symbol}: {e}")
+        log(f"❌ Ошибка лимитки {symbol}: {e}")
 
 async def signal_hunter(exchange):
     """Цикл поиска сигналов"""
@@ -233,8 +225,8 @@ async def signal_hunter(exchange):
         await asyncio.sleep(1)
 
 async def monitor_logic(exchange):
-    """Ультимативный мониторинг с обратной связью"""
-    exit_params = {'spot': False} # Оставим только самое необходимое
+    """Ультимативный мониторинг V3.6: Лимитки + Smart-Cut"""
+    exit_params = {'spot': False}
     
     while memory.is_running:
         for symbol, pos in list(memory.active_pos.items()):
@@ -242,60 +234,56 @@ async def monitor_logic(exchange):
                 cur_p = memory.prices.get(symbol)
                 if not cur_p: continue
                 
-                current_sl = pos['custom_sl']
                 dna = pos['dna']
-                
-                # Расчет профита
-                if pos['side'] == 'buy':
-                    diff = (cur_p / pos['price']) - 1
-                else:
-                    diff = (pos['price'] / cur_p) - 1
-                
+                # Считаем PNL от нашей лимитной цены входа
+                diff = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
                 age = time.time() - memory.entry_times[symbol]
                 
-                # ЛОГ ДЛЯ ДЕБАГА (раз в 10 секунд, чтобы видеть прогресс)
+                # ЛОГ ДЛЯ ДЕБАГА
                 if int(time.time()) % 10 == 0:
-                    log(f"🕵️ Монитор {symbol}: Profit: {round(diff*100, 3)}% | Age: {int(age)}s | Price: {cur_p}")
+                    log(f"🕵️ Монитор {symbol}: Profit: {round(diff*100, 3)}% | Age: {int(age)}s")
 
-                # 1. Ultra-Short SL
-                if diff <= current_sl:
-                    log(f"🚨 СРАБОТАЛ SL: {symbol} на цене {cur_p}")
-                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                    await exchange.create_market_order(symbol, side_exit, pos['vol'], exit_params)
+                # --- СТАДИЯ А: Если лимитка входа еще не исполнилась (ждем 30 сек) ---
+                # Если цена улетела далеко (+0.5%) без нас - отменяем охоту
+                if age > 30 and diff > 0.005: 
+                    log(f"🚫 Пропуск {symbol}: Улетела без отката.")
+                    await exchange.cancel_all_orders(symbol, exit_params)
                     del memory.active_pos[symbol]
                     memory.slots_occupied -= 1
                     continue
 
-                # 2. Smart Price-Cut (30 сек)
+                # --- СТАДИЯ Б: Активная позиция (уже в рынке) ---
+                
+                # 1. Smart Price-Cut (Та самая проверка через 45 сек)
+                # Выходим, если время вышло, а мы НЕ в профите хотя бы 0.1%
                 if age >= SMART_CUT_T and not memory.tp_fixed[symbol] and diff < 0.001:
-                    log(f"⏱️ SMART-CUT ACTIVATED: {symbol} (No momentum)")
+                    log(f"⏱️ SMART-CUT: {symbol} (Нет инерции) | PNL: {round(diff*100, 3)}%")
+                    await exchange.cancel_all_orders(symbol, exit_params) # Чистим TP/SL на бирже
                     side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
                     await exchange.create_market_order(symbol, side_exit, pos['vol'], exit_params)
                     del memory.active_pos[symbol]
                     memory.slots_occupied -= 1
                     continue
 
-                # 3. Тейк №1 + БУ
+                # 2. Локальный Тейк №1 (в дополнение к биржевому, для лога и БУ)
                 if not memory.tp_fixed[symbol] and diff >= dna['tp1']:
-                    close_vol = float(exchange.amount_to_precision(symbol, pos['vol'] * 0.5))
-                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                    await exchange.create_market_order(symbol, side_exit, close_vol, exit_params)
+                    # Биржа сама закроет TP1, если мы правильно связали ордера, 
+                    # но тут мы фиксируем это в памяти бота для перевода в БУ
                     memory.tp_fixed[symbol] = True
-                    pos['vol'] -= close_vol
-                    pos['custom_sl'] = 0.0005 # Ставим БУ чуть ближе (0.05%)
-                    log(f"🎯 TP1 HIT: {symbol} | Locked profit, SL moved to BE")
+                    # После Тейка 1 на бирже останется половина, монитор просто ждет TP2
+                    log(f"🎯 TP1 REACHED: {symbol} | Ждем финала или БУ")
 
-                # 4. Тейк №2 (Финал)
-                if diff >= dna['tp2']:
-                    log(f"🏆 TP2 HIT: {symbol} | Closing remainder")
+                # 3. Ultra-Short SL (Подстраховка кода, если биржа лаганет)
+                if diff <= dna['sl']:
+                    log(f"🚨 ULTRA-SL TRIGGERED: {symbol}")
+                    await exchange.cancel_all_orders(symbol, exit_params)
                     side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
                     await exchange.create_market_order(symbol, side_exit, pos['vol'], exit_params)
                     del memory.active_pos[symbol]
                     memory.slots_occupied -= 1
 
             except Exception as e: 
-                log(f"⚠️ Ошибка в цикле монитора {symbol}: {e}")
-                await asyncio.sleep(1) # Пауза при ошибке
+                log(f"⚠️ Monitor error {symbol}: {e}")
         
         await asyncio.sleep(0.5)
 
