@@ -9,8 +9,8 @@ from datetime import datetime
 # ==========================================
 # --- ПУЛЬТ УПРАВЛЕНИЯ TITAN-BINANCE V1.0 ---
 # ==========================================
-API_KEY = "R6GkxP6mtLaSEZN3oVzsyh5TeyWaiSNN93ilIBkJaRgLmtGkg3FTFB4vVTlHwbTH"
-SECRET_KEY = "2abik0n5P2eMGVnwK6hp32w3vOmvLN9GZVGrJSJWyOOWXzDJU4nDpMd7ZEX41KBD"
+API_KEY = ""
+SECRET_KEY = ""
 
 # --- УПРАВЛЕНИЕ КАПИТАЛОМ ---
 MAX_ACTIVE_SLOTS = 1       # Динамика: 1 (при <$150), 2 (при <$500), 3 (при >$500)
