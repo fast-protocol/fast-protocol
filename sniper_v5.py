@@ -167,7 +167,7 @@ async def check_signal(exchange, symbol):
 
 async def execute_entry(exchange, res):
     """Вход по Лимитке (Retest) + Авто-TPSL"""
-    symbol, side, price, dna = res['symbol'], res['side'], res['price'], res['dna']
+    symbol, side, price, dna, open_p = res['symbol'], res['side'], res['price'], res['dna'], res['open_p']
     try:
         # 1. Расчет цены Ретеста (Середина между Open и Trigger)
         # Мы передадим ohlcv в res через check_signal для точности
@@ -190,11 +190,9 @@ async def execute_entry(exchange, res):
         sl_price = limit_price * (1 + dna['sl']) if side == 'buy' else limit_price * (1 - dna['sl'])
         
         params = {
-            'stopLoss': float(exchange.price_to_precision(symbol, sl_price)),
-            'takeProfit': float(exchange.price_to_precision(symbol, tp_price)),
-            'spot': False
+             'stopLoss': float(exchange.price_to_precision(symbol, sl_price)),
+             'spot': False
         }
-
         log(f"🕸️ ЛОВУШКА: {symbol} {side.upper()} на {limit_price} | TP: {round(tp_price,4)} | SL: {round(sl_price,4)}")
 
         # Отправляем лимитный ордер со встроенным TPSL
