@@ -4,137 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAST PROTOCOL | Global Interface</title>
-    <!-- Подключаем тот самый шрифт Orbitron -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root { --emerald: #00ff41; --gold: #ffd700; --bg: #010101; }
+        :root { --emerald: #00ff41; --gold: #ffd700; --bg: #000; }
         body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Orbitron', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
 
-        /* ЗВЕЗДНОЕ НЕБО */
-        .space-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: black; }
-        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: drift linear infinite; }
-
-        /* СЕТКА */
+        /* ЖИВОЕ ЗВЕЗДНОЕ НЕБО */
+        #stars-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; }
         .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background-image: linear-gradient(rgba(0, 255, 65, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.08) 1px, transparent 1px); 
-            background-size: 40px 40px; z-index: -1; pointer-events: none; }
+            background-image: linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px); 
+            background-size: 50px 50px; z-index: -2; pointer-events: none; }
 
-        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; box-sizing: border-box; }
+        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; box-sizing: border-box; }
 
-        /* ЗАГОЛОВОК */
-        .neon-title { font-size: 4rem; letter-spacing: 12px; color: var(--emerald); text-shadow: 0 0 15px var(--emerald); margin-bottom: 40px; font-weight: 900; }
+        /* ШРИФТ И ЗАГОЛОВОК */
+        .neon-title { font-size: clamp(2rem, 6vw, 4.5rem); letter-spacing: 15px; color: var(--emerald); text-shadow: 0 0 20px var(--emerald); margin-bottom: 20px; font-weight: 900; text-align: center; }
 
-        /* КОНТЕЙНЕР С БОКОВЫМИ ПАНЕЛЯМИ */
-        .interface-wrap { display: flex; align-items: center; justify-content: center; gap: 30px; width: 100%; max-width: 1400px; }
+        /* КОНТЕЙНЕР СЕКЦИИ */
+        .interface-group { display: flex; align-items: stretch; justify-content: center; gap: 20px; width: 100%; max-width: 1400px; }
         
-        .side-monitor { width: 220px; height: 350px; border: 1px solid rgba(0, 255, 65, 0.3); background: rgba(0, 20, 0, 0.6); padding: 15px; font-family: monospace; font-size: 11px; color: var(--emerald); overflow: hidden; display: flex; flex-direction: column; box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.1); }
-        .monitor-label { color: #aaa; font-size: 9px; margin-bottom: 10px; border-bottom: 1px solid var(--emerald); padding-bottom: 4px; }
+        .side-monitor { width: 240px; border: 1px solid rgba(0, 255, 65, 0.3); background: rgba(0, 15, 0, 0.75); padding: 15px; font-family: 'Courier New', monospace; font-size: 11px; color: var(--emerald); display: flex; flex-direction: column; justify-content: space-between; box-shadow: inset 0 0 30px rgba(0, 255, 65, 0.1); }
+        
+        .img-container { flex-shrink: 0; position: relative; border: 1px solid var(--emerald); box-shadow: 0 0 50px rgba(0, 255, 65, 0.15); line-height: 0; }
+        .img-container img { width: 100%; max-width: 750px; display: block; }
 
-        .img-box { width: 650px; border: 1px solid var(--emerald); box-shadow: 0 0 30px rgba(0, 255, 65, 0.2); border-radius: 4px; position: relative; }
-        .img-box img { width: 100%; display: block; }
+        /* РАЗНЫЕ ТИПЫ БЛОКОВ */
+        .monitor-label { font-size: 9px; color: rgba(255,255,255,0.5); border-bottom: 1px solid var(--emerald); margin-bottom: 10px; padding-bottom: 4px; letter-spacing: 2px; }
+        .stat-value { font-size: 20px; color: #fff; text-shadow: 0 0 10px var(--emerald); margin-bottom: 15px; }
+        .pulse-line { width: 100%; height: 40px; stroke: var(--emerald); fill: none; stroke-width: 1; }
+        .matrix-sub { width: 100%; height: 60px; margin-top: 15px; border: 1px solid var(--emerald); background: #000; overflow: hidden; }
 
-        /* БЕГУЩАЯ СТРОКА (МАТРИЦА) */
-        .matrix-sub-box { width: 650px; height: 60px; border: 1px solid var(--emerald); margin-top: 15px; background: rgba(0,0,0,0.8); overflow: hidden; position: relative; }
-        #matrix-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8; }
-
-        @keyframes drift { from { transform: translateY(0); } to { transform: translateY(-1000px); } }
+        @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
     </style>
 </head>
 <body>
 
-    <div class="space-bg" id="space"></div>
+    <canvas id="stars-canvas"></canvas>
     <div class="grid-overlay"></div>
 
-    <!-- СЕКЦИЯ 1: COMMAND -->
+    <!-- СЕКЦИЯ 1: THE COMMAND (Пульт) -->
     <section>
         <h1 class="neon-title">FAST PROTOCOL</h1>
-        <div class="interface-wrap">
+        <div class="interface-group">
             <div class="side-monitor">
-                <div class="monitor-label">SYSTEM_LOGS</div>
-                <div id="logs-1"></div>
+                <div>
+                    <div class="monitor-label">CORE_TELEMETRY</div>
+                    <div id="logs-1" style="height: 180px; overflow: hidden; opacity: 0.7;"></div>
+                </div>
+                <div>
+                    <div class="monitor-label">NETWORK_PULSE</div>
+                    <svg class="pulse-line" viewBox="0 0 100 40"><polyline id="pulse-path" points="0,20 10,20 15,5 25,35 35,20 100,20" /></svg>
+                </div>
             </div>
-            <div class="img-box"><img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/status.png"></div>
-            <div class="side-monitor">
-                <div class="monitor-label">NEURAL_LINK</div>
-                <div id="logs-2"></div>
+            <div class="img-container">
+                <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/status.png">
+                <div class="matrix-sub"><canvas id="matrix-mini"></canvas></div>
             </div>
-        </div>
-        <div class="matrix-sub-box"><canvas id="matrix-canvas"></canvas></div>
-    </section>
-
-    <!-- СЕКЦИЯ 2: ENGINE -->
-    <section>
-        <div class="interface-wrap">
             <div class="side-monitor">
-                <div class="monitor-label">THERMAL_CONTROL</div>
-                <div id="logs-3"></div>
-            </div>
-            <div class="img-box" style="border-color: var(--gold);"><img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/Fast%20high-tech.png"></div>
-            <div class="side-monitor">
-                <div class="monitor-label">FUEL_ANALYSIS</div>
-                <div id="logs-4"></div>
+                <div>
+                    <div class="monitor-label">SYSTEM_STATUS</div>
+                    <div class="stat-value" style="color: var(--emerald);">● ONLINE</div>
+                    <div class="monitor-label">ENCRYPTION</div>
+                    <div class="stat-value">RSA_4096</div>
+                </div>
+                <div style="font-size: 10px; opacity: 0.5;">[ ACCESS_GRANTED ]<br>NODE_ID: 0x7F2A...</div>
             </div>
         </div>
     </section>
 
-    <!-- СЕКЦИЯ 3: TERMINAL -->
+    <!-- СЕКЦИЯ 2: THE ENGINE (Двигатель) -->
     <section>
-        <div class="interface-wrap">
+        <div class="interface-group">
             <div class="side-monitor">
-                <div class="monitor-label">QUANTUM_SCAN</div>
-                <div id="logs-5"></div>
+                <div>
+                    <div class="monitor-label">ORACLE_FEED</div>
+                    <div class="stat-value" id="btc-price">$79,842.50</div>
+                    <div class="monitor-label">MARKET_PHASE</div>
+                    <div class="stat-value" style="font-size: 16px;">STABLE_INERTIA</div>
+                </div>
+                <div id="logs-3" style="font-size: 9px; opacity: 0.6;"></div>
             </div>
-            <div class="img-box"><img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/engine.png"></div>
+            <div class="img-container" style="border-color: var(--gold);">
+                <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/Fast%20high-tech.png">
+            </div>
             <div class="side-monitor">
-                <div class="monitor-label">MARKET_ORACLE</div>
-                <div id="logs-6"></div>
+                <div>
+                    <div class="monitor-label">FACTORY_COUNTDOWN</div>
+                    <div class="stat-value" id="timer" style="color: var(--gold); font-size: 16px;">--d --h --m --s</div>
+                </div>
+                <div>
+                    <div class="monitor-label">BURN_EFFICIENCY</div>
+                    <div class="stat-value">99.87%</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЕКЦИЯ 3: THE TERMINAL (Зеленый пульт) -->
+    <section>
+        <div class="interface-group">
+            <div class="side-monitor">
+                <div class="monitor-label">SECTOR_SCAN</div>
+                <div id="logs-5" style="height: 100%; overflow: hidden; line-height: 1.6;"></div>
+            </div>
+            <div class="img-container">
+                <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/engine.png">
+            </div>
+            <div class="side-monitor">
+                <div>
+                    <div class="monitor-label">LIQUIDITY_MAP</div>
+                    <div style="height: 120px; background: rgba(0,255,65,0.05); border: 1px solid rgba(0,255,65,0.2); position: relative;">
+                        <div style="position: absolute; top: 10px; left: 10px; width: 5px; height: 5px; background: #fff; box-shadow: 0 0 10px #fff;"></div>
+                        <div style="position: absolute; bottom: 20px; right: 30px; width: 5px; height: 5px; background: var(--emerald); box-shadow: 0 0 10px var(--emerald);"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="monitor-label">PROTOCOL_VERSION</div>
+                    <div class="stat-value">V3.9_LIMIT</div>
+                </div>
             </div>
         </div>
     </section>
 
     <script>
-        // ГЕНЕРАЦИЯ ЗВЕЗД
-        const space = document.getElementById('space');
-        for (let i = 0; i < 150; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 3;
-            star.style.width = size + 'px';
-            star.style.height = size + 'px';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDuration = (Math.random() * 50 + 50) + 's';
-            space.appendChild(star);
-        }
-
-        // МАТРИЦА (ПОД ПЕРВОЙ КАРТИНКОЙ)
-        const canvas = document.getElementById('matrix-canvas');
+        // 1. ЗВЕЗДНОЕ НЕБО (CANVAS)
+        const canvas = document.getElementById('stars-canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = 650; canvas.height = 60;
-        const chars = "0101FASTAAA";
-        const drops = Array(40).fill(0);
+        let stars = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+        for(let i=0; i<200; i++) stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2, v: Math.random()*0.5});
+        function animateStars() {
+            ctx.clearRect(0,0,canvas.width, canvas.height); ctx.fillStyle = "#fff";
+            stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill(); s.y -= s.v; if(s.y<0) s.y=canvas.height; });
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+
+        // 2. MATRIX MINI (ПОД ПЕРВОЙ КАРТИНКОЙ)
+        const mCanvas = document.getElementById('matrix-mini');
+        const mCtx = mCanvas.getContext('2d');
+        mCanvas.width = 750; mCanvas.height = 60;
+        let columns = Array(50).fill(0);
         function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#00ff41"; ctx.font = "12px monospace";
-            drops.forEach((y, i) => {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillText(text, i * 16, y);
-                if (y > canvas.height && Math.random() > 0.9) drops[i] = 0;
-                else drops[i] += 12;
+            mCtx.fillStyle = "rgba(0,0,0,0.1)"; mCtx.fillRect(0,0,750,60); mCtx.fillStyle = "#00ff41"; mCtx.font = "10px monospace";
+            columns.forEach((y, i) => {
+                mCtx.fillText(String.fromCharCode(0x30A0 + Math.random()*96), i*15, y);
+                columns[i] = y > 60 || Math.random() > 0.95 ? 0 : y + 10;
             });
         }
         setInterval(drawMatrix, 50);
 
-        // ЖИВЫЕ ЛОГИ
-        const phrases = ["> ACCESING CORE...", "> BTC_ORACLE: OK", "> PREDATOR_SCAN...", "> AAA_SCARCITY: 98%", "> TRAP_SET: LIMIT"];
-        function addLog(id) {
-            const el = document.getElementById(id);
-            const div = document.createElement('div');
-            div.textContent = phrases[Math.floor(Math.random() * phrases.length)];
-            el.prepend(div);
-            if(el.children.length > 20) el.removeChild(el.lastChild);
+        // 3. ТАЙМЕР И ЛОГИ
+        function updateTimer() {
+            const diff = new Date("May 14, 2026") - new Date();
+            if (diff < 0) return;
+            const d = Math.floor(diff/(1000*60*60*24)), h = Math.floor((diff/(1000*60*60))%24), m = Math.floor((diff/(1000*60))%60), s = Math.floor((diff/1000)%60);
+            document.getElementById("timer").innerHTML = `${d}d ${h}h ${m}m ${s}s`;
         }
-        setInterval(() => { ["logs-1","logs-2","logs-3","logs-4","logs-5","logs-6"].forEach(addLog); }, 2000);
+        setInterval(updateTimer, 1000);
+
+        const phrases = ["> ANALYZING BTC...", "> RETEST DETECTED", "> EXECUTING TRAP", "> SCARCITY_RISE: 0.12%", "> NEURAL_LINK: OK"];
+        function addLog(id) {
+            const el = document.getElementById(id); if(!el) return;
+            const div = document.createElement('div'); div.textContent = phrases[Math.floor(Math.random()*phrases.length)];
+            el.prepend(div); if(el.children.length > 15) el.removeChild(el.lastChild);
+        }
+        setInterval(() => { ["logs-1", "logs-3", "logs-5"].forEach(addLog); }, 2000);
     </script>
 </body>
 </html>
