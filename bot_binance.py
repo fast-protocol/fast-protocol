@@ -529,7 +529,7 @@ async def run_titan_v1():
         tasks = [
             asyncio.create_task(price_stream()),        # Поток цен
             asyncio.create_task(update_balance(exchange)), # Поток баланса
-            asyncio.create_task(update_market_regime()), # Активация коробки передач
+            asyncio.create_task(memory.update_market_regime(exchange)), # Активация коробки передач
             asyncio.create_task(position_tracker(exchange)), # Поток позиций
             asyncio.create_task(signal_hunter(exchange)),    # Охотник
             asyncio.create_task(monitoring_cycle(exchange))  # Мониторинг
