@@ -268,21 +268,31 @@ async def monitor_logic(exchange):
                 # 1. Smart Price-Cut (Та самая проверка через 45 сек)
                 # Выходим, если время вышло, а мы НЕ в профите хотя бы 0.1%
                 if age >= SMART_CUT_T and not memory.tp_fixed[symbol] and diff < 0.001:
-                    log(f"⏱️ SMART-CUT: {symbol} (Нет инерции) | PNL: {round(diff*100, 3)}%")
+                    log(f"⏱️ SMART-CUT: {symbol} (Нет инерции)")
                     try:
-                        # 1. Сначала отменяем все лимитки (Тейки/Стопы)
+                        # 1. Расчищаем место (отменяем лимитки)
                         await exchange.cancel_all_orders(symbol, {'spot': False})
-                        # 2. Ждем микро-паузу
                         await asyncio.sleep(0.5)
-                        # 3. Закрываем позицию гарантированно (reduceOnly)
-                        side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                        await exchange.create_market_order(symbol, side_exit, pos['vol'], {'spot': False, 'reduceOnly': True})
-                        log(f"✅ Позиция {symbol} принудительно закрыта по SC.")
+                        
+                        # 2. Узнаем, сколько РЕАЛЬНО успело купиться
+                        pos_info = await exchange.fetch_position(symbol, {'spot': False})
+                        real_vol = float(pos_info['contracts']) if pos_info and pos_info.get('contracts') else 0
+                        
+                        if real_vol > 0:
+                            side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
+                            # Закрываем именно столько, сколько есть на бирже
+                            await exchange.create_market_order(symbol, side_exit, real_vol, {'spot': False, 'reduceOnly': True})
+                            log(f"✅ Позиция {symbol} успешно очищена: {real_vol} шт.")
+                        else:
+                            log(f"ℹ️ Лимитка {symbol} была пустой, просто отменена.")
+
+                        # ТОЛЬКО ТЕПЕРЬ СТИРАЕМ ИЗ ПАМЯТИ
+                        del memory.active_pos[symbol]
+                        memory.slots_occupied -= 1
+
                     except Exception as e:
-                        log(f"🆘 КРИТИЧЕСКАЯ ОШИБКА ЗАКРЫТИЯ {symbol}: {e}")
-                    
-                    del memory.active_pos[symbol]
-                    memory.slots_occupied -= 1
+                        log(f"🆘 КРИТИЧЕСКИЙ СБОЙ ОЧИСТКИ {symbol}: {e}")
+                        log("⚠️ Позиция остается в памяти для повторной попытки!")
                     continue
 
                 # 2. Локальный Тейк №1 (в дополнение к биржевому, для лога и БУ)
