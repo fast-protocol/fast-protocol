@@ -289,10 +289,10 @@ async def check_signal(exchange, symbol):
         # 5. Логика входа (Оффсет + Поглощение)
         # ЛОНГ: зашел в зону l_off И текущая цена пробила вверх тело красной свечи
         # ЛОНГ: Цена выше триггера + Поглощение + Фитиль > 35%
-        is_buy = (cur_p >= long_trigger) and (cur_p > prev_open) and (wick_ratio_long > 0.35)  and is_prev_red 
+        is_buy = (cur_p >= long_trigger) and (cur_p > prev_open) and (wick_ratio_long > 0.35)
 
         # ШОРТ: Цена ниже триггера + Поглощение + Фитиль > 35%
-        is_sell = (cur_p <= short_trigger) and (cur_p < prev_open) and (wick_ratio_short > 0.35)  and is_prev_green
+        is_sell = (cur_p <= short_trigger) and (cur_p < prev_open) and (wick_ratio_short > 0.35)
 
         
       #  is_buy = (cur_p <= lower * (1 - dna['l_off'])) and (cur_p > prev_open) and is_prev_red 
