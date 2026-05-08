@@ -132,7 +132,20 @@ async def price_stream(exchange):
                 await asyncio.sleep(2)
 
     # Запускаем задачи параллельно
+    async def heartbeat():
+        while memory.is_running:
+            try:
+                # Берем текущий баланс для информативности
+                bal = memory.available if hasattr(memory, 'available') else "Active"
+                log(f"💓 HEARTBEAT: System OK | Bal: ${bal} | Mode: V3.11")
+                await asyncio.sleep(600) # 10 минут
+            except:
+                await asyncio.sleep(10)
+
+    # Добавь heartbeat в список задач
     tasks = [track_symbol(s) for s in symbols]
+    tasks.append(heartbeat()) # Добавляем пульс
+
     await asyncio.gather(*tasks)
 
 async def check_signal(exchange, symbol):
@@ -361,7 +374,6 @@ async def main():
         asyncio.create_task(price_stream(exchange)),
         asyncio.create_task(monitor_logic(exchange)),
         asyncio.create_task(signal_hunter(exchange))
-        tasks.append(heartbeat()) # Добавляем пульс
     ]
     await asyncio.gather(*tasks)
 
