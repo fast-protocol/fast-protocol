@@ -265,31 +265,29 @@ async def monitor_logic(exchange):
                 # 2. Локальный Тейк №1 (в дополнение к биржевому, для лога и БУ)
                 if not memory.tp_fixed[symbol]:
                     pos_info = await exchange.fetch_position(symbol, {'spot': False})
-                    # ЗАЩИТА ОТ None
+                    current_vol = pos['vol'] # Инициализируем дефолтным значением
+
                     if pos_info and pos_info.get('contracts') is not None:
                         current_vol = float(pos_info['contracts'])
-                    
-                    if current_vol < pos['vol'] * 0.7: # Если объем упал (Тейк 1 сработал)
-                        log(f"🎯 ТЕЙК 1 СРАБОТАЛ (Лимитка): {symbol}. Переводим в БУ и ставим ТП2.")
                         
-                        # Переносим Стоп в БУ и ставим ТП2 лимиткой
-                        be_p = pos['price'] * (1 + 0.0005) if pos['side'] == 'buy' else pos['price'] * (1 - 0.0005)
-                        tp2_p = pos['price'] * (1 + dna['tp2']) if pos['side'] == 'buy' else pos['price'] * (1 - dna['tp2'])
-                        
-                        side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                        # Чистим старые ордера (старый стоп)
-                        await exchange.cancel_all_orders(symbol, {'spot': False})
-                        
-                        # Ставим ТП2 со стопом в БУ
-                        final_params = {
-                            'stopLoss': float(exchange.price_to_precision(symbol, be_p)),
-                            'spot': False
-                        }
-                        await exchange.create_order(symbol, 'limit', side_exit, current_vol, tp2_p, final_params)
-                        
-                        memory.tp_fixed[symbol] = True
-                        pos['vol'] = current_vol
+                        if current_vol < pos['vol'] * 0.7:
+                            log(f"🎯 ТЕЙК 1 СРАБОТАЛ: {symbol}. БУ + ТП2.")
+                            be_p = pos['price'] * (1 + 0.0005) if pos['side'] == 'buy' else pos['price'] * (1 - 0.0005)
+                            tp2_p = pos['price'] * (1 + dna['tp2']) if pos['side'] == 'buy' else pos['price'] * (1 - dna['tp2'])
+                            
+                            side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
+                            await exchange.cancel_all_orders(symbol, {'spot': False})
+                            
+                            final_params = {
+                                'stopLoss': float(exchange.price_to_precision(symbol, be_p)),
+                                'spot': False
+                            }
+                            await exchange.create_order(symbol, 'limit', side_exit, current_vol, tp2_p, final_params)
+                            
+                            memory.tp_fixed[symbol] = True
+                            pos['vol'] = current_vol
 
+                
                 
                 # 3. Ultra-Short SL (Подстраховка кода, если биржа лаганет)
                 if diff <= dna['sl']:
