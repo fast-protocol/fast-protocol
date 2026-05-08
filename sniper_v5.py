@@ -123,6 +123,7 @@ async def price_stream(exchange):
 
     # Запускаем задачи параллельно
     async def heartbeat():
+        await asyncio.sleep(5) # Ждем прогрузки баланса 5 секунд при старте
         while memory.is_running:
             try:
                 # Берем текущий баланс для информативности
