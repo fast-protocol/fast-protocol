@@ -269,9 +269,18 @@ async def monitor_logic(exchange):
                 # Выходим, если время вышло, а мы НЕ в профите хотя бы 0.1%
                 if age >= SMART_CUT_T and not memory.tp_fixed[symbol] and diff < 0.001:
                     log(f"⏱️ SMART-CUT: {symbol} (Нет инерции) | PNL: {round(diff*100, 3)}%")
-                    await exchange.cancel_all_orders(symbol, exit_params) # Чистим TP/SL на бирже
-                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                    await exchange.create_market_order(symbol, side_exit, pos['vol'], exit_params)
+                    try:
+                        # 1. Сначала отменяем все лимитки (Тейки/Стопы)
+                        await exchange.cancel_all_orders(symbol, {'spot': False})
+                        # 2. Ждем микро-паузу
+                        await asyncio.sleep(0.5)
+                        # 3. Закрываем позицию гарантированно (reduceOnly)
+                        side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
+                        await exchange.create_market_order(symbol, side_exit, pos['vol'], {'spot': False, 'reduceOnly': True})
+                        log(f"✅ Позиция {symbol} принудительно закрыта по SC.")
+                    except Exception as e:
+                        log(f"🆘 КРИТИЧЕСКАЯ ОШИБКА ЗАКРЫТИЯ {symbol}: {e}")
+                    
                     del memory.active_pos[symbol]
                     memory.slots_occupied -= 1
                     continue
