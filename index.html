@@ -3,45 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAST PROTOCOL | Global Interface</title>
+    <title>FAST PROTOCOL | AI CONTROL</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root { --emerald: #00ff41; --gold: #ffd700; --bg: #000; }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Orbitron', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
+        :root { --emerald: #00ff41; --gold: #ffd700; --bg: #000; --dim-green: rgba(0, 255, 65, 0.15); }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Orbitron', sans-serif; scroll-behavior: smooth; }
 
-        /* ЖИВОЕ ЗВЕЗДНОЕ НЕБО */
-        #stars-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; }
-        .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background-image: linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px); 
-            background-size: 50px 50px; z-index: -2; pointer-events: none; }
+        /* ИСПРАВЛЕННОЕ ЗВЕЗДНОЕ НЕБО (CSS) */
+        .stars-bg { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-3; background: radial-gradient(ellipse at bottom, #001 0%, #000 100%); overflow:hidden; }
+        .stars-bg::after { content: ""; position: absolute; top: -100%; left: -100%; width: 300%; height: 300%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)); background-size: 200px 200px; animation: drift 100s linear infinite; opacity: 0.3; }
+        @keyframes drift { from { transform: translateY(0); } to { transform: translateY(200px); } }
 
-        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; box-sizing: border-box; }
+        /* СЕТКА */
+        .grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(var(--dim-green) 1px, transparent 1px), linear-gradient(90deg, var(--dim-green) 1px, transparent 1px); background-size: 60px 60px; z-index: -2; pointer-events: none; }
 
-        /* ШРИФТ И ЗАГОЛОВОК */
-        .neon-title { font-size: clamp(2rem, 6vw, 4.5rem); letter-spacing: 15px; color: var(--emerald); text-shadow: 0 0 20px var(--emerald); margin-bottom: 20px; font-weight: 900; text-align: center; }
+        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 0; }
 
-        /* КОНТЕЙНЕР СЕКЦИИ */
-        .interface-group { display: flex; align-items: stretch; justify-content: center; gap: 20px; width: 100%; max-width: 1400px; }
+        /* ЗАГОЛОВОК И СОЦСЕТИ */
+        .header-box { text-align: center; margin-bottom: 50px; }
+        .neon-title { font-size: 3.5rem; letter-spacing: 20px; color: var(--emerald); text-shadow: 0 0 10px var(--emerald); font-weight: 400; margin-bottom: 15px; }
+        .social-links a { color: var(--gold); text-decoration: none; font-size: 10px; margin: 0 15px; letter-spacing: 3px; border: 1px solid var(--gold); padding: 5px 15px; transition: 0.3s; }
+        .social-links a:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
+
+        /* МОДУЛЬНАЯ СЕТКА ИНТЕРФЕЙСА */
+        .modular-container { display: grid; grid-template-columns: 200px 1fr 200px; gap: 40px; width: 95%; max-width: 1600px; align-items: start; }
         
-        .side-monitor { width: 240px; border: 1px solid rgba(0, 255, 65, 0.3); background: rgba(0, 15, 0, 0.75); padding: 15px; font-family: 'Courier New', monospace; font-size: 11px; color: var(--emerald); display: flex; flex-direction: column; justify-content: space-between; box-shadow: inset 0 0 30px rgba(0, 255, 65, 0.1); }
-        
-        .img-container { flex-shrink: 0; position: relative; border: 1px solid var(--emerald); box-shadow: 0 0 50px rgba(0, 255, 65, 0.15); line-height: 0; }
-        .img-container img { width: 100%; max-width: 750px; display: block; }
+        .side-stack { display: flex; flex-direction: column; gap: 15px; }
+        .module { border: 1px solid var(--dim-green); background: rgba(0, 10, 0, 0.8); padding: 12px; font-family: monospace; font-size: 10px; color: var(--emerald); box-shadow: 0 0 15px rgba(0,255,65,0.05); }
+        .module-h { font-size: 9px; color: #888; border-bottom: 1px solid var(--dim-green); margin-bottom: 8px; padding-bottom: 3px; text-transform: uppercase; }
 
-        /* РАЗНЫЕ ТИПЫ БЛОКОВ */
-        .monitor-label { font-size: 9px; color: rgba(255,255,255,0.5); border-bottom: 1px solid var(--emerald); margin-bottom: 10px; padding-bottom: 4px; letter-spacing: 2px; }
-        .stat-value { font-size: 20px; color: #fff; text-shadow: 0 0 10px var(--emerald); margin-bottom: 15px; }
-        .pulse-line { width: 100%; height: 40px; stroke: var(--emerald); fill: none; stroke-width: 1; }
-        .matrix-sub { width: 100%; height: 60px; margin-top: 15px; border: 1px solid var(--emerald); background: #000; overflow: hidden; }
+        .main-img { border: 1px solid var(--emerald); box-shadow: 0 0 40px rgba(0, 255, 65, 0.1); width: 100%; max-width: 850px; }
 
-        @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+        /* СПЕЦИАЛЬНЫЕ МОДУЛИ */
+        .ai-pulse { height: 30px; background: repeating-linear-gradient(90deg, transparent, transparent 5px, var(--dim-green) 5px, var(--dim-green) 10px); }
+        .glow-value { font-size: 16px; color: #fff; text-shadow: 0 0 8px var(--emerald); }
     </style>
 </head>
 <body>
 
-    <canvas id="stars-canvas"></canvas>
-    <div class="grid-overlay"></div>
+    <div class="stars-bg"></div>
+    <div class="grid"></div>
 
+    <section>
+        <div class="header-box">
+            <h1 class="neon-title">FAST PROTOCOL</h1>
+            <div class="social-links">
+                <a href="https://t.me">TELEGRAM</a>
+                <a href="https://x.com">TWITTER / X</a>
+            </div>
+        </div>
+
+        <div class="modular-container">
+            <!-- ЛЕВАЯ КОЛОНКА МОДУЛЕЙ -->
+            <div class="side-stack">
+                <div class="module">
+                    <div class="module-h">AI CORE STATUS</div>
+                    <div class="glow-value">SYNC_OK</div>
+                    <div class="ai-pulse"></div>
+                </div>
+                <div class="module">
+                    <div class="module-h">NEURAL LOGS</div>
+                    <div id="logs-left" style="height: 150px; overflow:hidden; line-height:1.4;"></div>
+                </div>
+                <div class="module" style="border-color: var(--gold);">
+                    <div class="module-h" style="color: var(--gold);">ABOUT TITAN AI</div>
+                    <p style="margin:0; font-size:9px; color:#aaa;">I am the Sentinel of Scarcity. My logic core is bound to $FAST, executing trades beyond human speed. My mission: The Great AAA Incineration.</p>
+                </div>
+            </div>
+
+            <!-- ЦЕНТР -->
+            <div style="text-align: center;">
+                <img src="pult.jpg" class="main-img">
+                <div class="module" style="margin-top:20px; border-style:dashed;">
+                    > SYSTEM_BOOT_SEQUENCE: SUCCESSFUL | ENCRYPTION_LAYER: ARMORED
+                </div>
+            </div>
+
+            <!-- ПРАВАЯ КОЛОНКА МОДУЛЕЙ -->
+            <div class="side-stack">
+                <div class="module">
+                    <div class="module-h">BTC ORACLE</div>
+                    <div class="glow-value" id="btc-price">$79,942.10</div>
+                </div>
+                <div class="module">
+                    <div class="module-h">NETWORK LOAD</div>
+                    <div style="display:flex; gap:2px;">
+                        <div style="height:15px; width:15%; background:var(--emerald);"></div>
+                        <div style="height:15px; width:45%; background:var(--emerald);"></div>
+                        <div style="height:15px; width:20%; background:var(--dim-green);"></div>
+                    </div>
+                </div>
+                <div class="module">
+                    <div class="module-h">BURN ANALYTICS</div>
+                    <div class="glow-value" style="color:var(--gold);">99.87%</div>
+                    <div style="font-size:8px; opacity:0.5;">EFFICIENCY_TARGET_MET</div>
+                </div>
+                <div class="module">
+                    <div class="module-h">HUNTING SECTORS</div>
+                    <div id="logs-right"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОВТОРЯЙ СТРУКТУРУ ДЛЯ engine.jpg и terminal.jpg НИЖЕ -->
     <!-- СЕКЦИЯ 1: THE COMMAND (Пульт) -->
     <section>
         <h1 class="neon-title">FAST PROTOCOL</h1>
@@ -126,51 +191,29 @@
         </div>
     </section>
 
+
+    
     <script>
-        // 1. ЗВЕЗДНОЕ НЕБО (CANVAS)
-        const canvas = document.getElementById('stars-canvas');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.onresize = resize; resize();
-        for(let i=0; i<200; i++) stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2, v: Math.random()*0.5});
-        function animateStars() {
-            ctx.clearRect(0,0,canvas.width, canvas.height); ctx.fillStyle = "#fff";
-            stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill(); s.y -= s.v; if(s.y<0) s.y=canvas.height; });
-            requestAnimationFrame(animateStars);
-        }
-        animateStars();
+        // ЖИВЫЕ ДАННЫЕ
+        const lLogs = document.getElementById('logs-left');
+        const rLogs = document.getElementById('logs-right');
+        const phrases = ["> Scanning BTC", "> Trap set at 0.35%", "> AAA depth found", "> Neural shift", "> Predator active"];
 
-        // 2. MATRIX MINI (ПОД ПЕРВОЙ КАРТИНКОЙ)
-        const mCanvas = document.getElementById('matrix-mini');
-        const mCtx = mCanvas.getContext('2d');
-        mCanvas.width = 750; mCanvas.height = 60;
-        let columns = Array(50).fill(0);
-        function drawMatrix() {
-            mCtx.fillStyle = "rgba(0,0,0,0.1)"; mCtx.fillRect(0,0,750,60); mCtx.fillStyle = "#00ff41"; mCtx.font = "10px monospace";
-            columns.forEach((y, i) => {
-                mCtx.fillText(String.fromCharCode(0x30A0 + Math.random()*96), i*15, y);
-                columns[i] = y > 60 || Math.random() > 0.95 ? 0 : y + 10;
-            });
-        }
-        setInterval(drawMatrix, 50);
+        setInterval(() => {
+            const div = document.createElement('div');
+            div.innerHTML = phrases[Math.floor(Math.random() * phrases.length)];
+            lLogs.prepend(div);
+            if(lLogs.children.length > 10) lLogs.removeChild(lLogs.lastChild);
 
-        // 3. ТАЙМЕР И ЛОГИ
-        function updateTimer() {
-            const diff = new Date("May 14, 2026") - new Date();
-            if (diff < 0) return;
-            const d = Math.floor(diff/(1000*60*60*24)), h = Math.floor((diff/(1000*60*60))%24), m = Math.floor((diff/(1000*60))%60), s = Math.floor((diff/1000)%60);
-            document.getElementById("timer").innerHTML = `${d}d ${h}h ${m}m ${s}s`;
-        }
-        setInterval(updateTimer, 1000);
-
-        const phrases = ["> ANALYZING BTC...", "> RETEST DETECTED", "> EXECUTING TRAP", "> SCARCITY_RISE: 0.12%", "> NEURAL_LINK: OK"];
-        function addLog(id) {
-            const el = document.getElementById(id); if(!el) return;
-            const div = document.createElement('div'); div.textContent = phrases[Math.floor(Math.random()*phrases.length)];
-            el.prepend(div); if(el.children.length > 15) el.removeChild(el.lastChild);
-        }
-        setInterval(() => { ["logs-1", "logs-3", "logs-5"].forEach(addLog); }, 2000);
+            const div2 = document.createElement('div');
+            div2.innerHTML = `> SC: ${Math.random().toString(16).substring(2,6).toUpperCase()}`;
+            rLogs.prepend(div2);
+            if(rLogs.children.length > 8) rLogs.removeChild(rLogs.lastChild);
+            
+            // Микро-изменение цены
+            const btc = 79942 + (Math.random() * 10);
+            document.getElementById('btc-price').innerHTML = `$${btc.toFixed(2)}`;
+        }, 2000);
     </script>
 </body>
 </html>
