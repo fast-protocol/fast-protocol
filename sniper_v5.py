@@ -169,7 +169,11 @@ async def execute_entry(exchange, res):
     """Вход по Лимитке + Мгновенный Тейк 1 и Стоп"""
     symbol, side, price, dna, open_p = res['symbol'], res['side'], res['price'], res['dna'], res['open_p']
     try:
-        limit_price = float(exchange.price_to_precision(symbol, (open_p + price) / 2))
+        #limit_price = float(exchange.price_to_precision(symbol, (open_p + price) / 2))
+        # Было: (open_p + price) / 2 (50% отката)
+        # Стало: цена пробоя минус 30% тела свечи (более агрессивный зацеп)
+        limit_price = price - (price - open_p) * 0.3 if side == 'buy' else price + (open_p - price) * 0.3
+        
         try: await exchange.set_leverage(LEVERAGE, symbol)
         except: pass
         
@@ -260,9 +264,10 @@ async def monitor_logic(exchange):
 
                 # 2. Локальный Тейк №1 (в дополнение к биржевому, для лога и БУ)
                 if not memory.tp_fixed[symbol]:
-                    # Проверяем реальный остаток позиции на бирже
                     pos_info = await exchange.fetch_position(symbol, {'spot': False})
-                    current_vol = float(pos_info['contracts'])
+                    # ЗАЩИТА ОТ None
+                    if pos_info and pos_info.get('contracts') is not None:
+                        current_vol = float(pos_info['contracts'])
                     
                     if current_vol < pos['vol'] * 0.7: # Если объем упал (Тейк 1 сработал)
                         log(f"🎯 ТЕЙК 1 СРАБОТАЛ (Лимитка): {symbol}. Переводим в БУ и ставим ТП2.")
