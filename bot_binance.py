@@ -272,12 +272,33 @@ async def check_signal(exchange, symbol):
         is_prev_red = prev_close < prev_open
         is_prev_green = prev_close > prev_open
 
+        # --- БЛОК V20.0: ФАКТОР ФИТИЛЯ ---
+        # Считаем длину всей свечи и длину фитиля
+        candle_range = df['h'].iloc[-1] - df['l'].iloc[-1]
+        if candle_range == 0: return None # Защита от нулевых свечей
+        
+        # Для ЛОНГА: нижняя тень (от минимума до тела)
+        lower_wick = min(df['o'].iloc[-1], df['c'].iloc[-1]) - df['l'].iloc[-1]
+        wick_ratio_long = lower_wick / candle_range
+        
+        # Для ШОРТА: верхняя тень (от максимума до тела)
+        upper_wick = df['h'].iloc[-1] - max(df['o'].iloc[-1], df['c'].iloc[-1])
+        wick_ratio_short = upper_wick / candle_range
+        # --------------------------------
+        
         # 5. Логика входа (Оффсет + Поглощение)
         # ЛОНГ: зашел в зону l_off И текущая цена пробила вверх тело красной свечи
-        is_buy = (cur_p <= lower * (1 - dna['l_off'])) and (cur_p > prev_open) and is_prev_red
+        # ЛОНГ: Цена выше триггера + Поглощение + Фитиль > 35%
+        is_buy = (cur_p >= long_trigger) and (cur_p > prev_open) and (wick_ratio_long > 0.35)  and is_prev_red 
+
+        # ШОРТ: Цена ниже триггера + Поглощение + Фитиль > 35%
+        is_sell = (cur_p <= short_trigger) and (cur_p < prev_open) and (wick_ratio_short > 0.35)  and is_prev_green
+
+        
+      #  is_buy = (cur_p <= lower * (1 - dna['l_off'])) and (cur_p > prev_open) and is_prev_red 
         
         # ШОРТ: зашел в зону s_off И текущая цена пробила вниз тело зеленой свечи
-        is_sell = (cur_p >= upper * (1 + dna['s_off'])) and (cur_p < prev_open) and is_prev_green
+# is_sell = (cur_p >= upper * (1 + dna['s_off'])) and (cur_p < prev_open) and is_prev_green
 
         if is_buy or is_sell:
             # Funding Shield
