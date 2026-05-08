@@ -78,6 +78,16 @@ def log(msg):
     with open("bingx_log.txt", "a", encoding="utf-8") as f:
         f.write(formatted_msg + "\n")
 
+async def heartbeat():
+        while memory.is_running:
+            try:
+                # Берем текущий баланс для информативности
+                bal = memory.available if hasattr(memory, 'available') else "Active"
+                log(f"💓 HEARTBEAT: System OK | Bal: ${bal} | Mode: V3.11")
+                await asyncio.sleep(600) # 10 минут
+            except:
+                await asyncio.sleep(10)
+
 async def init_exchange():
     """Связь с BingX через зашифрованный канал"""
     # Архитектор, вставь свои ключи сюда
@@ -351,6 +361,7 @@ async def main():
         asyncio.create_task(price_stream(exchange)),
         asyncio.create_task(monitor_logic(exchange)),
         asyncio.create_task(signal_hunter(exchange))
+        tasks.append(heartbeat()) # Добавляем пульс
     ]
     await asyncio.gather(*tasks)
 
