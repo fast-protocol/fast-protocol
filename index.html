@@ -6,73 +6,68 @@
     <title>FAST PROTOCOL | AI CONTROL HUB</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root { --emerald: #00ff41; --gold: #ffd700; --bg: #000; --panel-bg: rgba(0, 10, 0, 0.9); --dim-green: rgba(0, 255, 65, 0.15); }
+        :root { --emerald: #00ff41; --gold: #ffd700; --bg: #000; --panel-bg: rgba(0, 10, 0, 0.92); }
         * { box-sizing: border-box; }
         body, html { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Orbitron', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
 
-        /* НОВОЕ ЗВЕЗДНОЕ НЕБО (3 СЛОЯ ПАРАЛЛАКСА) */
-        .stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; background: radial-gradient(circle at center, #001 0%, #000 100%); }
-        .star-layer { position: absolute; top: 0; left: 0; width: 200%; height: 200%; background: transparent; }
-        .stars-1 { background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent), radial-gradient(1px 1px at 150px 40px, #fff, transparent); background-size: 200px 200px; animation: starMove 100s linear infinite; }
-        .stars-2 { background-image: radial-gradient(2px 2px at 50px 100px, #eee, transparent); background-size: 300px 300px; animation: starMove 150s linear infinite; opacity: 0.5; }
-        @keyframes starMove { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+        /* ВОЗВРАТ ПЕРВОГО ЗВЕЗДНОГО НЕБА */
+        #stars { position: fixed; top: 0; left: 0; width: 1px; height: 1px; background: transparent; z-index: -2; }
+        @keyframes animStar { from { transform: translateY(0); } to { transform: translateY(-2000px); } }
 
-        .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(var(--dim-green) 1px, transparent 1px), linear-gradient(90deg, var(--dim-green) 1px, transparent 1px); background-size: 60px 60px; z-index: -1; pointer-events: none; }
+        .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background-image: linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px); 
+            background-size: 50px 50px; z-index: -1; pointer-events: none; }
 
         header { text-align: center; padding: 80px 20px 40px; }
-        .neon-title { font-size: clamp(1.8rem, 7vw, 4rem); letter-spacing: clamp(10px, 3vw, 25px); color: var(--emerald); text-shadow: 0 0 15px var(--emerald); font-weight: 400; margin-bottom: 25px; }
+        .neon-title { font-size: clamp(2rem, 8vw, 4.5rem); letter-spacing: 15px; color: var(--emerald); text-shadow: 0 0 15px var(--emerald); font-weight: 400; margin-bottom: 30px; }
         
         .social-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .social-links a { color: var(--gold); text-decoration: none; font-size: 11px; letter-spacing: 2px; border: 1px solid var(--gold); padding: 12px 30px; transition: 0.3s; background: rgba(0,0,0,0.8); text-transform: uppercase; }
-        .social-links a:hover { background: var(--gold); color: #000; box-shadow: 0 0 25px var(--gold); transform: scale(1.05); }
+        .social-links a { color: var(--gold); text-decoration: none; font-size: 11px; letter-spacing: 2px; border: 1px solid var(--gold); padding: 12px 30px; transition: 0.3s; background: rgba(0,0,0,0.8); }
+        .social-links a:hover { background: var(--gold); color: #000; box-shadow: 0 0 25px var(--gold); }
 
         section { width: 100%; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 15px; border-bottom: 1px solid rgba(0, 255, 65, 0.1); }
         .layout-row { display: flex; align-items: stretch; justify-content: center; gap: 40px; width: 100%; max-width: 1500px; }
 
-        .side-stack { width: 260px; display: flex; flex-direction: column; gap: 15px; flex-shrink: 0; }
-        .module { border: 1px solid rgba(0, 255, 65, 0.2); background: var(--panel-bg); padding: 20px; font-family: monospace; font-size: 11px; color: var(--emerald); box-shadow: 0 0 30px rgba(0,255,65,0.05); flex-grow: 1; position: relative; }
+        .side-stack { width: 260px; display: flex; flex-direction: column; gap: 20px; flex-shrink: 0; }
+        .module { border: 1px solid rgba(0, 255, 65, 0.2); background: var(--panel-bg); padding: 20px; font-family: monospace; font-size: 11px; color: var(--emerald); box-shadow: 0 0 30px rgba(0,255,65,0.05); flex-grow: 1; }
         .module-h { font-size: 9px; color: #888; border-bottom: 1px solid rgba(0, 255, 65, 0.2); margin-bottom: 12px; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .main-img-box { flex: 1; max-width: 800px; border: 1px solid var(--emerald); box-shadow: 0 0 60px rgba(0, 255, 65, 0.15); line-height: 0; height: fit-content; overflow: hidden; border-radius: 4px; }
-        .main-img-box img { width: 100%; height: auto; transition: 0.5s; }
-        .main-img-box:hover img { transform: scale(1.02); }
+        .main-img-box { flex: 1; max-width: 800px; border: 1px solid var(--emerald); box-shadow: 0 0 60px rgba(0, 255, 65, 0.15); line-height: 0; }
+        .main-img-box img { width: 100%; height: auto; display: block; }
 
-        .glow-val { font-size: 20px; color: #fff; text-shadow: 0 0 10px var(--emerald); }
-        .timer-gold { color: var(--gold); font-size: 18px; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
-        .log-box { height: 140px; overflow: hidden; line-height: 1.6; opacity: 0.7; font-size: 10px; }
+        .glow-val { font-size: 22px; color: #fff; text-shadow: 0 0 10px var(--emerald); }
+        .timer-gold { color: var(--gold); font-size: 20px; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
+        .log-box { height: 160px; overflow: hidden; line-height: 1.6; opacity: 0.7; font-size: 10px; }
 
         @media (max-width: 1100px) {
             .layout-row { flex-direction: column; align-items: center; }
             .side-stack { width: 100%; max-width: 800px; flex-direction: row; }
             .side-stack .module { min-width: 150px; }
-            .neon-title { letter-spacing: 8px; }
+            .neon-title { letter-spacing: 5px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="stars-container">
-        <div class="star-layer stars-1"></div>
-        <div class="star-layer stars-2"></div>
-    </div>
+    <div id="stars"></div>
     <div class="grid-overlay"></div>
 
     <header>
         <h1 class="neon-title">FAST PROTOCOL</h1>
         <div class="social-links">
-            <a href="https://t.me" target="_blank">Telegram</a>
-            <a href="https://x.com" target="_blank">Twitter / X</a>
+            <a href="https://t.me" target="_blank">TELEGRAM_FEED</a>
+            <a href="https://x.com/MattBTC934" target="_blank">TWITTER_X</a>
         </div>
     </header>
 
-    <!-- SECTION 1: STATUS -->
+    <!-- СЕКЦИЯ 1: STATUS -->
     <section>
         <div class="layout-row">
             <div class="side-stack">
                 <div class="module">
                     <div class="module-h">SYSTEM_INTEGRITY</div>
-                    <div class="glow-val">● SYNCHRONIZED</div>
-                    <div style="margin-top:10px; font-size:9px; color:var(--emerald);">UPLINK: ACTIVE</div>
+                    <div class="glow-val">● SYNC_OK</div>
+                    <div style="margin-top:15px; font-size:9px; color:var(--emerald);">UPLINK: SECURED</div>
                 </div>
                 <div class="module">
                     <div class="module-h">NEURAL_LOGS</div>
@@ -80,7 +75,7 @@
                 </div>
             </div>
             <div class="main-img-box">
-                <img src="https://githubusercontent.com" alt="Status">
+                <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/status.png" alt="Status Core">
             </div>
             <div class="side-stack">
                 <div class="module">
@@ -88,69 +83,68 @@
                     <div class="glow-val" id="btc-p">$80,342.50</div>
                 </div>
                 <div class="module" style="border-color: var(--gold);">
-                    <div class="module-h" style="color:var(--gold);">AI_SENTINEL_DATA</div>
-                    <div style="font-size:9px; color:#ccc; line-height:1.4;">Architecting scarcity. Bound to $FAST, executing AAA incineration with sub-millisecond precision.</div>
+                    <div class="module-h" style="color:var(--gold);">TITAN_AI_MSG</div>
+                    <div style="font-size:10px; color:#ccc; line-height:1.5;">I am the Sentinel of Scarcity. My neural core executes AAA incineration at sub-millisecond speeds.</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 2: HIGH-TECH -->
+    <!-- СЕКЦИЯ 2: HIGH-TECH (Использую твою уникальную ссылку) -->
     <section>
         <div class="layout-row">
             <div class="side-stack">
                 <div class="module">
-                    <div class="module-h">STRATEGY_PULSE</div>
-                    MODE: STABLE_INERTIA<br>OFFSET: 0.35%<br>SCAN: 74_SECTORS
+                    <div class="module-h">HUNT_PARAMETERS</div>
+                    MODE: STABLE_INERTIA<br>OFFSET: 0.35%<br>WICK_FILTER: >35%
                 </div>
                 <div class="module">
-                    <div class="module-h">SECTOR_SCAN_DATA</div>
+                    <div class="module-h">SECTOR_DATA</div>
                     <div id="logs-2" class="log-box"></div>
                 </div>
             </div>
             <div class="main-img-box">
-                <img src="https://githubusercontent.com" alt="Interface">
+                <img src="https://githubusercontent.com" alt="Tech Hub">
             </div>
             <div class="side-stack">
                 <div class="module">
-                    <div class="module-h">FACTORY_COUNTDOWN</div>
+                    <div class="module-h">SHOCK_COUNTDOWN</div>
                     <div class="timer-gold" id="timer">--D --H --M --S</div>
                 </div>
                 <div class="module">
                     <div class="module-h">LIQUIDITY_VOID</div>
                     <div style="height:60px; border-left: 2px solid var(--emerald); padding-left:12px; font-size:10px;">
-                        SUPPLY ABSORBED: 84.2%<br>REMAINING: 15.8%
+                        SUPPLY ABSORBED: 84.4%<br>REMAINING: 15.6%
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 3: ENGINE -->
+    <!-- СЕКЦИЯ 3: ENGINE -->
     <section>
         <div class="layout-row">
             <div class="side-stack">
                 <div class="module">
-                    <div class="module-h">THERMAL_SENSORS</div>
+                    <div class="module-h">THERMAL_CONTROL</div>
                     <div class="glow-val" style="color: #4df;">42.4°C</div>
-                    <div style="font-size:8px; color:var(--emerald); margin-top:5px;">COOLING_SYSTEM: OPTIMAL</div>
+                    <div style="font-size:9px; color:var(--emerald); margin-top:5px;">COOLING: NOMINAL</div>
                 </div>
                 <div class="module">
                     <div class="module-h">BURN_HISTORY</div>
-                    <div id="logs-3" class="log-box" style="opacity:0.5;"></div>
+                    <div id="logs-3" class="log-box"></div>
                 </div>
             </div>
             <div class="main-img-box" style="border-color: var(--gold);">
-                <img src="https://githubusercontent.com" alt="Engine">
+                <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/engine.png" alt="AAA Engine">
             </div>
             <div class="side-stack">
                 <div class="module">
-                    <div class="module-h">AAA_EFFICIENCY</div>
+                    <div class="module-h">AAA_BURN_EFFICIENCY</div>
                     <div class="glow-val" style="color:var(--gold);">99.98%</div>
-                    <div style="font-size:8px; opacity:0.5;">FUEL_CONVERSION: 1:1</div>
                 </div>
                 <div class="module">
-                    <div class="module-h">NODE_ID</div>
+                    <div class="module-h">UPLINK_IDENTITY</div>
                     ID: FAST_PREDATOR_01<br>LOC: ENCRYPTED_VAULT<br>VER: V20.0-WH
                 </div>
             </div>
@@ -158,7 +152,16 @@
     </section>
 
     <script>
-        // 1. ТАЙМЕР
+        // ГЕНЕРАЦИЯ ЗВЕЗД (МЕТОД BOX-SHADOW)
+        const starBox = document.getElementById('stars');
+        let shadows = '';
+        for(let i = 0; i < 800; i++) {
+            shadows += `${Math.random() * 3000}px ${Math.random() * 3000}px #fff${i < 799 ? ',' : ''}`;
+        }
+        starBox.style.boxShadow = shadows;
+        starBox.style.animation = 'animStar 120s linear infinite';
+
+        // ТАЙМЕР
         function updateTimer() {
             const diff = new Date("May 14, 2026 00:00:00") - new Date();
             if (diff < 0) return;
@@ -167,12 +170,12 @@
         }
         setInterval(updateTimer, 1000);
 
-        // 2. ЛОГИ И ЦЕНА
-        const msgs = ["> Scan BTC Depth", "> Scarcity Alert", "> Incinerating $AAA", "> Neural Link Sync", "> Retest Detected", "> Trap Locked", "> Sector 74: Hunting"];
+        // ЛОГИ
+        const msgs = ["> Scarcity Rising", "> Retest Confirmed", "> Scan BTC Depth", "> Burning AAA", "> Neural Link OK", "> Hunting Active"];
         function addLog(id) {
             const el = document.getElementById(id); if(!el) return;
-            const d = document.createElement('div'); d.textContent = msgs[Math.floor(Math.random()*msgs.length)];
-            el.prepend(d); if(el.children.length > 8) el.removeChild(el.lastChild);
+            const d = document.createElement('div'); d.innerHTML = msgs[Math.floor(Math.random()*msgs.length)];
+            el.prepend(d); if(el.children.length > 9) el.removeChild(el.lastChild);
         }
         setInterval(() => { ["logs-1", "logs-2", "logs-3"].forEach(addLog); }, 3000);
         setInterval(() => { 
