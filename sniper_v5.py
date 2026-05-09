@@ -186,7 +186,7 @@ async def execute_entry(exchange, res):
         #limit_price = float(exchange.price_to_precision(symbol, (open_p + price) / 2))
         # Было: (open_p + price) / 2 (50% отката)
         # Стало: цена пробоя минус 30% тела свечи (более агрессивный зацеп)
-        limit_price = price - (price - open_p) * 0.3 if side == 'buy' else price + (open_p - price) * 0.3
+        limit_price = price - (price - open_p) * 0.15 if side == 'buy' else price + (open_p - price) * 0.15
         
         try: await exchange.set_leverage(LEVERAGE, symbol)
         except: pass
