@@ -6,214 +6,165 @@
     <title>FAST PROTOCOL | AI CONTROL</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root { --emerald: #00ff41; --gold: #ffd700; --bg: #000; --dim-green: rgba(0, 255, 65, 0.15); }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Orbitron', sans-serif; scroll-behavior: smooth; }
+        :root { --emerald: #00ff41; --gold: #ffd700; --bg: #000; }
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: #fff; font-family: 'Orbitron', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
 
-        /* ИСПРАВЛЕННОЕ ЗВЕЗДНОЕ НЕБО (CSS) */
-        .stars-bg { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-3; background: radial-gradient(ellipse at bottom, #001 0%, #000 100%); overflow:hidden; }
-        .stars-bg::after { content: ""; position: absolute; top: -100%; left: -100%; width: 300%; height: 300%; background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)); background-size: 200px 200px; animation: drift 100s linear infinite; opacity: 0.3; }
-        @keyframes drift { from { transform: translateY(0); } to { transform: translateY(200px); } }
+        /* ЗВЕЗДЫ */
+        #stars-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; }
+        .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background-image: linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px); 
+            background-size: 50px 50px; z-index: -2; pointer-events: none; }
 
-        /* СЕТКА */
-        .grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(var(--dim-green) 1px, transparent 1px), linear-gradient(90deg, var(--dim-green) 1px, transparent 1px); background-size: 60px 60px; z-index: -2; pointer-events: none; }
+        /* ШАПКА */
+        header { text-align: center; padding: 60px 20px; }
+        .neon-title { font-size: clamp(1.8rem, 6vw, 3.5rem); letter-spacing: 15px; color: var(--emerald); text-shadow: 0 0 15px var(--emerald); margin-bottom: 20px; font-weight: 400; }
+        .social-links a { color: var(--gold); text-decoration: none; font-size: 11px; letter-spacing: 2px; border: 1px solid var(--gold); padding: 10px 20px; margin: 5px; display: inline-block; transition: 0.3s; }
+        .social-links a:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px var(--gold); }
 
-        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 0; }
-
-        /* ЗАГОЛОВОК И СОЦСЕТИ */
-        .header-box { text-align: center; margin-bottom: 50px; }
-        .neon-title { font-size: 3.5rem; letter-spacing: 20px; color: var(--emerald); text-shadow: 0 0 10px var(--emerald); font-weight: 400; margin-bottom: 15px; }
-        .social-links a { color: var(--gold); text-decoration: none; font-size: 10px; margin: 0 15px; letter-spacing: 3px; border: 1px solid var(--gold); padding: 5px 15px; transition: 0.3s; }
-        .social-links a:hover { background: var(--gold); color: #000; box-shadow: 0 0 15px var(--gold); }
-
-        /* МОДУЛЬНАЯ СЕТКА ИНТЕРФЕЙСА */
-        .modular-container { display: grid; grid-template-columns: 200px 1fr 200px; gap: 40px; width: 95%; max-width: 1600px; align-items: start; }
+        /* СЕКЦИИ */
+        .section-box { width: 100%; max-width: 1400px; margin: 0 auto 100px; display: flex; flex-direction: column; align-items: center; padding: 0 20px; }
         
-        .side-stack { display: flex; flex-direction: column; gap: 15px; }
-        .module { border: 1px solid var(--dim-green); background: rgba(0, 10, 0, 0.8); padding: 12px; font-family: monospace; font-size: 10px; color: var(--emerald); box-shadow: 0 0 15px rgba(0,255,65,0.05); }
-        .module-h { font-size: 9px; color: #888; border-bottom: 1px solid var(--dim-green); margin-bottom: 8px; padding-bottom: 3px; text-transform: uppercase; }
+        .main-layout { display: flex; align-items: stretch; justify-content: center; gap: 30px; width: 100%; }
+        
+        /* МОНИТОРЫ */
+        .side-monitor { width: 260px; border: 1px solid rgba(0, 255, 65, 0.2); background: rgba(0, 10, 0, 0.9); padding: 20px; font-family: monospace; font-size: 11px; color: var(--emerald); display: flex; flex-direction: column; justify-content: space-between; }
+        .monitor-h { font-size: 9px; color: #888; border-bottom: 1px solid rgba(0, 255, 65, 0.2); margin-bottom: 15px; padding-bottom: 5px; }
 
-        .main-img { border: 1px solid var(--emerald); box-shadow: 0 0 40px rgba(0, 255, 65, 0.1); width: 100%; max-width: 850px; }
+        /* КАРТИНКА */
+        .img-wrap { flex: 1; max-width: 800px; border: 1px solid var(--emerald); box-shadow: 0 0 50px rgba(0, 255, 65, 0.1); line-height: 0; }
+        .img-wrap img { width: 100%; height: auto; }
 
-        /* СПЕЦИАЛЬНЫЕ МОДУЛИ */
-        .ai-pulse { height: 30px; background: repeating-linear-gradient(90deg, transparent, transparent 5px, var(--dim-green) 5px, var(--dim-green) 10px); }
-        .glow-value { font-size: 16px; color: #fff; text-shadow: 0 0 8px var(--emerald); }
+        /* ТЕЛЕМЕТРИЯ */
+        .glow-val { font-size: 22px; color: #fff; text-shadow: 0 0 10px var(--emerald); }
+        .log-stream { height: 150px; overflow: hidden; opacity: 0.8; line-height: 1.6; }
+
+        /* МОБИЛЬНАЯ ВЕРСИЯ */
+        @media (max-width: 1100px) {
+            .main-layout { flex-direction: column; align-items: center; }
+            .side-monitor { width: 100%; order: 2; }
+            .img-wrap { order: 1; margin-bottom: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="stars-bg"></div>
-    <div class="grid"></div>
+    <canvas id="stars-canvas"></canvas>
+    <div class="grid-overlay"></div>
 
-    <section>
-        <div class="header-box">
-            <h1 class="neon-title">FAST PROTOCOL</h1>
-            <div class="social-links">
-                <a href="https://t.me">TELEGRAM</a>
-                <a href="https://x.com">TWITTER / X</a>
-            </div>
-        </div>
-
-        <div class="modular-container">
-            <!-- ЛЕВАЯ КОЛОНКА МОДУЛЕЙ -->
-            <div class="side-stack">
-                <div class="module">
-                    <div class="module-h">AI CORE STATUS</div>
-                    <div class="glow-value">SYNC_OK</div>
-                    <div class="ai-pulse"></div>
-                </div>
-                <div class="module">
-                    <div class="module-h">NEURAL LOGS</div>
-                    <div id="logs-left" style="height: 150px; overflow:hidden; line-height:1.4;"></div>
-                </div>
-                <div class="module" style="border-color: var(--gold);">
-                    <div class="module-h" style="color: var(--gold);">ABOUT TITAN AI</div>
-                    <p style="margin:0; font-size:9px; color:#aaa;">I am the Sentinel of Scarcity. My logic core is bound to $FAST, executing trades beyond human speed. My mission: The Great AAA Incineration.</p>
-                </div>
-            </div>
-
-            <!-- ЦЕНТР -->
-            <div style="text-align: center;">
-                <img src="pult.jpg" class="main-img">
-                <div class="module" style="margin-top:20px; border-style:dashed;">
-                    > SYSTEM_BOOT_SEQUENCE: SUCCESSFUL | ENCRYPTION_LAYER: ARMORED
-                </div>
-            </div>
-
-            <!-- ПРАВАЯ КОЛОНКА МОДУЛЕЙ -->
-            <div class="side-stack">
-                <div class="module">
-                    <div class="module-h">BTC ORACLE</div>
-                    <div class="glow-value" id="btc-price">$79,942.10</div>
-                </div>
-                <div class="module">
-                    <div class="module-h">NETWORK LOAD</div>
-                    <div style="display:flex; gap:2px;">
-                        <div style="height:15px; width:15%; background:var(--emerald);"></div>
-                        <div style="height:15px; width:45%; background:var(--emerald);"></div>
-                        <div style="height:15px; width:20%; background:var(--dim-green);"></div>
-                    </div>
-                </div>
-                <div class="module">
-                    <div class="module-h">BURN ANALYTICS</div>
-                    <div class="glow-value" style="color:var(--gold);">99.87%</div>
-                    <div style="font-size:8px; opacity:0.5;">EFFICIENCY_TARGET_MET</div>
-                </div>
-                <div class="module">
-                    <div class="module-h">HUNTING SECTORS</div>
-                    <div id="logs-right"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ПОВТОРЯЙ СТРУКТУРУ ДЛЯ engine.jpg и terminal.jpg НИЖЕ -->
-    <!-- СЕКЦИЯ 1: THE COMMAND (Пульт) -->
-    <section>
+    <header>
         <h1 class="neon-title">FAST PROTOCOL</h1>
-        <div class="interface-group">
-            <div class="side-monitor">
-                <div>
-                    <div class="monitor-label">CORE_TELEMETRY</div>
-                    <div id="logs-1" style="height: 180px; overflow: hidden; opacity: 0.7;"></div>
-                </div>
-                <div>
-                    <div class="monitor-label">NETWORK_PULSE</div>
-                    <svg class="pulse-line" viewBox="0 0 100 40"><polyline id="pulse-path" points="0,20 10,20 15,5 25,35 35,20 100,20" /></svg>
-                </div>
-            </div>
-            <div class="img-container">
-                <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/status.png">
-                <div class="matrix-sub"><canvas id="matrix-mini"></canvas></div>
-            </div>
-            <div class="side-monitor">
-                <div>
-                    <div class="monitor-label">SYSTEM_STATUS</div>
-                    <div class="stat-value" style="color: var(--emerald);">● ONLINE</div>
-                    <div class="monitor-label">ENCRYPTION</div>
-                    <div class="stat-value">RSA_4096</div>
-                </div>
-                <div style="font-size: 10px; opacity: 0.5;">[ ACCESS_GRANTED ]<br>NODE_ID: 0x7F2A...</div>
-            </div>
+        <div class="social-links">
+            <a href="https://t.me" target="_blank">TELEGRAM</a>
+            <a href="https://x.com" target="_blank">TWITTER</a>
         </div>
-    </section>
+    </header>
 
-    <!-- СЕКЦИЯ 2: THE ENGINE (Двигатель) -->
-    <section>
-        <div class="interface-group">
+    <!-- СЕКЦИЯ 1: STATUS -->
+    <div class="section-box">
+        <div class="main-layout">
             <div class="side-monitor">
                 <div>
-                    <div class="monitor-label">ORACLE_FEED</div>
-                    <div class="stat-value" id="btc-price">$79,842.50</div>
-                    <div class="monitor-label">MARKET_PHASE</div>
-                    <div class="stat-value" style="font-size: 16px;">STABLE_INERTIA</div>
+                    <div class="monitor-h">CORE_INTEGRITY</div>
+                    <div class="glow-val">● SYNC_OK</div>
                 </div>
-                <div id="logs-3" style="font-size: 9px; opacity: 0.6;"></div>
+                <div class="log-stream" id="logs-1"></div>
             </div>
-            <div class="img-container" style="border-color: var(--gold);">
-                <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/Fast%20high-tech.png">
-            </div>
-            <div class="side-monitor">
-                <div>
-                    <div class="monitor-label">FACTORY_COUNTDOWN</div>
-                    <div class="stat-value" id="timer" style="color: var(--gold); font-size: 16px;">--d --h --m --s</div>
-                </div>
-                <div>
-                    <div class="monitor-label">BURN_EFFICIENCY</div>
-                    <div class="stat-value">99.87%</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- СЕКЦИЯ 3: THE TERMINAL (Зеленый пульт) -->
-    <section>
-        <div class="interface-group">
-            <div class="side-monitor">
-                <div class="monitor-label">SECTOR_SCAN</div>
-                <div id="logs-5" style="height: 100%; overflow: hidden; line-height: 1.6;"></div>
-            </div>
-            <div class="img-container">
-                <img src="https://raw.githubusercontent.com/fast-protocol/fast-protocol/refs/heads/main/engine.png">
-            </div>
-            <div class="side-monitor">
-                <div>
-                    <div class="monitor-label">LIQUIDITY_MAP</div>
-                    <div style="height: 120px; background: rgba(0,255,65,0.05); border: 1px solid rgba(0,255,65,0.2); position: relative;">
-                        <div style="position: absolute; top: 10px; left: 10px; width: 5px; height: 5px; background: #fff; box-shadow: 0 0 10px #fff;"></div>
-                        <div style="position: absolute; bottom: 20px; right: 30px; width: 5px; height: 5px; background: var(--emerald); box-shadow: 0 0 10px var(--emerald);"></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="monitor-label">PROTOCOL_VERSION</div>
-                    <div class="stat-value">V3.9_LIMIT</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    
-    <script>
-        // ЖИВЫЕ ДАННЫЕ
-        const lLogs = document.getElementById('logs-left');
-        const rLogs = document.getElementById('logs-right');
-        const phrases = ["> Scanning BTC", "> Trap set at 0.35%", "> AAA depth found", "> Neural shift", "> Predator active"];
-
-        setInterval(() => {
-            const div = document.createElement('div');
-            div.innerHTML = phrases[Math.floor(Math.random() * phrases.length)];
-            lLogs.prepend(div);
-            if(lLogs.children.length > 10) lLogs.removeChild(lLogs.lastChild);
-
-            const div2 = document.createElement('div');
-            div2.innerHTML = `> SC: ${Math.random().toString(16).substring(2,6).toUpperCase()}`;
-            rLogs.prepend(div2);
-            if(rLogs.children.length > 8) rLogs.removeChild(rLogs.lastChild);
             
-            // Микро-изменение цены
-            const btc = 79942 + (Math.random() * 10);
-            document.getElementById('btc-price').innerHTML = `$${btc.toFixed(2)}`;
-        }, 2000);
+            <div class="img-wrap">
+                <img src="https://githubusercontent.com">
+            </div>
+
+            <div class="side-monitor">
+                <div>
+                    <div class="monitor-h">BTC_ORACLE</div>
+                    <div class="glow-val" id="btc-val">$80,342.10</div>
+                </div>
+                <div style="font-size: 9px; color: #aaa;">[ SYSTEM_READY ]<br>SCANNING 74 SECTORS...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- СЕКЦИЯ 2: HIGH-TECH -->
+    <div class="section-box">
+        <div class="main-layout">
+            <div class="side-monitor">
+                <div>
+                    <div class="monitor-h">WickHunter_V20.0</div>
+                    RATIO: >0.35<br>LEVERAGE: 20X<br>MODE: STABLE
+                </div>
+            </div>
+            
+            <div class="img-wrap">
+                <img src="https://githubusercontent.com">
+            </div>
+
+            <div class="side-monitor">
+                <div>
+                    <div class="monitor-h">SHOCK_COUNTDOWN</div>
+                    <div class="glow-val" id="timer" style="color:var(--gold); font-size:18px;">--D --H --M</div>
+                </div>
+                <div class="log-stream" id="logs-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- СЕКЦИЯ 3: ENGINE -->
+    <div class="section-box">
+        <div class="main-layout">
+            <div class="side-monitor">
+                <div>
+                    <div class="monitor-h">ABOUT_TITAN_AI</div>
+                    <p style="font-size:10px; color:#ccc;">I am the architect of scarcity. Bound to $FAST, I execute the Great AAA Incineration.</p>
+                </div>
+            </div>
+            
+            <div class="img-wrap" style="border-color: var(--gold);">
+                <img src="https://githubusercontent.com">
+            </div>
+
+            <div class="side-monitor">
+                <div>
+                    <div class="monitor-h">BURN_EFFICIENCY</div>
+                    <div class="glow-val" style="color:var(--gold);">99.98%</div>
+                </div>
+                <div class="log-stream" id="logs-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ЗВЕЗДЫ
+        const canvas = document.getElementById('stars-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+        for(let i=0; i<150; i++) stars.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, s:Math.random()*2, v:Math.random()*0.5});
+        function animate() {
+            ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="#fff";
+            stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill(); s.y-=s.v; if(s.y<0) s.y=canvas.height; });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // ТАЙМЕР
+        function updateTimer() {
+            const diff = new Date("May 14, 2026 00:00:00") - new Date();
+            if (diff < 0) return;
+            const d=Math.floor(diff/(1000*60*60*24)), h=Math.floor((diff/(1000*60*60))%24), m=Math.floor((diff/(1000*60))%60), s=Math.floor((diff/1000)%60);
+            document.getElementById("timer").innerHTML = `${d}D ${h}H ${m}M ${s}S`;
+        }
+        setInterval(updateTimer, 1000);
+
+        // ЛОГИ
+        const msgs = ["> Scarcity Detected", "> Retest confirmed", "> Scanning depth", "> Incinerating AAA", "> Neural link OK"];
+        function addLog(id) {
+            const el = document.getElementById(id); if(!el) return;
+            const d = document.createElement('div'); d.innerHTML = msgs[Math.floor(Math.random()*msgs.length)];
+            el.prepend(d); if(el.children.length > 8) el.removeChild(el.lastChild);
+        }
+        setInterval(() => { ["logs-1", "logs-2", "logs-3"].forEach(addLog); }, 3000);
     </script>
 </body>
 </html>
