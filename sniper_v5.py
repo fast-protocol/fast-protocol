@@ -266,11 +266,19 @@ async def monitor_logic(exchange):
                 # Если цена улетела далеко (+0.5%) без нас - отменяем охоту
                 if age > 30 and diff > 0.005:
                     log(f"🚫 Пропуск {symbol}: Улетела без отката.")
-                    await exchange.cancel_all_orders(symbol, exit_params)
+                    try:
+                        # Усиленная очистка: пробуем 3 раза с паузой
+                        for _ in range(3):
+                            await exchange.cancel_all_orders(symbol, exit_params)
+                            await asyncio.sleep(0.3)
+                        log(f"🧹 Ордера {symbol} принудительно вычищены.")
+                    except: pass
+                    
                     del memory.active_pos[symbol]
                     memory.slots_occupied -= 1
-                    continue
+                    continue                
 
+                
                 # --- СТАДИЯ Б: Активная позиция (уже в рынке) ---
 
                 # 1. Smart Price-Cut (Та самая проверка через 45 сек)
