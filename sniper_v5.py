@@ -58,6 +58,12 @@ RISK_GEAR = 0.85    # Использование 95% доступной марж
 RESERVE_CASH = 0.8  # Резерв на комиссии ($)
 SMART_CUT_T = 45    # Секунд до проверки Price-Cut
 
+MAX_SLOTS = 1
+LEVERAGE = 20
+RISK_GEAR = 0.85    # Использование 95% доступной маржи на слот
+RESERVE_CASH = 0.8  # Резерв на комиссии ($)
+SMART_CUT_T = 45    # Секунд до проверки Price-Cut
+
 class GlobalMemory:
     def __init__(self):
         self.prices = {}
@@ -82,11 +88,11 @@ async def init_exchange():
     """Связь с BingX через зашифрованный канал"""
     # Архитектор, вставь свои ключи сюда
     return ccxt.bingx({
-        'apiKey': '',
-        'secret': '',
+        'apiKey': 'JalqlQMGxo0HNxVgkCDcvik47vAUDYkv8ZlChntsXDt4OjHDRTRG5W56F0aKJoK9Z8hNA8ADGvKyOlbhRDOA',
+        'secret': 'DeA2h64PM8KtfQZ4wQcUvIPUt3LgjunjYCLJVHqnIL8PtHLgDmef7oJNHxYEy00cO9OswsI4wg4WBwCFa9v0A',
         'enableRateLimit': True,
         'options': {
-            'defaultType': 'swap', 
+            'defaultType': 'swap',
             'portfolioMargin': False, # Убираем, если аккаунт обычный
             'broker': 'CCXT'
         }
@@ -107,7 +113,7 @@ async def price_stream(exchange):
     """Индивидуальный захват цен (Поддержка BingX V2)"""
     symbols = list(PULSE_GENOME.keys())
     log(f"📡 Запуск раздельного WS-потока для: {symbols}")
-    
+
     async def track_symbol(symbol):
         while memory.is_running:
             try:
@@ -139,6 +145,7 @@ async def price_stream(exchange):
 
     await asyncio.gather(*tasks)
 
+
 async def check_signal(exchange, symbol):
     """Анализ на пробой и поглощение"""
     try:
@@ -146,20 +153,20 @@ async def check_signal(exchange, symbol):
         # Берем 30 свечей для точности MA и STD
         ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
         df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
-        
+
         # Индикаторы
         ma = df['c'].rolling(20).mean().iloc[-1]
         std = df['c'].rolling(20).std().iloc[-1]
         upper = ma + (std * 2.1)
         lower = ma - (std * 2.1)
         width = (upper - lower) / ma * 100
-        
+
         # 1. Фильтр Окна (Squeeze)
         if not (dna['min_w'] <= width <= dna['max_w']): return None
-        
+
         cur_p = memory.prices.get(symbol, df['c'].iloc[-1])
         prev_o, prev_c = df['o'].iloc[-1], df['c'].iloc[-1]
-        
+
         # 2. Логика Поглощения (Входим по тренду пробоя)
         # ЛОНГ: Цена выше верхней ленты + оффсет И текущая цена выше открытия красной свечи
 #        is_buy = (cur_p >= upper * (1 + dna['l_off'])) and (cur_p > prev_o) and (prev_c > prev_o)
@@ -167,7 +174,7 @@ async def check_signal(exchange, symbol):
 #        is_sell = (cur_p <= lower * (1 - dna['s_off'])) and (cur_p < prev_o) and (prev_c < prev_o)
         # ЛОНГ: Цена > оффсета И выше открытия ПРЕДЫДУЩЕЙ (неважно какого она была цвета)
         is_buy = (cur_p >= upper * (1 + dna['l_off'])) and (cur_p > prev_o)
-        
+
         # ШОРТ: Цена < оффсета И ниже открытия ПРЕДЫДУЩЕЙ
         is_sell = (cur_p <= lower * (1 - dna['s_off'])) and (cur_p < prev_o)
 
@@ -183,14 +190,15 @@ async def execute_entry(exchange, res):
     """Вход по Лимитке + Мгновенный Тейк 1 и Стоп"""
     symbol, side, price, dna, open_p = res['symbol'], res['side'], res['price'], res['dna'], res['open_p']
     try:
-        #limit_price = float(exchange.price_to_precision(symbol, (open_p + price) / 2))
+#        limit_price = float(exchange.price_to_precision(symbol, (open_p + price) / 2))
         # Было: (open_p + price) / 2 (50% отката)
         # Стало: цена пробоя минус 30% тела свечи (более агрессивный зацеп)
         limit_price = price - (price - open_p) * 0.15 if side == 'buy' else price + (open_p - price) * 0.15
-        
+
+
         try: await exchange.set_leverage(LEVERAGE, symbol)
         except: pass
-        
+
         margin = (memory.available / (MAX_SLOTS - memory.slots_occupied)) * RISK_GEAR
         if margin > RESERVE_CASH: margin -= RESERVE_CASH
         amount = float(exchange.amount_to_precision(symbol, (margin * LEVERAGE) / limit_price))
@@ -199,7 +207,7 @@ async def execute_entry(exchange, res):
         # Расчет цен
         tp1_price = limit_price * (1 + dna['tp1']) if side == 'buy' else limit_price * (1 - dna['tp1'])
         sl_price = limit_price * (1 + dna['sl']) if side == 'buy' else limit_price * (1 - dna['sl'])
-        
+
         # ПАРАМЕТРЫ: Тейк 1 на 50% объема + полный Стоп
         params = {
             'stopLoss': float(exchange.price_to_precision(symbol, sl_price)),
@@ -208,12 +216,12 @@ async def execute_entry(exchange, res):
             'spot': False
         }
 
-        log(f"🕸️ ЛОВУШКА [V3.9]: {symbol} {side.upper()} | TP1(50%): {round(tp1_price,4)} | SL: {round(sl_price,4)}")
+        log(f"🕸️ ЛОВУШКА [V3.9]: {symbol} {side.upper()} | TP1(50%): {round(tp1_price,4)} | SL: {ro und(sl_price,4)}")
         order = await exchange.create_order(symbol, 'limit', side, amount, limit_price, params)
 
         if order:
             memory.active_pos[symbol] = {
-                'side': side, 'price': limit_price, 'vol': amount, 
+                'side': side, 'price': limit_price, 'vol': amount,
                 'dna': dna, 'order_id': order['id']
             }
             memory.entry_times[symbol] = time.time()
@@ -238,25 +246,25 @@ async def signal_hunter(exchange):
 async def monitor_logic(exchange):
     """Ультимативный мониторинг V3.6: Лимитки + Smart-Cut"""
     exit_params = {'spot': False}
-    
+
     while memory.is_running:
         for symbol, pos in list(memory.active_pos.items()):
             try:
                 cur_p = memory.prices.get(symbol)
                 if not cur_p: continue
-                
+
                 dna = pos['dna']
                 # Считаем PNL от нашей лимитной цены входа
                 diff = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
                 age = time.time() - memory.entry_times[symbol]
-                
+
                 # ЛОГ ДЛЯ ДЕБАГА
                 if int(time.time()) % 10 == 0:
-                    log(f"🕵️ Монитор {symbol}: Profit: {round(diff*100, 3)}% | Age: {int(age)}s")
+                    log(f"🕵️ Монитор {sym bol}: Profit: {round(diff*100, 3)}% | Age: {int(age)}s")
 
                 # --- СТАДИЯ А: Если лимитка входа еще не исполнилась (ждем 30 сек) ---
                 # Если цена улетела далеко (+0.5%) без нас - отменяем охоту
-                if age > 30 and diff > 0.005: 
+                if age > 30 and diff > 0.005:
                     log(f"🚫 Пропуск {symbol}: Улетела без отката.")
                     await exchange.cancel_all_orders(symbol, exit_params)
                     del memory.active_pos[symbol]
@@ -264,7 +272,7 @@ async def monitor_logic(exchange):
                     continue
 
                 # --- СТАДИЯ Б: Активная позиция (уже в рынке) ---
-                
+
                 # 1. Smart Price-Cut (Та самая проверка через 45 сек)
                 # Выходим, если время вышло, а мы НЕ в профите хотя бы 0.1%
                 if age >= SMART_CUT_T and not memory.tp_fixed[symbol] and diff < 0.001:
@@ -273,11 +281,11 @@ async def monitor_logic(exchange):
                         # 1. Расчищаем место (отменяем лимитки)
                         await exchange.cancel_all_orders(symbol, {'spot': False})
                         await asyncio.sleep(0.5)
-                        
+
                         # 2. Узнаем, сколько РЕАЛЬНО успело купиться
                         pos_info = await exchange.fetch_position(symbol, {'spot': False})
                         real_vol = float(pos_info['contracts']) if pos_info and pos_info.get('contracts') else 0
-                        
+
                         if real_vol > 0:
                             side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
                             # Закрываем именно столько, сколько есть на бирже
@@ -295,6 +303,7 @@ async def monitor_logic(exchange):
                         log("⚠️ Позиция остается в памяти для повторной попытки!")
                     continue
 
+
                 # 2. Локальный Тейк №1 (в дополнение к биржевому, для лога и БУ)
                 if not memory.tp_fixed[symbol]:
                     pos_info = await exchange.fetch_position(symbol, {'spot': False})
@@ -302,26 +311,25 @@ async def monitor_logic(exchange):
 
                     if pos_info and pos_info.get('contracts') is not None:
                         current_vol = float(pos_info['contracts'])
-                        
+
                         if current_vol < pos['vol'] * 0.7:
                             log(f"🎯 ТЕЙК 1 СРАБОТАЛ: {symbol}. БУ + ТП2.")
                             be_p = pos['price'] * (1 + 0.0005) if pos['side'] == 'buy' else pos['price'] * (1 - 0.0005)
                             tp2_p = pos['price'] * (1 + dna['tp2']) if pos['side'] == 'buy' else pos['price'] * (1 - dna['tp2'])
-                            
+
                             side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
                             await exchange.cancel_all_orders(symbol, {'spot': False})
-                            
+
                             final_params = {
                                 'stopLoss': float(exchange.price_to_precision(symbol, be_p)),
                                 'spot': False
                             }
                             await exchange.create_order(symbol, 'limit', side_exit, current_vol, tp2_p, final_params)
-                            
+
                             memory.tp_fixed[symbol] = True
                             pos['vol'] = current_vol
 
-                
-                
+
                 # 3. Ultra-Short SL (Подстраховка кода, если биржа лаганет)
                 if diff <= dna['sl']:
                     log(f"🚨 ULTRA-SL TRIGGERED: {symbol}")
@@ -331,9 +339,9 @@ async def monitor_logic(exchange):
                     del memory.active_pos[symbol]
                     memory.slots_occupied -= 1
 
-            except Exception as e: 
+            except Exception as e:
                 log(f"⚠️ Monitor error {symbol}: {e}")
-        
+
         await asyncio.sleep(0.5)
 
 async def recover_positions(exchange):
@@ -342,17 +350,17 @@ async def recover_positions(exchange):
         log("🔍 Протокол реанимации: Сканирую открытые позиции...")
         # Запрашиваем только фьючерсные позиции
         pos_data = await exchange.fetch_positions(symbols=list(PULSE_GENOME.keys()), params={'spot': False})
-        
+
         for p in pos_data:
             symbol = p['symbol']
             side = p['side'] # 'long' или 'short'
             contracts = float(p['contracts'])
-            
+
             if contracts > 0:
                 # Мапим сторону под наш формат
                 side_internal = 'buy' if side == 'long' else 'sell'
                 entry_p = float(p['entryPrice'])
-                
+
                 # Восстанавливаем паспорт позиции
                 memory.active_pos[symbol] = {
                     'side': side_internal,
@@ -364,12 +372,12 @@ async def recover_positions(exchange):
                 memory.tp_fixed[symbol] = False
                 memory.entry_times[symbol] = time.time() # Таймер Smart-Cut сбросится (безопасно)
                 memory.slots_occupied += 1
-                
+
                 log(f"✅ Позиция {symbol} ({side}) подхвачена! Вход: {entry_p} | Vol: {contracts}")
-                
+
         if memory.slots_occupied == 0:
             log("📡 Активных позиций на бирже не обнаружено. Охотник чист.")
-            
+
     except Exception as e:
         log(f"⚠️ Ошибка реанимации: {e}")
 
@@ -392,4 +400,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         log("🛑 Остановка Архитектором.")
-
