@@ -240,7 +240,7 @@ async def position_tracker(exchange):
             memory.slots_occupied = len(active)
         except Exception as e:
             log(f"⚠️ Ошибка Position-Tracker: {e}")
-        await asyncio.sleep(10)
+        await asyncio.sleep(15)
 
 async def check_signal(exchange, symbol):
     try:
@@ -304,8 +304,12 @@ async def check_signal(exchange, symbol):
 
         if is_buy or is_sell:
             # Funding Shield
-            f_data = await exchange.fetch_funding_rate(symbol)
-            if abs(float(f_data.get('fundingRate', 0))) > FUNDING_SHIELD: return None
+            try:
+                f_data = await exchange.fetch_funding_rate(symbol)
+                if abs(float(f_data.get('fundingRate', 0))) > FUNDING_SHIELD: 
+                    log(f"🛡️ Funding Shield: {symbol} пропуск (Rate: {f_data.get('fundingRate')})")
+                    return None
+            except: pass # Обработка ошибок, чтобы бот не падал
 
             return {
                 'symbol': symbol,
