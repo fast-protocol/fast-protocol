@@ -216,7 +216,7 @@ async def execute_entry(exchange, res):
             'spot': False
         }
 
-        log(f"🕸️ ЛОВУШКА [V3.9]: {symbol} {side.upper()} | TP1(50%): {round(tp1_price,4)} | SL: {ro und(sl_price,4)}")
+        log(f"🕸️ ЛОВУШКА [V3.9]: {symbol} {side.upper()} | TP1(50%): {round(tp1_price,4)} | SL: {round(sl_price,4)}")
         order = await exchange.create_order(symbol, 'limit', side, amount, limit_price, params)
 
         if order:
@@ -260,7 +260,7 @@ async def monitor_logic(exchange):
 
                 # ЛОГ ДЛЯ ДЕБАГА
                 if int(time.time()) % 10 == 0:
-                    log(f"🕵️ Монитор {sym bol}: Profit: {round(diff*100, 3)}% | Age: {int(age)}s")
+                    log(f"🕵️ Монитор {symbol}: Profit: {round(diff*100, 3)}% | Age: {int(age)}s")
 
                 # --- СТАДИЯ А: Если лимитка входа еще не исполнилась (ждем 30 сек) ---
                 # Если цена улетела далеко (+0.5%) без нас - отменяем охоту
