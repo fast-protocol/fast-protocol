@@ -227,7 +227,7 @@ async def update_balance(exchange):
 
         except Exception as e:
             log(f"⚠️ Ошибка Balance-Worker: {e}")
-        await asyncio.sleep(10)
+        await asyncio.sleep(60)
 
 async def position_tracker(exchange):
     """Синхронизация открытых позиций в реальном времени"""
@@ -240,7 +240,7 @@ async def position_tracker(exchange):
             memory.slots_occupied = len(active)
         except Exception as e:
             log(f"⚠️ Ошибка Position-Tracker: {e}")
-        await asyncio.sleep(2)
+        await asyncio.sleep(10)
 
 async def check_signal(exchange, symbol):
     try:
