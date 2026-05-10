@@ -314,16 +314,26 @@ async def monitor_logic(exchange):
 
                         if current_vol < pos['vol'] * 0.7:
                             log(f"🎯 ТЕЙК 1 СРАБОТАЛ: {symbol}. БУ + ТП2.")
-                            be_p = pos['price'] * (1 + 0.0005) if pos['side'] == 'buy' else pos['price'] * (1 - 0.0005)
-                            tp2_p = pos['price'] * (1 + dna['tp2']) if pos['side'] == 'buy' else pos['price'] * (1 - dna['tp2'])
+
+                            # СТАЛО (БЕЗОПАСНЫЙ БУ):
+                            # Считаем БУ не от входа, а от текущей цены с зазором, чтобы биржа не ругалась
+                            if pos['side'] == 'buy':
+                                be_p = cur_p * 0.9995 
+                                tp2_p = pos['price'] * (1 + dna['tp2'])
+                            else:
+                                be_p = cur_p * 1.0005
+                                tp2_p = pos['price'] * (1 - dna['tp2'])
 
                             side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
                             await exchange.cancel_all_orders(symbol, {'spot': False})
 
                             final_params = {
                                 'stopLoss': float(exchange.price_to_precision(symbol, be_p)),
-                                'spot': False
+                                'spot': False,
+                                'reduceOnly': True # Добавил для безопасности
                             }
+
+                            
                             await exchange.create_order(symbol, 'limit', side_exit, current_vol, tp2_p, final_params)
 
                             memory.tp_fixed[symbol] = True
