@@ -23,6 +23,7 @@ FUNDING_SHIELD = 0.0003    # Пропуск при ставке > 0.03%
 SAFE_LEVERAGE_LIMIT = 20    # Жесткий лимит до июня 2026
 # ==========================================
 
+
 class GlobalMemory:
     def __init__(self):
         self.mode = "STABLE"
@@ -43,7 +44,7 @@ class GlobalMemory:
         self.available_margin = 0.0
         self.total_wallet = 0.0
         self.be_levels = {}
-        self.last_btc_push = 0 
+        self.last_btc_push = 0
 memory = GlobalMemory()
 
 def load_all_dna():
@@ -65,31 +66,31 @@ async def warm_up_btc_history(exchange):
         log("💉 Прогрев истории BTC: Загрузка свечей...")
         # Берем последние 60 минутных свечей
         ohlcv = await exchange.fetch_ohlcv('BTC/USDT:USDT', '1m', limit=60)
-        
+
         # Индекс [4] — это цена закрытия (Close). Это критично.
         memory.btc_history = [float(candle[4]) for candle in ohlcv]
-        
+
         if memory.btc_history:
             memory.last_btc_push = time.time()
-            
+
             # МГНОВЕННЫЙ РАСЧЕТ РЕЖИМА ПРИ СТАРТЕ
             btc_start = memory.btc_history[0]
             btc_now = memory.btc_history[-1]
             change = (btc_now / btc_start) - 1
-            
+
             new_regime = 'stable'
             if change > 0.008:   new_regime = 'bull'
             elif change < -0.008: new_regime = 'bear'
-            
+
             memory.current_regime = new_regime
             memory.dna_fleet = memory.all_dna[new_regime]
-            
+
             log(f"✅ История BTC прогрета: {len(memory.btc_history)} записей. База: {btc_start}")
             log(f"⚙️ Стартовый режим: >>> {new_regime.upper()} <<< (Trend: {round(change*100, 2)}%)")
-            
+
     except Exception as e:
         log(f"⚠️ Не удалось прогреть историю: {e}")
-        
+
 async def update_market_regime(exchange):
     """Аналитик Биткоина с инерцией 90с и бесконечным циклом V19.5"""
     log("🚥 Аналитик BTC запущен (Защита от дребезга 90с активна)")
@@ -98,7 +99,7 @@ async def update_market_regime(exchange):
             # 1. Получаем историю BTC для анализа фазы
             ohlcv = await exchange.fetch_ohlcv('BTC/USDT:USDT', '1m', limit=100)
             df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
-            
+
             # Расчет изменения: Берем первую свечу [0] и последнюю [-1]
             price_start = df['c'].iloc[0]
             price_now = df['c'].iloc[-1]
@@ -126,11 +127,11 @@ async def update_market_regime(exchange):
                     memory.mode = calculated_mode
                     memory.change_timer = 0
                     memory.current_regime = calculated_mode.lower()
-                    
+
                     # Загружаем соответствующие ДНК файлы
-                    load_all_dna() 
-                    
-                    log(f"🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> {memory.mode} <<< | Trend: {round(change, 3)}%")
+                    load_all_dna()
+
+                    log(f"🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> {memory.mode} <<< | Trend: {round(change, 3) }%")
             else:
                 # Если рынок вернулся к нашему текущему режиму - сбрасываем ожидание
                 if memory.pending_mode != memory.mode:
@@ -188,7 +189,7 @@ async def price_stream():
                 if 'USDT' in symbol:
                     val = float(price_data['last'])
                     memory.prices[symbol] = val
-                    
+
                     # 2. Ловим Биткоина (любой формат: BTC/USDT, BTC/USDT:USDT, BTCUSDT)
                     if not btc_captured and 'BTC' in symbol and 'USDT' in symbol:
                         if (now - memory.last_btc_push) >= 10:
@@ -209,7 +210,7 @@ async def update_balance(exchange):
         try:
             bal = await exchange.fetch_balance()
             # Добавь этот принудительный лог для проверки
- #           log(f"DEBUG: Получены данные баланса") 
+ #           log(f"DEBUG: Получены данные баланса")
             total = float(bal.get('total', {}).get('USDT', 0))
             free = float(bal.get('free', {}).get('USDT', 0))
 
@@ -218,7 +219,7 @@ async def update_balance(exchange):
             memory.total_wallet = total
             # Если хочешь видеть баланс чаще, убери комментарий ниже
 #            log(f"💰 БАЛАНС: ${round(total, 2)} | Доступно: ${round(memory.available_margin, 2)}")
-            
+
             # Логируем МАЯК только если баланс изменился или раз в 5 минут
             if not hasattr(memory, 'last_bal_log') or time.time() - memory.last_bal_log > 300:
 #                log(f"💰 МАЯК: Balance ${round(total, 2)} | Available: ${round(memory.available_margin, 2)}")
@@ -262,9 +263,9 @@ async def check_signal(exchange, symbol):
 
         # 3. Фильтры безопасности (Анти-Шторм + Анти-Шип)
         if not (dna.get('min_w', 0.8) <= width <= dna.get('width', 2.0)): return None
-        
+
         candle_size = (df['h'].iloc[-1] / df['l'].iloc[-1] - 1)
-        if candle_size > 0.008: return None 
+        if candle_size > 0.008: return None
 
         # 4. Параметры предыдущей свечи (Engulfing)
         prev_open = df['o'].iloc[-1]
@@ -276,29 +277,30 @@ async def check_signal(exchange, symbol):
         # Считаем длину всей свечи и длину фитиля
         candle_range = df['h'].iloc[-1] - df['l'].iloc[-1]
         if candle_range == 0: return None # Защита от нулевых свечей
-        
+
         # Для ЛОНГА: нижняя тень (от минимума до тела)
         lower_wick = min(df['o'].iloc[-1], df['c'].iloc[-1]) - df['l'].iloc[-1]
         wick_ratio_long = lower_wick / candle_range
-        
+
         # Для ШОРТА: верхняя тень (от максимума до тела)
         upper_wick = df['h'].iloc[-1] - max(df['o'].iloc[-1], df['c'].iloc[-1])
         wick_ratio_short = upper_wick / candle_range
         # --------------------------------
-        
+
         # 5. Логика входа (Оффсет + Поглощение)
-        # ЛОНГ: зашел в зону l_off И текущая цена пробила вверх тело красной свечи
         # ЛОНГ: Цена выше триггера + Поглощение + Фитиль > 35%
         is_buy = (cur_p >= long_trigger) and (cur_p > prev_open) and (wick_ratio_long > 0.35)
 
         # ШОРТ: Цена ниже триггера + Поглощение + Фитиль > 35%
         is_sell = (cur_p <= short_trigger) and (cur_p < prev_open) and (wick_ratio_short > 0.35)
 
-        
-      #  is_buy = (cur_p <= lower * (1 - dna['l_off'])) and (cur_p > prev_open) and is_prev_red 
-        
+
+
+        # ЛОНГ: зашел в зону l_off И текущая цена пробила вверх тело красной свечи
+        #is_buy = (cur_p <= lower * (1 - dna['l_off'])) and (cur_p > prev_open) and is_prev_red
+
         # ШОРТ: зашел в зону s_off И текущая цена пробила вниз тело зеленой свечи
-# is_sell = (cur_p >= upper * (1 + dna['s_off'])) and (cur_p < prev_open) and is_prev_green
+        #is_sell = (cur_p >= upper * (1 + dna['s_off'])) and (cur_p < prev_open) and is_prev_green
 
         if is_buy or is_sell:
             # Funding Shield
@@ -449,12 +451,12 @@ async def monitor_logic(exchange, symbol, pos):
         # Ступень 1: Подтяжка к +0.4%
         if profit >= dna['step1_p'] and memory.step_be[symbol] < dna['step1_be']:
             memory.step_be[symbol] = dna['step1_be']
-            log(f"🛡️ ХРАПОВИК {symbol}: Ступень 1 активирована (+{round(dna['step1_be']*100, 2)}%)" )
+            log(f"🛡️ ХРАПОВИК {symbol}: Ступень 1 активирована (+{round(dna['step1_be']*100, 2)}%)"  )
 
         # Ступень 2: Подтяжка к +1.0%
         if profit >= dna['step2_p'] and memory.step_be[symbol] < dna['step2_be']:
             memory.step_be[symbol] = dna['step2_be']
-            log(f"🛡️ ХРАПОВИК {symbol}: Ступень 2 активирована (+{round(dna['step2_be']*100, 2)}%)" )
+            log(f"🛡️ ХРАПОВИК {symbol}: Ступень 2 активирована (+{round(dna['step2_be']*100, 2)}%)"  )
 
         # 3. КАСКАДНАЯ ФИКСАЦИЯ (Тройной удар)
         exit_side = 'sell' if side == 'long' or side == 'buy' else 'buy'
@@ -507,7 +509,7 @@ async def monitor_logic(exchange, symbol, pos):
         is_qc = elapsed > qc_time_limit and profit < qc_profit_limit
 
         if is_tp3 or is_sl or is_surgeon or is_qc:
-            reason = "🎯 TP3" if is_tp3 else "🛡️ SL/BE" if is_sl else "⚔️ SURGEON" if is_surgeon else "✂️ QC"
+            reason = "🎯 TP3" if is_tp3 else "🛡️ SL/BE" if is_sl else "⚔️ SURGEON" if is_surgeon el se "✂️ QC"
 #            log(f"🚨 ВЫХОД {reason}: {symbol} | Profit: {round(profit*100, 2)}%")
             # ПЫТАЕМСЯ ЗАКРЫТЬ ПОКА НЕ ЗАКРОЕМ (Цикл против ошибки -2022)
             for attempt in range(3):
@@ -551,9 +553,9 @@ async def run_titan_v1():
     # 2. Подключение к бирже
     exchange = await init_exchange()
     # --- НОВАЯ СТРОКА ---
-    await warm_up_btc_history(exchange) 
+    await warm_up_btc_history(exchange)
     # --------------------
-    
+
     try:
         log("🛰️ Подключение к квантовым потокам данных...")
 
