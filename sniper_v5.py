@@ -27,27 +27,27 @@ from datetime import datetime
 # ==========================================================
 PULSE_GENOME = {
     "SOL/USDT:USDT": {
-        "l_off": 0.0030, "s_off": 0.0030, "min_w": 0.8, "max_w": 2.5, 
+        "l_off": 0.0030, "s_off": 0.0030, "min_w": 0.8, "max_w": 2.5,
         "tp1": 0.0050, "tp2": 0.0120, "sl": -0.0035
     },
     "SUI/USDT:USDT": {
-        "l_off": 0.0035, "s_off": 0.0035, "min_w": 1.0, "max_w": 3.0, 
-        "tp1": 0.0065, "tp2": 0.0180, "sl": -0.0045
+        "l_off": 0.0035, "s_off": 0.0035, "min_w": 1.0, "max_w": 3.0,
+        "tp1": 0.0035, "tp2": 0.0180, "sl": -0.0045
     },
     "1000PEPE/USDT:USDT": {
-        "l_off": 0.0040, "s_off": 0.0040, "min_w": 1.5, "max_w": 4.5, 
-        "tp1": 0.0090, "tp2": 0.0280, "sl": -0.0055
+        "l_off": 0.0038, "s_off": 0.0038, "min_w": 1.5, "max_w": 4.5,
+        "tp1": 0.0040, "tp2": 0.0280, "sl": -0.0055
     },
     "FET/USDT:USDT": {
-        "l_off": 0.0032, "s_off": 0.0032, "min_w": 0.9, "max_w": 3.2, 
+        "l_off": 0.0032, "s_off": 0.0032, "min_w": 0.9, "max_w": 3.2,
         "tp1": 0.0060, "tp2": 0.0150, "sl": -0.0040
     },
     "NEAR/USDT:USDT": {
-        "l_off": 0.0030, "s_off": 0.0030, "min_w": 0.7, "max_w": 2.8, 
+        "l_off": 0.0030, "s_off": 0.0030, "min_w": 0.7, "max_w": 2.8,
         "tp1": 0.0055, "tp2": 0.0130, "sl": -0.0035
     },
     "WIF/USDT:USDT": {
-        "l_off": 0.0042, "s_off": 0.0042, "min_w": 1.2, "max_w": 4.0, 
+        "l_off": 0.0042, "s_off": 0.0042, "min_w": 1.2, "max_w": 4.0,
         "tp1": 0.0085, "tp2": 0.0220, "sl": -0.0050
     }
 }
@@ -56,13 +56,7 @@ MAX_SLOTS = 1
 LEVERAGE = 20
 RISK_GEAR = 0.85    # Использование 95% доступной маржи на слот
 RESERVE_CASH = 0.8  # Резерв на комиссии ($)
-SMART_CUT_T = 45    # Секунд до проверки Price-Cut
-
-MAX_SLOTS = 1
-LEVERAGE = 20
-RISK_GEAR = 0.85    # Использование 95% доступной маржи на слот
-RESERVE_CASH = 0.8  # Резерв на комиссии ($)
-SMART_CUT_T = 45    # Секунд до проверки Price-Cut
+SMART_CUT_T = 35    # Секунд до проверки Price-Cut. Было 45, поставил для теста 35
 
 class GlobalMemory:
     def __init__(self):
