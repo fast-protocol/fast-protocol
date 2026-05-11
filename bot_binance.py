@@ -349,7 +349,7 @@ async def signal_hunter(exchange):
                     await execute_entry(exchange, res)
 
             await asyncio.sleep(0.1) # Микро-пауза между пачками
-        await asyncio.sleep(1.5) # Пауза после полного круга
+        await asyncio.sleep(2.5) # Пауза после полного круга
 
 async def execute_entry(exchange, signal):
     """Асинхронная установка плеча и вход в позицию"""
