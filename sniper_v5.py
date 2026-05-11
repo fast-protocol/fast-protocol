@@ -265,18 +265,22 @@ async def monitor_logic(exchange):
                 # --- СТАДИЯ А: Если лимитка входа еще не исполнилась (ждем 30 сек) ---
                 # Если цена улетела далеко (+0.5%) без нас - отменяем охоту
                 if age > 30 and diff > 0.005:
-                    log(f"🚫 Пропуск {symbol}: Улетела без отката.")
-                    try:
-                        # Усиленная очистка: пробуем 3 раза с паузой
-                        for _ in range(3):
-                            await exchange.cancel_all_orders(symbol, exit_params)
-                            await asyncio.sleep(0.3)
-                        log(f"🧹 Ордера {symbol} принудительно вычищены.")
-                    except: pass
+                    # ПРОВЕРКА: А вдруг часть ордера уже купилась?
+                    pos_info = await exchange.fetch_position(symbol, {'spot': False})
+                    real_vol = float(pos_info['contracts']) if pos_info and pos_info.get('contracts') else 0
                     
-                    del memory.active_pos[symbol]
-                    memory.slots_occupied -= 1
-                    continue                
+                    if real_vol > 0:
+                        log(f"⚡ ЧАСТИЧНЫЙ ЗАЦЕП {symbol}: {real_vol} шт. Переводим в мониторинг.")
+                        # Не удаляем из памяти, просто отменяем остаток лимитки
+                        await exchange.cancel_all_orders(symbol, {'spot': False})
+                        pos['vol'] = real_vol # Обновляем объем до реального
+                        continue # Оставляем в цикле мониторинга
+                    else:
+                        log(f"🚫 Пропуск {symbol}: Улетела без отката.")
+                        await exchange.cancel_all_orders(symbol, {'spot': False})
+                        del memory.active_pos[symbol]
+                        memory.slots_occupied -= 1
+                        continue      
 
                 
                 # --- СТАДИЯ Б: Активная позиция (уже в рынке) ---
