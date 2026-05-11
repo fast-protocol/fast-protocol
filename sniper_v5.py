@@ -125,7 +125,10 @@ async def price_stream(exchange):
 #                    log(f"🟢 Поток {symbol}: {val}")
             except Exception as e:
                 log(f"⚠️ Ошибка потока {symbol}: {e}")
-                await asyncio.sleep(2)
+                try:
+                    await exchange.close() # Закрываем старое, чтобы не копились сессии
+                except: pass
+                await asyncio.sleep(5)
 
     # Запускаем задачи параллельно
     async def heartbeat():
