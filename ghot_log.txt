@@ -1,0 +1,320 @@
+Last login: Tue May 12 16:42:15 2026 from 109.252.164.156
+root@vm-v2-mini:~# tail -f ghost_v22_log.txt
+[20:09:42] ⏱️ SMART-FILTER: Попытка выхода XRP/USDT:USDT (-0.111%)
+[20:09:43] ✅ XRP/USDT:USDT успешно утилизирован.
+[20:09:46] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Объем 0.3x < 2.0x ❌]
+[20:09:49] 🚀 GHOST STRIKE: ONDO/USDT:USDT SELL @ 0.3934
+[20:14:49] ⏱️ SMART-FILTER: Попытка выхода ONDO/USDT:USDT (-0.076%)
+[20:14:50] ✅ ONDO/USDT:USDT успешно утилизирован.
+[20:14:52] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 2.4x ❌]
+[20:15:43] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 2.4x ❌]
+[20:16:15] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.0x ❌]
+[20:16:20] 🚀 GHOST STRIKE: SUI/USDT:USDT SELL @ 1.2488
+[20:20:21] ⏱️ SMART-FILTER: Попытка выхода SUI/USDT:USDT (-0.064%)
+[20:20:21] ✅ SUI/USDT:USDT успешно утилизирован.
+[20:20:23] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.4x ❌]
+[20:20:54] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.0x ❌]
+[20:21:25] 🔍 ПОЧТИ СИГНАЛ ARB/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 1.9x ❌]
+[20:21:58] 🚀 GHOST STRIKE: 1000PEPE/USDT:USDT BUY @ 0.0041583
+[20:23:59] ⏱️ SMART-FILTER: Попытка выхода 1000PEPE/USDT:USDT (-0.024%)
+[20:23:59] ✅ 1000PEPE/USDT:USDT успешно утилизирован.
+[20:24:01] 🔍 ПОЧТИ СИГНАЛ BNB/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 1.2x ❌]
+[20:24:31] 🔍 ПОЧТИ СИГНАЛ BNB/USDT:USDT: Цена за пробоем, но: [Объем 0.6x < 1.2x ❌]
+[20:25:03] 🔍 ПОЧТИ СИГНАЛ ARB/USDT:USDT: Цена за пробоем, но: [Объем 0.0x < 1.9x ❌]
+[20:25:31] 🚀 GHOST STRIKE: BNB/USDT:USDT BUY @ 665.29
+[20:30:32] ⏱️ SMART-FILTER: Попытка выхода BNB/USDT:USDT (-0.027%)
+[20:30:32] ✅ BNB/USDT:USDT успешно утилизирован.
+[20:30:34] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 1.3x ❌]
+[20:30:52] 🚀 GHOST STRIKE: ONDO/USDT:USDT BUY @ 0.3943
+[20:35:53] ⏱️ SMART-FILTER: Попытка выхода ONDO/USDT:USDT (-0.482%)
+[20:35:53] ✅ ONDO/USDT:USDT успешно утилизирован.
+[20:35:54] 🚀 GHOST STRIKE: BTC/USDT:USDT SELL @ 80687.7
+[20:40:55] ⏱️ SMART-FILTER: Попытка выхода BTC/USDT:USDT (0.067%)
+[20:40:55] ✅ BTC/USDT:USDT успешно утилизирован.
+[20:40:56] 🔍 ПОЧТИ СИГНАЛ SOL/USDT:USDT: Цена за пробоем, но: [Объем 1.2x < 1.6x ❌]
+[20:41:28] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.4x < 2.1x ❌]
+[20:41:35] 🚀 GHOST STRIKE: ONDO/USDT:USDT SELL @ 0.3913
+[20:47:03] ⏱️ SMART-FILTER: Попытка выхода ONDO/USDT:USDT (0.077%)
+[20:47:04] ✅ ONDO/USDT:USDT успешно утилизирован.
+[20:47:08] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.1x ❌]
+[20:47:40] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.6x < 2.1x ❌]
+[20:48:10] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.1x < 2.1x ❌]
+[20:48:41] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Объем 0.3x < 2.2x ❌]
+[20:49:13] 🔍 ПОЧТИ СИГНАЛ WIF/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.2x ❌]
+[20:49:44] 🔍 ПОЧТИ СИГНАЛ DOGE/USDT:USDT: Цена за пробоем, но: [Объем 0.8x < 1.8x ❌]
+[20:50:14] 🔍 ПОЧТИ СИГНАЛ DOGE/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 1.8x ❌]
+[20:50:44] 🔍 ПОЧТИ СИГНАЛ WIF/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 2.2x ❌]
+[20:51:15] 🔍 ПОЧТИ СИГНАЛ ETH/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 1.4x ❌]
+[20:51:49] 🔍 ПОЧТИ СИГНАЛ ETH/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 1.4x ❌]
+[20:52:55] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 2.4x ❌]
+[20:53:27] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.4x ❌]
+[20:54:00] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 1.3x ❌]
+[20:54:30] 🔍 ПОЧТИ СИГНАЛ DOGE/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 1.8x ❌]
+[20:55:00] 🚀 GHOST STRIKE: SUI/USDT:USDT BUY @ 1.2444
+[20:59:01] ⏱️ SMART-FILTER: Попытка выхода SUI/USDT:USDT (-0.193%)
+[20:59:01] ✅ SUI/USDT:USDT успешно утилизирован.
+[20:59:03] 🔍 ПОЧТИ СИГНАЛ BNB/USDT:USDT: Цена за пробоем, но: [Объем 0.0x < 1.2x ❌]
+[20:59:07] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[19:42:58] 💎 TITAN GHOST V22.3 READY. Slots: 1 | Assets: 15
+[19:42:58] 🚀 Охота Ghost Strike активирована [V22.4]...
+[19:42:58] 📡 Запуск REST-мониторинга цен для 15 активов...
+[19:43:01] 🔗 RECOVERED: TIA/USDT:USDT (232.802 units)
+[19:43:02] 🎯 Попытка фиксации TP1 для TIA/USDT:USDT (PNL: 2.37%)
+[19:43:03] ✅ TP1 ВЫПОЛНЕН: TIA/USDT:USDT. Остаток в БУ.
+[19:45:08] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.0x < 2.4x ❌]
+[19:45:38] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.0x < 2.4x ❌]
+[19:46:50] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.0x ❌]
+[19:47:40] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.4x ❌]
+[19:48:14] 🔍 ПОЧТИ СИГНАЛ OP/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.2x < 1.9x ❌]
+[19:48:46] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.0x < 2.4x ❌]
+[19:49:17] 🔍 ПОЧТИ СИГНАЛ ARB/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.3x < 1.9x ❌]
+[19:49:49] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Объем 1.7x < 2.2x ❌]
+[19:50:10] 🚀 GHOST STRIKE: ARB/USDT:USDT BUY @ 0.1377
+[19:56:11] ⏱️ SMART-FILTER: Попытка выхода ARB/USDT:USDT (-0.363%)
+[19:56:11] ✅ ARB/USDT:USDT успешно утилизирован.
+[19:56:16] 🔍 ПОЧТИ СИГНАЛ ONDO/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.2x < 2.0x ❌]
+[19:56:51] 🔍 ПОЧТИ СИГНАЛ ONDO/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.6x < 2.0x ❌]
+[19:57:05] 🚀 GHOST STRIKE: WIF/USDT:USDT BUY @ 0.2208
+[19:59:05] ⏱️ SMART-FILTER: Попытка выхода WIF/USDT:USDT (-0.181%)
+[19:59:05] ✅ WIF/USDT:USDT успешно утилизирован.
+[19:59:08] 🔍 ПОЧТИ СИГНАЛ NEAR/USDT:USDT: Цена за пробоем, но: [Объем 0.0x < 1.7x ❌]
+[19:59:28] 🚀 GHOST STRIKE: XRP/USDT:USDT SELL @ 1.4389
+[20:04:29] ⏱️ SMART-FILTER: Попытка выхода XRP/USDT:USDT (-0.187%)
+[20:04:29] ✅ XRP/USDT:USDT успешно утилизирован.
+[20:04:30] 🔍 ПОЧТИ СИГНАЛ BTC/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 1.3x ❌]
+[20:04:42] 🚀 GHOST STRIKE: XRP/USDT:USDT BUY @ 1.4418
+[20:09:42] ⏱️ SMART-FILTER: Попытка выхода XRP/USDT:USDT (-0.111%)
+[20:09:43] ✅ XRP/USDT:USDT успешно утилизирован.
+[20:09:46] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Объем 0.3x < 2.0x ❌]
+[20:09:49] 🚀 GHOST STRIKE: ONDO/USDT:USDT SELL @ 0.3934
+[20:14:49] ⏱️ SMART-FILTER: Попытка выхода ONDO/USDT:USDT (-0.076%)
+[20:14:50] ✅ ONDO/USDT:USDT успешно утилизирован.
+[20:14:52] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 2.4x ❌]
+[20:15:43] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 2.4x ❌]
+[20:16:15] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.0x ❌]
+[20:16:20] 🚀 GHOST STRIKE: SUI/USDT:USDT SELL @ 1.2488
+[20:20:21] ⏱️ SMART-FILTER: Попытка выхода SUI/USDT:USDT (-0.064%)
+[20:20:21] ✅ SUI/USDT:USDT успешно утилизирован.
+[20:20:23] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.4x ❌]
+[20:20:54] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.0x ❌]
+[20:21:25] 🔍 ПОЧТИ СИГНАЛ ARB/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 1.9x ❌]
+[20:21:58] 🚀 GHOST STRIKE: 1000PEPE/USDT:USDT BUY @ 0.0041583
+[20:23:59] ⏱️ SMART-FILTER: Попытка выхода 1000PEPE/USDT:USDT (-0.024%)
+[20:23:59] ✅ 1000PEPE/USDT:USDT успешно утилизирован.
+[20:24:01] 🔍 ПОЧТИ СИГНАЛ BNB/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 1.2x ❌]
+[20:24:31] 🔍 ПОЧТИ СИГНАЛ BNB/USDT:USDT: Цена за пробоем, но: [Объем 0.6x < 1.2x ❌]
+[20:25:03] 🔍 ПОЧТИ СИГНАЛ ARB/USDT:USDT: Цена за пробоем, но: [Объем 0.0x < 1.9x ❌]
+[20:25:31] 🚀 GHOST STRIKE: BNB/USDT:USDT BUY @ 665.29
+[20:30:32] ⏱️ SMART-FILTER: Попытка выхода BNB/USDT:USDT (-0.027%)
+[20:30:32] ✅ BNB/USDT:USDT успешно утилизирован.
+[20:30:34] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 1.3x ❌]
+[20:30:52] 🚀 GHOST STRIKE: ONDO/USDT:USDT BUY @ 0.3943
+[20:35:53] ⏱️ SMART-FILTER: Попытка выхода ONDO/USDT:USDT (-0.482%)
+[20:35:53] ✅ ONDO/USDT:USDT успешно утилизирован.
+[20:35:54] 🚀 GHOST STRIKE: BTC/USDT:USDT SELL @ 80687.7
+[20:40:55] ⏱️ SMART-FILTER: Попытка выхода BTC/USDT:USDT (0.067%)
+[20:40:55] ✅ BTC/USDT:USDT успешно утилизирован.
+[20:40:56] 🔍 ПОЧТИ СИГНАЛ SOL/USDT:USDT: Цена за пробоем, но: [Объем 1.2x < 1.6x ❌]
+[20:41:28] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.4x < 2.1x ❌]
+[20:41:35] 🚀 GHOST STRIKE: ONDO/USDT:USDT SELL @ 0.3913
+[20:47:03] ⏱️ SMART-FILTER: Попытка выхода ONDO/USDT:USDT (0.077%)
+[20:47:04] ✅ ONDO/USDT:USDT успешно утилизирован.
+[20:47:08] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.1x ❌]
+[20:47:40] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.6x < 2.1x ❌]
+[20:48:10] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.1x < 2.1x ❌]
+[20:48:41] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Объем 0.3x < 2.2x ❌]
+[20:49:13] 🔍 ПОЧТИ СИГНАЛ WIF/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.2x ❌]
+[20:49:44] 🔍 ПОЧТИ СИГНАЛ DOGE/USDT:USDT: Цена за пробоем, но: [Объем 0.8x < 1.8x ❌]
+[20:50:14] 🔍 ПОЧТИ СИГНАЛ DOGE/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 1.8x ❌]
+[20:50:44] 🔍 ПОЧТИ СИГНАЛ WIF/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 2.2x ❌]
+[20:51:15] 🔍 ПОЧТИ СИГНАЛ ETH/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 1.4x ❌]
+[20:51:49] 🔍 ПОЧТИ СИГНАЛ ETH/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 1.4x ❌]
+[20:52:55] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 2.4x ❌]
+[20:53:27] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.4x ❌]
+[20:54:00] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 1.3x ❌]
+[20:54:30] 🔍 ПОЧТИ СИГНАЛ DOGE/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 1.8x ❌]
+[20:55:00] 🚀 GHOST STRIKE: SUI/USDT:USDT BUY @ 1.2444
+[20:59:01] ⏱️ SMART-FILTER: Попытка выхода SUI/USDT:USDT (-0.193%)
+[20:59:01] ✅ SUI/USDT:USDT успешно утилизирован.
+[20:59:03] 🔍 ПОЧТИ СИГНАЛ BNB/USDT:USDT: Цена за пробоем, но: [Объем 0.0x < 1.2x ❌]
+[20:59:07] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[20:59:13] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[20:59:19] 🚀 GHOST STRIKE: ETH/USDT:USDT BUY @ 2284.12
+[21:04:20] ⏱️ SMART-FILTER: Попытка выхода ETH/USDT:USDT (-0.003%)
+[21:04:20] ✅ ETH/USDT:USDT успешно утилизирован.
+[21:04:21] 🔍 ПОЧТИ СИГНАЛ SOL/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.4x < 1.6x ❌]
+[21:04:24] 🚀 GHOST STRIKE: DOGE/USDT:USDT BUY @ 0.11053
+[21:07:24] ⏱️ SMART-FILTER: Попытка выхода DOGE/USDT:USDT (-0.054%)
+[21:07:24] ✅ DOGE/USDT:USDT успешно утилизирован.
+[21:07:28] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.7x < 2.1x ❌]
+[21:08:02] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.1x < 2.1x ❌]
+[21:08:32] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 2.1x ❌]
+[21:09:07] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.1x ❌]
+[21:09:38] 🔍 ПОЧТИ СИГНАЛ ONDO/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 2.0x ❌]
+[21:09:47] 🚀 GHOST STRIKE: FET/USDT:USDT BUY @ 0.2266
+[21:13:47] ⏱️ SMART-FILTER: Попытка выхода FET/USDT:USDT (0.132%)
+[21:13:48] ✅ FET/USDT:USDT успешно утилизирован.
+[21:13:49] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 1.3x ❌]
+[21:14:20] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.5x < 2.0x ❌]
+[21:14:53] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Цвет ❌]
+[21:14:59] 🚀 GHOST STRIKE: XRP/USDT:USDT SELL @ 1.4382
+[21:19:59] ⏱️ SMART-FILTER: Попытка выхода XRP/USDT:USDT (0.097%)
+[21:19:59] ✅ XRP/USDT:USDT успешно утилизирован.
+[21:20:01] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 1.3x ❌]
+[21:20:21] 🚀 GHOST STRIKE: TIA/USDT:USDT SELL @ 0.4592
+[21:28:21] ⏱️ SMART-FILTER: Попытка выхода TIA/USDT:USDT (-0.022%)
+[21:28:21] ✅ TIA/USDT:USDT успешно утилизирован.
+[21:28:22] 🔍 ПОЧТИ СИГНАЛ SOL/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 1.6x ❌]
+[21:28:53] 🔍 ПОЧТИ СИГНАЛ NEAR/USDT:USDT: Цена за пробоем, но: [Объем 0.7x < 1.7x ❌]
+[21:29:27] 🔍 ПОЧТИ СИГНАЛ NEAR/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 1.7x ❌]
+[21:29:48] 🚀 GHOST STRIKE: SUI/USDT:USDT BUY @ 1.2449
+[21:33:48] ⏱️ SMART-FILTER: Попытка выхода SUI/USDT:USDT (-0.394%)
+[21:33:48] ✅ SUI/USDT:USDT успешно утилизирован.
+[21:33:49] ⚠️ ENTRY ERROR BTC/USDT:USDT: bingx amount of BTC/USDT:USDT must be greater than minimum amount precision of 0.0001
+[21:33:50] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[21:33:51] 🔍 ПОЧТИ СИГНАЛ SOL/USDT:USDT: Цена за пробоем, но: [Объем 1.1x < 1.6x ❌]
+[21:33:55] ⚠️ ENTRY ERROR BTC/USDT:USDT: bingx amount of BTC/USDT:USDT must be greater than minimum amount precision of 0.0001
+[21:33:56] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[21:33:58] 🚀 GHOST STRIKE: SOL/USDT:USDT SELL @ 94.58
+[21:38:58] ⏱️ SMART-FILTER: Попытка выхода SOL/USDT:USDT (-0.018%)
+[21:38:59] ✅ SOL/USDT:USDT успешно утилизирован.
+[21:38:59] 🔍 ПОЧТИ СИГНАЛ BTC/USDT:USDT: Цена за пробоем, но: [Объем 0.6x < 1.3x ❌]
+[21:39:01] 🚀 GHOST STRIKE: ETH/USDT:USDT SELL @ 2283.63
+[21:44:01] ⏱️ SMART-FILTER: Попытка выхода ETH/USDT:USDT (-0.005%)
+[21:44:01] ✅ ETH/USDT:USDT успешно утилизирован.
+[21:44:06] 🔍 ПОЧТИ СИГНАЛ OP/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 1.9x ❌]
+[21:44:37] 🔍 ПОЧТИ СИГНАЛ BNB/USDT:USDT: Цена за пробоем, но: [Объем 1.1x < 1.2x ❌]
+[21:44:44] 🚀 GHOST STRIKE: BNB/USDT:USDT SELL @ 665.9
+[22:00:36] ⏱️ SMART-FILTER: Попытка выхода BNB/USDT:USDT (0.077%)
+[22:00:36] ✅ BNB/USDT:USDT успешно утилизирован.
+[22:00:37] 🔍 ПОЧТИ СИГНАЛ BTC/USDT:USDT: Цена за пробоем, но: [Объем 1.2x < 1.3x ❌]
+[22:00:39] 🚀 GHOST STRIKE: XRP/USDT:USDT BUY @ 1.4404
+[22:07:09] ⏱️ SMART-FILTER: Попытка выхода XRP/USDT:USDT (0.097%)
+[22:07:10] ✅ XRP/USDT:USDT успешно утилизирован.
+[22:07:12] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 2.4x ❌]
+[22:07:43] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.4x < 2.0x ❌]
+[22:08:14] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.1x < 2.2x ❌]
+[22:08:44] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.2x < 2.2x ❌]
+[22:09:17] 🔍 ПОЧТИ СИГНАЛ OP/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 1.9x ❌]
+[22:09:51] 🔍 ПОЧТИ СИГНАЛ OP/USDT:USDT: Цена за пробоем, но: [Объем 0.7x < 1.9x ❌]
+[22:10:26] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.2x ❌]
+[22:11:01] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 2.2x ❌]
+[22:11:46] 🔍 ПОЧТИ СИГНАЛ OP/USDT:USDT: Цена за пробоем, но: [Объем 0.7x < 1.9x ❌]
+[22:12:25] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.2x ❌]
+[22:13:32] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.2x ❌]
+[22:13:50] 🚀 GHOST STRIKE: TIA/USDT:USDT BUY @ 0.4658
+[22:21:50] ⏱️ SMART-FILTER: Попытка выхода TIA/USDT:USDT (0.064%)
+[22:21:50] ✅ TIA/USDT:USDT успешно утилизирован.
+[22:21:55] 🔍 ПОЧТИ СИГНАЛ ONDO/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.1x < 2.0x ❌]
+[22:22:20] 🚀 GHOST STRIKE: TIA/USDT:USDT BUY @ 0.4673
+[22:30:20] ⏱️ SMART-FILTER: Попытка выхода TIA/USDT:USDT (-0.663%)
+[22:30:20] ✅ TIA/USDT:USDT успешно утилизирован.
+[22:30:21] 🔍 ПОЧТИ СИГНАЛ ETH/USDT:USDT: Цена за пробоем, но: [Объем 0.3x < 1.4x ❌]
+[22:30:42] 🚀 GHOST STRIKE: ETH/USDT:USDT SELL @ 2284.24
+[22:35:42] ⏱️ SMART-FILTER: Попытка выхода ETH/USDT:USDT (0.022%)
+[22:35:42] ✅ ETH/USDT:USDT успешно утилизирован.
+[22:35:43] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[22:35:45] 🚀 GHOST STRIKE: SOL/USDT:USDT SELL @ 94.641
+[22:40:45] ⏱️ SMART-FILTER: Попытка выхода SOL/USDT:USDT (-0.052%)
+[22:40:46] ✅ SOL/USDT:USDT успешно утилизирован.
+[22:40:50] 🚀 GHOST STRIKE: DOGE/USDT:USDT BUY @ 0.11031
+[22:43:50] ⏱️ SMART-FILTER: Попытка выхода DOGE/USDT:USDT (-0.045%)
+[22:43:50] ✅ DOGE/USDT:USDT успешно утилизирован.
+[22:43:52] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.6x < 2.4x ❌]
+[22:44:23] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 2.1x ❌]
+[20:59:13] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[20:59:19] 🚀 GHOST STRIKE: ETH/USDT:USDT BUY @ 2284.12
+[21:04:20] ⏱️ SMART-FILTER: Попытка выхода ETH/USDT:USDT (-0.003%)
+[21:04:20] ✅ ETH/USDT:USDT успешно утилизирован.
+[21:04:21] 🔍 ПОЧТИ СИГНАЛ SOL/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.4x < 1.6x ❌]
+[21:04:24] 🚀 GHOST STRIKE: DOGE/USDT:USDT BUY @ 0.11053
+[21:07:24] ⏱️ SMART-FILTER: Попытка выхода DOGE/USDT:USDT (-0.054%)
+[21:07:24] ✅ DOGE/USDT:USDT успешно утилизирован.
+[21:07:28] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.7x < 2.1x ❌]
+[21:08:02] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.1x < 2.1x ❌]
+[21:08:32] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.5x < 2.1x ❌]
+[21:09:07] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.1x ❌]
+[21:09:38] 🔍 ПОЧТИ СИГНАЛ ONDO/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 2.0x ❌]
+[21:09:47] 🚀 GHOST STRIKE: FET/USDT:USDT BUY @ 0.2266
+[21:13:47] ⏱️ SMART-FILTER: Попытка выхода FET/USDT:USDT (0.132%)
+[21:13:48] ✅ FET/USDT:USDT успешно утилизирован.
+[21:13:49] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 1.3x ❌]
+[21:14:20] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.5x < 2.0x ❌]
+[21:14:53] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Цвет ❌]
+[21:14:59] 🚀 GHOST STRIKE: XRP/USDT:USDT SELL @ 1.4382
+[21:19:59] ⏱️ SMART-FILTER: Попытка выхода XRP/USDT:USDT (0.097%)
+[21:19:59] ✅ XRP/USDT:USDT успешно утилизирован.
+[21:20:01] 🔍 ПОЧТИ СИГНАЛ XRP/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 1.3x ❌]
+[21:20:21] 🚀 GHOST STRIKE: TIA/USDT:USDT SELL @ 0.4592
+[21:28:21] ⏱️ SMART-FILTER: Попытка выхода TIA/USDT:USDT (-0.022%)
+[21:28:21] ✅ TIA/USDT:USDT успешно утилизирован.
+[21:28:22] 🔍 ПОЧТИ СИГНАЛ SOL/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 1.6x ❌]
+[21:28:53] 🔍 ПОЧТИ СИГНАЛ NEAR/USDT:USDT: Цена за пробоем, но: [Объем 0.7x < 1.7x ❌]
+[21:29:27] 🔍 ПОЧТИ СИГНАЛ NEAR/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 1.7x ❌]
+[21:29:48] 🚀 GHOST STRIKE: SUI/USDT:USDT BUY @ 1.2449
+[21:33:48] ⏱️ SMART-FILTER: Попытка выхода SUI/USDT:USDT (-0.394%)
+[21:33:48] ✅ SUI/USDT:USDT успешно утилизирован.
+[21:33:49] ⚠️ ENTRY ERROR BTC/USDT:USDT: bingx amount of BTC/USDT:USDT must be greater than minimum amount precision of 0.0001
+[21:33:50] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[21:33:51] 🔍 ПОЧТИ СИГНАЛ SOL/USDT:USDT: Цена за пробоем, но: [Объем 1.1x < 1.6x ❌]
+[21:33:55] ⚠️ ENTRY ERROR BTC/USDT:USDT: bingx amount of BTC/USDT:USDT must be greater than minimum amount precision of 0.0001
+[21:33:56] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[21:33:58] 🚀 GHOST STRIKE: SOL/USDT:USDT SELL @ 94.58
+[21:38:58] ⏱️ SMART-FILTER: Попытка выхода SOL/USDT:USDT (-0.018%)
+[21:38:59] ✅ SOL/USDT:USDT успешно утилизирован.
+[21:38:59] 🔍 ПОЧТИ СИГНАЛ BTC/USDT:USDT: Цена за пробоем, но: [Объем 0.6x < 1.3x ❌]
+[21:39:01] 🚀 GHOST STRIKE: ETH/USDT:USDT SELL @ 2283.63
+[21:44:01] ⏱️ SMART-FILTER: Попытка выхода ETH/USDT:USDT (-0.005%)
+[21:44:01] ✅ ETH/USDT:USDT успешно утилизирован.
+[21:44:06] 🔍 ПОЧТИ СИГНАЛ OP/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 1.9x ❌]
+[21:44:37] 🔍 ПОЧТИ СИГНАЛ BNB/USDT:USDT: Цена за пробоем, но: [Объем 1.1x < 1.2x ❌]
+[21:44:44] 🚀 GHOST STRIKE: BNB/USDT:USDT SELL @ 665.9
+[22:00:36] ⏱️ SMART-FILTER: Попытка выхода BNB/USDT:USDT (0.077%)
+[22:00:36] ✅ BNB/USDT:USDT успешно утилизирован.
+[22:00:37] 🔍 ПОЧТИ СИГНАЛ BTC/USDT:USDT: Цена за пробоем, но: [Объем 1.2x < 1.3x ❌]
+[22:00:39] 🚀 GHOST STRIKE: XRP/USDT:USDT BUY @ 1.4404
+[22:07:09] ⏱️ SMART-FILTER: Попытка выхода XRP/USDT:USDT (0.097%)
+[22:07:10] ✅ XRP/USDT:USDT успешно утилизирован.
+[22:07:12] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 2.4x ❌]
+[22:07:43] 🔍 ПОЧТИ СИГНАЛ SUI/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.4x < 2.0x ❌]
+[22:08:14] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.1x < 2.2x ❌]
+[22:08:44] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.2x < 2.2x ❌]
+[22:09:17] 🔍 ПОЧТИ СИГНАЛ OP/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 1.9x ❌]
+[22:09:51] 🔍 ПОЧТИ СИГНАЛ OP/USDT:USDT: Цена за пробоем, но: [Объем 0.7x < 1.9x ❌]
+[22:10:26] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Объем 0.1x < 2.2x ❌]
+[22:11:01] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.0x < 2.2x ❌]
+[22:11:46] 🔍 ПОЧТИ СИГНАЛ OP/USDT:USDT: Цена за пробоем, но: [Объем 0.7x < 1.9x ❌]
+[22:12:25] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.2x ❌]
+[22:13:32] 🔍 ПОЧТИ СИГНАЛ TIA/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.2x ❌]
+[22:13:50] 🚀 GHOST STRIKE: TIA/USDT:USDT BUY @ 0.4658
+[22:21:50] ⏱️ SMART-FILTER: Попытка выхода TIA/USDT:USDT (0.064%)
+[22:21:50] ✅ TIA/USDT:USDT успешно утилизирован.
+[22:21:55] 🔍 ПОЧТИ СИГНАЛ ONDO/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.1x < 2.0x ❌]
+[22:22:20] 🚀 GHOST STRIKE: TIA/USDT:USDT BUY @ 0.4673
+[22:30:20] ⏱️ SMART-FILTER: Попытка выхода TIA/USDT:USDT (-0.663%)
+[22:30:20] ✅ TIA/USDT:USDT успешно утилизирован.
+[22:30:21] 🔍 ПОЧТИ СИГНАЛ ETH/USDT:USDT: Цена за пробоем, но: [Объем 0.3x < 1.4x ❌]
+[22:30:42] 🚀 GHOST STRIKE: ETH/USDT:USDT SELL @ 2284.24
+[22:35:42] ⏱️ SMART-FILTER: Попытка выхода ETH/USDT:USDT (0.022%)
+[22:35:42] ✅ ETH/USDT:USDT успешно утилизирован.
+[22:35:43] ⚠️ ENTRY ERROR ETH/USDT:USDT: bingx amount of ETH/USDT:USDT must be greater than minimum amount precision of 0.01
+[22:35:45] 🚀 GHOST STRIKE: SOL/USDT:USDT SELL @ 94.641
+[22:40:45] ⏱️ SMART-FILTER: Попытка выхода SOL/USDT:USDT (-0.052%)
+[22:40:46] ✅ SOL/USDT:USDT успешно утилизирован.
+[22:40:50] 🚀 GHOST STRIKE: DOGE/USDT:USDT BUY @ 0.11031
+[22:43:50] ⏱️ SMART-FILTER: Попытка выхода DOGE/USDT:USDT (-0.045%)
+[22:43:50] ✅ DOGE/USDT:USDT успешно утилизирован.
+[22:43:52] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.6x < 2.4x ❌]
+[22:44:23] 🔍 ПОЧТИ СИГНАЛ FET/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 2.1x ❌]
+[22:45:06] 🔍 ПОЧТИ СИГНАЛ DOGE/USDT:USDT: Цена за пробоем, но: [Объем 0.0x < 1.8x ❌]
+[22:45:36] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.4x < 2.4x ❌]
+[22:46:11] 🔍 ПОЧТИ СИГНАЛ WIF/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.1x < 2.2x ❌]
+[22:46:41] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.6x < 2.4x ❌]
+[22:47:13] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.2x < 2.4x ❌]
+[22:47:45] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Цвет ❌] [Объем 0.6x < 2.4x ❌]
+[22:48:17] 🔍 ПОЧТИ СИГНАЛ 1000PEPE/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 2.4x ❌]
+[22:48:49] 🚀 GHOST STRIKE: ETH/USDT:USDT SELL @ 2281.91
+[22:53:49] ⏱️ SMART-FILTER: Попытка выхода ETH/USDT:USDT (-0.063%)
+[22:53:50] ✅ ETH/USDT:USDT успешно утилизирован.
+[22:53:50] 🔍 ПОЧТИ СИГНАЛ BTC/USDT:USDT: Цена за пробоем, но: [Объем 0.2x < 1.3x ❌]
+[22:53:52] 🚀 GHOST STRIKE: BNB/USDT:USDT BUY @ 667.03
