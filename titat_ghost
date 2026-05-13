@@ -69,23 +69,30 @@ class TitanGhost:
             except: await asyncio.sleep(5)
 
     async def price_stream(self):
-        self.log(f"📡 Запуск REST-мониторинга цен и rolling-объемов...")
+        """Высокочастотный REST-мониторинг цен, объемов и тиковой истории [V23.0]"""
+        self.log(f"📡 Запуск REST-мониторинга цен и объемов для {len(self.memory['dna'])} активов...")
         while self.memory['is_running']:
             try:
                 tickers = await self.exchange.fetch_tickers(list(self.memory['dna'].keys()))
-                t_now = time.time()
                 for symbol, data in tickers.items():
-                    self.memory['prices'][symbol] = float(data['last'])
+                    last_price = float(data['last'])
+                    self.memory['prices'][symbol] = last_price
 
-                    # Сохраняем quoteVolume (объем в USDT) с меткой времени
                     q_vol = float(data['quoteVolume']) if data.get('quoteVolume') else 0.0
-                    if symbol not in self.memory['vol_history']: self.memory['vol_history'][symbol] = []
-                    self.memory['vol_history'][symbol].append((t_now, q_vol))
 
-                    # Очищаем историю, оставляя только последние 60 секунд
-                    self.memory['vol_history'][symbol] = [x for x in self.memory['vol_history'][symbol] if t_now - x[0] <= 60]
+                    if symbol not in self.memory['vol_history']:
+                        self.memory['vol_history'][symbol] = []
+
+                    # Сохраняем КОРТЕЖ: (текущая_цена, текущий_объем)
+                    self.memory['vol_history'][symbol].append((last_price, q_vol))
+
+                    # ИСПРАВЛЕННАЯ СТРОКА: Храним строго последние 65 секунд/элементов (1 минута)
+                    self.memory['vol_history'][symbol] = self.memory['vol_history'][symbol][-65:]
+
                 await asyncio.sleep(1)
-            except: await asyncio.sleep(5)
+            except Exception as e:
+                # self.log(f"⚠️ Ошибка потока цен: {e}")
+                await asyncio.sleep(5)
 
     async def execute_limit_entry(self, sym, side, limit_price, dna):
         try:
@@ -115,69 +122,89 @@ class TitanGhost:
 #уже не надо?                self.memory['available'] -= (usdt_vol / dna['lev'])
         except Exception as e:
             self.log(f"⚠️ Ошибка выставления капкана {sym}: {e}")
-
+#================
     async def hunter_loop(self):
-        self.log("🚀 Охота Ghost Strike [V22.9 Лимитная Броня] активирована...")
+        self.log("🚀 Охота Ghost Strike [V23.0 Квантовая Скорость] активирована...")
         await asyncio.sleep(5)
         last_debug_t = 0
 
         while self.memory['is_running']:
             for sym, dna in self.memory['dna'].items():
 
-                # --- [ВОЗВРАТ АНТИ-ПОВТОР V22.8] ---
-                if sym in self.memory.get('cooldown', {}) and (time.time() - self.memory['cooldown'][sym] < 180):
+                # 1. АНТИ-ПОВТОР: Индивидуальный кулдаун из ДНК для защиты от пилы
+                cd_time = dna.get('cooldown', 300)
+                if sym in self.memory.get('cooldown', {}) and (time.time() - self.memory['cooldown'][sym] < cd_time):
                     continue
 
+                # 2. БЕЗОПАСНОСТЬ: Проверка свободных слотов
                 if sym in self.memory['active_pos'] or len(self.memory['active_pos']) >= MAX_SLOTS:
                     continue
 
                 try:
+                    # Запрос свечей для расчета Боллинджера
                     ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
                     df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+
                     cur_p = self.memory['prices'].get(sym)
                     if not cur_p: continue
 
-                    # Математика BB
+                    # Математика BB по закрытой свече (Lag-1)
                     df['ma'] = df['c'].rolling(20).mean()
                     df['std'] = df['c'].rolling(20).std()
-                    p_up = df['ma'].iloc[-2] + (2.1 * df['std'].iloc[-2])
-                    p_dn = df['ma'].iloc[-2] - (2.1 * df['std'].iloc[-2])
+
+                    ma_prev = df['ma'].iloc[-2]
+                    std_prev = df['std'].iloc[-2]
+                    p_up = ma_prev + (2.1 * std_prev)
+                    p_dn = ma_prev - (2.1 * std_prev)
                     p_w = p_up - p_dn
 
-                    # Линии Призрака
+                    # Ghost Strike уровни (Пространственный фильтр)
                     strike_up = p_up - (p_w * dna['ghost_p'])
                     strike_dn = p_dn + (p_w * dna['ghost_p'])
 
-                    # Расчет rolling-объема в монетах
+                    # 3. ДАТЧИК СКОРОСТИ (Tick Velocity) за последние 3 секунды
                     vol_history = self.memory['vol_history'].get(sym, [])
-                    if len(vol_history) > 2:
-                        diff_vol = vol_history[-1][1] - vol_history[0][1]
+                    if len(vol_history) >= 4:
+                        # Фикс отрицательного quoteVolume (Объем в USDT)
+                        diff_vol = vol_history[-1][1] - vol_history[-4][1]
                         vol_now_usdt = diff_vol if diff_vol > 0 else 0.0
                         vol_now = vol_now_usdt / cur_p
+
+                        # Расчет изменения цены за последние 3 секунды (Скорость)
+                        price_3s_ago = vol_history[-4][0]  # Цена 3 секунды назад
+                        price_change_pct = abs(cur_p / price_3s_ago - 1) if price_3s_ago > 0 else 0.0
                     else:
                         vol_now = 0.0
+                        price_change_pct = 0.0
 
+                    # Средний исторический объем в монетах
                     vol_avg = float(df['v'].rolling(10).mean().iloc[-2]) if not df['v'].empty else 0.0
                     vol_ratio = vol_now / vol_avg if vol_avg > 0 else 0
 
-                    # ЖЕСТКИЕ РАЗДЕЛЬНЫЕ ФИЛЬТРЫ (Защита от инверсии)
+                    # 4. СИНХРОНИЗАЦИЯ ТРИГГЕРОВ
                     open_now = df['o'].iloc[-1]
                     vol_ok = vol_ratio >= dna['vol']
+                    speed_ok = price_change_pct >= dna.get('min_speed', 0.0015)
 
-                    is_long = (cur_p >= strike_up) and (cur_p > open_now) and vol_ok
-                    is_short = (cur_p <= strike_dn) and (cur_p < open_now) and vol_ok
+                    # Защита от расширения: проверяем, куда реально идет пробой свечи
+                    hit_up = (cur_p >= strike_up) and (cur_p > open_now)
+                    hit_dn = (cur_p <= strike_dn) and (cur_p < open_now)
 
-                    # ДЕБАГ (Раздельный и точный)
+                    is_long = hit_up and vol_ok and speed_ok
+                    is_short = hit_dn and vol_ok and speed_ok
+
+                    # ДЕБАГ (Логирует только если цена за уровнем, но не хватает параметров)
                     if (cur_p >= strike_up or cur_p <= strike_dn) and not (is_long or is_short):
                         if time.time() - last_debug_t > 30:
                             reason = ""
                             if cur_p >= strike_up and cur_p <= open_now: reason += "[Цвет не LONG ❌] "
                             if cur_p <= strike_dn and cur_p >= open_now: reason += "[Цвет не SHORT ❌] "
-                            if not vol_ok: reason += f"[Объем {round(vol_ratio,1)}x < {dna['vol']}x ❌]"
+                            if not vol_ok: reason += f"[Объем {round(vol_ratio,1)}x < {dna['vol']}x ❌] "
+                            if not speed_ok: reason += f"[Скорость {round(price_change_pct*100,3)}% < {round(dna['min_speed']*100,3)}% ❌]"
                             self.log(f"🔍 ПОЧТИ СИГНАЛ {sym}: {reason}")
                             last_debug_t = time.time()
 
-                    # ВХОД ЛИМИТКОЙ (Экономим на проскальзывании)
+                    # 5. ИСПОЛНЕНИЕ: Вход лимиткой на пробойный уровень
                     if is_long:
                         await self.execute_limit_entry(sym, 'buy', strike_up, dna)
                     elif is_short:
@@ -186,7 +213,7 @@ class TitanGhost:
                 except Exception as e:
                     continue
             await asyncio.sleep(0.4)
-
+#====================
     async def execute_entry(self, sym, side, price, dna):
         try:
             # Исправление 109400: для One-way mode всегда передаем BOTH
