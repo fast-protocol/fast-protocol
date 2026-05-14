@@ -1,16 +1,3 @@
-import asyncio
-import ccxt.pro as ccxt
-import pandas as pd
-import time
-import json
-import math
-from datetime import datetime
-
-# ==========================================
-# --- ПУЛЬТ УПРАВЛЕНИЯ TITAN-BINANCE V1.0 ---
-# ==========================================
-API_KEY = ""
-SECRET_KEY = ""
 
 # --- УПРАВЛЕНИЕ КАПИТАЛОМ ---
 MAX_ACTIVE_SLOTS = 1       # Динамика: 1 (при <$150), 2 (при <$500), 3 (при >$500)
@@ -306,7 +293,7 @@ async def check_signal(exchange, symbol):
             # Funding Shield
             try:
                 f_data = await exchange.fetch_funding_rate(symbol)
-                if abs(float(f_data.get('fundingRate', 0))) > FUNDING_SHIELD: 
+                if abs(float(f_data.get('fundingRate', 0))) > FUNDING_SHIELD:
                     log(f"🛡️ Funding Shield: {symbol} пропуск (Rate: {f_data.get('fundingRate')})")
                     return None
             except: pass # Обработка ошибок, чтобы бот не падал
