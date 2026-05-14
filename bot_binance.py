@@ -380,7 +380,7 @@ async def execute_entry(exchange, signal):
         # Считаем количество контрактов
         #amount_base = (margin_for_slot * dna['lev']) / price
         #amount = float(exchange.amount_to_precision(symbol, amount_base))
-        amount = exchange.amount_to_precision(symbol, amount_base)
+       
         # ФЬЮЧЕРСНЫЙ РАСЧЕТ В ПЛЕЧОМ: Рассчитываем базовый объем позиции в долларах
         usdt_volume = margin_for_slot * dna['lev']
         if usdt_volume > available_usdt * dna['lev']:
@@ -390,7 +390,7 @@ async def execute_entry(exchange, signal):
         
         # Получаем СТРОКУ точной прецизии для фьючерсов Binance (БЕЗ float-обертки!)
         amount_str = exchange.amount_to_precision(symbol, amount_base)
-        
+        amount = exchange.amount_to_precision(symbol, amount_base)      
         if float(amount) <= 0: 
             return
             
