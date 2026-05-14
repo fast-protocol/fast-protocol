@@ -124,14 +124,14 @@ class TitanGhost:
             self.log(f"⚠️ Ошибка выставления капкана {sym}: {e}")
 #================
     async def hunter_loop(self):
-        self.log("🚀 Охота Ghost Strike [V23.0 Квантовая Скорость] активирована...")
+        self.log("🚀 Охота Ghost Strike [V23.1 Квантовая Геометрия] активирована...")
         await asyncio.sleep(5)
         last_debug_t = 0
 
         while self.memory['is_running']:
             for sym, dna in self.memory['dna'].items():
 
-                # 1. АНТИ-ПОВТОР: Индивидуальный кулдаун из ДНК для защиты от пилы
+                # 1. АНТИ-ПОВТОР: Индивидуальный кулдаун из ДНК для защиты от распила
                 cd_time = dna.get('cooldown', 300)
                 if sym in self.memory.get('cooldown', {}) and (time.time() - self.memory['cooldown'][sym] < cd_time):
                     continue
@@ -162,16 +162,16 @@ class TitanGhost:
                     strike_up = p_up - (p_w * dna['ghost_p'])
                     strike_dn = p_dn + (p_w * dna['ghost_p'])
 
-                    # 3. ДАТЧИК СКОРОСТИ (Tick Velocity) за последние 3 секунды
+                    # 3. ДАТЧИК СКОРОСТИ И ОБЪЕМА (Tick Velocity) с исправленными индексами кортежа
                     vol_history = self.memory['vol_history'].get(sym, [])
                     if len(vol_history) >= 4:
-                        # Фикс отрицательного quoteVolume (Объем в USDT)
+                        # Извлекаем quoteVolume (индекс [1])
                         diff_vol = vol_history[-1][1] - vol_history[-4][1]
                         vol_now_usdt = diff_vol if diff_vol > 0 else 0.0
                         vol_now = vol_now_usdt / cur_p
 
-                        # Расчет изменения цены за последние 3 секунды (Скорость)
-                        price_3s_ago = vol_history[-4][0]  # Цена 3 секунды назад
+                        # Извлекаем цену (индекс [0]) для замера скорости за 3 секунды
+                        price_3s_ago = vol_history[-4][0]
                         price_change_pct = abs(cur_p / price_3s_ago - 1) if price_3s_ago > 0 else 0.0
                     else:
                         vol_now = 0.0
@@ -181,22 +181,21 @@ class TitanGhost:
                     vol_avg = float(df['v'].rolling(10).mean().iloc[-2]) if not df['v'].empty else 0.0
                     vol_ratio = vol_now / vol_avg if vol_avg > 0 else 0
 
-                    # 4. СИНХРОНИЗАЦИЯ ТРИГГЕРОВ
+                    # Базовые флаги триггеров
                     open_now = df['o'].iloc[-1]
                     vol_ok = vol_ratio >= dna['vol']
                     speed_ok = price_change_pct >= dna.get('min_speed', 0.0015)
 
-                    # Защита от расширения: проверяем, куда реально идет пробой свечи
-                    hit_up = (cur_p >= strike_up) and (cur_p > open_now)
-                    hit_dn = (cur_p <= strike_dn) and (cur_p < open_now)
+                    # Жесткая проверка направления (Защита от ложного расширения полос)
+                  #  hit_up = (cur_p >= strike_up) and (cur_p > open_now)
+                  #  hit_dn = (cur_p <= strike_dn) and (cur_p < open_now)
+                    # Восстанавливаем чистую математику пробоя
+                    hit_up = cur_p >= strike_up
+                    hit_dn = cur_p <= strike_dn
 
-#                    is_long = hit_up and vol_ok and speed_ok
-#                    is_short = hit_dn and vol_ok and speed_ok
-#=================
                     # --- [АНАЛИЗАТОР ГЕОМЕТРИИ СВЕЧИ V23.1] ---
                     high_now = max(df['h'].iloc[-1], cur_p)
                     low_now = min(df['l'].iloc[-1], cur_p)
-                    open_now = df['o'].iloc[-1]
 
                     # Полный диапазон движения текущей свечи
                     candle_range = high_now - low_now if (high_now - low_now) > 0 else 0.000001
@@ -213,36 +212,48 @@ class TitanGhost:
                     shadow_limit = dna.get('max_shadow', 0.30)
                     body_limit = dna.get('min_body', 0.60)
 
+                    # Свечные предохранители (True/False)
                     shadow_long_ok = (up_shadow / candle_range) <= shadow_limit
                     body_long_ok = (long_body / candle_range) >= body_limit
 
                     shadow_short_ok = (dn_shadow / candle_range) <= shadow_limit
                     body_short_ok = (short_body / candle_range) >= body_limit
 
-                    # --- [DEBUG START V23.1] ---
-                    if (cur_p >= strike_up or cur_p <= strike_dn) and not (is_long or is_short):
-                        if time.time() - last_debug_t > 30:
-                            reason = ""
+                    # Финальные триггеры жесткой свечной синхронизации
+#                    is_long = hit_up and vol_ok and speed_ok and shadow_long_ok and body_long_ok
+#                    is_short = hit_dn and vol_ok and speed_ok and shadow_short_ok and body_short_ok
+
+                    # Цвет свечи проверяем раздельно: для лонга свеча зеленая (cur_p > open), для шорта красная
+                    is_long = hit_up and (cur_p > open_now) and vol_ok and speed_ok and shadow_long_ok and body_long_ok
+                    is_short = hit_dn and (cur_p < open_now) and vol_ok and speed_ok and shadow_short_ok and body_short_ok
+                    # --- [ПРОЗРАЧНЫЙ ДЕБАГ РАДАР V23.1.1] ---
+                    # Бот начнет ворчать в лог, если цена приблизилась к страйкам ближе чем на 0.15%
+                    near_up = cur_p >= (strike_up * 0.9985)
+                    near_dn = cur_p <= (strike_dn * 1.0015)
+
+                    if (near_up or near_dn) and not (is_long or is_short):
+                        if time.time() - last_debug_t > 15: # Отчет каждые 15 секунд
+                            dist_up = (cur_p / strike_up - 1) * 100
+                            dist_dn = (1 - cur_p / strike_dn) * 100
+
+                            reason = f"| Срез истории: {len(vol_history)} тиков | "
                             if cur_p >= strike_up and cur_p <= open_now: reason += "[Цвет не LONG ❌] "
                             if cur_p <= strike_dn and cur_p >= open_now: reason += "[Цвет не SHORT ❌] "
                             if not vol_ok: reason += f"[Объем {round(vol_ratio,1)}x < {dna['vol']}x ❌] "
                             if not speed_ok: reason += f"[Скорость {round(price_change_pct*100,3)}% < {round(dna['min_speed']*100,3)}% ❌] "
-                            if cur_p >= strike_up and not shadow_long_ok: reason += "[Длинный хвост сверху ❌] "
-                            if cur_p >= strike_up and not body_long_ok: reason += "[Свеча пустая для LONG ❌] "
-                            if cur_p <= strike_dn and not shadow_short_ok: reason += "[Длинный хвост снизу ❌] "
-                            if cur_p <= strike_dn and not body_short_ok: reason += "[Свеча пустая для SHORT ❌] "
-                            self.log(f"🔍 ПОЧТИ СИГНАЛ {sym}: {reason}")
-                            last_debug_t = time.time()
-                    # --- [DEBUG END] ---
+                            if cur_p >= strike_up and not shadow_long_ok: reason += "[Фитиль сверху ❌] "
+                            if cur_p <= strike_dn and not shadow_short_ok: reason += "[Фитиль снизу ❌] "
 
-                    # Финальные триггеры жесткой свечной синхронизации
-                    is_long = hit_up and vol_ok and speed_ok and shadow_long_ok and body_long_ok
-                    is_short = hit_dn and vol_ok and speed_ok and shadow_short_ok and body_short_ok
-#==================
-                    # 5. ИСПОЛНЕНИЕ: Вход лимиткой на пробойный уровень
+                            self.log(f"📡 РАДАР {sym}: Цена рядом (Up: {round(dist_up,2)}%, Dn: {round(dist_dn,2)}%) {reason}")
+                            last_debug_t = time.time()
+
+                    # 5. ИСПОЛНЕНИЕ: Выставляем капкан только если ВСЕ фильтры истинны
                     if is_long:
+                        # Страховочный дубль-фильтр объема перед выстрелом
+                        if vol_ratio < dna['vol']: continue
                         await self.execute_limit_entry(sym, 'buy', strike_up, dna)
                     elif is_short:
+                        if vol_ratio < dna['vol']: continue
                         await self.execute_limit_entry(sym, 'sell', strike_dn, dna)
 
                 except Exception as e:
