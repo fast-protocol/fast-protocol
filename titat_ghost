@@ -228,8 +228,10 @@ class TitanGhost:
                     is_short = hit_dn and (cur_p < open_now) and vol_ok and speed_ok and shadow_short_ok and body_short_ok
                     # --- [ПРОЗРАЧНЫЙ ДЕБАГ РАДАР V23.1.1] ---
                     # Бот начнет ворчать в лог, если цена приблизилась к страйкам ближе чем на 0.15%
-                    near_up = cur_p >= (strike_up * 0.9985)
-                    near_dn = cur_p <= (strike_dn * 1.0015)
+                    #near_up = cur_p >= (strike_up * 0.9985)
+                    #near_dn = cur_p <= (strike_dn * 1.0015)
+                    near_up = cur_p >= (strike_up * 0.985)
+                    near_dn = cur_p <= (strike_dn * 1.015)
 
                     if (near_up or near_dn) and not (is_long or is_short):
                         if time.time() - last_debug_t > 15: # Отчет каждые 15 секунд
