@@ -273,7 +273,9 @@ async def check_signal(exchange, symbol):
         upper_wick = df['h'].iloc[-1] - max(df['o'].iloc[-1], df['c'].iloc[-1])
         wick_ratio_short = upper_wick / candle_range
         # --------------------------------
-
+        # РАСЧЕТ ТРИГГЕРОВ ИЗ ДНК МАТРИЦЫ
+        long_trigger = lower * (1 - dna['l_off'])
+        short_trigger = upper * (1 + dna['s_off'])
         # 5. Логика входа (Оффсет + Поглощение)
         # ЛОНГ: Цена выше триггера + Поглощение + Фитиль > 35%
         is_buy = (cur_p >= long_trigger) and (cur_p > prev_open) and (wick_ratio_long > 0.35)
