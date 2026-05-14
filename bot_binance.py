@@ -397,7 +397,7 @@ async def execute_entry(exchange, signal):
 
         # 3. Выставление ордера (MARKET для мгновенного захвата тени)
 #        log(f"🚀 ВХОД {symbol}: {side.upper()} | Vol: {amount} | Margin: ${round(margin_for_slot, 2)}")
-        log(f"🚀 ВХОД {symbol} {side.upper()} | Vol: {amount} | Bal: ${round(memory.total_wallet, 2)}")
+        log(f"🚀 ВХОД {symbol} {side.upper()} | Vol: {amount_str} | Bal: ${round(memory.total_wallet, 2)}")
 
         order = await exchange.create_market_order(symbol, side, amount_str)
 
