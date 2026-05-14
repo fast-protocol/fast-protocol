@@ -378,16 +378,28 @@ async def execute_entry(exchange, signal):
             return
 
         # Считаем количество контрактов
-        amount_base = (margin_for_slot * dna['lev']) / price
-        amount = float(exchange.amount_to_precision(symbol, amount_base))
+        #amount_base = (margin_for_slot * dna['lev']) / price
+        #amount = float(exchange.amount_to_precision(symbol, amount_base))
+        # ФЬЮЧЕРСНЫЙ РАСЧЕТ В ПЛЕЧОМ: Рассчитываем базовый объем позиции в долларах
+        usdt_volume = margin_for_slot * dna['lev']
+        if usdt_volume > available_usdt * dna['lev']:
+            usdt_volume = available_usdt * dna['lev'] * 0.98 # Защитный зазор 2%
 
-        if amount <= 0: return
+        amount_base = usdt_volume / price
+        
+        # Получаем СТРОКУ точной прецизии для фьючерсов Binance (БЕЗ float-обертки!)
+        amount_str = exchange.amount_to_precision(symbol, amount_base)
+        
+        if float(amount_str) <= 0: 
+            return
+            
+#        if amount <= 0: return
 
         # 3. Выставление ордера (MARKET для мгновенного захвата тени)
 #        log(f"🚀 ВХОД {symbol}: {side.upper()} | Vol: {amount} | Margin: ${round(margin_for_slot, 2)}")
         log(f"🚀 ВХОД {symbol} {side.upper()} | Vol: {amount} | Bal: ${round(memory.total_wallet, 2)}")
 
-        order = await exchange.create_market_order(symbol, side, amount)
+        order = await exchange.create_market_order(symbol, side, amount_str)
 
         if order:
             # ОБЯЗАТЕЛЬНО РАСКОММЕНТИРУЙ ЭТО:
@@ -396,7 +408,7 @@ async def execute_entry(exchange, signal):
                 'symbol': symbol,
                 'side': side,
                 'entryPrice': price,
-                'contracts': amount
+                'contracts': amount_str
             }
             # 4. Инициализация "Живой Памяти" для этой сделки
             memory.entry_times[symbol] = time.time()
