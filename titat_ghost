@@ -190,20 +190,55 @@ class TitanGhost:
                     hit_up = (cur_p >= strike_up) and (cur_p > open_now)
                     hit_dn = (cur_p <= strike_dn) and (cur_p < open_now)
 
-                    is_long = hit_up and vol_ok and speed_ok
-                    is_short = hit_dn and vol_ok and speed_ok
+#                    is_long = hit_up and vol_ok and speed_ok
+#                    is_short = hit_dn and vol_ok and speed_ok
+#=================
+                    # --- [АНАЛИЗАТОР ГЕОМЕТРИИ СВЕЧИ V23.1] ---
+                    high_now = max(df['h'].iloc[-1], cur_p)
+                    low_now = min(df['l'].iloc[-1], cur_p)
+                    open_now = df['o'].iloc[-1]
 
-                    # ДЕБАГ (Логирует только если цена за уровнем, но не хватает параметров)
+                    # Полный диапазон движения текущей свечи
+                    candle_range = high_now - low_now if (high_now - low_now) > 0 else 0.000001
+
+                    # Геометрия для ЛОНГА
+                    up_shadow = high_now - cur_p
+                    long_body = cur_p - open_now
+
+                    # Геометрия для ШОРТА
+                    dn_shadow = cur_p - low_now
+                    short_body = open_now - cur_p
+
+                    # Извлечение жестких свечных лимитов из ДНК
+                    shadow_limit = dna.get('max_shadow', 0.30)
+                    body_limit = dna.get('min_body', 0.60)
+
+                    shadow_long_ok = (up_shadow / candle_range) <= shadow_limit
+                    body_long_ok = (long_body / candle_range) >= body_limit
+
+                    shadow_short_ok = (dn_shadow / candle_range) <= shadow_limit
+                    body_short_ok = (short_body / candle_range) >= body_limit
+
+                    # --- [DEBUG START V23.1] ---
                     if (cur_p >= strike_up or cur_p <= strike_dn) and not (is_long or is_short):
                         if time.time() - last_debug_t > 30:
                             reason = ""
                             if cur_p >= strike_up and cur_p <= open_now: reason += "[Цвет не LONG ❌] "
                             if cur_p <= strike_dn and cur_p >= open_now: reason += "[Цвет не SHORT ❌] "
                             if not vol_ok: reason += f"[Объем {round(vol_ratio,1)}x < {dna['vol']}x ❌] "
-                            if not speed_ok: reason += f"[Скорость {round(price_change_pct*100,3)}% < {round(dna['min_speed']*100,3)}% ❌]"
+                            if not speed_ok: reason += f"[Скорость {round(price_change_pct*100,3)}% < {round(dna['min_speed']*100,3)}% ❌] "
+                            if cur_p >= strike_up and not shadow_long_ok: reason += "[Длинный хвост сверху ❌] "
+                            if cur_p >= strike_up and not body_long_ok: reason += "[Свеча пустая для LONG ❌] "
+                            if cur_p <= strike_dn and not shadow_short_ok: reason += "[Длинный хвост снизу ❌] "
+                            if cur_p <= strike_dn and not body_short_ok: reason += "[Свеча пустая для SHORT ❌] "
                             self.log(f"🔍 ПОЧТИ СИГНАЛ {sym}: {reason}")
                             last_debug_t = time.time()
+                    # --- [DEBUG END] ---
 
+                    # Финальные триггеры жесткой свечной синхронизации
+                    is_long = hit_up and vol_ok and speed_ok and shadow_long_ok and body_long_ok
+                    is_short = hit_dn and vol_ok and speed_ok and shadow_short_ok and body_short_ok
+#==================
                     # 5. ИСПОЛНЕНИЕ: Вход лимиткой на пробойный уровень
                     if is_long:
                         await self.execute_limit_entry(sym, 'buy', strike_up, dna)
