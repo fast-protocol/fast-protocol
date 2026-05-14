@@ -1,0 +1,208 @@
+RISK_GEAR = 0.12    # Доля депо на одну сделку
+MAX_SLOTS = 4       # Максимум 4 параллельных сделки
+LOG_FILE = "ignition_heavy_log.txt"
+
+class GlobalMemory:
+    def __init__(self):
+        self.prices = {}
+        self.active_pos = {}
+        self.all_dna = {}
+        self.is_running = True
+        self.slots_occupied = 0
+        self.available = 0.0
+        self.tp_fixed = {}
+        self.start_balance = 0.0
+        self.be_fixed = {} # Отслеживание активации Храповика
+
+memory = GlobalMemory()
+
+def log(msg):
+    t = time.strftime('%Y-%m-%d %H:%M:%S')
+    formatted = f"[{t}] {msg}"
+    print(formatted)
+    try:
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(formatted + "\n")
+    except: pass
+
+async def update_balance(exchange):
+    while memory.is_running:
+        try:
+            bal = await exchange.fetch_balance({'type': 'swap'})
+            memory.available = float(bal['USDT']['free'])
+            if memory.start_balance == 0: memory.start_balance = memory.available
+            await asyncio.sleep(20)
+        except Exception as e:
+            log(f"⚠️ Balance Error: {e}")
+            await asyncio.sleep(5)
+
+async def check_signal(exchange, symbol):
+    try:
+        dna = memory.all_dna.get(symbol)
+        cur_p = memory.prices.get(symbol)
+        if not dna or not cur_p: return None
+
+        # Загружаем 50 свечей для расчета BB(20)
+        ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=50)
+        df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+
+        # Расчет Боллинджера (используем pandas_ta)
+        bb = df.ta.bbands(length=20, std=2.1)
+        if bb is None: return None
+
+        # Текущая и предыдущая ширина
+        curr_w = (bb['BBU_20_2.1'].iloc[-1] - bb['BBL_20_2.1'].iloc[-1]) / bb['BBM_20_2.1'].iloc[-1] * 100
+        prev_w = (bb['BBU_20_2.1'].iloc[-2] - bb['BBL_20_2.1'].iloc[-2]) / bb['BBM_20_2.1'].iloc[-2] * 100
+
+        # 1. ТРИГГЕР ВЗРЫВА (w_grow)
+        w_growth = curr_w / prev_w
+        if w_growth < dna['w_grow']: return None
+
+        # 2. ТРИГГЕР СКОРОСТИ (Скорость внутри свечи)
+        open_p = df['o'].iloc[-1]
+        change = abs(cur_p / open_p - 1)
+
+        gear = 'g2' if change >= dna['g2']['speed'] else ('g1' if change >= dna['g1']['speed'] else None)
+        if not gear: return None
+
+        # 3. ФИЛЬТР ОБЪЕМА
+        if df['v'].iloc[-1] < df['v'].mean() * dna[gear]['vol']: return None
+
+        return {
+            'symbol': symbol,
+            'side': 'buy' if cur_p > open_p else 'sell',
+            'gear': gear, 'price': cur_p, 'dna': dna, 'gear_data': dna[gear]
+        }
+    except: return None
+
+async def execute_entry(exchange, sig):
+    symbol = sig['symbol']
+    if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos: return
+
+    try:
+        # Установка плеча
+        try: await exchange.set_leverage(sig['dna']['lev'], symbol)
+        except: pass
+
+        # Расчет объема (с учетом RISK_GEAR)
+        amount_usdt = memory.available * RISK_GEAR * sig['dna']['lev']
+        qty = float(exchange.amount_to_precision(symbol, amount_usdt / sig['price']))
+        if qty <= 0: return
+
+        # Вход по Рынку (Импульсный захват)
+        order = await exchange.create_market_order(symbol, sig['side'], qty)
+        if order:
+            log(f"🚀 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty}")
+            memory.active_pos[symbol] = {
+                'side': sig['side'], 'vol': qty, 'price': sig['price'],
+                'gear': sig['gear'], 'gear_data': sig['gear_data'], 'dna': sig['dna'],
+                'entry_time': time.time()
+            }
+            memory.tp_fixed[symbol] = False
+            memory.slots_occupied += 1
+    except Exception as e:
+        log(f"⚠️ Entry Error {symbol}: {e}")
+
+async def monitor_logic(exchange):
+    while memory.is_running:
+        for symbol, pos in list(memory.active_pos.items()):
+            try:
+                cur_p = memory.prices.get(symbol)
+                if not cur_p: continue
+
+                # Расчет PNL сделки
+                pnl = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
+                gd = pos['gear_data']
+                age = time.time() - pos['entry_time']
+
+                # 0. ХРАПОВИК (Ratchet) - Перенос в БУ до Тейка
+                if not memory.be_fixed.get(symbol, False) and pnl >= gd['step_p']:
+                    memory.be_fixed[symbol] = True
+                    log(f"⚙️ ХРАПОВИК: {symbol} поднял защиту в +{round(gd['step_be']*100,2)}%")
+                    # (Здесь мы просто фиксируем в памяти, что стоп теперь в BE)
+                    # Физически стоп сработает в блоке STOP LOSS ниже
+
+                # 1. ТЕЙК 1 (50%) + ПЕРЕВОД В БУ
+                if not memory.tp_fixed[symbol] and pnl >= gd['tp1']:
+                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
+                    close_qty = float(exchange.amount_to_precision(symbol, pos['vol'] * 0.5))
+                    await exchange.create_market_order(symbol, side_exit, close_qty, {'reduceOnly': True})
+                    memory.tp_fixed[symbol] = True
+                    pos['vol'] -= close_qty
+                    log(f"🎯 ТЕЙК-1: {symbol} зафиксирован (+{round(gd['tp1']*100,2)}%)")
+
+                # 2. ТЕЙК 2 (ФИНАЛ)
+                if pnl >= gd['tp2']:
+                    log(f"🏆 ТЕЙК-2: {symbol} зафиксирован (+{round(gd['tp2']*100,2)}%)")
+                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
+                    await exchange.create_market_order(symbol, side_exit, pos['vol'], {'reduceOnly': True})
+                    del memory.active_pos[symbol]
+                    if symbol in memory.be_fixed: del memory.be_fixed[symbol] #
+                    memory.slots_occupied -= 1
+                    continue
+
+                # 3. ФИЛЬТР ЗАТУХАНИЯ (Time-Decay)
+                if age > gd['time'] and pnl < gd['tp1']:
+                    log(f"⏱️ ЗАТУХАНИЕ: {symbol} закрыт по таймеру (PNL: {round(pnl*100,2)}%)")
+                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
+                    await exchange.create_market_order(symbol, side_exit, pos['vol'], {'reduceOnly': True})
+                    del memory.active_pos[symbol]
+                    if symbol in memory.be_fixed: del memory.be_fixed[symbol] #
+                    memory.slots_occupied -= 1
+                    continue
+
+                # 4. СТОП-ЛОСС / ХРАПОВИК
+                current_sl = gd['step_be'] if memory.be_fixed.get(symbol, False) else pos['dna']['sl']
+                if pnl <= current_sl:
+                #if pnl <= pos['dna']['sl']:
+                    log(f"🚨 СТОП: {symbol} сработал на {cur_p} (PNL: {round(pnl*100,2)}%)")
+                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
+                    await exchange.create_market_order(symbol, side_exit, pos['vol'], {'reduceOnly': True})
+                    del memory.active_pos[symbol]
+                    if symbol in memory.be_fixed: del memory.be_fixed[symbol] #
+                    memory.slots_occupied -= 1
+
+            except Exception as e: pass
+        await asyncio.sleep(1)
+
+async def main():
+    exchange = ccxt.binance({
+        'apiKey': API_KEY, 'secret': API_SECRET,
+        'options': {'defaultType': 'future'}, 'enableRateLimit': True
+    })
+
+    # Загружаем DNA
+    with open('dna_ignition.json', 'r') as f:
+        memory.all_dna = json.load(f)
+    log(f"✅ TITAN V21.5 ONLINE. Охота на {len(memory.all_dna)} секторов.")
+
+    # Задача потока цен
+    async def price_stream():
+        symbols = list(memory.all_dna.keys())
+        async def track(s):
+            while memory.is_running:
+                try:
+                    t = await exchange.watch_ticker(s)
+                    memory.prices[s] = float(t['last'])
+                except: await asyncio.sleep(1)
+        await asyncio.gather(*[track(s) for s in symbols])
+
+    # Задача поиска сигналов
+    async def hunter_loop():
+        await asyncio.sleep(10) # Прогрев цен
+        while memory.is_running:
+            for s in memory.all_dna.keys():
+                sig = await check_signal(exchange, s)
+                if sig: await execute_entry(exchange, sig)
+            await asyncio.sleep(0.4)
+
+    # Запуск всех систем
+    await asyncio.gather(
+        update_balance(exchange),
+        price_stream(),
+        hunter_loop(),
+        monitor_logic(exchange)
+    )
+
+if __name__ == "__main__":
+    asyncio.run(main())
