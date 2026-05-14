@@ -222,7 +222,7 @@ async def update_balance(exchange):
         await asyncio.sleep(20) # Оптимальная частота опроса кошелька для HFT
 
 async def position_tracker(exchange):
-    """Синхронизация позиций с адресной зачисткой ордеров-сирот V24.6 [BINANCE Futures]"""
+    """Синхронизация позиций с защитой БУ-стопов и жестким клинингом пыли V25.6 [BINANCE Futures]"""
     while memory.is_running:
         try:
             pos_data = await exchange.fetch_positions()
@@ -230,33 +230,31 @@ async def position_tracker(exchange):
             active = {}
             for p in pos_data:
                 vol = abs(float(p.get('contracts', 0)))
-                if vol > 0.00001 and float(p.get('notional', 0)) != 0:
+                if vol > 0.00001:
                     raw_sym = p['symbol']
-                    # Приводим к единому спот-формату CCXT для Binance Spot/Futures
                     clean_sym = raw_sym.replace(':USDT', '')
                     if '/' not in clean_sym and 'USDT' in clean_sym:
                         clean_sym = clean_sym.replace('USDT', '/USDT')
 
-                    # --- [АДРЕСНАЯ ЗАЧИСТКА ОРДЕРОВ-СИРОТ] ---
-                    # Опрашиваем ордера конкретно по этому символу
-                    try:
-                        orders = await exchange.fetch_open_orders(clean_sym)
-                        # Если по монете есть ордера, но её долларовый объем микроскопический (пыль меньше $0.20)
-                        if abs(float(p.get('notional', 0))) < 0.20:
-                            for o in orders:
-                                log(f"🔥 ВЕНИК-ОРДЕР: Уничтожаю сироту по пыли {clean_sym} (ID: {o['id']})")
-                                await exchange.cancel_order(o['id'], clean_sym)
-                            try:
-                                exit_side = 'SELL' if p['side'].lower() in ['long', 'buy'] else 'BUY'
-                                await exchange.create_market_order(clean_sym, exit_side, vol, {'reduceOnly': True})
-                            except Exception: pass
-                            continue # Стираем из активной памяти
-                    except Exception: pass
+                    # --- [ПРОТОКОЛ: АВТО-УТИЛИЗАЦИЯ ПЫЛИ V25.6] ---
+                    notional_val = abs(float(p.get('notional', 0)))
+                    if notional_val < 0.25: # Увеличили порог пыли до $0.25
+                        try:
+                            binance_market_id = clean_sym.replace('/', '')
+                            # Полностью выжигаем все ордера по этой пыли (включая Algo)
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
 
-                    # Нормальная рабочая позиция
-                    if abs(float(p.get('notional', 0))) >= 0.20:
-                        if clean_sym in memory.all_dna['stable']:
-                            active[clean_sym] = p
+                            # Пробуем закрыть остаток позиции по рынку
+                            exit_side = 'SELL' if p['side'].lower() in ['long', 'buy'] else 'BUY'
+                            await exchange.create_market_order(clean_sym, exit_side, vol, {'reduceOnly': True})
+                            log(f"🧹 ВЕНИК: Позиция-пыль {clean_sym} успешно выжжена из терминала.")
+                        except Exception:
+                            pass
+                        continue # Намертво стираем из памяти бота, чтобы не занимала слот
+
+                    if clean_sym in memory.all_dna['stable']:
+                        active[clean_sym] = p
 
             # ПРОТОКОЛ ВОССТАНОВЛЕНИЯ RECOVERED
             for symbol, p in active.items():
@@ -268,7 +266,7 @@ async def position_tracker(exchange):
                     memory.max_pnl[symbol] = 0.0
                     memory.entry_times[symbol] = time.time()
 
-            # АВТОМАТИЧЕСКАЯ ОЧИСТКА СЛОВАРЕЙ
+            # АВТОМАТИЧЕСКАЯ ОЧИСТКА СЛОВАРЕЙ ПРИ ЗАКРЫТИИ СДЕЛКИ
             for sym in list(memory.active_pos.keys()):
                 if sym not in active:
                     log(f"🧹 Позиция {sym} закрыта на бирже. Очистка системных флагов.")
@@ -277,20 +275,31 @@ async def position_tracker(exchange):
             memory.active_pos = active
             memory.slots_occupied = len(active)
 
-            # --- [БРОНИРОВАННЫЙ ТОТАЛЬНЫЙ ВЕНИК ОРДЕРОВ-СИРОТ V24.6.1] ---
-            # Перебираем все 12 монет из нашей активной обоймы ДНК
+            # --- [БРОНИРОВАННЫЙ ТОТАЛЬНЫЙ ВЕНИК ОРДЕРОВ-СИРОТ V25.6] ---
             for sym_key in list(memory.dna_fleet.keys()):
-                # Если по монете НЕТ активной позиции в памяти бота
+                binance_market_id = sym_key.replace('/', '').replace(':USDT', '')
+
+                # СЦЕНАРИЙ 1: Если позиции НЕТ в рынке (SOL, LINK) — тотальный снос ордеров
                 if sym_key not in memory.active_pos:
                     try:
-                        # Запрашиваем открытые ордера по конкретному символу
-                        open_orders = await exchange.fetch_open_orders(sym_key)
-                        for order in open_orders:
-                            log(f"🔥 ВЕНИК-ОРДЕР: Уничтожаю висящий стоп-сироту по {sym_key} (ID: {order['id']})")
-                            await exchange.cancel_order(order['id'], sym_key)
+                        await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
                     except Exception:
-                        pass # Гасим сетевые заминки, если ордеров нет
+                        pass
 
+                # СЦЕНАРИЙ 2: Для ЖИВЫХ позиций (SUI, PEPE, DOGE) — ЖЕСТКАЯ ЗАЩИТА БЕЗУБЫТКА
+                else:
+                    pass
+#                    try:
+                        # Если Тейк 1 по монете ЕЩЕ НЕ ВЫПОЛНЕН — мы можем безопасно чистить дубликаты стопов.
+                        # Но если TP1 выполнен (флаг равен True), венику ЗАПРЕЩЕНО трогать ордера,
+                        # чтобы не сбить наш выставленный БУ-стоп!
+#                        if sym_key in memory.tp_fixed and not memory.tp_fixed[sym_key]['tp1']:
+#                            if int(time.time()) % 60 < 10: # Раз в минуту убираем наводку дублей стартового стопа
+#                                await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
+#                                memory.stop_placed[sym_key] = None # Заставляем выставить один чистый стоп
+#                    except Exception:
+#                        pass
 
             await asyncio.sleep(10)
         except Exception as e:
