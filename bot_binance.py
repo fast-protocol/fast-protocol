@@ -86,7 +86,7 @@ async def warm_up_btc_history(exchange):
 
 async def update_market_regime(exchange):
     """Аналитик Биткоина с инерцией 90с и бесконечным циклом V19.5"""
-    log("🚥 Аналитик BTC запущен (Защита от дребезга 90с активна)")
+    #log("🚥 Аналитик BTC запущен (Защита от дребезга 90с активна)")
     while memory.is_running:
         try:
             # 1. Получаем историю BTC для анализа фазы
@@ -112,7 +112,7 @@ async def update_market_regime(exchange):
                 if memory.pending_mode != calculated_mode:
                     memory.pending_mode = calculated_mode
                     memory.change_timer = time.time()
-                    log(f"🚥 ПОДГОТОВКА: BTC тянет в {calculated_mode}. Ждем подтверждения 90с...")
+                    #log(f"🚥 ПОДГОТОВКА: BTC тянет в {calculated_mode}. Ждем подтверждения 90с...")
 
                 # Если 90 секунд стабильно держится новый режим - переключаем
                 time_passed = time.time() - memory.change_timer
@@ -128,13 +128,13 @@ async def update_market_regime(exchange):
             else:
                 # Если рынок вернулся к нашему текущему режиму - сбрасываем ожидание
                 if memory.pending_mode != memory.mode:
-                    log(f"✅ ВЕТЕР СТИХ: BTC вернулся в норму. Остаемся в {memory.mode}.")
+                    #log(f"✅ ВЕТЕР СТИХ: BTC вернулся в норму. Остаемся в {memory.mode}.")
                     memory.pending_mode = memory.mode
                     memory.change_timer = 0
 
             # Редкий лог статуса (раз в 5 минут)
-            if int(time.time()) % 300 < 20:
-                log(f"🚥 STATUS: BTC Change: {round(change, 3)}% | Current Mode: {memory.mode}")
+#            if int(time.time()) % 300 < 20:
+                #log(f"🚥 STATUS: BTC Change: {round(change, 3)}% | Current Mode: {memory.mode}")
 
             await asyncio.sleep(20) # Пауза между проверками 20 секунд
 
@@ -198,42 +198,104 @@ async def price_stream():
     await client.close()
 
 async def update_balance(exchange):
-    """Фоновое обновление кошелька (раз в 10 секунд)"""
+    """Фоновое обновление кошелька (раз в 20 секунд) [V24.3]"""
     while memory.is_running:
         try:
             bal = await exchange.fetch_balance()
-            # Добавь этот принудительный лог для проверки
- #           log(f"DEBUG: Получены данные баланса")
+
+            # Безопасное извлечение данных из CCXT структуры Binance Futures
             total = float(bal.get('total', {}).get('USDT', 0))
             free = float(bal.get('free', {}).get('USDT', 0))
 
-            # Резервируем часть для безопасности
+            # Резервируем часть капитала для безопасности системы
             memory.available_margin = max(0, free - RESERVE_CASH)
             memory.total_wallet = total
-            # Если хочешь видеть баланс чаще, убери комментарий ниже
-#            log(f"💰 БАЛАНС: ${round(total, 2)} | Доступно: ${round(memory.available_margin, 2)}")
 
-            # Логируем МАЯК только если баланс изменился или раз в 5 минут
+            # Логируем МАЯК баланса строго раз в 5 минут, чтобы не спамить
             if not hasattr(memory, 'last_bal_log') or time.time() - memory.last_bal_log > 300:
-#                log(f"💰 МАЯК: Balance ${round(total, 2)} | Available: ${round(memory.available_margin, 2)}")
                 memory.last_bal_log = time.time()
 
         except Exception as e:
             log(f"⚠️ Ошибка Balance-Worker: {e}")
-        await asyncio.sleep(60)
+            await asyncio.sleep(5) # Защитная пауза при сбое сети
+
+        await asyncio.sleep(20) # Оптимальная частота опроса кошелька для HFT
 
 async def position_tracker(exchange):
-    """Синхронизация открытых позиций в реальном времени"""
+    """Синхронизация позиций с адресной зачисткой ордеров-сирот V24.6 [BINANCE Futures]"""
     while memory.is_running:
         try:
             pos_data = await exchange.fetch_positions()
-            # Фильтруем только те, где объем > 0
-            active = {p['symbol']: p for p in pos_data if float(p.get('contracts', 0)) > 0}
+
+            active = {}
+            for p in pos_data:
+                vol = abs(float(p.get('contracts', 0)))
+                if vol > 0.00001 and float(p.get('notional', 0)) != 0:
+                    raw_sym = p['symbol']
+                    # Приводим к единому спот-формату CCXT для Binance Spot/Futures
+                    clean_sym = raw_sym.replace(':USDT', '')
+                    if '/' not in clean_sym and 'USDT' in clean_sym:
+                        clean_sym = clean_sym.replace('USDT', '/USDT')
+
+                    # --- [АДРЕСНАЯ ЗАЧИСТКА ОРДЕРОВ-СИРОТ] ---
+                    # Опрашиваем ордера конкретно по этому символу
+                    try:
+                        orders = await exchange.fetch_open_orders(clean_sym)
+                        # Если по монете есть ордера, но её долларовый объем микроскопический (пыль меньше $0.20)
+                        if abs(float(p.get('notional', 0))) < 0.20:
+                            for o in orders:
+                                log(f"🔥 ВЕНИК-ОРДЕР: Уничтожаю сироту по пыли {clean_sym} (ID: {o['id']})")
+                                await exchange.cancel_order(o['id'], clean_sym)
+                            try:
+                                exit_side = 'SELL' if p['side'].lower() in ['long', 'buy'] else 'BUY'
+                                await exchange.create_market_order(clean_sym, exit_side, vol, {'reduceOnly': True})
+                            except Exception: pass
+                            continue # Стираем из активной памяти
+                    except Exception: pass
+
+                    # Нормальная рабочая позиция
+                    if abs(float(p.get('notional', 0))) >= 0.20:
+                        if clean_sym in memory.all_dna['stable']:
+                            active[clean_sym] = p
+
+            # ПРОТОКОЛ ВОССТАНОВЛЕНИЯ RECOVERED
+            for symbol, p in active.items():
+                if symbol not in memory.tp_fixed:
+                    log(f"🔗 RECOVERED BINANCE: {symbol} ({abs(float(p['contracts']))} units) успешно усыновлена!")
+                    memory.tp_fixed[symbol] = {'tp1': False, 'tp2': False}
+                    memory.trail_active[symbol] = False
+                    memory.stop_placed[symbol] = None
+                    memory.max_pnl[symbol] = 0.0
+                    memory.entry_times[symbol] = time.time()
+
+            # АВТОМАТИЧЕСКАЯ ОЧИСТКА СЛОВАРЕЙ
+            for sym in list(memory.active_pos.keys()):
+                if sym not in active:
+                    log(f"🧹 Позиция {sym} закрыта на бирже. Очистка системных флагов.")
+                    clean_memory_keys(sym)
+
             memory.active_pos = active
             memory.slots_occupied = len(active)
+
+            # --- [БРОНИРОВАННЫЙ ТОТАЛЬНЫЙ ВЕНИК ОРДЕРОВ-СИРОТ V24.6.1] ---
+            # Перебираем все 12 монет из нашей активной обоймы ДНК
+            for sym_key in list(memory.dna_fleet.keys()):
+                # Если по монете НЕТ активной позиции в памяти бота
+                if sym_key not in memory.active_pos:
+                    try:
+                        # Запрашиваем открытые ордера по конкретному символу
+                        open_orders = await exchange.fetch_open_orders(sym_key)
+                        for order in open_orders:
+                            log(f"🔥 ВЕНИК-ОРДЕР: Уничтожаю висящий стоп-сироту по {sym_key} (ID: {order['id']})")
+                            await exchange.cancel_order(order['id'], sym_key)
+                    except Exception:
+                        pass # Гасим сетевые заминки, если ордеров нет
+
+
+            await asyncio.sleep(10)
         except Exception as e:
-            log(f"⚠️ Ошибка Position-Tracker: {e}")
-        await asyncio.sleep(15)
+            log(f"⚠ Ошибка Position-Tracker: {e}")
+            await asyncio.sleep(15)
 
 async def check_signal(exchange, symbol):
     try:
@@ -445,120 +507,116 @@ async def safe_close_all_orders(exchange, symbol):
 #=============
 async def monitor_logic(exchange, symbol, pos):
     try:
+        # 1. ЧИСТОЕ ЧТЕНИЕ ЦЕНЫ ИЗ WEBSOCKET (Без лагов и мусора)
+#        cur_p = memory.prices.get(symbol)
+#        if not cur_p: return
+        # БРОНИРОВАННОЕ ЧТЕНИЕ ЦЕНЫ: Ищем оба формата ключа в WebSocket-потоке
         cur_p = memory.prices.get(symbol)
-        if not cur_p: return
+        if not cur_p:
+            alt_symbol = symbol.replace('/', '') # Пробуем формат DOGEUSDT
+            cur_p = memory.prices.get(alt_symbol)
 
-        # 1. Расчет PNL с защитой от инверсии сторон
+        if not cur_p:
+            # Если в WebSocket пусто — берем живую цену прямо из инфо-пакета позиции на бирже
+            cur_p = float(pos.get('markPrice')) if pos.get('markPrice') else float(pos.get('info', {}).get('markPrice', 0))
+
+        if not cur_p or cur_p <= 0: return # Полная защита от деления на ноль
+
+        # 2. РАСЧЕТ PNL С ЗАЩИТОЙ ОТ ИНВЕРСИИ
         entry_p = float(pos['entryPrice'])
-        side = pos['side'].lower() # 'long' или 'short'
-
-        if side in ['long', 'buy']:
-            profit = (cur_p / entry_p) - 1
-        else:
-            profit = (entry_p / cur_p) - 1
-
+        side = pos['side'].lower()
+        profit = (cur_p / entry_p) - 1 if side in ['long', 'buy'] else (entry_p / cur_p) - 1
         vol = abs(float(pos['contracts']))
+
         dna = memory.dna_fleet.get(symbol)
         if not dna: return
 
-        # Инициализация локальной памяти для трейлинга, если её нет
+        # Локальная инициализация
         if symbol not in memory.trail_active: memory.trail_active[symbol] = False
         if symbol not in memory.tp_fixed: memory.tp_fixed[symbol] = {'tp1': False, 'tp2': False}
 
-        # Определяем режим адаптивного трейлинга на основе активной матрицы
         current_mode = 'stable'
-        for mode, matrix in memory.all_dna.items():
-            if matrix == memory.dna_fleet:
-                current_mode = mode
-                break
+        for m, matrix in memory.all_dna.items():
+            if matrix == memory.dna_fleet: current_mode = m; break
 
         exit_side = 'SELL' if side in ['long', 'buy'] else 'BUY'
+        bal_str = f"| Bal: ${round(memory.total_wallet, 2)}"
 
-        # --- [СТРАХОВКА: ВЫСТАВЛЕНИЕ РЕАЛЬНОГО СТОПА НА БИРЖУ] ---
-        # Если позиция открыта, а стопа на бирже еще нет — ставим его жестко!
+        # 3. ВЫСТАВЛЕНИЕ РЕАЛЬНОГО СТОПА НА БИРЖУ СРАЗУ ПРИ ВХОДЕ
         if not memory.stop_placed.get(symbol):
             try:
-                sl_price = entry_p * (1 + dna['sl']) if side in ['long', 'buy'] else entry_p * (1 - dna['sl'])
+                sl_price = entry_p * (1 - abs(dna['sl'])) if side in ['long', 'buy'] else entry_p * (1 + abs(dna['sl']))
                 sl_price = float(exchange.price_to_precision(symbol, sl_price))
 
-                await exchange.cancel_all_orders(symbol, {'spot': False}) # Чистим хвосты
-                await exchange.create_order(symbol, 'STOP_MARKET', exit_side, vol, params={
-                    'stopPrice': sl_price, 'reduceOnly': True
-                })
+                await exchange.cancel_all_orders(symbol, {'spot': False})
+                await exchange.create_order(symbol, 'STOP_MARKET', exit_side, vol, params={'stopPrice': sl_price, 'reduceOnly': True})
                 memory.stop_placed[symbol] = sl_price
-                log(f"🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: {symbol} @ {sl_price}")
-            except Exception as e:
-                log(f"🆘 Критическая ошибка выставления стопа {symbol}: {e}")
+                log(f"🛡️ СТОП ВЫСТАВЛЕН: {symbol} @ {sl_price} {bal_str}")
+            except Exception as e: log(f"🆘 Ошибка стопа {symbol}: {e}")
 
-        # --- [БЛОК ФИКСАЦИИ TP1] ---
+        # 4. TP1 С ИСПРАВЛЕННЫМ СТРОКОВЫМ ОБЪЕМОМ И ПЕРЕВОДОМ В РЕАЛЬНЫЙ БУ
         if not memory.tp_fixed[symbol]['tp1'] and profit >= dna['tp1']:
             try:
-                close_qty = float(exchange.amount_to_precision(symbol, vol * 0.5))
+                close_qty = exchange.amount_to_precision(symbol, vol * 0.5)
                 await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
 
-                # Перевод реального стопа на бирже в безубыток (БУ)
-                bu_price = float(exchange.price_to_precision(symbol, entry_p))
+                # Полная перезапись стопа на бирже на остаток объема по цене входа
                 await exchange.cancel_all_orders(symbol, {'spot': False})
-                await exchange.create_order(symbol, 'STOP_MARKET', exit_side, vol - close_qty, params={
-                    'stopPrice': bu_price, 'reduceOnly': True
-                })
+                bu_price = float(exchange.price_to_precision(symbol, entry_p))
+                rem_qty = exchange.amount_to_precision(symbol, vol - float(close_qty))
+
+                await exchange.create_order(symbol, 'STOP_MARKET', exit_side, rem_qty, params={'stopPrice': bu_price, 'reduceOnly': True})
 
                 memory.tp_fixed[symbol]['tp1'] = True
                 memory.stop_placed[symbol] = bu_price
-                log(f"🎯 TP1 ФИКСИРОВАН: {symbol} (+{round(profit*100,2)}%). Остаток переведен в БУ.")
-            except Exception as e:
-                log(f"⚠️ Ошибка исполнения TP1 {symbol}: {e}")
+                log(f"🎯 TP1 ВЫПОЛНЕН: {symbol} (+{round(profit*100,2)}%) {bal_str}")
+            except Exception as e: log(f"⚠️ Ошибка TP1 {symbol}: {e}")
 
-        # --- [БЛОК ФИКСАЦИИ TP2] ---
+        # 5. TP2 С ПЕРЕХОДОМ В АДАПТИВНЫЙ ТРЕЙЛИНГ V24.3
         if memory.tp_fixed[symbol]['tp1'] and not memory.tp_fixed[symbol]['tp2'] and profit >= (dna['tp1'] * 2):
             try:
-                # Фиксируем еще 50% от остатка (остается 25% от первоначального объема)
-                close_qty = float(exchange.amount_to_precision(symbol, vol * 0.5))
+                close_qty = exchange.amount_to_precision(symbol, vol * 0.5)
                 await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
-
                 memory.tp_fixed[symbol]['tp2'] = True
-                memory.trail_active[symbol] = True # АКТИВИРУЕМ ГИБРИДНЫЙ ТРЕЙЛИНГ ВМЕСТО TP3
+                memory.trail_active[symbol] = True
                 memory.max_pnl[symbol] = profit
-                log(f"🔥 TP2 ФИКСИРОВАН: {symbol}. Включен адаптивный Трейлинг V24.0. Режим: {current_mode.upper()}")
-            except Exception as e:
-                log(f"⚠️ Ошибка исполнения TP2 {symbol}: {e}")
+                log(f"🔥 TP2 ФИКСИРОВАН: {symbol}. Включен Трейлинг [{current_mode.upper()}] {bal_str}")
+            except Exception as e: log(f"⚠️ Ошибка TP2 {symbol}: {e}")
 
-        # --- [АДАПТИВНЫЙ ГИБРИДНЫЙ ТРЕЙЛИНГ V24.0] ---
+        # 6. ВЕДЕНИЕ АДАПТИВНОГО ТРЕЙЛИНГА ПО ШАГАМ
         if memory.trail_active[symbol]:
-            # Динамический выбор шага трейлинга в зависимости от коробки передач
-            if current_mode == 'bull':
-                trail_step = 0.0045 # Широкий шаг для сильных пампов
-            elif current_mode == 'bear':
-                trail_step = 0.0015 # Жесткий поджим на падающем рынке
-            else:
-                trail_step = dna.get('trail', 0.0032) # Стандарт флэта STABLE
+            trail_step = 0.0045 if current_mode == 'bull' else (0.0015 if current_mode == 'bear' else dna.get('trail', 0.0032))
+            if profit > memory.max_pnl[symbol]: memory.max_pnl[symbol] = profit
 
-            if profit > memory.max_pnl[symbol]:
-                memory.max_pnl[symbol] = profit # Тянем пик профита вверх
-
-            # Проверка триггера на выход по трейлингу
             if profit <= (memory.max_pnl[symbol] - trail_step):
-                log(f"🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ СРАБОТАЛ: Выход {symbol} @ {round(profit*100,2)}% (Пик был: {round(memory.max_pnl[symbol]*100,2)}%)")
+                log(f"🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие {symbol} @ {round(profit*100,2)}% {bal_str}")
                 await exchange.cancel_all_orders(symbol, {'spot': False})
                 await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
-                # Очистка памяти
-                memory.active_positions.remove(symbol)
-                del memory.tp_fixed[symbol]
-                del memory.trail_active[symbol]
-                del memory.stop_placed[symbol]
+                clean_memory_keys(symbol)
 
-    except Exception as e:
-        log(f"⚠ Критический сбой мониторинга {symbol}: {e}")
+    except Exception as e: pass
+
+def clean_memory_keys(symbol):
+    """Тотальная зачистка флагов монеты при выходе"""
+    if symbol in memory.tp_fixed: del memory.tp_fixed[symbol]
+    if symbol in memory.trail_active: del memory.trail_active[symbol]
+    if symbol in memory.stop_placed: del memory.stop_placed[symbol]
+    if symbol in memory.max_pnl: del memory.max_pnl[symbol]
 #==============
 async def monitoring_cycle(exchange):
-    """Цикл слежения за всеми открытыми позициями одновременно"""
+    """Цикл слежения за всеми открытыми позициями одновременно [V24.5 Трейл-Синхро]"""
     log("👁️ Мониторинг позиций запущен.")
     while memory.is_running:
         if memory.active_pos:
-            # Создаем задачи мониторинга для каждой активной позиции
-            tasks = [monitor_logic(exchange, sym, data) for sym, data in memory.active_pos.items()]
-            await asyncio.gather(*tasks)
-        await asyncio.sleep(0.5) # Частота проверки - 2 раза в секунду
+            tasks = []
+            for sym, data in memory.active_pos.items():
+                # Гарантируем, что ключ чистый, без двоеточий
+                clean_sym = sym.replace(':USDT', '')
+                tasks.append(monitor_logic(exchange, clean_sym, data))
+
+            if tasks:
+                await asyncio.gather(*tasks)
+        await asyncio.sleep(0.5)
 
 async def run_titan_v1():
     """Главный дирижер системы Titan-Binance"""
