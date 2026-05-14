@@ -377,20 +377,23 @@ async def execute_entry(exchange, signal):
             log(f"⚠️ Мало маржи для {symbol} (${round(margin_for_slot, 2)}). Пропуск.")
             return
 
-        # Считаем количество контрактов
-        #amount_base = (margin_for_slot * dna['lev']) / price
-        #amount = float(exchange.amount_to_precision(symbol, amount_base))
-       
-        # ФЬЮЧЕРСНЫЙ РАСЧЕТ В ПЛЕЧОМ: Рассчитываем базовый объем позиции в долларах
+        # РЕМОНТ V16.0: Используем глобальный баланс из памяти объекта memory
+        avail_bal = float(memory.available) if hasattr(memory, 'available') else 0.0
+        
+        # Если баланс в памяти пуст, ставим аварийный лимит от маржи слота
+        if avail_bal <= 0:
+            avail_bal = margin_for_slot * 1.05
+
         usdt_volume = margin_for_slot * dna['lev']
-        if usdt_volume > available_usdt * dna['lev']:
-            usdt_volume = available_usdt * dna['lev'] * 0.98 # Защитный зазор 2%
+        if usdt_volume > avail_bal * dna['lev']:
+            usdt_volume = avail_bal * dna['lev'] * 0.98
 
         amount_base = usdt_volume / price
         
-        # Получаем СТРОКУ точной прецизии для фьючерсов Binance (БЕЗ float-обертки!)
-        amount_str = exchange.amount_to_precision(symbol, amount_base)
-        amount = exchange.amount_to_precision(symbol, amount_base)      
+        # Получаем чистую строковую прецизию без обертки во float
+        amount = exchange.amount_to_precision(symbol, amount_base)
+        
+        
         if float(amount) <= 0: 
             return
             
