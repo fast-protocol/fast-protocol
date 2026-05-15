@@ -1,4 +1,16 @@
 
+# --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
+RISK_GEAR = 0.90       # Доля депо на одну сделку (12%)
+MAX_SLOTS = 1          # Максимум 4 параллельных сделки
+LOG_FILE = "ignition__log.txt"
+
+# --- ТУМБЛЕР РЕЖИМА ДЕБАГА (ВКЛ / ВЫКЛ) ---
+DEBUG_BEACONS = True   # Сделай False, чтобы полностью выключить маяки в консоли
+
+# Поля API Binance
+API_KEY = 
+API_SECRET = 
+
 
 class GlobalMemory:
     def __init__(self):
@@ -253,7 +265,7 @@ async def main():
         last_prices_beacon = time.time()
         while memory.is_running:
             try:
-                tickers = await exchange.fetch_tickers(symbols)
+                tickers = await exchange.fetch_tickers()
                 for s in symbols:
                     if s in tickers and tickers[s].get('last'):
                         memory.prices[s] = float(tickers[s]['last'])
@@ -264,7 +276,7 @@ async def main():
                     last_prices_beacon = time.time()
 
                 await asyncio.sleep(1)
-            except:
+            except Exception:
                 await asyncio.sleep(5)
 
     async def hunter_loop():
