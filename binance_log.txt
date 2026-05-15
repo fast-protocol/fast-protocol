@@ -1,1013 +1,482 @@
-[15:45:18] 🚥 STATUS: BTC Change: 1.775% | Current Mode: BULL
-[15:48:44] 🎯 СИГНАЛ: NEAR/USDT BUY | Offset: 0.0007 | Price: 1.61 | Mode: BULL
-[15:48:44] ⚠️ Мало маржи для NEAR/USDT ($2.21). Пропуск.
-[15:48:45] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.2129 | Mode: BULL
-[15:48:45] ⚠️ Мало маржи для SUI/USDT ($2.21). Пропуск.
-[15:48:49] 🎯 СИГНАЛ: ENJ/USDT BUY | Offset: 0.002 | Price: 0.048 | Mode: BULL
-[15:48:50] ⚠️ Мало маржи для ENJ/USDT ($2.21). Пропуск.
-[15:48:56] 🎯 СИГНАЛ: NEAR/USDT BUY | Offset: 0.0007 | Price: 1.611 | Mode: BULL
-[15:48:56] ⚠️ Мало маржи для NEAR/USDT ($2.21). Пропуск.
-[15:48:58] 🎯 СИГНАЛ: POL/USDT BUY | Offset: 0.0018 | Price: 0.09378 | Mode: BULL
-[15:48:58] 🚀 ВХОД POL/USDT BUY | Vol: 3151 | Bal: $19.39
-[15:48:59] ✅ Позиция POL/USDT открыта успешно.
-[15:49:09] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11408 | Mode: BULL
-[15:49:09] 🚀 ВХОД DOGE/USDT BUY | Vol: 2591 | Bal: $19.39
-[15:49:10] ❌ ОШИБКА ВХОДА DOGE/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[15:49:11] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.2127 | Mode: BULL
-[15:49:11] 🚀 ВХОД SUI/USDT SELL | Vol: 243.7 | Bal: $19.39
-[15:49:11] ❌ ОШИБКА ВХОДА SUI/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[15:50:02] 🚥 STATUS: BTC Change: 1.594% | Current Mode: BULL
-[15:54:55] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[15:54:55] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[15:54:55] 💉 Прогрев истории BTC: Загрузка свечей...
-[15:54:57] ✅ История BTC прогрета: 60 записей. База: 80902.9
-[15:54:57] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: 0.43%)
-[15:54:57] 🛰️ Подключение к квантовым потокам данных...
-[15:54:57] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[15:54:57] 📡 Запуск WebSocket-потока цен...
-[15:54:57] 🚥 Аналитик BTC запущен (Защита от дребезга 90с активна)
-[15:54:57] 🏹 Охотник за сигналами активирован.
-[15:54:57] 👁️ Мониторинг позиций запущен.
-[15:54:58] 🚥 ПОДГОТОВКА: BTC тянет в BULL. Ждем подтверждения 90с...
-[15:55:03] 🛡️ Funding Shield: IMX/USDT пропуск (Rate: -0.00039866)
-[15:55:18] 🚥 STATUS: BTC Change: 1.584% | Current Mode: STABLE
-[15:56:39] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[15:56:39] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BULL <<< | Trend: 1.556%
-[16:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BULL...
-[16:00:02] 🚥 STATUS: BTC Change: 1.36% | Current Mode: BULL
-[16:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BULL...
-[16:05:07] 🚥 STATUS: BTC Change: 1.516% | Current Mode: BULL
-[16:10:11] 🚥 STATUS: BTC Change: 1.659% | Current Mode: BULL
-[16:15:15] 🚥 STATUS: BTC Change: 1.647% | Current Mode: BULL
-[16:17:45] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0041325 | Mode: BULL
-[16:17:46] ⚠️ Мало маржи для 1000PEPE/USDT ($2.2). Пропуск.
-[16:17:47] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.2155 | Mode: BULL
-[16:17:47] ⚠️ Мало маржи для SUI/USDT ($2.2). Пропуск.
-[16:17:47] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 10.08 | Mode: BULL
-[16:17:48] ⚠️ Мало маржи для AVAX/USDT ($2.2). Пропуск.
-[16:17:48] 🎯 СИГНАЛ: ADA/USDT BUY | Offset: 0.0013 | Price: 0.2713 | Mode: BULL
-[16:17:49] ⚠️ Мало маржи для ADA/USDT ($2.2). Пропуск.
-[16:17:49] 🎯 СИГНАЛ: DOT/USDT BUY | Offset: 0.0015 | Price: 1.38 | Mode: BULL
-[16:17:50] ⚠️ Мало маржи для DOT/USDT ($2.2). Пропуск.
-[16:17:50] 🎯 СИГНАЛ: ARB/USDT SELL | Offset: 0.002 | Price: 0.1351 | Mode: BULL
-[16:17:51] ⚠️ Мало маржи для ARB/USDT ($2.2). Пропуск.
-[16:17:52] 🎯 СИГНАЛ: ATOM/USDT BUY | Offset: 0.0015 | Price: 2.06 | Mode: BULL
-[16:17:52] ⚠️ Мало маржи для ATOM/USDT ($2.2). Пропуск.
-[16:17:56] 🎯 СИГНАЛ: LTC/USDT BUY | Offset: 0.0012 | Price: 58.16 | Mode: BULL
-[16:17:57] ⚠️ Мало маржи для LTC/USDT ($2.2). Пропуск.
-[16:18:01] 🎯 СИГНАЛ: WIF/USDT BUY | Offset: 0.001 | Price: 0.2252 | Mode: BULL
-[16:18:02] ⚠️ Мало маржи для WIF/USDT ($2.2). Пропуск.
-[16:18:02] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.2152 | Mode: BULL
-[16:18:03] ⚠️ Мало маржи для SUI/USDT ($2.2). Пропуск.
-[16:18:03] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 10.078 | Mode: BULL
-[16:18:04] ⚠️ Мало маржи для AVAX/USDT ($2.2). Пропуск.
-[16:18:10] 🎯 СИГНАЛ: PENDLE/USDT BUY | Offset: 0.0023 | Price: 2.0221 | Mode: BULL
-[16:18:11] 🚀 ВХОД PENDLE/USDT BUY | Vol: 108 | Bal: $19.28
-[16:18:11] ✅ Позиция PENDLE/USDT открыта успешно.
-[16:20:00] 🚥 STATUS: BTC Change: 1.327% | Current Mode: BULL
-[16:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BULL...
-[16:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BULL...
-[16:25:04] 🚥 STATUS: BTC Change: 1.319% | Current Mode: BULL
-[16:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BULL...
-[16:30:08] 🚥 STATUS: BTC Change: 0.927% | Current Mode: BULL
-[16:30:49] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0041327 | Mode: BULL
-[16:30:49] 🚀 ВХОД 1000PEPE/USDT SELL | Vol: 26083 | Bal: $18.25
-[16:30:50] ✅ Позиция 1000PEPE/USDT открыта успешно.
-[16:30:51] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 93.26 | Mode: BULL
-[16:30:51] 🚀 ВХОД SOL/USDT SELL | Vol: 1.15 | Bal: $18.25
-[16:30:52] ✅ Позиция SOL/USDT открыта успешно.
-[16:30:53] 🎯 СИГНАЛ: WIF/USDT SELL | Offset: 0.0012 | Price: 0.2252 | Mode: BULL
-[16:30:53] 🚀 ВХОД WIF/USDT SELL | Vol: 478.6 | Bal: $18.25
-[16:30:55] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[16:30:55] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[16:30:55] 💉 Прогрев истории BTC: Загрузка свечей...
-[16:30:58] ✅ История BTC прогрета: 60 записей. База: 80990.9
-[16:30:58] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: 0.65%)
-[16:30:58] 🛰️ Подключение к квантовым потокам данных...
-[16:30:58] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[16:30:58] 📡 Запуск WebSocket-потока цен...
-[16:30:58] 🚥 Аналитик BTC запущен (Защита от дребезга 90с активна)
-[16:30:58] 🏹 Охотник за сигналами активирован.
-[16:30:58] 👁️ Мониторинг позиций запущен.
-[16:30:59] 🚥 ПОДГОТОВКА: BTC тянет в BULL. Ждем подтверждения 90с...
-[16:30:59] 🔗 RECOVERED BINANCE: 1000PEPE/USDT:USDT (26083.0 units) успешно усыновлена!
-[16:30:59] 🔗 RECOVERED BINANCE: SOL/USDT:USDT (1.15 units) успешно усыновлена!
-[16:30:59] 🔗 RECOVERED BINANCE: WIF/USDT:USDT (478.6 units) успешно усыновлена!
-[16:32:40] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[16:32:40] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BULL <<< | Trend: 0.869%
-[16:33:21] 🚥 ПОДГОТОВКА: BTC тянет в STABLE. Ждем подтверждения 90с...
-[16:35:02] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[16:35:02] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> STABLE <<< | Trend: 0.618%
-[16:35:02] 🚥 STATUS: BTC Change: 0.618% | Current Mode: STABLE
-[16:40:06] 🚥 STATUS: BTC Change: 0.404% | Current Mode: STABLE
-[16:45:11] 🚥 STATUS: BTC Change: 0.661% | Current Mode: STABLE
-[16:50:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[16:50:15] 🚥 STATUS: BTC Change: 0.556% | Current Mode: STABLE
-[16:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[16:59:44] 🚥 ПОДГОТОВКА: BTC тянет в BULL. Ждем подтверждения 90с...
-[17:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[17:00:04] 🚥 STATUS: BTC Change: 0.994% | Current Mode: STABLE
-[17:01:25] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[17:01:25] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BULL <<< | Trend: 1.035%
-[17:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BULL...
-[17:05:08] 🚥 STATUS: BTC Change: 1.24% | Current Mode: BULL
-[17:10:13] 🚥 STATUS: BTC Change: 1.122% | Current Mode: BULL
-[17:15:17] 🚥 STATUS: BTC Change: 0.943% | Current Mode: BULL
-[17:16:10] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[17:16:10] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[17:16:10] 💉 Прогрев истории BTC: Загрузка свечей...
-[17:16:13] ✅ История BTC прогрета: 60 записей. База: 81399.9
-[17:16:13] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: 0.19%)
-[17:16:13] 🛰️ Подключение к квантовым потокам данных...
-[17:16:13] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[17:16:13] 📡 Запуск WebSocket-потока цен...
-[17:16:13] 🚥 Аналитик BTC запущен (Защита от дребезга 90с активна)
-[17:16:13] 🏹 Охотник за сигналами активирован.
-[17:16:13] 👁️ Мониторинг позиций запущен.
-[17:16:13] 🚥 ПОДГОТОВКА: BTC тянет в BULL. Ждем подтверждения 90с...
-[17:16:14] 🔗 RECOVERED BINANCE: 1000PEPE/USDT (26083.0 units) успешно усыновлена!
-[17:16:14] 🔗 RECOVERED BINANCE: SOL/USDT (1.15 units) успешно усыновлена!
-[17:16:14] 🔗 RECOVERED BINANCE: WIF/USDT (478.6 units) успешно усыновлена!
-[17:16:15] 🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: 1000PEPE/USDT @ 0.0041735
-[17:16:15] 🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: SOL/USDT @ 93.95
-[17:16:15] 🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: WIF/USDT @ 0.2278
-[17:16:16] 🎯 TP1 ФИКСИРОВАН: SOL/USDT (+0.6%). Остаток переведен в БУ.
-[17:17:55] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[17:17:55] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BULL <<< | Trend: 0.91%
-[17:18:56] 🚥 ПОДГОТОВКА: BTC тянет в STABLE. Ждем подтверждения 90с...
-[17:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BULL...
-[17:20:17] 🚥 STATUS: BTC Change: 0.586% | Current Mode: BULL
-[17:20:37] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[17:20:37] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> STABLE <<< | Trend: 0.613%
-[17:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[17:25:01] 🚥 STATUS: BTC Change: 0.502% | Current Mode: STABLE
-[17:25:43] 🎯 TP1 ФИКСИРОВАН: WIF/USDT (+1.1%). Остаток переведен в БУ.
+[12:42:49] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
+[12:42:49] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
+[12:42:49] 💉 Прогрев истории BTC: Загрузка свечей...
+[12:42:51] ✅ История BTC прогрета: 60 записей. База: 80590.6
+[12:42:51] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.29%)
+[12:42:51] 🛰️ Подключение к квантовым потокам данных...
+[12:42:51] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
+[12:42:51] 📡 Запуск WebSocket-потока цен...
+[12:42:51] 🏹 Охотник за сигналами активирован.
+[12:42:51] 👁️ Мониторинг позиций запущен.
+[12:42:52] 🔗 RECOVERED BINANCE: ATOM/USDT (66.98 units) успешно усыновлена!
+[12:42:54] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.25
+[13:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
+[13:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
+[13:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
+[13:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
+[13:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
+[13:30:54] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
+[13:30:54] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BEAR <<< | Trend: -0.923%
+[13:31:44] 🧹 Позиция ATOM/USDT закрыта на бирже. Очистка системных флагов.
+[13:32:04] 🎯 СИГНАЛ: NOT/USDT BUY | Offset: 0.0028 | Price: 0.000522 | Mode: BEAR
+[13:32:04] 🚀 ВХОД NOT/USDT BUY | Vol: 149271 | Bal: $8.11
+[13:32:05] ✅ Позиция NOT/USDT открыта успешно.
+[13:32:09] 🎯 СИГНАЛ: WIF/USDT SELL | Offset: 0.0012 | Price: 0.2078 | Mode: BEAR
+[13:32:10] 🚀 ВХОД WIF/USDT SELL | Vol: 499.9 | Bal: $8.11
+[13:32:10] ❌ ОШИБКА ВХОДА WIF/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
+[13:32:10] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11336 | Mode: BEAR
+[13:32:10] 🚀 ВХОД DOGE/USDT BUY | Vol: 916 | Bal: $8.11
+[13:32:11] ❌ ОШИБКА ВХОДА DOGE/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
+[13:32:12] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.1201 | Mode: BEAR
+[13:32:12] 🚀 ВХОД SUI/USDT SELL | Vol: 92.7 | Bal: $8.11
+[13:32:13] ❌ ОШИБКА ВХОДА SUI/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
+[13:32:13] 🎯 СИГНАЛ: ADA/USDT SELL | Offset: 0.0015 | Price: 0.2628 | Mode: BEAR
+[13:32:13] 🚀 ВХОД ADA/USDT SELL | Vol: 395 | Bal: $8.11
+[13:32:13] ❌ ОШИБКА ВХОДА ADA/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
+[13:32:14] 🎯 СИГНАЛ: TIA/USDT SELL | Offset: 0.0028 | Price: 0.4323 | Mode: BEAR
+[13:32:15] 🚀 ВХОД TIA/USDT SELL | Vol: 180 | Bal: $8.11
+[13:32:15] ✅ Позиция TIA/USDT открыта успешно.
+[13:32:17] 🎯 СИГНАЛ: LDO/USDT SELL | Offset: 0.0023 | Price: 0.3685 | Mode: BEAR
+[13:32:18] ⚠️ Мало маржи для LDO/USDT ($0.0). Пропуск.
+[13:32:18] 🎯 СИГНАЛ: ATOM/USDT SELL | Offset: 0.0018 | Price: 1.983 | Mode: BEAR
+[13:32:19] ⚠️ Мало маржи для ATOM/USDT ($0.0). Пропуск.
+[13:32:20] 🎯 СИГНАЛ: SNX/USDT SELL | Offset: 0.002 | Price: 0.3195 | Mode: BEAR
+[13:32:20] ⚠️ Мало маржи для SNX/USDT ($0.0). Пропуск.
+[13:32:22] 🎯 СИГНАЛ: KAVA/USDT SELL | Offset: 0.0021 | Price: 0.0604 | Mode: BEAR
+[13:32:22] ⚠️ Мало маржи для KAVA/USDT ($0.0). Пропуск.
+[13:32:25] 🎯 СИГНАЛ: JUP/USDT SELL | Offset: 0.0027 | Price: 0.2134 | Mode: BEAR
+[13:32:25] ⚠️ Мало маржи для JUP/USDT ($0.0). Пропуск.
+[13:32:29] 🎯 СИГНАЛ: WIF/USDT SELL | Offset: 0.0012 | Price: 0.2079 | Mode: BEAR
+[13:32:30] ⚠️ Мало маржи для WIF/USDT ($0.0). Пропуск.
+[13:32:30] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11331 | Mode: BEAR
+[13:32:31] ⚠️ Мало маржи для DOGE/USDT ($0.0). Пропуск.
+[13:32:31] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.1196 | Mode: BEAR
+[13:32:32] ⚠️ Мало маржи для SUI/USDT ($0.0). Пропуск.
+[13:32:32] 🎯 СИГНАЛ: FET/USDT SELL | Offset: 0.0016 | Price: 0.206 | Mode: BEAR
+[13:32:33] ⚠️ Мало маржи для FET/USDT ($0.0). Пропуск.
+[13:32:33] 🎯 СИГНАЛ: 1000SHIB/USDT SELL | Offset: 0.002 | Price: 0.006176 | Mode: BEAR
+[13:32:33] ⚠️ Мало маржи для 1000SHIB/USDT ($0.0). Пропуск.
+[13:32:33] 🎯 СИГНАЛ: AVAX/USDT SELL | Offset: 0.0013 | Price: 9.648 | Mode: BEAR
+[13:32:34] ⚠️ Мало маржи для AVAX/USDT ($0.0). Пропуск.
+[13:32:34] 🎯 СИГНАЛ: DOT/USDT SELL | Offset: 0.0017 | Price: 1.32 | Mode: BEAR
+[13:32:35] 🔗 RECOVERED BINANCE: TIA/USDT (180.0 units) успешно усыновлена!
+[13:32:35] 🔗 RECOVERED BINANCE: NOT/USDT (149271.0 units) успешно усыновлена!
+[13:32:35] ⚠️ Мало маржи для DOT/USDT ($0.0). Пропуск.
+[13:32:36] 🛡️ СТОП ВЫСТАВЛЕН: TIA/USDT @ 0.4399 | Bal: $7.88
+[13:32:36] 🛡️ СТОП ВЫСТАВЛЕН: NOT/USDT @ 0.0005119 | Bal: $7.88
+[13:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BEAR...
+[13:35:06] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
+[13:35:06] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
+[13:35:06] 💉 Прогрев истории BTC: Загрузка свечей...
+[13:35:09] ✅ История BTC прогрета: 60 записей. База: 80466.7
+[13:35:09] ⚙️ Стартовый режим: >>> BEAR <<< (Trend: -1.04%)
+[13:35:09] 🛰️ Подключение к квантовым потокам данных...
+[13:35:09] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
+[13:35:09] 📡 Запуск WebSocket-потока цен...
+[13:35:09] 🏹 Охотник за сигналами активирован.
+[13:35:09] 👁️ Мониторинг позиций запущен.
+[13:35:10] 🔗 RECOVERED BINANCE: TIA/USDT (180.0 units) успешно усыновлена!
+[13:35:10] 🔗 RECOVERED BINANCE: NOT/USDT (149271.0 units) успешно усыновлена!
+[13:35:11] 🛡️ СТОП ВЫСТАВЛЕН: TIA/USDT @ 0.4429 | Bal: $7.75
+[13:35:11] 🛡️ СТОП ВЫСТАВЛЕН: NOT/USDT @ 0.0005072 | Bal: $7.75
+[13:36:51] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
+[13:36:51] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BEAR <<< | Trend: -1.226%
+[13:42:59] 🎯 TP1 ВЫПОЛНЕН: TIA/USDT (+1.05%) | Bal: $7.83
+[13:51:36] 🧹 Позиция NOT/USDT закрыта на бирже. Очистка системных флагов.
+[13:51:36] 🔥 TP2 ФИКСИРОВАН: TIA/USDT. Включен Трейлинг [STABLE] | Bal: $7.52
+[13:52:24] 🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие TIA/USDT @ 2.21% | Bal: $7.58
+[13:52:25] 🛡️ СТОП ВЫСТАВЛЕН: TIA/USDT @ 0.4399 | Bal: $7.54
+[13:52:26] 🎯 TP1 ВЫПОЛНЕН: TIA/USDT (+2.21%) | Bal: $7.54
+[13:52:27] 🔥 TP2 ФИКСИРОВАН: TIA/USDT. Включен Трейлинг [STABLE] | Bal: $7.54
+[13:53:12] 🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие TIA/USDT @ 0.2% | Bal: $7.55
+[13:53:14] 🛡️ СТОП ВЫСТАВЛЕН: TIA/USDT @ 0.4155 | Bal: $7.55
+[13:54:00] 🧹 Позиция TIA/USDT закрыта на бирже. Очистка системных флагов.
+[13:56:48] 🎯 СИГНАЛ: AVAX/USDT SELL | Offset: 0.0013 | Price: 9.481 | Mode: BEAR
+[13:56:49] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[13:56:50] 🎯 СИГНАЛ: TIA/USDT SELL | Offset: 0.0028 | Price: 0.4227 | Mode: BEAR
+[13:56:51] ⚠️ Мало маржи для TIA/USDT ($4.73). Пропуск.
+[13:59:25] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.471 | Mode: BEAR
+[13:59:25] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[14:00:05] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0038447 | Mode: BEAR
+[14:00:06] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[14:00:14] 🎯 СИГНАЛ: PYTH/USDT SELL | Offset: 0.0022 | Price: 0.04599 | Mode: BEAR
+[14:00:14] ⚠️ Мало маржи для PYTH/USDT ($4.73). Пропуск.
+[14:01:28] 🎯 СИГНАЛ: PYTH/USDT SELL | Offset: 0.0022 | Price: 0.04593 | Mode: BEAR
+[14:01:29] ⚠️ Мало маржи для PYTH/USDT ($4.73). Пропуск.
+[14:06:14] 🎯 СИГНАЛ: POPCAT/USDT SELL | Offset: 0.004 | Price: 0.05955 | Mode: BEAR
+[14:06:15] ⚠️ Мало маржи для POPCAT/USDT ($4.73). Пропуск.
+[14:06:21] 🎯 СИГНАЛ: PYTH/USDT SELL | Offset: 0.0022 | Price: 0.04616 | Mode: BEAR
+[14:06:22] ⚠️ Мало маржи для PYTH/USDT ($4.73). Пропуск.
+[14:06:53] 🛡 Funding Shield: RUNE/USDT пропуск (Rate: -0.00035661)
+[14:06:54] 🎯 СИГНАЛ: GRT/USDT BUY | Offset: 0.0022 | Price: 0.0267 | Mode: BEAR
+[14:06:54] ⚠️ Мало маржи для GRT/USDT ($4.73). Пропуск.
+[14:07:08] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0038557 | Mode: BEAR
+[14:07:08] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[14:07:24] 🎯 СИГНАЛ: TIA/USDT SELL | Offset: 0.0028 | Price: 0.4205 | Mode: BEAR
+[14:07:24] ⚠️ Мало маржи для TIA/USDT ($4.73). Пропуск.
+[14:09:13] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4328 | Mode: BEAR
+[14:09:14] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[14:09:15] 🎯 СИГНАЛ: ENA/USDT BUY | Offset: 0.0026 | Price: 0.11188 | Mode: BEAR
+[14:09:15] ⚠️ Мало маржи для ENA/USDT ($4.73). Пропуск.
+[14:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BEAR...
+[14:12:59] 🎯 СИГНАЛ: NEAR/USDT BUY | Offset: 0.0007 | Price: 1.528 | Mode: BEAR
+[14:12:59] ⚠️ Мало маржи для NEAR/USDT ($4.73). Пропуск.
+[14:13:02] 🛡 Funding Shield: RUNE/USDT пропуск (Rate: -0.00033503)
+[14:13:52] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.1 | Mode: BEAR
+[14:13:52] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[14:13:56] 🛡 Funding Shield: ENJ/USDT пропуск (Rate: -0.00042874)
+[14:14:35] 🎯 СИГНАЛ: LDO/USDT BUY | Offset: 0.002 | Price: 0.3653 | Mode: BEAR
+[14:14:35] ⚠️ Мало маржи для LDO/USDT ($4.73). Пропуск.
+[14:17:11] 🎯 СИГНАЛ: APT/USDT BUY | Offset: 0.0021 | Price: 0.9862 | Mode: BEAR
+[14:17:12] ⚠️ Мало маржи для APT/USDT ($4.73). Пропуск.
+[14:19:22] 🎯 СИГНАЛ: ENA/USDT SELL | Offset: 0.003 | Price: 0.11229 | Mode: BEAR
+[14:19:22] ⚠️ Мало маржи для ENA/USDT ($4.73). Пропуск.
+[14:19:27] 🎯 СИГНАЛ: LINK/USDT SELL | Offset: 0.0016 | Price: 10.056 | Mode: BEAR
+[14:19:27] ⚠️ Мало маржи для LINK/USDT ($4.73). Пропуск.
+[14:19:58] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.37 | Mode: BEAR
+[14:19:59] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[14:19:59] 🎯 СИГНАЛ: APT/USDT SELL | Offset: 0.0024 | Price: 0.9868 | Mode: BEAR
+[14:20:00] ⚠️ Мало маржи для APT/USDT ($4.73). Пропуск.
+[14:21:03] 🎯 СИГНАЛ: APT/USDT BUY | Offset: 0.0021 | Price: 0.988 | Mode: BEAR
+[14:21:03] ⚠️ Мало маржи для APT/USDT ($4.73). Пропуск.
+[14:21:37] 🎯 СИГНАЛ: PYTH/USDT SELL | Offset: 0.0022 | Price: 0.04657 | Mode: BEAR
+[14:21:38] ⚠️ Мало маржи для PYTH/USDT ($4.73). Пропуск.
+[14:22:23] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.1123 | Mode: BEAR
+[14:22:23] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[14:22:52] 🎯 СИГНАЛ: GRT/USDT SELL | Offset: 0.0025 | Price: 0.02684 | Mode: BEAR
+[14:22:53] ⚠️ Мало маржи для GRT/USDT ($4.73). Пропуск.
+[14:26:23] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.0433 | Mode: BEAR
+[14:26:23] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[14:26:25] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11196 | Mode: BEAR
+[14:26:25] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[14:26:35] 🎯 СИГНАЛ: EGLD/USDT SELL | Offset: 0.0017 | Price: 4.157 | Mode: BEAR
+[14:26:35] ⚠️ Мало маржи для EGLD/USDT ($4.73). Пропуск.
+[14:26:46] 🎯 СИГНАЛ: EGLD/USDT SELL | Offset: 0.0017 | Price: 4.157 | Mode: BEAR
+[14:26:47] ⚠️ Мало маржи для EGLD/USDT ($4.73). Пропуск.
+[14:28:22] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11199 | Mode: BEAR
+[14:28:22] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[14:28:23] 🎯 СИГНАЛ: ONDO/USDT BUY | Offset: 0.002 | Price: 0.3652 | Mode: BEAR
+[14:28:24] ⚠️ Мало маржи для ONDO/USDT ($4.73). Пропуск.
+[14:28:29] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.0948 | Mode: BEAR
+[14:28:30] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[14:29:26] 🎯 СИГНАЛ: AR/USDT SELL | Offset: 0.0025 | Price: 2.181 | Mode: BEAR
+[14:29:26] ⚠️ Мало маржи для AR/USDT ($4.73). Пропуск.
+[14:31:09] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0038753 | Mode: BEAR
+[14:31:10] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[14:34:14] 🎯 СИГНАЛ: SOL/USDT BUY | Offset: 0.0006 | Price: 89.07 | Mode: BEAR
+[14:34:14] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[14:34:18] 🎯 СИГНАЛ: FLOW/USDT BUY | Offset: 0.0017 | Price: 0.03644 | Mode: BEAR
+[14:34:18] ⚠️ Ошибка плеча FLOW/USDT: binance {"code":-4028,"msg":"Leverage 20 is not valid"}
+[14:34:18] ⚠️ Мало маржи для FLOW/USDT ($4.73). Пропуск.
+[14:34:29] 🎯 СИГНАЛ: FLOW/USDT BUY | Offset: 0.0017 | Price: 0.03644 | Mode: BEAR
+[14:34:29] ⚠️ Ошибка плеча FLOW/USDT: binance {"code":-4028,"msg":"Leverage 20 is not valid"}
+[14:34:29] ⚠️ Мало маржи для FLOW/USDT ($4.73). Пропуск.
+[14:34:40] 🎯 СИГНАЛ: FLOW/USDT BUY | Offset: 0.0017 | Price: 0.03644 | Mode: BEAR
+[14:34:40] ⚠️ Ошибка плеча FLOW/USDT: binance {"code":-4028,"msg":"Leverage 20 is not valid"}
+[14:34:40] ⚠️ Мало маржи для FLOW/USDT ($4.73). Пропуск.
+[14:34:51] 🎯 СИГНАЛ: FLOW/USDT BUY | Offset: 0.0017 | Price: 0.03644 | Mode: BEAR
+[14:34:51] ⚠️ Ошибка плеча FLOW/USDT: binance {"code":-4028,"msg":"Leverage 20 is not valid"}
+[14:34:51] ⚠️ Мало маржи для FLOW/USDT ($4.73). Пропуск.
+[14:35:33] 🎯 СИГНАЛ: MINA/USDT BUY | Offset: 0.0018 | Price: 0.06081 | Mode: BEAR
+[14:35:34] ⚠️ Мало маржи для MINA/USDT ($4.73). Пропуск.
+[14:36:13] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.0946 | Mode: BEAR
+[14:36:13] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[14:37:21] 🎯 СИГНАЛ: EGLD/USDT SELL | Offset: 0.0017 | Price: 4.159 | Mode: BEAR
+[14:37:22] ⚠️ Мало маржи для EGLD/USDT ($4.73). Пропуск.
+[14:37:54] 🎯 СИГНАЛ: ONDO/USDT SELL | Offset: 0.0023 | Price: 0.3654 | Mode: BEAR
+[14:37:55] ⚠️ Мало маржи для ONDO/USDT ($4.73). Пропуск.
+[14:39:33] 🎯 СИГНАЛ: HBAR/USDT SELL | Offset: 0.0017 | Price: 0.09232 | Mode: BEAR
+[14:39:34] ⚠️ Мало маржи для HBAR/USDT ($4.73). Пропуск.
+[14:43:51] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.14 | Mode: BEAR
+[14:43:52] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[14:46:31] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4357 | Mode: BEAR
+[14:46:31] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[14:49:44] 🎯 СИГНАЛ: INJ/USDT SELL | Offset: 0.0024 | Price: 4.79 | Mode: BEAR
+[14:49:44] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[14:51:12] 🎯 СИГНАЛ: PENDLE/USDT SELL | Offset: 0.0026 | Price: 1.9446 | Mode: BEAR
+[14:51:13] ⚠️ Мало маржи для PENDLE/USDT ($4.73). Пропуск.
+[14:52:32] 🎯 СИГНАЛ: WIF/USDT BUY | Offset: 0.001 | Price: 0.202 | Mode: BEAR
+[14:52:33] ⚠️ Мало маржи для WIF/USDT ($4.73). Пропуск.
+[14:54:24] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04294 | Mode: BEAR
+[14:54:25] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[14:54:35] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04295 | Mode: BEAR
+[14:54:36] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[14:57:12] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.1119 | Mode: BEAR
+[14:57:12] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[14:58:02] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.043 | Mode: BEAR
+[14:58:02] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[14:58:23] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.04292 | Mode: BEAR
+[14:58:23] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[15:02:43] 🎯 СИГНАЛ: WIF/USDT SELL | Offset: 0.0012 | Price: 0.2027 | Mode: BEAR
+[15:02:43] ⚠️ Мало маржи для WIF/USDT ($4.73). Пропуск.
+[15:04:38] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11171 | Mode: BEAR
+[15:04:38] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[15:05:56] 🎯 СИГНАЛ: SOL/USDT BUY | Offset: 0.0006 | Price: 89.02 | Mode: BEAR
+[15:05:56] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[15:05:56] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.478 | Mode: BEAR
+[15:05:57] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[15:06:34] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0038663 | Mode: BEAR
+[15:06:34] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[15:06:39] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 88.97 | Mode: BEAR
+[15:06:40] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[15:06:45] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0038662 | Mode: BEAR
+[15:06:46] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[15:06:51] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 88.96 | Mode: BEAR
+[15:06:51] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[15:10:15] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4382 | Mode: BEAR
+[15:10:16] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[15:10:21] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.08 | Mode: BEAR
+[15:10:21] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[15:10:32] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.0901 | Mode: BEAR
+[15:10:33] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[15:11:14] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.14 | Mode: BEAR
+[15:11:14] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[15:11:44] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
+[15:11:44] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> STABLE <<< | Trend: -0.529%
+[15:12:23] 🎯 СИГНАЛ: ONDO/USDT BUY | Offset: 0.002 | Price: 0.3667 | Mode: STABLE
+[15:12:24] ⚠️ Мало маржи для ONDO/USDT ($4.73). Пропуск.
+[15:14:57] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.0432 | Mode: STABLE
+[15:14:57] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[15:15:19] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0038693 | Mode: STABLE
+[15:15:19] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[15:15:30] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4369 | Mode: STABLE
+[15:15:31] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[15:22:46] 🎯 СИГНАЛ: AVAX/USDT SELL | Offset: 0.0013 | Price: 9.496 | Mode: STABLE
+[15:22:47] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[15:22:53] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4377 | Mode: STABLE
+[15:22:54] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[15:32:49] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.491 | Mode: STABLE
+[15:32:49] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[15:32:59] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.491 | Mode: STABLE
+[15:33:00] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[15:33:24] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.04355 | Mode: STABLE
+[15:33:25] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[15:33:26] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11136 | Mode: STABLE
+[15:33:27] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[15:33:38] 🎯 СИГНАЛ: LTC/USDT SELL | Offset: 0.0014 | Price: 56.78 | Mode: STABLE
+[15:33:38] ⚠️ Мало маржи для LTC/USDT ($4.73). Пропуск.
+[15:33:47] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.04354 | Mode: STABLE
+[15:33:47] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[15:34:51] 🎯 СИГНАЛ: PENDLE/USDT SELL | Offset: 0.0026 | Price: 2.0024 | Mode: STABLE
+[15:34:52] ⚠️ Мало маржи для PENDLE/USDT ($4.73). Пропуск.
+[15:36:52] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.0434 | Mode: STABLE
+[15:36:53] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[15:37:52] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.0951 | Mode: STABLE
+[15:37:52] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[15:40:51] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0038644 | Mode: STABLE
+[15:40:52] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[15:42:13] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4324 | Mode: STABLE
+[15:42:13] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[15:45:06] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4313 | Mode: STABLE
+[15:45:07] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[15:46:11] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4316 | Mode: STABLE
+[15:46:12] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[15:52:56] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0038584 | Mode: STABLE
+[15:52:56] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[15:53:38] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0038574 | Mode: STABLE
+[15:53:39] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[15:57:35] 🎯 СИГНАЛ: ONDO/USDT SELL | Offset: 0.0023 | Price: 0.361 | Mode: STABLE
+[15:57:36] ⚠️ Мало маржи для ONDO/USDT ($4.73). Пропуск.
+[15:57:56] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4332 | Mode: STABLE
+[15:57:57] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[16:02:35] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.04371 | Mode: STABLE
+[16:02:36] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[16:06:52] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11156 | Mode: STABLE
+[16:06:52] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[16:08:23] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.0435 | Mode: STABLE
+[16:08:24] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[16:08:30] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 88.9 | Mode: STABLE
+[16:08:30] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[16:08:40] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 88.9 | Mode: STABLE
+[16:08:41] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[16:08:51] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 88.9 | Mode: STABLE
+[16:08:51] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[16:09:02] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 88.9 | Mode: STABLE
+[16:09:02] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[16:12:21] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11155 | Mode: STABLE
+[16:12:21] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[16:15:35] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11191 | Mode: STABLE
+[16:15:36] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[16:16:27] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0038769 | Mode: STABLE
+[16:16:27] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[16:17:28] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04342 | Mode: STABLE
+[16:17:29] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[16:17:40] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04342 | Mode: STABLE
+[16:17:40] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[16:17:42] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.438 | Mode: STABLE
+[16:17:43] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[16:18:03] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4381 | Mode: STABLE
+[16:18:03] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[16:26:08] 🎯 СИГНАЛ: RUNE/USDT SELL | Offset: 0.0024 | Price: 0.5166 | Mode: STABLE
+[16:26:08] ⚠️ Мало маржи для RUNE/USDT ($4.73). Пропуск.
+[16:26:19] 🎯 СИГНАЛ: RUNE/USDT SELL | Offset: 0.0024 | Price: 0.5166 | Mode: STABLE
+[16:26:20] ⚠️ Мало маржи для RUNE/USDT ($4.73). Пропуск.
+[16:27:09] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.0921 | Mode: STABLE
+[16:27:10] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[16:28:52] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.08 | Mode: STABLE
+[16:28:52] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[16:29:45] 🎯 СИГНАЛ: INJ/USDT BUY | Offset: 0.0021 | Price: 4.835 | Mode: STABLE
+[16:29:46] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[16:30:05] 🎯 СИГНАЛ: APT/USDT BUY | Offset: 0.0021 | Price: 0.9936 | Mode: STABLE
+[16:30:06] ⚠️ Мало маржи для APT/USDT ($4.73). Пропуск.
+[16:33:24] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04369 | Mode: STABLE
+[16:33:25] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[16:35:44] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.569 | Mode: STABLE
+[16:35:45] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[16:36:57] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.1006 | Mode: STABLE
+[16:36:58] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[16:37:38] 🎯 СИГНАЛ: LINK/USDT BUY | Offset: 0.0014 | Price: 10.101 | Mode: STABLE
+[16:37:39] ⚠️ Мало маржи для LINK/USDT ($4.73). Пропуск.
+[16:37:50] 🎯 СИГНАЛ: LDO/USDT BUY | Offset: 0.002 | Price: 0.3687 | Mode: STABLE
+[16:37:50] ⚠️ Мало маржи для LDO/USDT ($4.73). Пропуск.
+[16:38:06] 🎯 СИГНАЛ: SEI/USDT BUY | Offset: 0.0021 | Price: 0.06387 | Mode: STABLE
+[16:38:06] ⚠️ Мало маржи для SEI/USDT ($4.73). Пропуск.
+[16:39:08] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.1129 | Mode: STABLE
+[16:39:08] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[16:39:19] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4447 | Mode: STABLE
+[16:39:20] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[16:41:42] 🎯 СИГНАЛ: ENA/USDT SELL | Offset: 0.003 | Price: 0.11149 | Mode: STABLE
+[16:41:43] ⚠️ Мало маржи для ENA/USDT ($4.73). Пропуск.
+[16:42:58] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.1001 | Mode: STABLE
+[16:42:59] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[16:45:32] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.4 | Mode: STABLE
+[16:45:32] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[16:54:43] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.29 | Mode: STABLE
+[16:54:44] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[16:57:21] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.555 | Mode: STABLE
+[16:57:21] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[16:57:27] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0039174 | Mode: STABLE
+[16:57:27] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[16:58:37] 🎯 СИГНАЛ: RUNE/USDT SELL | Offset: 0.0024 | Price: 0.5138 | Mode: STABLE
+[16:58:37] ⚠️ Мало маржи для RUNE/USDT ($4.73). Пропуск.
+[16:58:48] 🎯 СИГНАЛ: RUNE/USDT SELL | Offset: 0.0024 | Price: 0.5138 | Mode: STABLE
+[16:58:48] ⚠️ Мало маржи для RUNE/USDT ($4.73). Пропуск.
+[16:58:58] 🎯 СИГНАЛ: RUNE/USDT SELL | Offset: 0.0024 | Price: 0.5138 | Mode: STABLE
+[16:58:59] ⚠️ Мало маржи для RUNE/USDT ($4.73). Пропуск.
+[17:05:20] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0039254 | Mode: STABLE
+[17:05:20] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[17:06:06] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.577 | Mode: STABLE
+[17:06:06] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[17:12:29] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4479 | Mode: STABLE
+[17:12:29] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[17:16:44] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11273 | Mode: STABLE
+[17:16:44] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[17:16:45] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4461 | Mode: STABLE
+[17:16:45] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[17:16:56] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11273 | Mode: STABLE
+[17:16:56] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[17:17:01] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.61 | Mode: STABLE
+[17:17:02] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[17:25:20] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4475 | Mode: STABLE
+[17:25:21] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[17:27:44] 🎯 СИГНАЛ: LTC/USDT BUY | Offset: 0.0012 | Price: 57.44 | Mode: STABLE
+[17:27:45] ⚠️ Мало маржи для LTC/USDT ($4.73). Пропуск.
 [17:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[17:30:05] 🚥 STATUS: BTC Change: 0.366% | Current Mode: STABLE
-[17:35:10] 🚥 STATUS: BTC Change: 0.354% | Current Mode: STABLE
-[17:40:14] 🚥 STATUS: BTC Change: 0.216% | Current Mode: STABLE
-[17:45:18] 🚥 STATUS: BTC Change: 0.377% | Current Mode: STABLE
-[17:50:03] 🚥 STATUS: BTC Change: 0.267% | Current Mode: STABLE
-[17:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[17:55:07] 🚥 STATUS: BTC Change: 0.386% | Current Mode: STABLE
-[18:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[18:00:11] 🚥 STATUS: BTC Change: 0.237% | Current Mode: STABLE
-[18:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[18:05:16] 🚥 STATUS: BTC Change: -0.009% | Current Mode: STABLE
-[18:10:00] 🚥 STATUS: BTC Change: 0.197% | Current Mode: STABLE
-[18:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[18:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[18:15:04] 🚥 STATUS: BTC Change: 0.548% | Current Mode: STABLE
-[18:20:09] 🚥 STATUS: BTC Change: 0.363% | Current Mode: STABLE
-[18:20:35] 🎯 СИГНАЛ: LINK/USDT SELL | Offset: 0.0016 | Price: 10.701 | Mode: STABLE
-[18:20:35] 🚀 ВХОД LINK/USDT SELL | Vol: 24.29 | Bal: $17.29
-[18:20:35] ✅ Позиция LINK/USDT открыта успешно.
-[18:20:38] 🎯 СИГНАЛ: HBAR/USDT SELL | Offset: 0.0017 | Price: 0.09659 | Mode: STABLE
-[18:20:38] 🚀 ВХОД HBAR/USDT SELL | Vol: 2691 | Bal: $17.29
-[18:20:39] ❌ ОШИБКА ВХОДА HBAR/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[18:20:42] 🔗 RECOVERED BINANCE: LINK/USDT (24.29 units) успешно усыновлена!
-[18:20:43] 🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: LINK/USDT @ 10.82
-[18:25:13] 🚥 STATUS: BTC Change: 0.611% | Current Mode: STABLE
-[18:30:18] 🚥 STATUS: BTC Change: 0.699% | Current Mode: STABLE
-[18:31:18] 🚥 ПОДГОТОВКА: BTC тянет в BULL. Ждем подтверждения 90с...
-[18:33:00] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[18:33:00] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BULL <<< | Trend: 0.883%
-[18:33:20] 🚥 ПОДГОТОВКА: BTC тянет в STABLE. Ждем подтверждения 90с...
-[18:34:39] 🎯 TP1 ФИКСИРОВАН: LINK/USDT (+0.61%). Остаток переведен в БУ.
-[18:35:02] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[18:35:02] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> STABLE <<< | Trend: 0.292%
-[18:35:02] 🚥 STATUS: BTC Change: 0.292% | Current Mode: STABLE
-[18:40:06] 🚥 STATUS: BTC Change: -0.322% | Current Mode: STABLE
-[18:45:10] 🚥 STATUS: BTC Change: -0.594% | Current Mode: STABLE
-[18:50:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[18:50:15] 🚥 STATUS: BTC Change: -0.561% | Current Mode: STABLE
-[18:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[18:55:19] 🚥 STATUS: BTC Change: -0.028% | Current Mode: STABLE
-[19:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[19:00:03] 🚥 STATUS: BTC Change: 0.09% | Current Mode: STABLE
-[19:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[19:05:08] 🚥 STATUS: BTC Change: 0.265% | Current Mode: STABLE
-[19:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[19:10:12] 🚥 STATUS: BTC Change: 0.12% | Current Mode: STABLE
-[19:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[19:15:17] 🚥 STATUS: BTC Change: -0.144% | Current Mode: STABLE
-[19:20:01] 🚥 STATUS: BTC Change: 0.051% | Current Mode: STABLE
-[19:25:05] 🚥 STATUS: BTC Change: -0.346% | Current Mode: STABLE
-[19:30:10] 🚥 STATUS: BTC Change: -0.456% | Current Mode: STABLE
-[19:35:14] 🚥 STATUS: BTC Change: -0.356% | Current Mode: STABLE
-[19:54:50] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[19:54:50] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[19:54:50] 💉 Прогрев истории BTC: Загрузка свечей...
-[19:54:53] ✅ История BTC прогрета: 60 записей. База: 81500.0
-[19:54:53] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.09%)
-[19:54:53] 🛰️ Подключение к квантовым потокам данных...
-[19:54:53] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[19:54:53] 📡 Запуск WebSocket-потока цен...
-[19:54:53] 🏹 Охотник за сигналами активирован.
-[19:54:53] 👁️ Мониторинг позиций запущен.
-[19:54:56] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[19:54:56] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[19:54:56] 💉 Прогрев истории BTC: Загрузка свечей...
-[19:54:59] ✅ История BTC прогрета: 60 записей. База: 81500.0
-[19:54:59] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.09%)
-[19:54:59] 🛰️ Подключение к квантовым потокам данных...
-[19:54:59] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[19:54:59] 📡 Запуск WebSocket-потока цен...
-[19:54:59] 🏹 Охотник за сигналами активирован.
-[19:54:59] 👁️ Мониторинг позиций запущен.
-[19:55:00] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11603 | Mode: STABLE
-[19:55:01] 🚀 ВХОД DOGE/USDT BUY | Vol: 2313 | Bal: $17.8
-[19:55:02] ✅ Позиция DOGE/USDT открыта успешно.
-[19:55:04] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.2058 | Mode: STABLE
-[19:55:05] 🚀 ВХОД SUI/USDT BUY | Vol: 222.6 | Bal: $17.8
-[19:55:05] ❌ ОШИБКА ВХОДА SUI/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[19:55:05] 🎯 СИГНАЛ: FET/USDT BUY | Offset: 0.0014 | Price: 0.2155 | Mode: STABLE
-[19:55:06] 🚀 ВХОД FET/USDT BUY | Vol: 1245 | Bal: $17.8
-[19:55:06] ❌ ОШИБКА ВХОДА FET/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[19:55:10] 🔗 RECOVERED BINANCE: DOGE/USDT (2313.0 units) успешно усыновлена!
-[20:02:57] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[20:02:57] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[20:02:57] 💉 Прогрев истории BTC: Загрузка свечей...
-[20:02:59] ✅ История BTC прогрета: 60 записей. База: 81637.4
-[20:02:59] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.23%)
-[20:02:59] 🛰️ Подключение к квантовым потокам данных...
-[20:02:59] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[20:02:59] 📡 Запуск WebSocket-потока цен...
-[20:02:59] 🏹 Охотник за сигналами активирован.
-[20:02:59] 👁️ Мониторинг позиций запущен.
-[20:03:00] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:03:00] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 92.84 | Mode: STABLE
-[20:03:01] 🔗 RECOVERED BINANCE: DOGE/USDT (2313.0 units) успешно усыновлена!
-[20:03:02] ⚠️ Мало маржи для SOL/USDT ($2.03). Пропуск.
-[20:03:11] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:03:22] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:03:32] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:03:43] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:03:54] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:04:05] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:04:16] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:04:26] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:04:37] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:04:48] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:04:58] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:05:09] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:05:20] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:05:30] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:05:41] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:05:52] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:06:02] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:06:13] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:06:24] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:06:34] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:06:45] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:06:56] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:07:07] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:07:17] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:07:28] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:07:39] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:07:49] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:08:00] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:08:10] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:08:21] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:08:32] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:08:42] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:08:53] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:09:04] 🧹 ВЕНИК: Обнаружена микро-пыль по LINK/USDT. Шлю приказ на принудительное закрытие...
-[20:09:08] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[20:09:08] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[20:09:08] 💉 Прогрев истории BTC: Загрузка свечей...
-[20:09:10] ✅ История BTC прогрета: 60 записей. База: 81558.2
-[20:09:10] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.06%)
-[20:09:10] 🛰️ Подключение к квантовым потокам данных...
-[20:09:10] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[20:09:10] 📡 Запуск WebSocket-потока цен...
-[20:09:10] 🏹 Охотник за сигналами активирован.
-[20:09:10] 👁️ Мониторинг позиций запущен.
-[20:09:11] 🔗 RECOVERED BINANCE: DOGE/USDT (2313.0 units) успешно усыновлена!
-[20:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:17:10] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[20:17:10] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[20:17:10] 💉 Прогрев истории BTC: Загрузка свечей...
-[20:17:13] ✅ История BTC прогрета: 60 записей. База: 81576.7
-[20:17:13] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.35%)
-[20:17:13] 🛰️ Подключение к квантовым потокам данных...
-[20:17:13] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[20:17:13] 📡 Запуск WebSocket-потока цен...
-[20:17:13] 🏹 Охотник за сигналами активирован.
-[20:17:13] 👁️ Мониторинг позиций запущен.
-[20:17:14] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.2011 | Mode: STABLE
-[20:17:15] 🔗 RECOVERED BINANCE: DOGE/USDT (2313.0 units) успешно усыновлена!
-[20:17:16] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.11511 | Bal: $17.46
-[20:17:16] ⚠️ Мало маржи для SUI/USDT ($2.03). Пропуск.
-[20:19:31] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[20:19:31] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[20:19:31] 💉 Прогрев истории BTC: Загрузка свечей...
-[20:19:33] ✅ История BTC прогрета: 60 записей. База: 81550.0
-[20:19:33] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.34%)
-[20:19:33] 🛰️ Подключение к квантовым потокам данных...
-[20:19:33] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[20:19:33] 📡 Запуск WebSocket-потока цен...
-[20:19:33] 🏹 Охотник за сигналами активирован.
-[20:19:33] 👁️ Мониторинг позиций запущен.
-[20:19:34] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0041371 | Mode: STABLE
-[20:19:36] ⚠️ Мало маржи для 1000PEPE/USDT ($2.03). Пропуск.
-[20:19:36] 🎯 СИГНАЛ: NEAR/USDT BUY | Offset: 0.0007 | Price: 1.573 | Mode: STABLE
-[20:19:36] 🔗 RECOVERED BINANCE: DOGE/USDT (2313.0 units) успешно усыновлена!
-[20:19:36] ⚠️ Мало маржи для NEAR/USDT ($2.03). Пропуск.
-[20:19:37] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.11511 | Bal: $17.25
-[20:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:26:21] 🧹 Позиция DOGE/USDT закрыта на бирже. Очистка системных флагов.
-[20:26:24] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.191 | Mode: STABLE
-[20:26:24] 🚀 ВХОД SUI/USDT BUY | Vol: 195.1 | Bal: $15.68
-[20:26:25] ✅ Позиция SUI/USDT открыта успешно.
-[20:26:41] 🎯 СИГНАЛ: ONDO/USDT BUY | Offset: 0.002 | Price: 0.3895 | Mode: STABLE
-[20:26:42] ⚠️ Мало маржи для ONDO/USDT ($1.75). Пропуск.
-[20:26:51] 🔗 RECOVERED BINANCE: SUI/USDT (195.1 units) успешно усыновлена!
-[20:26:52] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $15.49
+[17:31:53] 🎯 СИГНАЛ: RUNE/USDT BUY | Offset: 0.0021 | Price: 0.5201 | Mode: STABLE
+[17:31:54] ⚠️ Мало маржи для RUNE/USDT ($4.73). Пропуск.
+[17:33:29] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0039314 | Mode: STABLE
+[17:33:30] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[17:36:26] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.72 | Mode: STABLE
+[17:36:26] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[17:46:29] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.65 | Mode: STABLE
+[17:46:29] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[17:47:26] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0039222 | Mode: STABLE
+[17:47:27] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[17:49:06] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.0998 | Mode: STABLE
+[17:49:07] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[17:51:44] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.003922 | Mode: STABLE
+[17:51:45] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[17:52:37] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0039207 | Mode: STABLE
+[17:52:37] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[17:52:44] 🎯 СИГНАЛ: RUNE/USDT SELL | Offset: 0.0024 | Price: 0.5128 | Mode: STABLE
+[17:52:45] ⚠️ Мало маржи для RUNE/USDT ($4.73). Пропуск.
+[17:56:31] 🎯 СИГНАЛ: RUNE/USDT BUY | Offset: 0.0021 | Price: 0.5132 | Mode: STABLE
+[17:56:31] ⚠️ Мало маржи для RUNE/USDT ($4.73). Пропуск.
+[17:57:24] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11253 | Mode: STABLE
+[17:57:25] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[18:01:43] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11295 | Mode: STABLE
+[18:01:44] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[18:02:50] 🎯 СИГНАЛ: SOL/USDT BUY | Offset: 0.0006 | Price: 89.96 | Mode: STABLE
+[18:02:51] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[18:04:38] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04474 | Mode: STABLE
+[18:04:38] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[18:06:26] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.106 | Mode: STABLE
+[18:06:27] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[18:07:54] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11303 | Mode: STABLE
+[18:07:54] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[18:11:48] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0039344 | Mode: STABLE
+[18:11:49] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[18:13:20] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04487 | Mode: STABLE
+[18:13:20] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[18:16:20] 🎯 СИГНАЛ: INJ/USDT BUY | Offset: 0.0021 | Price: 4.928 | Mode: STABLE
+[18:16:21] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[18:17:41] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.1033 | Mode: STABLE
+[18:17:41] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[18:20:55] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.557 | Mode: STABLE
+[18:20:56] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[18:26:45] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.78 | Mode: STABLE
+[18:26:46] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[18:26:56] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 89.78 | Mode: STABLE
+[18:26:57] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[18:27:55] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4434 | Mode: STABLE
+[18:27:56] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[18:29:38] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11305 | Mode: STABLE
+[18:29:39] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[18:33:02] 🎯 СИГНАЛ: HBAR/USDT BUY | Offset: 0.0014 | Price: 0.09325 | Mode: STABLE
+[18:33:02] ⚠️ Мало маржи для HBAR/USDT ($4.73). Пропуск.
+[18:36:30] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0039244 | Mode: STABLE
+[18:36:31] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[18:36:37] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.1004 | Mode: STABLE
+[18:36:37] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[18:44:56] 🎯 СИГНАЛ: SUI/USDT SELL | Offset: 0.0014 | Price: 1.1031 | Mode: STABLE
+[18:44:57] ⚠️ Мало маржи для SUI/USDT ($4.73). Пропуск.
+[18:45:20] 🎯 СИГНАЛ: INJ/USDT BUY | Offset: 0.0021 | Price: 4.96 | Mode: STABLE
+[18:45:21] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[18:47:53] 🎯 СИГНАЛ: INJ/USDT BUY | Offset: 0.0021 | Price: 4.957 | Mode: STABLE
+[18:47:53] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[18:58:08] 🎯 СИГНАЛ: INJ/USDT SELL | Offset: 0.0024 | Price: 4.987 | Mode: STABLE
+[18:58:09] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[18:58:12] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11308 | Mode: STABLE
+[18:58:13] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[18:58:20] 🎯 СИГНАЛ: INJ/USDT BUY | Offset: 0.0021 | Price: 4.995 | Mode: STABLE
+[18:58:20] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[19:08:36] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0039132 | Mode: STABLE
+[19:08:37] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[19:08:57] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0039133 | Mode: STABLE
+[19:08:58] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[19:09:29] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4361 | Mode: STABLE
+[19:09:30] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[19:11:07] 🎯 СИГНАЛ: INJ/USDT BUY | Offset: 0.0021 | Price: 4.947 | Mode: STABLE
+[19:11:08] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[19:11:18] 🎯 СИГНАЛ: INJ/USDT SELL | Offset: 0.0024 | Price: 4.939 | Mode: STABLE
+[19:11:19] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[19:11:21] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04471 | Mode: STABLE
+[19:11:22] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[19:13:53] 🎯 СИГНАЛ: AAVE/USDT BUY | Offset: 0.0017 | Price: 93.0 | Mode: STABLE
+[19:13:54] ⚠️ Мало маржи для AAVE/USDT ($4.73). Пропуск.
+[19:14:04] 🎯 СИГНАЛ: AAVE/USDT BUY | Offset: 0.0017 | Price: 93.0 | Mode: STABLE
+[19:14:04] ⚠️ Мало маржи для AAVE/USDT ($4.73). Пропуск.
+[19:16:36] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.547 | Mode: STABLE
+[19:16:36] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[19:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
+[19:24:46] 🎯 СИГНАЛ: INJ/USDT BUY | Offset: 0.0021 | Price: 4.925 | Mode: STABLE
+[19:24:46] ⚠️ Мало маржи для INJ/USDT ($4.73). Пропуск.
+[19:29:36] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0039187 | Mode: STABLE
+[19:29:37] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[19:29:37] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11299 | Mode: STABLE
+[19:29:38] ⚠️ Мало маржи для DOGE/USDT ($4.73). Пропуск.
+[19:37:56] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.04511 | Mode: STABLE
+[19:37:57] ⚠️ Мало маржи для CHZ/USDT ($4.73). Пропуск.
+[19:51:37] 🎯 СИГНАЛ: SOL/USDT BUY | Offset: 0.0006 | Price: 89.47 | Mode: STABLE
+[19:51:38] ⚠️ Мало маржи для SOL/USDT ($4.73). Пропуск.
+[19:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
+[20:06:19] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.51 | Mode: STABLE
+[20:06:20] ⚠️ Мало маржи для AVAX/USDT ($4.73). Пропуск.
+[20:07:27] 🎯 СИГНАЛ: XRP/USDT SELL | Offset: 0.0012 | Price: 1.4323 | Mode: STABLE
+[20:07:27] ⚠️ Мало маржи для XRP/USDT ($4.73). Пропуск.
+[20:10:49] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0038996 | Mode: STABLE
+[20:10:50] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
+[20:20:12] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0039019 | Mode: STABLE
+[20:20:12] ⚠️ Мало маржи для 1000PEPE/USDT ($4.73). Пропуск.
 [20:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:31:33] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[20:31:33] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[20:31:33] 💉 Прогрев истории BTC: Загрузка свечей...
-[20:31:36] ✅ История BTC прогрета: 60 записей. База: 81433.5
-[20:31:36] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.27%)
-[20:31:36] 🛰️ Подключение к квантовым потокам данных...
-[20:31:36] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[20:31:36] 📡 Запуск WebSocket-потока цен...
-[20:31:36] 🏹 Охотник за сигналами активирован.
-[20:31:36] 👁️ Мониторинг позиций запущен.
-[20:31:37] 🎯 СИГНАЛ: NEAR/USDT BUY | Offset: 0.0007 | Price: 1.567 | Mode: STABLE
-[20:31:37] 🔗 RECOVERED BINANCE: SUI/USDT (195.1 units) успешно усыновлена!
-[20:31:38] ⚠️ Мало маржи для NEAR/USDT ($1.75). Пропуск.
-[20:31:38] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $15.81
 [20:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:40:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:45:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:45:50] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[20:45:50] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[20:45:50] 💉 Прогрев истории BTC: Загрузка свечей...
-[20:45:52] ✅ История BTC прогрета: 60 записей. База: 81391.7
-[20:45:52] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.2%)
-[20:45:52] 🛰️ Подключение к квантовым потокам данных...
-[20:45:52] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[20:45:52] 📡 Запуск WebSocket-потока цен...
-[20:45:52] 🏹 Охотник за сигналами активирован.
-[20:45:52] 👁️ Мониторинг позиций запущен.
-[20:45:53] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 92.49 | Mode: STABLE
-[20:45:53] 🔗 RECOVERED BINANCE: SUI/USDT (195.1 units) успешно усыновлена!
-[20:45:54] ⚠️ Мало маржи для SOL/USDT ($1.75). Пропуск.
-[20:45:55] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $16.24
-[20:50:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:50:41] 🎯 TP1 ВЫПОЛНЕН: SUI/USDT (+0.59%) | Bal: $16.93
-[20:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[20:55:36] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[20:55:36] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[20:55:36] 💉 Прогрев истории BTC: Загрузка свечей...
-[20:55:38] ✅ История BTC прогрета: 60 записей. База: 81371.4
-[20:55:38] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.04%)
-[20:55:38] 🛰️ Подключение к квантовым потокам данных...
-[20:55:38] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[20:55:38] 📡 Запуск WebSocket-потока цен...
-[20:55:38] 🏹 Охотник за сигналами активирован.
-[20:55:38] 👁️ Мониторинг позиций запущен.
-[20:55:39] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0041437 | Mode: STABLE
-[20:55:40] 🔗 RECOVERED BINANCE: SUI/USDT (97.6 units) успешно усыновлена!
-[20:55:41] 🚀 ВХОД 1000PEPE/USDT BUY | Vol: 34580 | Bal: $16.8
-[20:55:41] ✅ Позиция 1000PEPE/USDT открыта успешно.
-[20:55:41] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $16.8
-[20:56:10] 🔗 RECOVERED BINANCE: 1000PEPE/USDT (34580.0 units) успешно усыновлена!
-[20:56:10] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.83
-[20:57:37] 🎯 TP1 ВЫПОЛНЕН: SUI/USDT (+0.56%) | Bal: $16.78
-[21:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[21:02:09] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[21:02:09] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[21:02:09] 💉 Прогрев истории BTC: Загрузка свечей...
-[21:02:12] ✅ История BTC прогрета: 60 записей. База: 81469.3
-[21:02:12] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.17%)
-[21:02:12] 🛰️ Подключение к квантовым потокам данных...
-[21:02:12] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[21:02:12] 📡 Запуск WebSocket-потока цен...
-[21:02:12] 🏹 Охотник за сигналами активирован.
-[21:02:12] 👁️ Мониторинг позиций запущен.
-[21:02:14] 🔗 RECOVERED BINANCE: SUI/USDT (48.8 units) успешно усыновлена!
-[21:02:14] 🔗 RECOVERED BINANCE: 1000PEPE/USDT (34580.0 units) успешно усыновлена!
-[21:02:15] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $16.44
-[21:02:15] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.44
-[21:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[21:06:42] 🎯 TP1 ВЫПОЛНЕН: SUI/USDT (+0.56%) | Bal: $16.39
-[21:07:07] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[21:07:07] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[21:07:07] 💉 Прогрев истории BTC: Загрузка свечей...
-[21:07:10] ✅ История BTC прогрета: 60 записей. База: 81506.2
-[21:07:10] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.15%)
-[21:07:10] 🛰️ Подключение к квантовым потокам данных...
-[21:07:10] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[21:07:10] 📡 Запуск WebSocket-потока цен...
-[21:07:10] 🏹 Охотник за сигналами активирован.
-[21:07:10] 👁️ Мониторинг позиций запущен.
-[21:07:11] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.1161 | Mode: STABLE
-[21:07:12] 🔗 RECOVERED BINANCE: SUI/USDT (24.4 units) успешно усыновлена!
-[21:07:12] 🔗 RECOVERED BINANCE: 1000PEPE/USDT (34580.0 units) успешно усыновлена!
-[21:07:12] 🚀 ВХОД DOGE/USDT SELL | Vol: 878 | Bal: $16.54
-[21:07:13] ✅ Позиция DOGE/USDT открыта успешно.
-[21:07:13] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $16.54
-[21:07:13] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.54
-[21:07:14] 🎯 TP1 ВЫПОЛНЕН: SUI/USDT (+0.56%) | Bal: $16.54
-[21:07:42] 🔗 RECOVERED BINANCE: DOGE/USDT (878.0 units) успешно усыновлена!
-[21:07:43] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $16.44
-[21:17:53] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[21:17:53] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[21:17:53] 💉 Прогрев истории BTC: Загрузка свечей...
-[21:17:55] ✅ История BTC прогрета: 60 записей. База: 81295.0
-[21:17:55] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: -0.07%)
-[21:17:55] 🛰️ Подключение к квантовым потокам данных...
-[21:17:55] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[21:17:55] 📡 Запуск WebSocket-потока цен...
-[21:17:55] 🏹 Охотник за сигналами активирован.
-[21:17:55] 👁️ Мониторинг позиций запущен.
-[21:17:56] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0041169 | Mode: STABLE
-[21:17:57] 🔗 RECOVERED BINANCE: DOGE/USDT (878.0 units) успешно усыновлена!
-[21:17:57] 🔗 RECOVERED BINANCE: SUI/USDT (12.2 units) успешно усыновлена!
-[21:17:57] 🔗 RECOVERED BINANCE: 1000PEPE/USDT (34580.0 units) успешно усыновлена!
-[21:17:58] ⚠️ Мало маржи для 1000PEPE/USDT ($1.44). Пропуск.
-[21:17:58] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.94
-[21:17:58] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $15.94
-[21:17:58] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.94
-[21:18:01] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.94
-[21:18:01] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $15.94
-[21:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[21:21:03] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.94
-[21:21:05] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.94
-[21:21:05] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $15.94
-[21:24:06] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.96
-[21:24:08] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.96
-[21:24:10] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $15.96
-[21:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[21:27:10] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.12
-[21:27:46] 🚀 Инициализация TITAN-BINANCE V1.0 [WS-STREAM]...
-[21:27:46] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[21:27:46] 💉 Прогрев истории BTC: Загрузка свечей...
-[21:27:49] ✅ История BTC прогрета: 60 записей. База: 81211.2
-[21:27:49] ⚙️ Стартовый режим: >>> STABLE <<< (Trend: 0.17%)
-[21:27:49] 🛰️ Подключение к квантовым потокам данных...
-[21:27:49] ✅ СИСТЕМА АКТИВИРОВАНА. Режим: Мульти-слот V16.0
-[21:27:49] 📡 Запуск WebSocket-потока цен...
-[21:27:49] 🏹 Охотник за сигналами активирован.
-[21:27:49] 👁️ Мониторинг позиций запущен.
-[21:27:51] 🔗 RECOVERED BINANCE: DOGE/USDT (878.0 units) успешно усыновлена!
-[21:27:51] 🔗 RECOVERED BINANCE: SUI/USDT (12.2 units) успешно усыновлена!
-[21:27:51] 🔗 RECOVERED BINANCE: 1000PEPE/USDT (34580.0 units) успешно усыновлена!
-[21:27:52] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $16.11
-[21:27:52] 🛡️ СТОП ВЫСТАВЛЕН: SUI/USDT @ 1.1802 | Bal: $16.11
-[21:27:52] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.11
-[21:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[21:30:11] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.99
-[21:31:43] 🎯 TP1 ВЫПОЛНЕН: SUI/USDT (+0.57%) | Bal: $16.11
-[21:34:01] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.21
-[21:34:03] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $16.21
-[21:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[21:37:05] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.08
-[21:37:06] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $16.08
-[21:37:49] 🧹 Позиция SUI/USDT закрыта на бирже. Очистка системных флагов.
-[21:40:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[21:40:07] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.0
-[21:40:10] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $16.0
-[21:43:11] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.76
-[21:50:01] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.96
-[21:50:03] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.96
-[21:53:03] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.71
-[21:53:05] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.71
-[21:56:05] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.75
-[21:56:07] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.75
-[21:59:08] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.56
-[21:59:10] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.56
-[22:03:01] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.49
-[22:06:01] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.81
-[22:06:03] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.75
-[22:09:03] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.71
-[22:09:05] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.88
-[22:12:06] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.77
-[22:12:08] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.77
-[22:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[22:15:09] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.12
-[22:15:10] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $16.12
-[22:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[22:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[22:28:02] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.89
-[22:28:04] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.89
-[22:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[22:31:05] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.09
-[22:31:07] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $16.09
-[22:34:07] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.05
-[22:34:09] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $16.05
-[22:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[22:37:09] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $16.1
-[22:40:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[22:47:02] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.96
-[22:50:02] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.94
-[22:50:03] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.94
-[22:53:03] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.71
-[22:53:05] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.71
-[22:56:04] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.73
-[22:56:07] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.65
-[22:59:08] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.74
-[22:59:10] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.68
-[23:02:11] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0041025 | Bal: $15.47
-[23:09:01] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.74
-[23:09:44] 🧹 Позиция 1000PEPE/USDT закрыта на бирже. Очистка системных флагов.
-[23:12:04] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.42
-[23:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[23:15:07] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.51
-[23:18:10] 🛡️ СТОП ВЫСТАВЛЕН: DOGE/USDT @ 0.1169 | Bal: $15.59
-[23:18:54] 🎯 TP1 ВЫПОЛНЕН: DOGE/USDT (+0.47%) | Bal: $15.63
-[23:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[23:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[23:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[23:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[23:40:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[00:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[00:15:23] 🧹 Позиция DOGE/USDT закрыта на бирже. Очистка системных флагов.
-[00:15:27] 🎯 СИГНАЛ: FIL/USDT BUY | Offset: 0.0017 | Price: 1.062 | Mode: STABLE
-[00:15:27] 🚀 ВХОД FIL/USDT BUY | Vol: 213.5 | Bal: $15.34
-[00:15:28] ✅ Позиция FIL/USDT открыта успешно.
-[00:15:29] 🎯 СИГНАЛ: HBAR/USDT SELL | Offset: 0.0017 | Price: 0.09548 | Mode: STABLE
-[00:15:29] 🚀 ВХОД HBAR/USDT SELL | Vol: 2375 | Bal: $15.34
-[00:15:29] ❌ ОШИБКА ВХОДА HBAR/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[00:15:33] 🎯 СИГНАЛ: ONDO/USDT BUY | Offset: 0.002 | Price: 0.3898 | Mode: STABLE
-[00:15:34] 🚀 ВХОД ONDO/USDT BUY | Vol: 581.7 | Bal: $15.34
-[00:15:34] ❌ ОШИБКА ВХОДА ONDO/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[00:15:35] 🎯 СИГНАЛ: ENA/USDT BUY | Offset: 0.0026 | Price: 0.12188 | Mode: STABLE
-[00:15:35] ⚠️ Мало маржи для ENA/USDT ($1.7). Пропуск.
-[00:15:42] 🎯 СИГНАЛ: HBAR/USDT SELL | Offset: 0.0017 | Price: 0.09549 | Mode: STABLE
-[00:15:42] ⚠️ Мало маржи для HBAR/USDT ($1.7). Пропуск.
-[00:15:46] 🎯 СИГНАЛ: ENA/USDT BUY | Offset: 0.0026 | Price: 0.12187 | Mode: STABLE
-[00:15:47] ⚠️ Мало маржи для ENA/USDT ($1.7). Пропуск.
-[00:15:51] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0041152 | Mode: STABLE
-[00:15:51] ⚠️ Мало маржи для 1000PEPE/USDT ($1.7). Пропуск.
-[00:15:52] 🎯 СИГНАЛ: FET/USDT SELL | Offset: 0.0016 | Price: 0.2147 | Mode: STABLE
-[00:15:53] ⚠️ Мало маржи для FET/USDT ($1.7). Пропуск.
-[00:15:53] 🎯 СИГНАЛ: AVAX/USDT SELL | Offset: 0.0013 | Price: 9.936 | Mode: STABLE
-[00:15:53] ⚠️ Мало маржи для AVAX/USDT ($1.7). Пропуск.
-[00:15:55] 🎯 СИГНАЛ: HBAR/USDT SELL | Offset: 0.0017 | Price: 0.09549 | Mode: STABLE
-[00:15:56] ⚠️ Мало маржи для HBAR/USDT ($1.7). Пропуск.
-[00:15:57] 🎯 СИГНАЛ: FLOW/USDT SELL | Offset: 0.002 | Price: 0.03871 | Mode: STABLE
-[00:15:58] ⚠️ Ошибка плеча FLOW/USDT: binance {"code":-4028,"msg":"Leverage 20 is not valid"}
-[00:15:58] ⚠️ Мало маржи для FLOW/USDT ($1.7). Пропуск.
-[00:16:00] 🎯 СИГНАЛ: LTC/USDT SELL | Offset: 0.0014 | Price: 58.42 | Mode: STABLE
-[00:16:01] ⚠️ Мало маржи для LTC/USDT ($1.7). Пропуск.
-[00:16:02] 🎯 СИГНАЛ: ENA/USDT BUY | Offset: 0.0026 | Price: 0.12188 | Mode: STABLE
-[00:16:02] ⚠️ Мало маржи для ENA/USDT ($1.7). Пропуск.
-[00:16:06] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0041162 | Mode: STABLE
-[00:16:07] ⚠️ Мало маржи для 1000PEPE/USDT ($1.7). Пропуск.
-[00:16:07] 🎯 СИГНАЛ: SOL/USDT BUY | Offset: 0.0006 | Price: 92.37 | Mode: STABLE
-[00:16:07] ⚠️ Мало маржи для SOL/USDT ($1.7). Пропуск.
-[00:16:07] 🎯 СИГНАЛ: WIF/USDT SELL | Offset: 0.0012 | Price: 0.2216 | Mode: STABLE
-[00:16:08] ⚠️ Мало маржи для WIF/USDT ($1.7). Пропуск.
-[00:16:12] 🔗 RECOVERED BINANCE: FIL/USDT (213.5 units) успешно усыновлена!
-[00:16:13] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.05
-[00:17:10] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.23
-[00:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[00:24:02] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $14.92
-[00:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[00:27:06] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $14.88
-[00:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[00:30:09] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.02
-[00:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[00:37:02] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.98
-[00:40:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[00:40:05] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.65
-[00:43:08] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $14.8
-[00:45:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[00:46:10] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $14.9
-[00:53:02] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.35
-[00:56:04] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.25
-[00:59:07] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.12
-[01:02:11] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.24
-[01:09:01] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.44
-[01:12:05] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.09
-[01:15:09] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $15.23
-[01:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[01:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[01:25:03] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $14.81
-[01:28:06] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $14.46
-[01:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[01:31:10] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $13.97
-[01:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[01:40:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[01:41:04] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $14.66
-[01:44:06] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $14.47
-[01:45:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[01:47:10] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $14.16
-[01:57:03] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $12.99
-[02:00:06] 🛡️ СТОП ВЫСТАВЛЕН: FIL/USDT @ 1.047 | Bal: $12.9
-[02:02:11] 🧹 Позиция FIL/USDT закрыта на бирже. Очистка системных флагов.
-[02:02:12] 🎯 СИГНАЛ: NEAR/USDT BUY | Offset: 0.0007 | Price: 1.56 | Mode: STABLE
-[02:02:12] 🚀 ВХОД NEAR/USDT BUY | Vol: 108 | Bal: $11.91
-[02:02:13] ✅ Позиция NEAR/USDT открыта успешно.
-[02:02:14] 🎯 СИГНАЛ: SUI/USDT BUY | Offset: 0.0012 | Price: 1.1859 | Mode: STABLE
-[02:02:15] 🚀 ВХОД SUI/USDT BUY | Vol: 142 | Bal: $11.91
-[02:02:15] ❌ ОШИБКА ВХОДА SUI/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:02:15] 🎯 СИГНАЛ: 1000SHIB/USDT BUY | Offset: 0.0018 | Price: 0.006337 | Mode: STABLE
-[02:02:16] 🚀 ВХОД 1000SHIB/USDT BUY | Vol: 26590 | Bal: $11.91
-[02:02:16] ❌ ОШИБКА ВХОДА 1000SHIB/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:02:16] 🎯 СИГНАЛ: AVAX/USDT BUY | Offset: 0.0011 | Price: 9.861 | Mode: STABLE
-[02:02:17] 🚀 ВХОД AVAX/USDT BUY | Vol: 17 | Bal: $11.91
-[02:02:17] ❌ ОШИБКА ВХОДА AVAX/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:02:18] 🎯 СИГНАЛ: LINK/USDT BUY | Offset: 0.0014 | Price: 10.426 | Mode: STABLE
-[02:02:18] 🚀 ВХОД LINK/USDT BUY | Vol: 16.16 | Bal: $11.91
-[02:02:19] ❌ ОШИБКА ВХОДА LINK/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:02:20] 🎯 СИГНАЛ: FIL/USDT BUY | Offset: 0.0017 | Price: 1.052 | Mode: STABLE
-[02:02:20] 🚀 ВХОД FIL/USDT BUY | Vol: 160.1 | Bal: $11.91
-[02:02:21] ❌ ОШИБКА ВХОДА FIL/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:02:23] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.0443 | Mode: STABLE
-[02:02:23] 🚀 ВХОД CHZ/USDT BUY | Vol: 3803 | Bal: $11.91
-[02:02:24] ❌ ОШИБКА ВХОДА CHZ/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:02:26] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4846 | Mode: STABLE
-[02:02:26] 🚀 ВХОД XRP/USDT BUY | Vol: 113.4 | Bal: $11.91
-[02:02:26] ❌ ОШИБКА ВХОДА XRP/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:02:26] 🎯 СИГНАЛ: LTC/USDT BUY | Offset: 0.0012 | Price: 58.06 | Mode: STABLE
-[02:02:27] 🚀 ВХОД LTC/USDT BUY | Vol: 2.902 | Bal: $11.91
-[02:02:27] ❌ ОШИБКА ВХОДА LTC/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:02:33] 🎯 СИГНАЛ: LINK/USDT BUY | Offset: 0.0014 | Price: 10.423 | Mode: STABLE
-[02:02:34] ⚠️ Мало маржи для LINK/USDT ($1.16). Пропуск.
-[02:02:35] 🎯 СИГНАЛ: FIL/USDT BUY | Offset: 0.0017 | Price: 1.051 | Mode: STABLE
-[02:02:35] ⚠️ Мало маржи для FIL/USDT ($1.16). Пропуск.
-[02:02:37] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04433 | Mode: STABLE
-[02:02:38] ⚠️ Мало маржи для CHZ/USDT ($1.16). Пропуск.
-[02:02:40] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4855 | Mode: STABLE
-[02:02:40] ⚠️ Мало маржи для XRP/USDT ($1.16). Пропуск.
-[02:02:40] 🎯 СИГНАЛ: LTC/USDT BUY | Offset: 0.0012 | Price: 58.08 | Mode: STABLE
-[02:02:41] ⚠️ Мало маржи для LTC/USDT ($1.16). Пропуск.
-[02:02:47] 🎯 СИГНАЛ: LINK/USDT BUY | Offset: 0.0014 | Price: 10.428 | Mode: STABLE
-[02:02:47] ⚠️ Мало маржи для LINK/USDT ($1.16). Пропуск.
-[02:02:49] 🎯 СИГНАЛ: FIL/USDT BUY | Offset: 0.0017 | Price: 1.051 | Mode: STABLE
-[02:02:49] ⚠️ Мало маржи для FIL/USDT ($1.16). Пропуск.
-[02:02:51] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04435 | Mode: STABLE
-[02:02:52] ⚠️ Мало маржи для CHZ/USDT ($1.16). Пропуск.
-[02:02:54] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4848 | Mode: STABLE
-[02:02:54] ⚠️ Мало маржи для XRP/USDT ($1.16). Пропуск.
-[02:02:54] 🎯 СИГНАЛ: LTC/USDT BUY | Offset: 0.0012 | Price: 58.04 | Mode: STABLE
-[02:02:55] ⚠️ Мало маржи для LTC/USDT ($1.16). Пропуск.
-[02:03:00] 🎯 СИГНАЛ: LINK/USDT SELL | Offset: 0.0016 | Price: 10.415 | Mode: STABLE
-[02:03:01] 🔗 RECOVERED BINANCE: NEAR/USDT (108.0 units) успешно усыновлена!
-[02:03:01] ⚠️ Мало маржи для LINK/USDT ($1.16). Пропуск.
-[02:03:02] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.55 | Bal: $11.72
-[02:03:04] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.55 | Bal: $11.72
-[02:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[02:06:07] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.55 | Bal: $11.83
-[02:09:10] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.55 | Bal: $11.72
-[02:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[02:13:56] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[02:13:56] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BEAR <<< | Trend: -0.834%
-[02:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BEAR...
-[02:16:01] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.55 | Bal: $11.2
-[02:17:19] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[02:17:19] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> STABLE <<< | Trend: -0.787%
-[02:19:05] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.55 | Bal: $11.18
-[02:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[02:22:09] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.55 | Bal: $11.05
-[02:29:01] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.55 | Bal: $11.07
-[02:32:05] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.55 | Bal: $10.65
-[02:32:49] 🧹 Позиция NEAR/USDT закрыта на бирже. Очистка системных флагов.
-[02:32:52] 🎯 СИГНАЛ: NEAR/USDT SELL | Offset: 0.0009 | Price: 1.55 | Mode: STABLE
-[02:32:52] ⚠️ Мало маржи для NEAR/USDT ($1.16). Пропуск.
-[02:32:53] 🎯 СИГНАЛ: AVAX/USDT SELL | Offset: 0.0013 | Price: 9.816 | Mode: STABLE
-[02:32:54] ⚠️ Мало маржи для AVAX/USDT ($1.16). Пропуск.
-[02:32:55] 🎯 СИГНАЛ: ATOM/USDT SELL | Offset: 0.0018 | Price: 2.012 | Mode: STABLE
-[02:32:56] ⚠️ Мало маржи для ATOM/USDT ($1.16). Пропуск.
-[02:32:57] 🎯 СИГНАЛ: FLOW/USDT SELL | Offset: 0.002 | Price: 0.03828 | Mode: STABLE
-[02:32:58] ⚠️ Ошибка плеча FLOW/USDT: binance {"code":-4028,"msg":"Leverage 20 is not valid"}
-[02:32:58] 🚀 ВХОД FLOW/USDT SELL | Vol: 3703.6 | Bal: $10.34
-[02:32:58] ❌ ОШИБКА ВХОДА FLOW/USDT: binance {"code":-2027,"msg":"Exceeded the maximum allowable position at current leverage."}
-[02:32:59] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.04383 | Mode: STABLE
-[02:33:00] 🚀 ВХОД CHZ/USDT SELL | Vol: 3234 | Bal: $10.34
-[02:33:00] ✅ Позиция CHZ/USDT открыта успешно.
-[02:33:03] 🎯 СИГНАЛ: LTC/USDT SELL | Offset: 0.0014 | Price: 57.83 | Mode: STABLE
-[02:33:03] 🚀 ВХОД LTC/USDT SELL | Vol: 2.451 | Bal: $10.34
-[02:33:04] ❌ ОШИБКА ВХОДА LTC/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:33:22] 🎯 СИГНАЛ: FIL/USDT BUY | Offset: 0.0017 | Price: 1.042 | Mode: STABLE
-[02:33:22] ⚠️ Мало маржи для FIL/USDT ($1.06). Пропуск.
-[02:33:38] 🔗 RECOVERED BINANCE: CHZ/USDT (3234.0 units) успешно усыновлена!
-[02:33:39] 🛡️ СТОП ВЫСТАВЛЕН: CHZ/USDT @ 0.04444 | Bal: $10.04
-[02:34:01] 🛡️ СТОП ВЫСТАВЛЕН: CHZ/USDT @ 0.04444 | Bal: $10.1
-[02:34:14] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[02:34:14] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BEAR <<< | Trend: -0.927%
-[02:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BEAR...
-[02:37:03] 🛡️ СТОП ВЫСТАВЛЕН: CHZ/USDT @ 0.04444 | Bal: $9.59
-[02:37:17] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[02:37:17] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> STABLE <<< | Trend: -0.784%
-[02:40:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[02:40:06] 🛡️ СТОП ВЫСТАВЛЕН: CHZ/USDT @ 0.04444 | Bal: $9.77
-[02:43:02] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[02:43:02] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BEAR <<< | Trend: -0.814%
-[02:43:09] 🛡️ СТОП ВЫСТАВЛЕН: CHZ/USDT @ 0.04444 | Bal: $9.72
-[02:45:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BEAR...
-[02:45:03] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[02:45:03] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> STABLE <<< | Trend: -0.564%
-[02:50:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[02:50:01] 🛡️ СТОП ВЫСТАВЛЕН: CHZ/USDT @ 0.04444 | Bal: $9.2
-[02:52:42] 🧹 Позиция CHZ/USDT закрыта на бирже. Очистка системных флагов.
-[02:52:43] 🎯 СИГНАЛ: NEAR/USDT SELL | Offset: 0.0009 | Price: 1.567 | Mode: STABLE
-[02:52:44] 🚀 ВХОД NEAR/USDT SELL | Vol: 67 | Bal: $8.22
-[02:52:44] ✅ Позиция NEAR/USDT открыта успешно.
-[02:52:45] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11651 | Mode: STABLE
-[02:52:46] 🚀 ВХОД DOGE/USDT SELL | Vol: 908 | Bal: $8.22
-[02:52:46] ❌ ОШИБКА ВХОДА DOGE/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:52:47] 🎯 СИГНАЛ: FET/USDT SELL | Offset: 0.0016 | Price: 0.2133 | Mode: STABLE
-[02:52:47] 🚀 ВХОД FET/USDT SELL | Vol: 496 | Bal: $8.22
-[02:52:48] ❌ ОШИБКА ВХОДА FET/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:52:48] 🎯 СИГНАЛ: AVAX/USDT SELL | Offset: 0.0013 | Price: 9.909 | Mode: STABLE
-[02:52:48] 🚀 ВХОД AVAX/USDT SELL | Vol: 10 | Bal: $8.22
-[02:52:48] ❌ ОШИБКА ВХОДА AVAX/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:52:48] 🎯 СИГНАЛ: ADA/USDT SELL | Offset: 0.0015 | Price: 0.2709 | Mode: STABLE
-[02:52:49] 🚀 ВХОД ADA/USDT SELL | Vol: 390 | Bal: $8.22
-[02:52:49] ❌ ОШИБКА ВХОДА ADA/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:52:50] 🎯 СИГНАЛ: LINK/USDT SELL | Offset: 0.0016 | Price: 10.453 | Mode: STABLE
-[02:52:51] 🚀 ВХОД LINK/USDT SELL | Vol: 10.12 | Bal: $8.22
-[02:52:51] ❌ ОШИБКА ВХОДА LINK/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:52:52] 🎯 СИГНАЛ: LDO/USDT SELL | Offset: 0.0023 | Price: 0.3883 | Mode: STABLE
-[02:52:53] 🚀 ВХОД LDO/USDT SELL | Vol: 272 | Bal: $8.22
-[02:52:53] ❌ ОШИБКА ВХОДА LDO/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:52:54] 🎯 СИГНАЛ: HBAR/USDT BUY | Offset: 0.0014 | Price: 0.09538 | Mode: STABLE
-[02:52:54] 🚀 ВХОД HBAR/USDT BUY | Vol: 1109 | Bal: $8.22
-[02:52:54] ❌ ОШИБКА ВХОДА HBAR/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[02:52:55] 🎯 СИГНАЛ: AAVE/USDT BUY | Offset: 0.0017 | Price: 98.34 | Mode: STABLE
-[02:52:56] ⚠️ Мало маржи для AAVE/USDT ($0.79). Пропуск.
-[02:52:59] 🎯 СИГНАЛ: LTC/USDT BUY | Offset: 0.0012 | Price: 58.32 | Mode: STABLE
-[02:52:59] ⚠️ Мало маржи для LTC/USDT ($0.79). Пропуск.
-[02:53:00] 🎯 СИГНАЛ: ENA/USDT BUY | Offset: 0.0026 | Price: 0.12156 | Mode: STABLE
-[02:53:01] ⚠️ Мало маржи для ENA/USDT ($0.79). Пропуск.
-[02:53:01] 🎯 СИГНАЛ: TNSR/USDT BUY | Offset: 0.0027 | Price: 0.04227 | Mode: STABLE
-[02:53:02] ⚠️ Мало маржи для TNSR/USDT ($0.79). Пропуск.
-[02:53:06] 🎯 СИГНАЛ: ADA/USDT SELL | Offset: 0.0015 | Price: 0.2709 | Mode: STABLE
-[02:53:06] ⚠️ Мало маржи для ADA/USDT ($0.79). Пропуск.
-[02:53:13] 🎯 СИГНАЛ: NOT/USDT SELL | Offset: 0.0032 | Price: 0.0005498 | Mode: STABLE
-[02:53:13] ⚠️ Мало маржи для NOT/USDT ($0.79). Пропуск.
-[02:53:18] 🎯 СИГНАЛ: AVAX/USDT SELL | Offset: 0.0013 | Price: 9.914 | Mode: STABLE
-[02:53:18] ⚠️ Мало маржи для AVAX/USDT ($0.79). Пропуск.
-[02:53:19] 🎯 СИГНАЛ: OP/USDT SELL | Offset: 0.0021 | Price: 0.1444 | Mode: STABLE
-[02:53:20] ⚠️ Мало маржи для OP/USDT ($0.79). Пропуск.
-[02:53:21] 🎯 СИГНАЛ: AAVE/USDT SELL | Offset: 0.002 | Price: 98.32 | Mode: STABLE
-[02:53:22] ⚠️ Мало маржи для AAVE/USDT ($0.79). Пропуск.
-[02:53:23] 🎯 СИГНАЛ: GRT/USDT SELL | Offset: 0.0025 | Price: 0.02801 | Mode: STABLE
-[02:53:23] ⚠️ Мало маржи для GRT/USDT ($0.79). Пропуск.
-[02:53:24] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.04441 | Mode: STABLE
-[02:53:25] ⚠️ Мало маржи для CHZ/USDT ($0.79). Пропуск.
-[02:53:27] 🎯 СИГНАЛ: AR/USDT SELL | Offset: 0.0025 | Price: 2.369 | Mode: STABLE
-[02:53:28] ⚠️ Мало маржи для AR/USDT ($0.79). Пропуск.
-[02:53:28] 🎯 СИГНАЛ: ENA/USDT SELL | Offset: 0.003 | Price: 0.12149 | Mode: STABLE
-[02:53:28] ⚠️ Мало маржи для ENA/USDT ($0.79). Пропуск.
-[02:53:32] 🔗 RECOVERED BINANCE: NEAR/USDT (67.0 units) успешно усыновлена!
-[02:53:32] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.1
-[02:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[02:55:07] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.14
-[02:58:10] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.17
-[03:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[03:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[03:05:04] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.24
-[03:08:07] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.97
-[03:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[03:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[03:15:01] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.7
-[03:18:04] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.04
-[03:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[03:21:07] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.9
-[03:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[03:31:06] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.9
-[03:41:03] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.97
-[03:44:07] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.1
-[03:51:01] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.14
-[03:54:05] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.97
-[03:57:08] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.04
-[04:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[04:04:04] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.9
-[04:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[04:07:10] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.57
-[04:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[04:11:02] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.57
-[04:14:05] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.57
-[04:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[04:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[04:21:05] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.7
-[04:24:10] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.59
-[04:31:06] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.83
-[04:34:10] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.84
-[04:41:04] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.75
-[04:44:09] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.57
-[04:51:04] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.7
-[04:54:09] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $7.9
-[04:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[05:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[05:01:05] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.1
-[05:04:08] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.3
-[05:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[05:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[05:11:01] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.23
-[05:14:06] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.2
-[05:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[05:21:04] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.26
-[05:24:07] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.44
-[05:31:02] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $8.37
-[05:32:34] 🎯 TP1 ВЫПОЛНЕН: NEAR/USDT (+0.77%) | Bal: $8.91
-[05:38:15] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[05:38:15] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BEAR <<< | Trend: -0.899%
-[05:39:25] 🔥 TP2 ФИКСИРОВАН: NEAR/USDT. Включен Трейлинг [STABLE] | Bal: $9.44
-[05:40:57] 🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие NEAR/USDT @ 1.42% | Bal: $9.43
-[05:40:58] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.58 | Bal: $9.43
-[05:40:59] 🎯 TP1 ВЫПОЛНЕН: NEAR/USDT (+1.42%) | Bal: $9.43
-[05:42:19] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[05:42:19] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> STABLE <<< | Trend: -0.698%
-[05:45:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[05:47:03] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[05:47:03] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> BEAR <<< | Trend: -0.835%
-[05:50:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме BEAR...
-[05:52:07] 🧬 Тройная Матрица загружена. Режим по умолчанию: STABLE
-[05:52:07] 🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> STABLE <<< | Trend: -0.644%
-[05:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[06:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[06:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[06:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[06:40:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[06:45:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[06:50:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[06:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[07:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[07:21:04] 🔥 TP2 ФИКСИРОВАН: NEAR/USDT. Включен Трейлинг [STABLE] | Bal: $9.53
-[07:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[07:35:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[07:35:03] 🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие NEAR/USDT @ 2.47% | Bal: $9.61
-[07:35:05] 🛡️ СТОП ВЫСТАВЛЕН: NEAR/USDT @ 1.534 | Bal: $9.61
-[07:35:05] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:06] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:07] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:08] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:08] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:09] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:10] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:11] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:12] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:12] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:13] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:14] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:15] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:16] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:16] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:17] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:18] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:19] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:20] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:20] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:21] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:22] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:23] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:24] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:25] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:26] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:27] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:28] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:29] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:29] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:30] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:31] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:32] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:32] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:33] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:34] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:35] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:36] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:36] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:37] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:38] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:39] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:40] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:41] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:42] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:43] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:43] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:44] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:45] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:46] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:47] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:47] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:48] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:49] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:50] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:51] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:52] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:52] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:53] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:54] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:55] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:56] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:57] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:58] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:35:59] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:36:00] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:36:00] 🧹 Позиция NEAR/USDT закрыта на бирже. Очистка системных флагов.
-[07:36:01] ⚠️ Ошибка TP1 NEAR/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 5 (unless you choose reduce only)."}
-[07:36:03] 🎯 СИГНАЛ: 1000PEPE/USDT SELL | Offset: 0.001 | Price: 0.0040462 | Mode: STABLE
-[07:36:03] 🚀 ВХОД 1000PEPE/USDT SELL | Vol: 31882 | Bal: $9.59
-[07:36:04] ✅ Позиция 1000PEPE/USDT открыта успешно.
-[07:36:05] 🎯 СИГНАЛ: SOL/USDT SELL | Offset: 0.0008 | Price: 91.3 | Mode: STABLE
-[07:36:05] 🚀 ВХОД SOL/USDT SELL | Vol: 1.41 | Bal: $9.59
-[07:36:05] ❌ ОШИБКА ВХОДА SOL/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[07:36:05] 🎯 СИГНАЛ: DOGE/USDT SELL | Offset: 0.0012 | Price: 0.11494 | Mode: STABLE
-[07:36:06] 🚀 ВХОД DOGE/USDT SELL | Vol: 1122 | Bal: $9.59
-[07:36:06] ❌ ОШИБКА ВХОДА DOGE/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[07:36:17] 🎯 СИГНАЛ: WIF/USDT SELL | Offset: 0.0012 | Price: 0.2136 | Mode: STABLE
-[07:36:17] ⚠️ Мало маржи для WIF/USDT ($0.92). Пропуск.
-[07:36:21] 🎯 СИГНАЛ: IMX/USDT SELL | Offset: 0.0023 | Price: 0.1967 | Mode: STABLE
-[07:36:22] ⚠️ Мало маржи для IMX/USDT ($0.92). Пропуск.
-[07:36:22] 🎯 СИГНАЛ: CHZ/USDT SELL | Offset: 0.002 | Price: 0.0439 | Mode: STABLE
-[07:36:23] ⚠️ Мало маржи для CHZ/USDT ($0.92). Пропуск.
-[07:36:25] 🎯 СИГНАЛ: TRX/USDT BUY | Offset: 0.0009 | Price: 0.35208 | Mode: STABLE
-[07:36:26] ⚠️ Мало маржи для TRX/USDT ($0.92). Пропуск.
-[07:36:26] 🎯 СИГНАЛ: XRP/USDT BUY | Offset: 0.001 | Price: 1.4682 | Mode: STABLE
-[07:36:26] ⚠️ Мало маржи для XRP/USDT ($0.92). Пропуск.
-[07:36:26] 🎯 СИГНАЛ: LTC/USDT BUY | Offset: 0.0012 | Price: 58.31 | Mode: STABLE
-[07:36:27] ⚠️ Мало маржи для LTC/USDT ($0.92). Пропуск.
-[07:36:32] 🎯 СИГНАЛ: WIF/USDT SELL | Offset: 0.0012 | Price: 0.2136 | Mode: STABLE
-[07:36:32] ⚠️ Мало маржи для WIF/USDT ($0.92). Пропуск.
-[07:36:37] 🎯 СИГНАЛ: IMX/USDT SELL | Offset: 0.0023 | Price: 0.1967 | Mode: STABLE
-[07:36:37] ⚠️ Мало маржи для IMX/USDT ($0.92). Пропуск.
-[07:36:38] 🎯 СИГНАЛ: CHZ/USDT BUY | Offset: 0.0017 | Price: 0.04392 | Mode: STABLE
-[07:36:39] ⚠️ Мало маржи для CHZ/USDT ($0.92). Пропуск.
-[07:36:41] 🎯 СИГНАЛ: TRX/USDT BUY | Offset: 0.0009 | Price: 0.35216 | Mode: STABLE
-[07:36:41] ⚠️ Мало маржи для TRX/USDT ($0.92). Пропуск.
-[07:36:50] 🎯 СИГНАЛ: IMX/USDT SELL | Offset: 0.0023 | Price: 0.1967 | Mode: STABLE
-[07:36:50] ⚠️ Мало маржи для IMX/USDT ($0.92). Пропуск.
-[07:36:51] 🔗 RECOVERED BINANCE: 1000PEPE/USDT (31882.0 units) успешно усыновлена!
-[07:36:52] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $9.45
-[07:43:07] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $9.69
-[07:47:05] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $9.44
-[07:54:07] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $9.56
-[07:58:03] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $9.51
-[08:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[08:02:02] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $9.6
-[08:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[08:05:10] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $9.8
-[08:09:06] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $9.71
-[08:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[08:13:04] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $9.76
-[08:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[08:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[08:20:08] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $10.19
-[08:24:01] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $10.05
-[08:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[08:27:09] 🛡️ СТОП ВЫСТАВЛЕН: 1000PEPE/USDT @ 0.0040867 | Bal: $10.14
-[08:31:04] 🎯 TP1 ВЫПОЛНЕН: 1000PEPE/USDT (+0.82%) | Bal: $10.47
-[09:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[09:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[09:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[09:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[09:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[09:45:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[09:50:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[09:55:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[10:00:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[10:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[10:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[10:45:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[10:50:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[10:51:20] 🧹 Позиция 1000PEPE/USDT закрыта на бирже. Очистка системных флагов.
-[10:51:21] 🎯 СИГНАЛ: 1000PEPE/USDT BUY | Offset: 0.0008 | Price: 0.0040412 | Mode: STABLE
-[10:51:21] ⚠️ Мало маржи для 1000PEPE/USDT ($4.07). Пропуск.
-[10:51:21] 🎯 СИГНАЛ: DOGE/USDT BUY | Offset: 0.001 | Price: 0.11498 | Mode: STABLE
-[10:51:22] ⚠️ Мало маржи для DOGE/USDT ($4.07). Пропуск.
-[10:51:55] 🎯 СИГНАЛ: ATOM/USDT BUY | Offset: 0.0015 | Price: 2.01 | Mode: STABLE
-[10:51:56] 🚀 ВХОД ATOM/USDT BUY | Vol: 66.98 | Bal: $9.92
-[10:51:56] ✅ Позиция ATOM/USDT открыта успешно.
-[10:52:10] 🔗 RECOVERED BINANCE: ATOM/USDT (66.98 units) успешно усыновлена!
-[10:52:11] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.85
-[10:57:06] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.92
-[11:01:01] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.91
-[11:04:09] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.65
-[11:05:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[11:08:06] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.42
-[11:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[11:12:04] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.28
-[11:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[11:19:04] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.18
-[11:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[11:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[11:26:04] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.44
-[11:30:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[11:33:08] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.77
-[11:37:02] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.92
-[11:40:11] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.79
-[11:44:05] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.79
-[11:48:01] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.66
-[11:51:09] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.72
-[11:55:05] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.72
-[11:59:02] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.45
-[12:03:03] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.38
-[12:10:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[12:10:07] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.38
-[12:14:04] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.58
-[12:15:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[12:18:01] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.25
-[12:20:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[12:21:09] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.45
-[12:25:00] 🏹 Охотник на чеку. Сканирую 65 секторов в режиме STABLE...
-[12:25:05] 🛡️ СТОП ВЫСТАВЛЕН: ATOM/USDT @ 1.986 | Bal: $9.38
