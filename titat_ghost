@@ -382,15 +382,22 @@ class TitanGhost:
             await asyncio.sleep(0.5)
 
     async def main(self):
+        """Жесткая монолитная инициализация всех квантовых потоков BingX V23.1.5"""
         await self.init_exchange()
-#        await asyncio.gather(self.update_context(), self.price_stream(), self.hunter_loop(), self.monitor_logic())
-        # Запускаем фоновые задачи без блокировки hunter_loop
-        asyncio.create_task(self.update_context())
-        asyncio.create_task(self.price_stream())
-        asyncio.create_task(self.monitor_logic())
-
-        # Основной цикл оставляем в главном потоке
-        await self.hunter_loop()
+        
+        self.log("🔗 Запуск параллельных квантовых модулей ядра...")
+        
+        # БРОНИРОВАННЫЙ ФИКС: Запускаем все процессы параллельно через gather.
+        # Теперь потоки цен и контекста будут выполняться одновременно с охотой!
+        try:
+            await asyncio.gather(
+                self.update_context(),
+                self.price_stream(),
+                self.monitor_logic(),
+                self.hunter_loop()
+            )
+        except Exception as e:
+            self.log(f"❌ КРИТИЧЕСКИЙ СБОЙ ЯДРА GHOST: {e}")
 
 if __name__ == "__main__":
     asyncio.run(TitanGhost().main())
