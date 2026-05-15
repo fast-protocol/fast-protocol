@@ -73,30 +73,50 @@ class TitanGhost:
                 await asyncio.sleep(5)
 
     async def price_stream(self):
-        """Высокочастотный REST-мониторинг цен, объемов и тиковой истории [V23.0]"""
+        """Высокочастотный тотальный сбор цен BingX со сквозной фильтрацией ID [V24.1]"""
         self.log(f"📡 Запуск REST-мониторинга цен и объемов для {len(self.memory['dna'])} активов...")
         while self.memory['is_running']:
             try:
-                tickers = await self.exchange.fetch_tickers(list(self.memory['dna'].keys()))
-                for symbol, data in tickers.items():
-                    last_price = float(data['last'])
-                    self.memory['prices'][symbol] = last_price
+                # ЖЕСТКИЙ ФИКС: Вызываем fetch_tickers БЕЗ аргументов.
+                # Это заставляет CCXT забрать ВСЕ рыночные пары BingX без вылета по ошибке Invalid Symbol!
+                tickers = await self.exchange.fetch_tickers()
+                if not tickers:
+                    await asyncio.sleep(1)
+                    continue
 
-                    q_vol = float(data['quoteVolume']) if data.get('quoteVolume') else 0.0
+                for raw_symbol, data in tickers.items():
+                    if not data.get('last'): continue
 
-                    if symbol not in self.memory['vol_history']:
-                        self.memory['vol_history'][symbol] = []
+                    # Приводим сырой символ к каноническому виду (чистим от двоеточий)
+                    clean_sym = raw_symbol.replace(':USDT', '')
 
-                    # Сохраняем КОРТЕЖ: (текущая_цена, текущий_объем)
-                    self.memory['vol_history'][symbol].append((last_price, q_vol))
+                    # Проверяем, есть ли эта монета в нашей ДНК-обойме
+                    # Проверка сработает для любого формата: "SOL/USDT", "SOL/USDT:USDT" или "SOLUSDT"
+                    target_key = None
+                    if clean_sym in self.memory['dna']: target_key = clean_sym
+                    elif f"{clean_sym}:USDT" in self.memory['dna']: target_key = f"{clean_sym}:USDT"
+                    elif clean_sym.replace('/', '') in self.memory['dna']: target_key = clean_sym.replace('/', '')
 
-                    # ИСПРАВЛЕННАЯ СТРОКА: Храним строго последние 65 секунд/элементов (1 минута)
-                    self.memory['vol_history'][symbol] = self.memory['vol_history'][symbol][-65:]
+                    if target_key:
+                        last_price = float(data['last'])
+                        q_vol = float(data['quoteVolume']) if data.get('quoteVolume') else 0.0
 
-                await asyncio.sleep(1)
+                        # Записываем цену по обоим ключам, чтобы hunter_loop её гарантированно увидел
+                        self.memory['prices'][target_key] = last_price
+                        self.memory['prices'][clean_sym] = last_price
+
+                        # Наполняем историю тиков
+                        if target_key not in self.memory['vol_history']:
+                            self.memory['vol_history'][target_key] = []
+
+                        self.memory['vol_history'][target_key].append((last_price, q_vol))
+                        self.memory['vol_history'][target_key] = self.memory['vol_history'][target_key][-65:]
+
+                await asyncio.sleep(1) # Опрос раз в секунду
             except Exception as e:
-                # self.log(f"⚠️ Ошибка потока цен: {e}")
-                await asyncio.sleep(5)
+                # Если произошла сетевая заминка, выводим её для прозрачности дебага
+                # print(f"DEBUG PRICE STREAM ERROR: {e}")
+                await asyncio.sleep(3)
 
     async def execute_limit_entry(self, sym, side, limit_price, dna):
         """Выставление скрытого лимитного капкана на пробойный уровень Strike"""
@@ -140,13 +160,33 @@ class TitanGhost:
                 if sym in self.memory.get('cooldown', {}) and (time.time() - self.memory['cooldown'][sym] < cd_time):
                     continue
 
-                # 2. БЕЗОПАСНОСТЬ: Проверка свободных слотов
+                # Извлекаем живую цену для проверки пульса
+                cur_p = self.memory['prices'].get(sym)
+
+                # --- [ТОТАЛЬНЫЙ ДЕБАГ В САМОМ ВЕРХУ ЦИКЛА V23.1.8] ---
+                # Радар стоит ДО всех фильтров слотов и свечей! Он обязан ожить!
+                #if 'last_debug' not in self.memory: self.memory['last_debug'] = {}
+                #if sym not in self.memory['last_debug']: self.memory['last_debug'][sym] = 0
+
+                #if time.time() - self.memory['last_debug'][sym] > 15:
+                #    vol_hist = self.memory['vol_history'].get(sym, [])
+                #    pos_count = len(self.memory['active_pos'])
+
+                    # Компактный отчет о состоянии системной памяти по монете
+                #    self.log(f"📡 ВЕРХНИЙ РАДАР {sym} | Живая Цена: {cur_p} | Занято слотов: {pos_count}/{MAX_SLOTS} | Накоплено тиков: {len(vol_hist)}")
+                #    self.memory['last_debug'][sym] = time.time()
+                # === КОНЕЦ ВЕРХНЕГО РАДАРА ---
+
+                # 2. БЕЗОПАСНОСТЬ: Проверка свободных слотов (теперь идет ПОСЛЕ лога радара!)
                 if sym in self.memory['active_pos'] or len(self.memory['active_pos']) >= MAX_SLOTS:
                     continue
 
                 try:
+                    if not cur_p: continue
+
                     # Запрос свечей для расчета Боллинджера
                     ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
+#=====
                     df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
 
                     cur_p = self.memory['prices'].get(sym)
@@ -220,34 +260,45 @@ class TitanGhost:
                     # Финальные триггеры жесткой свечной синхронности
                     is_long = hit_up and (cur_p > open_now) and vol_ok and speed_ok and shadow_long_ok and body_long_ok
                     is_short = hit_dn and (cur_p < open_now) and vol_ok and speed_ok and shadow_short_ok and body_short_ok
+
                     # --- [ПРОЗРАЧНЫЙ ДЕБАГ РАДАР V23.1.1] ---
-#                    near_up = cur_p >= (strike_up * 0.985)
-#                    near_dn = cur_p <= (strike_dn * 1.015)
+                    #near_up = cur_p >= (strike_up * 0.985)
+                    #near_dn = cur_p <= (strike_dn * 1.015)
 
                     # --- [ТОТАЛЬНЫЙ ДЕБАГ ВЕРИФИКАЦИИ V23.1.4] ---
-                    # Радар всегда True, чтобы вытащить данные из скрытой зоны
-                    near_up = True
-                    near_dn = True
+                    # --- [ТОТАЛЬНЫЙ ДЕБАГ ВЕРИФИКАЦИИ V23.1.7] ---
+#                    near_up = True
+#                    near_dn = True
 
-                    if (near_up or near_dn) and not (is_long or is_short):
-                        if time.time() - last_debug_t > 15: # Опрос каждые 15 секунд
-                            dist_up = (cur_p / strike_up - 1) * 100
-                            dist_dn = (1 - cur_p / strike_dn) * 100
+                    #if (near_up or near_dn) and not (is_long or is_short):
+                        # Инициализируем персональный таймер монеты, если его нет в памяти
+                    #    if 'last_debug' not in self.memory: self.memory['last_debug'] = {}
+                    #    if sym not in self.memory['last_debug']: self.memory['last_debug'][sym] = 0
 
-                            # Безопасный расчет процентов фитилей (Защита от ZeroDivisionError)
-                            pct_up_shadow = round(up_shadow / candle_range * 100, 1) if candle_range > 0 else 0.0
-                            pct_dn_shadow = round(dn_shadow / candle_range * 100, 1) if candle_range > 0 else 0.0
+                        # Проверяем индивидуальные 15 секунд для конкретного актива
+                    #    if time.time() - self.memory['last_debug'][sym] > 15:
 
-                            reason = f"| Тиков: {len(vol_history)} | Цена: {cur_p} | "
-                            if cur_p >= strike_up and cur_p <= open_now: reason += "[Цвет не LONG ❌] "
-                            if cur_p <= strike_dn and cur_p >= open_now: reason += "[Цвет не SHORT ❌] "
-                            if not vol_ok: reason += f"[Объем {round(vol_ratio,1)}x < {dna['vol']}x ❌] "
-                            if not speed_ok: reason += f"[Скорость {round(price_change_pct*100,3)}% < Мин ❌] "
-                            if cur_p >= strike_up and not shadow_long_ok: reason += f"[Фитиль сверху {pct_up_shadow}% > 30% ❌] "
-                            if cur_p <= strike_dn and not shadow_short_ok: reason += f"[Фитиль снизу {pct_dn_shadow}% > 30% ❌] "
+                            # 1. Расчет расстояний до страйков
+                    #        dist_up = (cur_p / strike_up - 1) * 100
+                    #        dist_dn = (1 - cur_p / strike_dn) * 100
 
-                            self.log(f"📡 РАДАР {sym}: (Up: {round(dist_up,2)}%, Dn: {round(dist_dn,2)}%) {reason}")
-                            last_debug_t = time.time()
+                            # 2. Безопасный расчет процентов фитилей (Защита от ZeroDivisionError)
+                    #        pct_up_shadow = round(up_shadow / candle_range * 100, 1) if candle_range > 0 else 0.0
+                    #        pct_dn_shadow = round(dn_shadow / candle_range * 100, 1) if candle_range > 0 else 0.0
+
+                            # 3. Формирование строки отчета
+                    #        reason = f"| Тиков: {len(vol_history)} | Цена: {cur_p} | "
+                    #        if cur_p >= strike_up and cur_p <= open_now: reason += "[Цвет не LONG ❌] "
+                    #        if cur_p <= strike_dn and cur_p >= open_now: reason += "[Цвет не SHORT ❌] "
+                    #        if not vol_ok: reason += f"[Объем {round(vol_ratio,1)}x < {dna['vol']}x ❌] "
+                    #        if not speed_ok: reason += f"[Скорость {round(price_change_pct*100,3)}% < Мин ❌] "
+                    #        if cur_p >= strike_up and not shadow_long_ok: reason += f"[Фитиль сверху {pct_up_shadow}% > 30% ❌] "
+                    #        if cur_p <= strike_dn and not shadow_short_ok: reason += f"[Фитиль снизу {pct_dn_shadow}% > 30% ❌] "
+
+                            # 4. Печать лога и фиксация времени строго для этой монеты
+                    #        self.log(f"📡 РАДАР {sym}: (Up: {round(dist_up,2)}%, Dn: {round(dist_dn,2)}%) {reason}")
+                    #        self.memory['last_debug'][sym] = time.time()
+                    # --- КОНЕЦ ДЕБАГА ---
 
                     # 5. ИСПОЛНЕНИЕ: Стреляем лимиткой строго при выполнении ВСЕХ условий
                     if is_long:
@@ -384,9 +435,9 @@ class TitanGhost:
     async def main(self):
         """Жесткая монолитная инициализация всех квантовых потоков BingX V23.1.5"""
         await self.init_exchange()
-        
+
         self.log("🔗 Запуск параллельных квантовых модулей ядра...")
-        
+
         # БРОНИРОВАННЫЙ ФИКС: Запускаем все процессы параллельно через gather.
         # Теперь потоки цен и контекста будут выполняться одновременно с охотой!
         try:
@@ -398,6 +449,5 @@ class TitanGhost:
             )
         except Exception as e:
             self.log(f"❌ КРИТИЧЕСКИЙ СБОЙ ЯДРА GHOST: {e}")
-
 if __name__ == "__main__":
     asyncio.run(TitanGhost().main())
