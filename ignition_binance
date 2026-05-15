@@ -1,6 +1,19 @@
-RISK_GEAR = 0.12    # Доля депо на одну сделку
-MAX_SLOTS = 4       # Максимум 4 параллельных сделки
+import os
+import json
+import time
+import asyncio
+import ccxt
+import pandas as pd
+import numpy as np
+
+# --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
+RISK_GEAR = 0.12     # Доля депо на одну сделку (12%)
+MAX_SLOTS = 4        # Максимум 4 параллельных сделки
 LOG_FILE = "ignition_heavy_log.txt"
+
+# Поля API Binance (Пропиши свои ключи или оставь чтение из окружения)
+API_KEY = os.getenv('BINANCE_API_KEY', 'твои_ключи')
+API_SECRET = os.getenv('BINANCE_API_SECRET', 'твои_ключи')
 
 class GlobalMemory:
     def __init__(self):
@@ -10,193 +23,269 @@ class GlobalMemory:
         self.is_running = True
         self.slots_occupied = 0
         self.available = 0.0
-        self.tp_fixed = {}
         self.start_balance = 0.0
-        self.be_fixed = {} # Отслеживание активации Храповика
+        
+        # Фиксы памяти для трейлинга, стопов и БУ
+        self.be_fixed = {}     # Флаги активации Храповика (БУ)
+        self.stop_placed = {}   # ID или цены реальных стопов на бирже
+        self.tp_fixed = {}      # Флаги фиксации Тейка-1
 
 memory = GlobalMemory()
 
 def log(msg):
     t = time.strftime('%Y-%m-%d %H:%M:%S')
-    formatted = f"[{t}] {msg}"
+    formatted = f"[{t}] 🚀 {msg}"
     print(formatted)
     try:
         with open(LOG_FILE, "a", encoding="utf-8") as f:
             f.write(formatted + "\n")
-    except: pass
+    except: 
+        pass
 
 async def update_balance(exchange):
+    """Фоновое высокочастотное обновление кошелька на рынке SWAP"""
     while memory.is_running:
         try:
             bal = await exchange.fetch_balance({'type': 'swap'})
             memory.available = float(bal['USDT']['free'])
-            if memory.start_balance == 0: memory.start_balance = memory.available
-            await asyncio.sleep(20)
+            if memory.start_balance == 0: 
+                memory.start_balance = memory.available
+            await asyncio.sleep(15) # Опрос раз в 15 секунд
         except Exception as e:
-            log(f"⚠️ Balance Error: {e}")
+            log(f"⚠ Balance Error: {e}")
             await asyncio.sleep(5)
 
 async def check_signal(exchange, symbol):
+    """Сканирование волатильности и структуры свечи на чистом NumPy"""
     try:
         dna = memory.all_dna.get(symbol)
         cur_p = memory.prices.get(symbol)
         if not dna or not cur_p: return None
 
-        # Загружаем 50 свечей для расчета BB(20)
-        ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=50)
+        # Загружаем свечи для расчета Боллинджера
+        ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
+        if len(ohlcv) < 21: return None
+        
         df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+        
+        # МАТЕМАТИЧЕСКИЙ ФИКС: Расчет Bollinger Bands (20, 2.1) без pandas_ta
+        close_prices = df['c'].to_numpy()
+        ma = df['c'].rolling(20).mean().to_numpy()
+        std = df['c'].rolling(20).std().to_numpy()
+        
+        p_up = ma[-2] + (2.1 * std[-2])
+        p_dn = ma[-2] - (2.1 * std[-2])
+        ma_prev = ma[-2]
+        
+        if std[-2] == 0 or ma_prev == 0: return None
+        
+        # Расчет ширины канала (Width Percent)
+        curr_w = (p_up - p_dn) / ma_prev * 100
+        
+        p_up_prev = ma[-3] + (2.1 * std[-3])
+        p_dn_prev = ma[-3] - (2.1 * std[-3])
+        prev_w = (p_up_prev - p_dn_prev) / ma[-3] * 100
 
-        # Расчет Боллинджера (используем pandas_ta)
-        bb = df.ta.bbands(length=20, std=2.1)
-        if bb is None: return None
-
-        # Текущая и предыдущая ширина
-        curr_w = (bb['BBU_20_2.1'].iloc[-1] - bb['BBL_20_2.1'].iloc[-1]) / bb['BBM_20_2.1'].iloc[-1] * 100
-        prev_w = (bb['BBU_20_2.1'].iloc[-2] - bb['BBL_20_2.1'].iloc[-2]) / bb['BBM_20_2.1'].iloc[-2] * 100
-
-        # 1. ТРИГГЕР ВЗРЫВА (w_grow)
+        # 1. ТРИГГЕР ВЗРЫВА ПОЛОС (Взрыв пружины)
         w_growth = curr_w / prev_w
         if w_growth < dna['w_grow']: return None
 
-        # 2. ТРИГГЕР СКОРОСТИ (Скорость внутри свечи)
+        # 2. ТРИГГЕР СКОРОСТИ ВНУТРИ ЖИВОЙ СВЕЧИ
         open_p = df['o'].iloc[-1]
         change = abs(cur_p / open_p - 1)
-
+        
         gear = 'g2' if change >= dna['g2']['speed'] else ('g1' if change >= dna['g1']['speed'] else None)
         if not gear: return None
 
-        # 3. ФИЛЬТР ОБЪЕМА
+        # 3. ФИЛЬТР ОБЪЕМА (Сверка со средним)
         if df['v'].iloc[-1] < df['v'].mean() * dna[gear]['vol']: return None
 
         return {
             'symbol': symbol,
             'side': 'buy' if cur_p > open_p else 'sell',
-            'gear': gear, 'price': cur_p, 'dna': dna, 'gear_data': dna[gear]
+            'gear': gear, 
+            'price': cur_p, 
+            'dna': dna, 
+            'gear_data': dna[gear]
         }
-    except: return None
+    except: 
+        return None
 
 async def execute_entry(exchange, sig):
+    """Импульсный захват позиции по рынку на фьючерсах Binance"""
     symbol = sig['symbol']
     if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos: return
 
     try:
-        # Установка плеча
+        # Установка плеча через API
         try: await exchange.set_leverage(sig['dna']['lev'], symbol)
         except: pass
 
-        # Расчет объема (с учетом RISK_GEAR)
+        # Расчет объема строго по RISK_GEAR
         amount_usdt = memory.available * RISK_GEAR * sig['dna']['lev']
         qty = float(exchange.amount_to_precision(symbol, amount_usdt / sig['price']))
         if qty <= 0: return
 
-        # Вход по Рынку (Импульсный захват)
+        # Маркет-вход (Taker ордер)
         order = await exchange.create_market_order(symbol, sig['side'], qty)
         if order:
-            log(f"🚀 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty}")
+            log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty}")
+            
             memory.active_pos[symbol] = {
                 'side': sig['side'], 'vol': qty, 'price': sig['price'],
                 'gear': sig['gear'], 'gear_data': sig['gear_data'], 'dna': sig['dna'],
                 'entry_time': time.time()
             }
             memory.tp_fixed[symbol] = False
+            memory.be_fixed[symbol] = False
+            memory.stop_placed[symbol] = None
             memory.slots_occupied += 1
     except Exception as e:
-        log(f"⚠️ Entry Error {symbol}: {e}")
+        log(f"⚠ Entry Error {symbol}: {e}")
 
 async def monitor_logic(exchange):
+    """Асинхронный бронированный контроль выходов и реальных стопов на сервере"""
     while memory.is_running:
         for symbol, pos in list(memory.active_pos.items()):
             try:
                 cur_p = memory.prices.get(symbol)
                 if not cur_p: continue
 
-                # Расчет PNL сделки
+                # Расчет чистого PNL
                 pnl = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
                 gd = pos['gear_data']
                 age = time.time() - pos['entry_time']
+                exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
 
-                # 0. ХРАПОВИК (Ratchet) - Перенос в БУ до Тейка
+                # --- [СТРАХОВКА: СЕРВЕРНЫЙ СТОП-МАРКЕТ ОРДЕР] ---
+                if not memory.stop_placed.get(symbol):
+                    try:
+                        sl_price = pos['price'] * (1 - abs(pos['dna']['sl'])) if pos['side'] == 'buy' else pos['price'] * (1 + abs(pos['dna']['sl']))
+                        sl_price = float(exchange.price_to_precision(symbol, sl_price))
+                        
+                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
+                        await exchange.create_order(symbol, 'STOP_MARKET', exit_side, pos['vol'], params={
+                            'stopPrice': sl_price, 'reduceOnly': True
+                        })
+                        memory.stop_placed[symbol] = sl_price
+                        log(f"🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: {symbol} @ {sl_price}")
+                    except Exception as e:
+                        log(f"🆘 Ошибка автостопа {symbol}: {e}")
+
+                # 0. ХРАПОВИК (Перевод в реальный Безубыток на сервере)
                 if not memory.be_fixed.get(symbol, False) and pnl >= gd['step_p']:
-                    memory.be_fixed[symbol] = True
-                    log(f"⚙️ ХРАПОВИК: {symbol} поднял защиту в +{round(gd['step_be']*100,2)}%")
-                    # (Здесь мы просто фиксируем в памяти, что стоп теперь в BE)
-                    # Физически стоп сработает в блоке STOP LOSS ниже
+                    try:
+                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
+                        bu_price = float(exchange.price_to_precision(symbol, pos['price']))
+                        
+                        await exchange.create_order(symbol, 'STOP_MARKET', exit_side, pos['vol'], params={
+                            'stopPrice': bu_price, 'reduceOnly': True
+                        })
+                        memory.be_fixed[symbol] = True
+                        memory.stop_placed[symbol] = bu_price
+                        log(f"⚙️ ХРАПОВИК: {symbol} перенесен в БУ по цене входа {bu_price}")
+                    except Exception as e:
+                        log(f"⚠ Ошибка Храповика {symbol}: {e}")
 
-                # 1. ТЕЙК 1 (50%) + ПЕРЕВОД В БУ
+                # 1. ТЕЙК 1 (Фиксация 50%)
                 if not memory.tp_fixed[symbol] and pnl >= gd['tp1']:
-                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                    close_qty = float(exchange.amount_to_precision(symbol, pos['vol'] * 0.5))
-                    await exchange.create_market_order(symbol, side_exit, close_qty, {'reduceOnly': True})
-                    memory.tp_fixed[symbol] = True
-                    pos['vol'] -= close_qty
-                    log(f"🎯 ТЕЙК-1: {symbol} зафиксирован (+{round(gd['tp1']*100,2)}%)")
+                    try:
+                        close_qty = exchange.amount_to_precision(symbol, pos['vol'] * 0.5)
+                        await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
+                        
+                        memory.tp_fixed[symbol] = True
+                        pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - float(close_qty)))
+                        log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксирован (+{round(gd['tp1']*100,2)}%)")
+                        
+                        # Обновляем стоп-лосс на остаток позиции на уровне БУ
+                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
+                        bu_price = float(exchange.price_to_precision(symbol, pos['price']))
+                        await exchange.create_order(symbol, 'STOP_MARKET', exit_side, pos['vol'], params={
+                            'stopPrice': bu_price, 'reduceOnly': True
+                        })
+                        memory.stop_placed[symbol] = bu_price
+                    except Exception as e:
+                        log(f"⚠ Ошибка TP1 {symbol}: {e}")
 
-                # 2. ТЕЙК 2 (ФИНАЛ)
+                # 2. ТЕЙК 2 (Финальный выход)
                 if pnl >= gd['tp2']:
-                    log(f"🏆 ТЕЙК-2: {symbol} зафиксирован (+{round(gd['tp2']*100,2)}%)")
-                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                    await exchange.create_market_order(symbol, side_exit, pos['vol'], {'reduceOnly': True})
+                    log(f"🏆 ТЕЙК-2 ФИНАЛ: {symbol} зафиксирован (+{round(gd['tp2']*100,2)}%)")
+                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
+                    await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
+                    
                     del memory.active_pos[symbol]
-                    if symbol in memory.be_fixed: del memory.be_fixed[symbol] #
+                    if symbol in memory.be_fixed: del memory.be_fixed[symbol]
+                    if symbol in memory.stop_placed: del memory.stop_placed[symbol]
                     memory.slots_occupied -= 1
                     continue
 
-                # 3. ФИЛЬТР ЗАТУХАНИЯ (Time-Decay)
+                # 3. ФИЛЬТР ЗАТУХАНИЯ ИМПУЛЬСА (Time-Decay)
                 if age > gd['time'] and pnl < gd['tp1']:
                     log(f"⏱️ ЗАТУХАНИЕ: {symbol} закрыт по таймеру (PNL: {round(pnl*100,2)}%)")
-                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                    await exchange.create_market_order(symbol, side_exit, pos['vol'], {'reduceOnly': True})
+                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
+                    await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
+                    
                     del memory.active_pos[symbol]
-                    if symbol in memory.be_fixed: del memory.be_fixed[symbol] #
+                    if symbol in memory.be_fixed: del memory.be_fixed[symbol]
+                    if symbol in memory.stop_placed: del memory.stop_placed[symbol]
                     memory.slots_occupied -= 1
                     continue
 
-                # 4. СТОП-ЛОСС / ХРАПОВИК
-                current_sl = gd['step_be'] if memory.be_fixed.get(symbol, False) else pos['dna']['sl']
-                if pnl <= current_sl:
-                #if pnl <= pos['dna']['sl']:
-                    log(f"🚨 СТОП: {symbol} сработал на {cur_p} (PNL: {round(pnl*100,2)}%)")
-                    side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                    await exchange.create_market_order(symbol, side_exit, pos['vol'], {'reduceOnly': True})
-                    del memory.active_pos[symbol]
-                    if symbol in memory.be_fixed: del memory.be_fixed[symbol] #
-                    memory.slots_occupied -= 1
+                # 4. ЛОКАЛЬНАЯ СИНХРОНИЗАЦИЯ СМЕРТИ ПОЗИЦИИ (Если выбило по БУ извне)
+                # Если позиция исчезла на бирже, чистим память, чтобы освободить слот
+                if int(time.time()) % 15 == 0:
+                    try:
+                        positions = await exchange.fetch_positions()
+                        live_symbols = [p['symbol'] for p in positions if abs(float(p.get('contracts', 0))) > 0.00001]
+                        if symbol not in live_symbols:
+                            log(f"🧹 ВЕНИК: Позиция {symbol} закрыта извне (Стоп/БУ). Очистка памяти.")
+                            del memory.active_pos[symbol]
+                            if symbol in memory.be_fixed: del memory.be_fixed[symbol]
+                            if symbol in memory.stop_placed: del memory.stop_placed[symbol]
+                            memory.slots_occupied -= 1
+                    except: pass
 
-            except Exception as e: pass
-        await asyncio.sleep(1)
+            except Exception as e: 
+                pass
+        await asyncio.sleep(0.5)
 
 async def main():
+    # ФЬЮЧЕРСНЫЙ ДВИЖОК BINANCE (USDT-M)
     exchange = ccxt.binance({
         'apiKey': API_KEY, 'secret': API_SECRET,
         'options': {'defaultType': 'future'}, 'enableRateLimit': True
     })
 
-    # Загружаем DNA
+    # Загружаем геномы DNA
     with open('dna_ignition.json', 'r') as f:
         memory.all_dna = json.load(f)
-    log(f"✅ TITAN V21.5 ONLINE. Охота на {len(memory.all_dna)} секторов.")
+        
+    log(f"✅ TITAN IGNITION V21.6 ONLINE. Охота на {len(memory.all_dna)} секторов.")
 
-    # Задача потока цен
+    # СТАБИЛЬНЫЙ REST-ПОТОК ЦЕН (Взамен ломающегося WebSocket)
     async def price_stream():
         symbols = list(memory.all_dna.keys())
-        async def track(s):
-            while memory.is_running:
-                try:
-                    t = await exchange.watch_ticker(s)
-                    memory.prices[s] = float(t['last'])
-                except: await asyncio.sleep(1)
-        await asyncio.gather(*[track(s) for s in symbols])
+        while memory.is_running:
+            try:
+                tickers = await exchange.fetch_tickers(symbols)
+                for s in symbols:
+                    if s in tickers and tickers[s].get('last'):
+                        memory.prices[s] = float(tickers[s]['last'])
+                await asyncio.sleep(1) # Частота REST-опроса цен 1 раз в секунду
+            except:
+                await asyncio.sleep(5)
 
-    # Задача поиска сигналов
+    # ГЛАВНЫЙ ЦИКЛ ОХОТЫ
     async def hunter_loop():
-        await asyncio.sleep(10) # Прогрев цен
+        await asyncio.sleep(5) # Быстрый прогрев
         while memory.is_running:
             for s in memory.all_dna.keys():
                 sig = await check_signal(exchange, s)
-                if sig: await execute_entry(exchange, sig)
+                if sig: 
+                    await execute_entry(exchange, sig)
             await asyncio.sleep(0.4)
 
-    # Запуск всех систем
+    # Параллельный запуск всех квантовых модулей
     await asyncio.gather(
         update_balance(exchange),
         price_stream(),
