@@ -1,19 +1,3 @@
-import os
-import json
-import time
-import asyncio
-import ccxt
-import pandas as pd
-import numpy as np
-
-# --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
-RISK_GEAR = 0.12     # Доля депо на одну сделку (12%)
-MAX_SLOTS = 4        # Максимум 4 параллельных сделки
-LOG_FILE = "ignition_heavy_log.txt"
-
-# Поля API Binance (Пропиши свои ключи или оставь чтение из окружения)
-API_KEY = os.getenv('BINANCE_API_KEY', 'твои_ключи')
-API_SECRET = os.getenv('BINANCE_API_SECRET', 'твои_ключи')
 
 class GlobalMemory:
     def __init__(self):
@@ -24,7 +8,7 @@ class GlobalMemory:
         self.slots_occupied = 0
         self.available = 0.0
         self.start_balance = 0.0
-        
+
         # Фиксы памяти для трейлинга, стопов и БУ
         self.be_fixed = {}     # Флаги активации Храповика (БУ)
         self.stop_placed = {}   # ID или цены реальных стопов на бирже
@@ -39,18 +23,29 @@ def log(msg):
     try:
         with open(LOG_FILE, "a", encoding="utf-8") as f:
             f.write(formatted + "\n")
-    except: 
+    except:
         pass
 
 async def update_balance(exchange):
-    """Фоновое высокочастотное обновление кошелька на рынке SWAP"""
+    """Фоновое высокочастотное обновление фьючерсного кошелька Binance [ИСПРАВЛЕНО]"""
     while memory.is_running:
         try:
-            bal = await exchange.fetch_balance({'type': 'swap'})
-            memory.available = float(bal['USDT']['free'])
-            if memory.start_balance == 0: 
+            # ФИКС: Убрали внутренний словарь, возвращаем метод в асинхронный режим
+            bal = await exchange.fetch_balance()
+
+            # Безопасное извлечение свободных USDT из фьючерсной структуры
+            if 'USDT' in bal and 'free' in bal['USDT']:
+                memory.available = float(bal['USDT']['free'])
+            elif 'free' in bal and 'USDT' in bal['free']:
+                memory.available = float(bal['free']['USDT'])
+            else:
+                memory.available = float(bal.get('total', {}).get('USDT', 0))
+
+            if memory.start_balance == 0:
                 memory.start_balance = memory.available
-            await asyncio.sleep(15) # Опрос раз в 15 секунд
+                log(f"💰 Стартовый баланс зафиксирован: ${round(memory.start_balance, 2)}")
+
+            await asyncio.sleep(15)
         except Exception as e:
             log(f"⚠ Balance Error: {e}")
             await asyncio.sleep(5)
@@ -65,23 +60,23 @@ async def check_signal(exchange, symbol):
         # Загружаем свечи для расчета Боллинджера
         ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
         if len(ohlcv) < 21: return None
-        
+
         df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
-        
+
         # МАТЕМАТИЧЕСКИЙ ФИКС: Расчет Bollinger Bands (20, 2.1) без pandas_ta
         close_prices = df['c'].to_numpy()
         ma = df['c'].rolling(20).mean().to_numpy()
         std = df['c'].rolling(20).std().to_numpy()
-        
+
         p_up = ma[-2] + (2.1 * std[-2])
         p_dn = ma[-2] - (2.1 * std[-2])
         ma_prev = ma[-2]
-        
+
         if std[-2] == 0 or ma_prev == 0: return None
-        
+
         # Расчет ширины канала (Width Percent)
         curr_w = (p_up - p_dn) / ma_prev * 100
-        
+
         p_up_prev = ma[-3] + (2.1 * std[-3])
         p_dn_prev = ma[-3] - (2.1 * std[-3])
         prev_w = (p_up_prev - p_dn_prev) / ma[-3] * 100
@@ -93,7 +88,7 @@ async def check_signal(exchange, symbol):
         # 2. ТРИГГЕР СКОРОСТИ ВНУТРИ ЖИВОЙ СВЕЧИ
         open_p = df['o'].iloc[-1]
         change = abs(cur_p / open_p - 1)
-        
+
         gear = 'g2' if change >= dna['g2']['speed'] else ('g1' if change >= dna['g1']['speed'] else None)
         if not gear: return None
 
@@ -103,12 +98,12 @@ async def check_signal(exchange, symbol):
         return {
             'symbol': symbol,
             'side': 'buy' if cur_p > open_p else 'sell',
-            'gear': gear, 
-            'price': cur_p, 
-            'dna': dna, 
+            'gear': gear,
+            'price': cur_p,
+            'dna': dna,
             'gear_data': dna[gear]
         }
-    except: 
+    except:
         return None
 
 async def execute_entry(exchange, sig):
@@ -130,7 +125,7 @@ async def execute_entry(exchange, sig):
         order = await exchange.create_market_order(symbol, sig['side'], qty)
         if order:
             log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty}")
-            
+
             memory.active_pos[symbol] = {
                 'side': sig['side'], 'vol': qty, 'price': sig['price'],
                 'gear': sig['gear'], 'gear_data': sig['gear_data'], 'dna': sig['dna'],
@@ -162,13 +157,13 @@ async def monitor_logic(exchange):
                     try:
                         sl_price = pos['price'] * (1 - abs(pos['dna']['sl'])) if pos['side'] == 'buy' else pos['price'] * (1 + abs(pos['dna']['sl']))
                         sl_price = float(exchange.price_to_precision(symbol, sl_price))
-                        
+
                         await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
                         await exchange.create_order(symbol, 'STOP_MARKET', exit_side, pos['vol'], params={
                             'stopPrice': sl_price, 'reduceOnly': True
                         })
                         memory.stop_placed[symbol] = sl_price
-                        log(f"🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: {symbol} @ {sl_price}")
+                        log(f"🛡️  ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: {symbol} @ {sl_price}")
                     except Exception as e:
                         log(f"🆘 Ошибка автостопа {symbol}: {e}")
 
@@ -177,7 +172,7 @@ async def monitor_logic(exchange):
                     try:
                         await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
                         bu_price = float(exchange.price_to_precision(symbol, pos['price']))
-                        
+
                         await exchange.create_order(symbol, 'STOP_MARKET', exit_side, pos['vol'], params={
                             'stopPrice': bu_price, 'reduceOnly': True
                         })
@@ -192,11 +187,11 @@ async def monitor_logic(exchange):
                     try:
                         close_qty = exchange.amount_to_precision(symbol, pos['vol'] * 0.5)
                         await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
-                        
+
                         memory.tp_fixed[symbol] = True
                         pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - float(close_qty)))
                         log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксирован (+{round(gd['tp1']*100,2)}%)")
-                        
+
                         # Обновляем стоп-лосс на остаток позиции на уровне БУ
                         await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
                         bu_price = float(exchange.price_to_precision(symbol, pos['price']))
@@ -212,7 +207,7 @@ async def monitor_logic(exchange):
                     log(f"🏆 ТЕЙК-2 ФИНАЛ: {symbol} зафиксирован (+{round(gd['tp2']*100,2)}%)")
                     await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
                     await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
-                    
+
                     del memory.active_pos[symbol]
                     if symbol in memory.be_fixed: del memory.be_fixed[symbol]
                     if symbol in memory.stop_placed: del memory.stop_placed[symbol]
@@ -224,7 +219,7 @@ async def monitor_logic(exchange):
                     log(f"⏱️ ЗАТУХАНИЕ: {symbol} закрыт по таймеру (PNL: {round(pnl*100,2)}%)")
                     await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
                     await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
-                    
+
                     del memory.active_pos[symbol]
                     if symbol in memory.be_fixed: del memory.be_fixed[symbol]
                     if symbol in memory.stop_placed: del memory.stop_placed[symbol]
@@ -238,31 +233,33 @@ async def monitor_logic(exchange):
                         positions = await exchange.fetch_positions()
                         live_symbols = [p['symbol'] for p in positions if abs(float(p.get('contracts', 0))) > 0.00001]
                         if symbol not in live_symbols:
-                            log(f"🧹 ВЕНИК: Позиция {symbol} закрыта извне (Стоп/БУ). Очистка памяти.")
+                            log(f"🧹 ВЕНИК: Позиция {symbol} закрыта извне (Стоп/БУ). Очистка памяти .")
                             del memory.active_pos[symbol]
                             if symbol in memory.be_fixed: del memory.be_fixed[symbol]
                             if symbol in memory.stop_placed: del memory.stop_placed[symbol]
                             memory.slots_occupied -= 1
                     except: pass
 
-            except Exception as e: 
+            except Exception as e:
                 pass
         await asyncio.sleep(0.5)
 
 async def main():
-    # ФЬЮЧЕРСНЫЙ ДВИЖОК BINANCE (USDT-M)
+    # ФЬЮЧЕРСНЫЙ АСИНХРОННЫЙ ДВИЖОК BINANCE (Современный стандарт CCXT 4.x+)
     exchange = ccxt.binance({
-        'apiKey': API_KEY, 'secret': API_SECRET,
-        'options': {'defaultType': 'future'}, 'enableRateLimit': True
+        'apiKey': API_KEY,
+        'secret': API_SECRET,
+        'options': {'defaultType': 'future'},
+        'enableRateLimit': True
     })
 
     # Загружаем геномы DNA
     with open('dna_ignition.json', 'r') as f:
         memory.all_dna = json.load(f)
-        
-    log(f"✅ TITAN IGNITION V21.6 ONLINE. Охота на {len(memory.all_dna)} секторов.")
 
-    # СТАБИЛЬНЫЙ REST-ПОТОК ЦЕН (Взамен ломающегося WebSocket)
+    log(f"✅ TITAN IGNITION V21.6.2 ONLINE. Охота на {len(memory.all_dna)} секторов.")
+
+    # СТАБИЛЬНЫЙ REST-ПОТОК ЦЕН
     async def price_stream():
         symbols = list(memory.all_dna.keys())
         while memory.is_running:
@@ -281,17 +278,21 @@ async def main():
         while memory.is_running:
             for s in memory.all_dna.keys():
                 sig = await check_signal(exchange, s)
-                if sig: 
+                if sig:
                     await execute_entry(exchange, sig)
             await asyncio.sleep(0.4)
 
-    # Параллельный запуск всех квантовых модулей
-    await asyncio.gather(
-        update_balance(exchange),
-        price_stream(),
-        hunter_loop(),
-        monitor_logic(exchange)
-    )
+    # Параллельный асинхронный запуск всех квантовых модулей
+    try:
+        await asyncio.gather(
+            update_balance(exchange),
+            price_stream(),
+            hunter_loop(),
+            monitor_logic(exchange)
+        )
+    finally:
+        # Корректно закрываем сессию при остановке бота
+        await exchange.close()
 
 if __name__ == "__main__":
     asyncio.run(main())
