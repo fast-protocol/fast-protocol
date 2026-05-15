@@ -325,20 +325,16 @@ async def check_signal(exchange, symbol):
         lower = ma - (std * ma_mult)
         width = (upper - lower) / ma * 100
 
-        # 3. Фильтры безопасности (Анти-Шторм + Анти-Шип)
+        # 3. Фильтры безопасности (Анти-Шторм + Anti-Wick)
         if not (dna.get('min_w', 0.8) <= width <= dna.get('width', 2.0)): return None
-
         candle_size = (df['h'].iloc[-1] / df['l'].iloc[-1] - 1)
         if candle_size > 0.008: return None
 
         # 4. Параметры предыдущей свечи (Engulfing)
         prev_open = df['o'].iloc[-1]
         prev_close = df['c'].iloc[-1]
-        is_prev_red = prev_close < prev_open
-        is_prev_green = prev_close > prev_open
 
         # --- БЛОК V20.0: ФАКТОР ФИТИЛЯ ---
-        # Считаем длину всей свечи и длину фитиля
         candle_range = df['h'].iloc[-1] - df['l'].iloc[-1]
         if candle_range == 0: return None # Защита от нулевых свечей
 
@@ -349,44 +345,58 @@ async def check_signal(exchange, symbol):
         # Для ШОРТА: верхняя тень (от максимума до тела)
         upper_wick = df['h'].iloc[-1] - max(df['o'].iloc[-1], df['c'].iloc[-1])
         wick_ratio_short = upper_wick / candle_range
-        # --------------------------------
 
         # РАСЧЕТ ТРИГГЕРОВ ИЗ ДНК МАТРИЦЫ
         long_trigger = lower * (1 - dna['l_off'])
         short_trigger = upper * (1 + dna['s_off'])
-        # 5. Логика входа (Оффсет + Поглощение)
-        # ЛОНГ: Цена выше триггера + Поглощение + Фитиль > 35%
-        is_buy = (cur_p >= long_trigger) and (cur_p > prev_open) and (wick_ratio_long > 0.35)
 
-        # ШОРТ: Цена ниже триггера + Поглощение + Фитиль > 35%
+        # 5. Первичная логика входа (Оффсет + Поглощение + Фитиль)
+        is_buy = (cur_p >= long_trigger) and (cur_p > prev_open) and (wick_ratio_long > 0.35)
         is_sell = (cur_p <= short_trigger) and (cur_p < prev_open) and (wick_ratio_short > 0.35)
 
+        if not (is_buy or is_sell): return None
 
+        # --- [ТРАНСПЛАНТАЦИЯ ГЕОМЕТРИИ СВЕЧИ V26.0] ---
+        # Расчет полноты живой свечи, чтобы отсечь флэт-шум
+        high_now = max(df['h'].iloc[-1], cur_p)
+        low_now = min(df['l'].iloc[-1], cur_p)
+        live_candle_range = high_now - low_now if (high_now - low_now) > 0 else 0.000001
 
-        # ЛОНГ: зашел в зону l_off И текущая цена пробила вверх тело красной свечи
-        #is_buy = (cur_p <= lower * (1 - dna['l_off'])) and (cur_p > prev_open) and is_prev_red
+        up_shadow = high_now - cur_p
+        dn_shadow = cur_p - low_now
+        long_body = cur_p - prev_open
+        short_body = prev_open - cur_p
 
-        # ШОРТ: зашел в зону s_off И текущая цена пробила вниз тело зеленой свечи
-        #is_sell = (cur_p >= upper * (1 + dna['s_off'])) and (cur_p < prev_open) and is_prev_green
+        shadow_limit = 0.30  # Тень не более 30% от всей свечи
+        body_limit = 0.60    # Тело не менее 60% от всей свечи
 
-        if is_buy or is_sell:
-            # Funding Shield
-            try:
-                f_data = await exchange.fetch_funding_rate(symbol)
-                if abs(float(f_data.get('fundingRate', 0))) > FUNDING_SHIELD:
-                    log(f"🛡️ Funding Shield: {symbol} пропуск (Rate: {f_data.get('fundingRate')})")
-                    return None
-            except: pass # Обработка ошибок, чтобы бот не падал
+        if is_buy: # Геометрический фильтр для ЛОНГА
+            if (up_shadow / live_candle_range) > shadow_limit or (long_body / live_candle_range) < body_limit:
+                return None
+        elif is_sell: # Геометрический фильтр для ШОРТА
+            if (dn_shadow / live_candle_range) > shadow_limit or (short_body / live_candle_range) < body_limit:
+                return None
 
-            return {
-                'symbol': symbol,
-                'side': 'buy' if is_buy else 'sell',
-                'price': cur_p,
-                'dna': dna
-            }
-    except: pass
+        # 6. Funding Shield (Если прошли геометрию)
+        try:
+            f_data = await exchange.fetch_funding_rate(symbol)
+            if abs(float(f_data.get('fundingRate', 0))) > FUNDING_SHIELD:
+                log(f"🛡 Funding Shield: {symbol} пропуск (Rate: {f_data.get('fundingRate')})")
+                return None
+        except:
+            pass
+
+        return {
+            'symbol': symbol,
+            'side': 'buy' if is_buy else 'sell',
+            'price': cur_p,
+            'dna': dna
+        }
+
+    except Exception as e:
+        pass
     return None
-
+#============
 async def signal_hunter(exchange):
     """Главный цикл поиска входов (Multi-Slot Ready)"""
     log("🏹 Охотник за сигналами активирован.")
@@ -550,6 +560,9 @@ async def monitor_logic(exchange, symbol, pos):
 
         exit_side = 'SELL' if side in ['long', 'buy'] else 'BUY'
         bal_str = f"| Bal: ${round(memory.total_wallet, 2)}"
+
+        # --- ЖЕСТКИЙ ФИКС ОБЪЯВЛЕНИЯ ID РЫНКА ---
+        binance_market_id = symbol.replace('/', '').replace(':USDT', '')
 
         # 3. ВЫСТАВЛЕНИЕ РЕАЛЬНОГО СТОПА НА БИРЖУ СРАЗУ ПРИ ВХОДЕ
         if not memory.stop_placed.get(symbol):
