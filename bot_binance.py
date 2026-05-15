@@ -565,6 +565,14 @@ async def monitor_logic(exchange, symbol, pos):
 
         # 4. TP1 С ИСПРАВЛЕННЫМ СТРОКОВЫМ ОБЪЕМОМ И ПЕРЕВОДОМ В РЕАЛЬНЫЙ БУ
         if not memory.tp_fixed[symbol]['tp1'] and profit >= dna['tp1']:
+            close_qty_raw = vol * 0.5
+            # ФИКС: Заменили price на cur_p для защиты от NameError
+            if (close_qty_raw * cur_p) < 5.2:
+                log(f"⚠ ОБЪЕМ МАЛ ДЛЯ ДРОБЛЕНИЯ {symbol}: Закрываем 100% по рынку для защиты кошелька.")
+                await exchange.cancel_all_orders(binance_market_id)
+                await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+                clean_memory_keys(symbol)
+                return
             try:
                 close_qty = exchange.amount_to_precision(symbol, vol * 0.5)
                 await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
@@ -593,15 +601,22 @@ async def monitor_logic(exchange, symbol, pos):
             except Exception as e: log(f"⚠️ Ошибка TP2 {symbol}: {e}")
 
         # 6. ВЕДЕНИЕ АДАПТИВНОГО ТРЕЙЛИНГА ПО ШАГАМ
+        # --- [ИСПРАВЛЕННЫЙ БЛОК ВЫХОДА ПО ТРЕЙЛИНГУ В MONITOR_LOGIC] ---
         if memory.trail_active[symbol]:
             trail_step = 0.0045 if current_mode == 'bull' else (0.0015 if current_mode == 'bear' else dna.get('trail', 0.0032))
             if profit > memory.max_pnl[symbol]: memory.max_pnl[symbol] = profit
 
             if profit <= (memory.max_pnl[symbol] - trail_step):
                 log(f"🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие {symbol} @ {round(profit*100,2)}% {bal_str}")
-                await exchange.cancel_all_orders(symbol, {'spot': False})
+
+                # Жесткий снос ордеров по market_id
+                await exchange.cancel_all_orders(binance_market_id)
+
+                # ФИКС: Берем чистый, накопленный в памяти объем vol для принудительного маркет-сноса позиции
                 await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+
                 clean_memory_keys(symbol)
+                return
 
     except Exception as e: pass
 
