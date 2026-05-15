@@ -1,0 +1,14 @@
+{
+  "SOL/USDT:USDT": {"ghost_p": 0.08, "lev": 20, "tp1": 0.0085, "sl": -0.006, "vol": 1.9, "trail": 0.0025, "cut_t": 240, "cut_p": 0.0020, "min_speed": 0.0012, "cooldown": 420, "max_shadow": 0.22, "min_body": 0.70},
+  "1000PEPE/USDT:USDT": {"ghost_p": 0.12, "lev": 20, "tp1": 0.0145, "sl": -0.009, "vol": 2.3, "trail": 0.0040, "cut_t": 120, "cut_p": 0.0025, "min_speed": 0.0025, "cooldown": 180, "max_shadow": 0.42, "min_body": 0.55},
+  "WIF/USDT:USDT": {"ghost_p": 0.10, "lev": 20, "tp1": 0.0130, "sl": -0.008, "vol": 2.2, "trail": 0.0035, "cut_t": 120, "cut_p": 0.0025, "min_speed": 0.0022, "cooldown": 180, "max_shadow": 0.40, "min_body": 0.58},
+  "BONK/USDT:USDT": {"ghost_p": 0.11, "lev": 20, "tp1": 0.0135, "sl": -0.009, "vol": 2.4, "trail": 0.0038, "cut_t": 120, "cut_p": 0.0025, "min_speed": 0.0024, "cooldown": 180, "max_shadow": 0.45, "min_body": 0.52},
+  "SUI/USDT:USDT": {"ghost_p": 0.09, "lev": 20, "tp1": 0.0110, "sl": -0.007, "vol": 2.0, "trail": 0.0030, "cut_t": 180, "cut_p": 0.0020, "min_speed": 0.0015, "cooldown": 300, "max_shadow": 0.25, "min_body": 0.65},
+  "TIA/USDT:USDT": {"ghost_p": 0.10, "lev": 20, "tp1": 0.0115, "sl": -0.008, "vol": 2.1, "trail": 0.0032, "cut_t": 300, "cut_p": 0.0020, "min_speed": 0.0018, "cooldown": 480, "max_shadow": 0.25, "min_body": 0.65},
+  "NEAR/USDT:USDT": {"ghost_p": 0.08, "lev": 20, "tp1": 0.0095, "sl": -0.007, "vol": 1.9, "trail": 0.0028, "cut_t": 240, "cut_p": 0.0018, "min_speed": 0.0014, "cooldown": 360, "max_shadow": 0.24, "min_body": 0.68},
+  "FET/USDT:USDT": {"ghost_p": 0.09, "lev": 20, "tp1": 0.0120, "sl": -0.008, "vol": 2.2, "trail": 0.0030, "cut_t": 240, "cut_p": 0.0020, "min_speed": 0.0016, "cooldown": 360, "max_shadow": 0.26, "min_body": 0.62},
+  "RENDER/USDT:USDT": {"ghost_p": 0.10, "lev": 20, "tp1": 0.0125, "sl": -0.009, "vol": 2.3, "trail": 0.0032, "cut_t": 180, "cut_p": 0.0022, "min_speed": 0.0020, "cooldown": 300, "max_shadow": 0.30, "min_body": 0.60},
+  "AVAX/USDT:USDT": {"ghost_p": 0.07, "lev": 20, "tp1": 0.0090, "sl": -0.006, "vol": 1.8, "trail": 0.0022, "cut_t": 300, "cut_p": 0.0015, "min_speed": 0.0012, "cooldown": 420, "max_shadow": 0.22, "min_body": 0.70},
+  "ONDO/USDT:USDT": {"ghost_p": 0.08, "lev": 20, "tp1": 0.0105, "sl": -0.007, "vol": 2.0, "trail": 0.0028, "cut_t": 240, "cut_p": 0.0018, "min_speed": 0.0015, "cooldown": 300, "max_shadow": 0.25, "min_body": 0.65},
+  "XRP/USDT:USDT": {"ghost_p": 0.06, "lev": 20, "tp1": 0.0075, "sl": -0.006, "vol": 1.7, "trail": 0.0020, "cut_t": 300, "cut_p": 0.0015, "min_speed": 0.0010, "cooldown": 480, "max_shadow": 0.20, "min_body": 0.72}
+}
