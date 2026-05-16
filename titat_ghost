@@ -30,45 +30,64 @@ class TitanGhost:
         self.log(f"💎 TITAN GHOST V22.3 READY. Slots: {MAX_SLOTS} | Assets: {len(self.memory['dna'])}")
 
     async def update_context(self):
-        """Синхронизация баланса и усыновление позиций BingX [V24.0]"""
+        """Синхронизация баланса, позиций и авто-эвакуация ручных удалений ордеров V24.3 [BINGX]"""
         while self.memory['is_running']:
             try:
+                # 1. Синхронизируем доступный маржинальный баланс
                 bal = await self.exchange.fetch_balance()
-                # ФИКС: Жестко пишем в 'available' для корректной работы execute_limit_entry
                 self.memory['available'] = float(bal['USDT']['free'])
 
-                # Синхронизация позиций
+                # 2. Получаем живой массив открытых позиций с биржи
                 pos = await self.exchange.fetch_positions()
                 current_active = []
+
                 for p in pos:
                     sym = p['symbol']
                     vol = abs(float(p['contracts']))
                     if vol > 0.00001 and sym in self.memory['dna']:
                         current_active.append(sym)
 
-                        # Если позиция была лимиткой — подтверждаем её активацию!
+                        # Если капкан сработал и налился в рынок — переводим из pending в active!
                         if sym in self.memory['active_pos']:
                             if self.memory['active_pos'][sym].get('status') == 'pending':
                                 self.log(f"⚡ КАПКАН СРАБОТАЛ: {sym} налит в рынок!")
                                 self.memory['active_pos'][sym]['status'] = 'active'
                                 self.memory['active_pos'][sym]['entry_time'] = time.time()
+                        # Протокол RECOVERED при холодном рестарте
                         else:
-                            self.log(f"🔗 RECOVERED: {sym} ({vol} units)")
+                            self.log(f"🔗 RECOVERED BINGX: {sym} ({vol} units) успешно усыновлена!")
                             self.memory['active_pos'][sym] = {
                                 'side': p['side'].lower(), 'vol': vol, 'price': float(p['entryPrice']),
                                 'entry_time': time.time(), 'dna': self.memory['dna'][sym], 'status': 'active'
                             }
 
-                # Очистка памяти от закрытых сделок (БРОНИРОВАННАЯ ЗАЩИТА ЛИМИТОК)
+                # --- [ПРОТОКОЛ АВТО-ЭВАКУАЦИИ РУЧНЫХ ЗАКРЫТИЙ ОРДЕРОВ] ---
+                # Проверяем монеты, которые зависли в памяти бота со статусом 'pending'
+                for sym in list(self.memory['active_pos'].keys()):
+                    pos_data = self.memory['active_pos'][sym]
+
+                    if pos_data.get('status') == 'pending':
+                        try:
+                            # Опрашиваем физическое наличие лимитного ордера в стакане BingX
+                            open_orders = await self.exchange.fetch_open_orders(sym)
+                            # Если ордера на бирже больше нет, а в активные позиции он не попал — капкан удален руками!
+                            if not open_orders and sym not in current_active:
+                                self.log(f"🧹 ЭВАКУАЦИЯ: Лимитка по {sym} удалена руками в терминале . Очищаем память бота.")
+                                del self.memory['active_pos'][sym]
+                                if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
+                        except Exception as e:
+                            pass
+
+                # 3. Очистка памяти от закрытых на бирже живых позиций
                 for sym in list(self.memory['active_pos'].keys()):
                     pos_data = self.memory['active_pos'][sym]
                     if sym not in current_active and pos_data.get('status') != 'pending':
-                        self.log(f"🧹 Позиция {sym} закрыта извне, удаляем из памяти.")
+                        self.log(f"🧹 Позиция {sym} закрыта на бирже. Вычищаем системные флаги.")
                         del self.memory['active_pos'][sym]
                         if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
                         if sym in self.memory.get('trail_active', {}): del self.memory['trail_active'][sym]
 
-                await asyncio.sleep(20)
+                await asyncio.sleep(20) # Частота синхронизации контекста — раз в 20 секунд
             except Exception as e:
                 await asyncio.sleep(5)
 
