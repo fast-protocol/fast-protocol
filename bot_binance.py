@@ -31,7 +31,7 @@ class GlobalMemory:
         self.available_margin = 0.0
         self.total_wallet = 0.0
         self.be_levels = {}
-        self.last_btc_push = 0
+        self.last_btc_push = 0 
         # --- ИСПРАВЛЕННЫЕ СТРОКИ (ЧЕРЕЗ SELF) ---
         self.stop_placed = {}
         self.max_pnl = {}
@@ -59,31 +59,31 @@ async def warm_up_btc_history(exchange):
         log("💉 Прогрев истории BTC: Загрузка свечей...")
         # Берем последние 60 минутных свечей
         ohlcv = await exchange.fetch_ohlcv('BTC/USDT:USDT', '1m', limit=60)
-
+        
         # Индекс [4] — это цена закрытия (Close). Это критично.
         memory.btc_history = [float(candle[4]) for candle in ohlcv]
-
+        
         if memory.btc_history:
             memory.last_btc_push = time.time()
-
+            
             # МГНОВЕННЫЙ РАСЧЕТ РЕЖИМА ПРИ СТАРТЕ
             btc_start = memory.btc_history[0]
             btc_now = memory.btc_history[-1]
             change = (btc_now / btc_start) - 1
-
+            
             new_regime = 'stable'
             if change > 0.008:   new_regime = 'bull'
             elif change < -0.008: new_regime = 'bear'
-
+            
             memory.current_regime = new_regime
             memory.dna_fleet = memory.all_dna[new_regime]
-
+            
             log(f"✅ История BTC прогрета: {len(memory.btc_history)} записей. База: {btc_start}")
             log(f"⚙️ Стартовый режим: >>> {new_regime.upper()} <<< (Trend: {round(change*100, 2)}%)")
-
+            
     except Exception as e:
         log(f"⚠️ Не удалось прогреть историю: {e}")
-
+        
 async def update_market_regime(exchange):
     """Аналитик Биткоина с инерцией 90с и бесконечным циклом V19.5"""
     #log("🚥 Аналитик BTC запущен (Защита от дребезга 90с активна)")
@@ -92,7 +92,7 @@ async def update_market_regime(exchange):
             # 1. Получаем историю BTC для анализа фазы
             ohlcv = await exchange.fetch_ohlcv('BTC/USDT:USDT', '1m', limit=100)
             df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
-
+            
             # Расчет изменения: Берем первую свечу [0] и последнюю [-1]
             price_start = df['c'].iloc[0]
             price_now = df['c'].iloc[-1]
@@ -120,11 +120,11 @@ async def update_market_regime(exchange):
                     memory.mode = calculated_mode
                     memory.change_timer = 0
                     memory.current_regime = calculated_mode.lower()
-
+                    
                     # Загружаем соответствующие ДНК файлы
-                    load_all_dna()
-
-                    log(f"🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> {memory.mode} <<< | Trend: {round(change, 3) }%")
+                    load_all_dna() 
+                    
+                    log(f"🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> {memory.mode} <<< | Trend: {round(change, 3)}%")
             else:
                 # Если рынок вернулся к нашему текущему режиму - сбрасываем ожидание
                 if memory.pending_mode != memory.mode:
@@ -182,7 +182,7 @@ async def price_stream():
                 if 'USDT' in symbol:
                     val = float(price_data['last'])
                     memory.prices[symbol] = val
-
+                    
                     # 2. Ловим Биткоина (любой формат: BTC/USDT, BTC/USDT:USDT, BTCUSDT)
                     if not btc_captured and 'BTC' in symbol and 'USDT' in symbol:
                         if (now - memory.last_btc_push) >= 10:
@@ -202,7 +202,7 @@ async def update_balance(exchange):
     while memory.is_running:
         try:
             bal = await exchange.fetch_balance()
-
+            
             # Безопасное извлечение данных из CCXT структуры Binance Futures
             total = float(bal.get('total', {}).get('USDT', 0))
             free = float(bal.get('free', {}).get('USDT', 0))
@@ -218,7 +218,7 @@ async def update_balance(exchange):
         except Exception as e:
             log(f"⚠️ Ошибка Balance-Worker: {e}")
             await asyncio.sleep(5) # Защитная пауза при сбое сети
-
+            
         await asyncio.sleep(20) # Оптимальная частота опроса кошелька для HFT
 
 async def position_tracker(exchange):
@@ -226,7 +226,7 @@ async def position_tracker(exchange):
     while memory.is_running:
         try:
             pos_data = await exchange.fetch_positions()
-
+            
             active = {}
             for p in pos_data:
                 vol = abs(float(p.get('contracts', 0)))
@@ -235,7 +235,7 @@ async def position_tracker(exchange):
                     clean_sym = raw_sym.replace(':USDT', '')
                     if '/' not in clean_sym and 'USDT' in clean_sym:
                         clean_sym = clean_sym.replace('USDT', '/USDT')
-
+                    
                     # --- [ПРОТОКОЛ: АВТО-УТИЛИЗАЦИЯ ПЫЛИ V25.6] ---
                     notional_val = abs(float(p.get('notional', 0)))
                     if notional_val < 0.25: # Увеличили порог пыли до $0.25
@@ -244,7 +244,7 @@ async def position_tracker(exchange):
                             # Полностью выжигаем все ордера по этой пыли (включая Algo)
                             await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                             await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-
+                            
                             # Пробуем закрыть остаток позиции по рынку
                             exit_side = 'SELL' if p['side'].lower() in ['long', 'buy'] else 'BUY'
                             await exchange.create_market_order(clean_sym, exit_side, vol, {'reduceOnly': True})
@@ -252,7 +252,7 @@ async def position_tracker(exchange):
                         except Exception:
                             pass
                         continue # Намертво стираем из памяти бота, чтобы не занимала слот
-
+                        
                     if clean_sym in memory.all_dna['stable']:
                         active[clean_sym] = p
 
@@ -278,7 +278,7 @@ async def position_tracker(exchange):
             # --- [БРОНИРОВАННЫЙ ТОТАЛЬНЫЙ ВЕНИК ОРДЕРОВ-СИРОТ V25.6] ---
             for sym_key in list(memory.dna_fleet.keys()):
                 binance_market_id = sym_key.replace('/', '').replace(':USDT', '')
-
+                
                 # СЦЕНАРИЙ 1: Если позиции НЕТ в рынке (SOL, LINK) — тотальный снос ордеров
                 if sym_key not in memory.active_pos:
                     try:
@@ -292,7 +292,7 @@ async def position_tracker(exchange):
                     pass
 #                    try:
                         # Если Тейк 1 по монете ЕЩЕ НЕ ВЫПОЛНЕН — мы можем безопасно чистить дубликаты стопов.
-                        # Но если TP1 выполнен (флаг равен True), венику ЗАПРЕЩЕНО трогать ордера,
+                        # Но если TP1 выполнен (флаг равен True), венику ЗАПРЕЩЕНО трогать ордера, 
                         # чтобы не сбить наш выставленный БУ-стоп!
 #                        if sym_key in memory.tp_fixed and not memory.tp_fixed[sym_key]['tp1']:
 #                            if int(time.time()) % 60 < 10: # Раз в минуту убираем наводку дублей стартового стопа
@@ -361,7 +361,7 @@ async def check_signal(exchange, symbol):
         high_now = max(df['h'].iloc[-1], cur_p)
         low_now = min(df['l'].iloc[-1], cur_p)
         live_candle_range = high_now - low_now if (high_now - low_now) > 0 else 0.000001
-
+        
         up_shadow = high_now - cur_p
         dn_shadow = cur_p - low_now
         long_body = cur_p - prev_open
@@ -383,7 +383,7 @@ async def check_signal(exchange, symbol):
             if abs(float(f_data.get('fundingRate', 0))) > FUNDING_SHIELD:
                 log(f"🛡 Funding Shield: {symbol} пропуск (Rate: {f_data.get('fundingRate')})")
                 return None
-        except:
+        except: 
             pass
 
         return {
@@ -393,7 +393,7 @@ async def check_signal(exchange, symbol):
             'dna': dna
         }
 
-    except Exception as e:
+    except Exception as e: 
         pass
     return None
 #============
@@ -468,7 +468,7 @@ async def execute_entry(exchange, signal):
         # Считаем количество контрактов
         # РЕМОНТ V16.0: Используем глобальный баланс из памяти объекта memory
         avail_bal = float(memory.available) if hasattr(memory, 'available') else 0.0
-
+        
         # Если баланс в памяти пуст, ставим аварийный лимит от маржи слота
         if avail_bal <= 0:
             avail_bal = margin_for_slot * 1.05
@@ -478,12 +478,12 @@ async def execute_entry(exchange, signal):
             usdt_volume = avail_bal * dna['lev'] * 0.98
 
         amount_base = usdt_volume / price
-
+        
         # Получаем чистую строковую прецизию без обертки во float
         amount = exchange.amount_to_precision(symbol, amount_base)
+        
 
-
-        if float(amount) <= 0:
+        if float(amount) <= 0: 
             return
     #    if amount <= 0: return
 
@@ -534,11 +534,11 @@ async def monitor_logic(exchange, symbol, pos):
         if not cur_p:
             alt_symbol = symbol.replace('/', '') # Пробуем формат DOGEUSDT
             cur_p = memory.prices.get(alt_symbol)
-
-        if not cur_p:
+            
+        if not cur_p: 
             # Если в WebSocket пусто — берем живую цену прямо из инфо-пакета позиции на бирже
             cur_p = float(pos.get('markPrice')) if pos.get('markPrice') else float(pos.get('info', {}).get('markPrice', 0))
-
+            
         if not cur_p or cur_p <= 0: return # Полная защита от деления на ноль
 
         # 2. РАСЧЕТ PNL С ЗАЩИТОЙ ОТ ИНВЕРСИИ
@@ -546,21 +546,21 @@ async def monitor_logic(exchange, symbol, pos):
         side = pos['side'].lower()
         profit = (cur_p / entry_p) - 1 if side in ['long', 'buy'] else (entry_p / cur_p) - 1
         vol = abs(float(pos['contracts']))
-
+        
         dna = memory.dna_fleet.get(symbol)
         if not dna: return
 
         # Локальная инициализация
         if symbol not in memory.trail_active: memory.trail_active[symbol] = False
         if symbol not in memory.tp_fixed: memory.tp_fixed[symbol] = {'tp1': False, 'tp2': False}
-
+        
         current_mode = 'stable'
         for m, matrix in memory.all_dna.items():
             if matrix == memory.dna_fleet: current_mode = m; break
 
         exit_side = 'SELL' if side in ['long', 'buy'] else 'BUY'
         bal_str = f"| Bal: ${round(memory.total_wallet, 2)}"
-
+        
         # --- ЖЕСТКИЙ ФИКС ОБЪЯВЛЕНИЯ ID РЫНКА ---
         binance_market_id = symbol.replace('/', '').replace(':USDT', '')
 
@@ -569,7 +569,7 @@ async def monitor_logic(exchange, symbol, pos):
             try:
                 sl_price = entry_p * (1 - abs(dna['sl'])) if side in ['long', 'buy'] else entry_p * (1 + abs(dna['sl']))
                 sl_price = float(exchange.price_to_precision(symbol, sl_price))
-
+                
                 await exchange.cancel_all_orders(symbol, {'spot': False})
                 await exchange.create_order(symbol, 'STOP_MARKET', exit_side, vol, params={'stopPrice': sl_price, 'reduceOnly': True})
                 memory.stop_placed[symbol] = sl_price
@@ -600,6 +600,7 @@ async def monitor_logic(exchange, symbol, pos):
                 memory.tp_fixed[symbol]['tp1'] = True
                 memory.stop_placed[symbol] = bu_price
                 log(f"🎯 TP1 ВЫПОЛНЕН: {symbol} (+{round(profit*100,2)}%) {bal_str}")
+                return
             except Exception as e: log(f"⚠️ Ошибка TP1 {symbol}: {e}")
 
         # 5. TP2 С ПЕРЕХОДОМ В АДАПТИВНЫЙ ТРЕЙЛИНГ V24.3
@@ -650,7 +651,7 @@ async def monitoring_cycle(exchange):
                 # Гарантируем, что ключ чистый, без двоеточий
                 clean_sym = sym.replace(':USDT', '')
                 tasks.append(monitor_logic(exchange, clean_sym, data))
-
+                
             if tasks:
                 await asyncio.gather(*tasks)
         await asyncio.sleep(0.5)
@@ -665,9 +666,9 @@ async def run_titan_v1():
     # 2. Подключение к бирже
     exchange = await init_exchange()
     # --- НОВАЯ СТРОКА ---
-    await warm_up_btc_history(exchange)
+    await warm_up_btc_history(exchange) 
     # --------------------
-
+    
     try:
         log("🛰️ Подключение к квантовым потокам данных...")
 
