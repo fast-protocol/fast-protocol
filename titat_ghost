@@ -37,6 +37,19 @@ class TitanGhost:
                 bal = await self.exchange.fetch_balance()
                 self.memory['available'] = float(bal['USDT']['free'])
 
+                # --- [БРОНИРОВАННЫЙ ВЕНИК ОРДЕРОВ-СИРОТ BINGX V24.5] ---
+                # Если позиции на бирже по монете нет — сносим любые висящие лимитки прошлых дней!
+                for sym_key in list(self.memory['dna'].keys()):
+                    if sym_key not in current_active:
+                        try:
+                            clean_sym_key = sym_key.replace(':USDT', '')
+                            open_orders = await self.exchange.fetch_open_orders(clean_sym_key)
+                            if open_orders:
+                                self.log(f"🔥 ВЕНИК-ОРДЕР BINGX: Уничтожаю висящий капкан-сироту по {clean_sym_key}")
+                                await self.exchange.cancel_all_orders(clean_sym_key)
+                        except Exception:
+                            pass
+
                 # 2. Получаем живой массив открытых позиций с биржи
                 pos = await self.exchange.fetch_positions()
                 current_active = []
@@ -138,26 +151,34 @@ class TitanGhost:
                 await asyncio.sleep(3)
 
     async def execute_limit_entry(self, sym, side, limit_price, dna):
-        """Выставление скрытого лимитного капкана на пробойный уровень Strike"""
+        """Выставление лимитного капкана с люфтом и очисткой суффиксов V24.6.1 [BINGX]"""
         try:
-            # 1. Жесткая установка плеча
-            await self.exchange.set_leverage(dna['lev'], sym, {'side': 'BOTH'})
+            # 1. Принудительно очищаем символ от фьючерсных двоеточий CCXT
+            clean_sym = sym.replace(':USDT', '')
 
-            # 2. Расчет объема от доступного баланса
+            # 2. Твой надежный метод установки плеча с защитой BOTH
+            await self.exchange.set_leverage(dna['lev'], clean_sym, {'side': 'BOTH'})
+
+            # 3. Добавляем микро-люфт 0.05% для гарантированного зацепа на импульсе
+            if side == 'buy':
+                limit_price = limit_price * 1.0005 # Ставим чуть выше для лонга
+            else:
+                limit_price = limit_price * 0.9995 # Ставим чуть ниже для шорта
+
+            # 4. Расчет объема позиции от свободного капитала
             avail = self.memory['available']
             usdt_vol = avail * RISK_PER_SLOT * dna['lev']
-            qty = float(self.exchange.amount_to_precision(sym, usdt_vol / limit_price))
+            qty = float(self.exchange.amount_to_precision(clean_sym, usdt_vol / limit_price))
             if qty <= 0: return
 
-            # 3. Полная зачистка старых «хвостов» перед новым капканом
-            await self.exchange.cancel_all_orders(sym, {'spot': False})
-            exact_price = float(self.exchange.price_to_precision(sym, limit_price))
+            # 5. Снос старых ордеров по очищенному символу
+            await self.exchange.cancel_all_orders(clean_sym, {'spot': False})
+            exact_price = float(self.exchange.price_to_precision(clean_sym, limit_price))
 
-            # 4. Выставляем Лимитный Ордер
-            order = await self.exchange.create_order(sym, 'limit', side, qty, exact_price)
+            # 6. Отправка лимитного ордера на биржу
+            order = await self.exchange.create_order(clean_sym, 'limit', side, qty, exact_price)
             if order:
-                self.log(f"🕸 ЛИМИТНЫЙ КАПКАН ВЫСТАВЛЕН: {sym} {side.upper()} по {exact_price}")
-                # Фиксируем как ОЖИДАЮЩИЙ ордер, а не активную позицию
+                self.log(f"🕸 ЛИМИТНЫЙ КАПКАН ВЫСТАВЛЕН: {clean_sym} {side.upper()} по {exact_price} ")
                 self.memory['active_pos'][sym] = {
                     'side': side, 'vol': qty, 'price': exact_price, 'entry_time': time.time(),
                     'dna': dna, 'status': 'pending'
@@ -376,8 +397,9 @@ class TitanGhost:
                         if age >= dna.get('cut_t', 300) and pnl < dna.get('cut_p', 0.0012):
                             # СЦЕНАРИЙ 1: Это был НЕИСПОЛНЕННЫЙ лимитный капкан (Наш случай с XRP!)
                             if pos_status == 'pending':
-                                self.log(f"🧹 СМАРТ-ФИЛЬТР: Снятие неисполненного капкана {sym} по таймеру ({int(age)} с)")
-                                await self.exchange.cancel_all_orders(sym, {'spot': False})
+                                self.log(f"🧹 СМАРТ-ФИЛЬТР: Снятие неисполненного капкана {sym} по т аймеру ({int(age)} с)")
+                                #await self.exchange.cancel_all_orders(sym, {'spot': False})
+                                await self.exchange.cancel_all_orders(sym.replace(':USDT', ''))
                                 if sym in self.memory['active_pos']: del self.memory['active_pos'][sym]
                                 self.memory['cooldown'][sym] = time.time()
                                 continue
@@ -388,8 +410,10 @@ class TitanGhost:
                                     self.log(f"⏱ SMART-FILTER: Утилизация зависшей позиции {sym} ({round(pnl*100,3)}%)")
                                     exit_side = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
                                     # Сначала чистим стопы, потом кроем марком
-                                    await self.exchange.cancel_all_orders(sym, {'spot': False})
-                                    await self.exchange.create_market_order(sym, exit_side, pos['vol'], {'reduceOnly': True})
+                                    #await self.exchange.cancel_all_orders(sym, {'spot': False})
+                                    await self.exchange.cancel_all_orders(sym.replace(':USDT', ''))
+                                    #await self.exchange.create_market_order(sym, exit_side, pos['vol'], {'reduceOnly': True})
+                                    await self.exchange.create_market_order(sym.replace(':USDT', ''), exit_side, pos['vol'], {'reduceOnly': True})
                                     self.log(f"✅ {sym} успешно утилизирован.")
                                     self.memory['cooldown'][sym] = time.time()
                                     if sym in self.memory['active_pos']: del self.memory['active_pos'][sym]
@@ -409,17 +433,17 @@ class TitanGhost:
                                 self.log(f"🎯 Попытка фиксации TP1 для {sym} (PNL: {round(pnl*100,2)}%)")
                                 close_qty = float(self.exchange.amount_to_precision(sym, pos['vol'] * 0.5))
                                 side_exit = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
-                                
+
                                 # Чистим старые ордера перед установкой новых, чтобы не было конфликтов
-                                await self.exchange.cancel_all_orders(sym, {'spot': False})
-                                
+                                #await self.exchange.cancel_all_orders(sym, {'spot': False})
+                                await self.exchange.cancel_all_orders(sym.replace(':USDT', ''))
                                 # Закрываем 50% объема по рынку
-                                await self.exchange.create_market_order(sym, side_exit, close_qty, {'reduceOnly': True})
-                                
+                                await self.exchange.create_market_order(sym.replace(':USDT', ''), side_exit, close_qty, {'reduceOnly': True})
+
                                 # Safe Break-Even ордер на остаток
                                 safe_bu = cur_p * 0.9995 if pos['side'].lower() in ['buy', 'long'] else cur_p * 1.0005
-                                await self.exchange.create_order(sym, 'stop', side_exit, pos['vol']-close_qty, safe_bu, {'stopPrice': safe_bu, 'reduceOnly': True})
-                                
+                                await self.exchange.create_order(sym.replace(':USDT', ''), 'stop', side_exit, pos['vol']-close_qty, safe_bu, {'stopPrice': safe_bu, 'reduceOnly': True})
+
                                 self.memory['tp_fixed'][sym] = True
                                 pos['vol'] -= close_qty
                                 self.log(f"✅ TP1 ВЫПОЛНЕН: {sym}. Остаток в БУ.")
@@ -427,11 +451,11 @@ class TitanGhost:
                                 self.log(f"🆘 Ошибка исполнения Тейка {sym}: {e}")
 
                         # Если профит очень большой, пометим Тейк как "пройденный", чтобы не спамить
-                        if pnl > dna['tp1'] * 2: 
+                        if pnl > dna['tp1'] * 2:
                             self.memory['tp_fixed'][sym] = True
 
                         # 4. АКТИВАЦИЯ ТРЕЙЛИНГА (INFINITY TRAIL)
-                        if pnl >= (dna['tp1'] * 2): 
+                        if pnl >= (dna['tp1'] * 2):
                             self.memory['trail_active'][sym] = True
 
                         # 5. СИСТЕМА ФИНАЛЬНОГО ВЫХОДА ПО СТОПУ ИЛИ ТРЕЙЛИНГУ
@@ -441,16 +465,18 @@ class TitanGhost:
 
                         if pnl <= sl_trigger:
                             side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                            await self.exchange.cancel_all_orders(sym, {'spot': False})
-                            await self.exchange.create_market_order(sym, side_exit, pos['vol'], {'reduceOnly': True})
+                            #await self.exchange.cancel_all_orders(sym, {'spot': False})
+                            await self.exchange.cancel_all_orders(sym.replace(':USDT', ''))
+                            #await self.exchange.create_market_order(sym, side_exit, pos['vol'], {'reduceOnly': True})
+                            await self.exchange.create_market_order(sym.replace(':USDT', ''), side_exit, pos['vol'], {'reduceOnly': True})
                             self.log(f"🏁 EXIT: {sym} @ {round(pnl*100,2)}%")
-                            
+
                             self.memory['cooldown'][sym] = time.time() # Ставим кулдаун
                             if sym in self.memory['active_pos']: del self.memory['active_pos'][sym]
                             if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
                             if sym in self.memory['trail_active']: del self.memory['trail_active'][sym]
 
-                    except Exception: 
+                    except Exception:
                         continue
 
                 # 🛑 ЖЕСТКИЙ ФИКС: Пауза перенесена ВНУТРЬ while! Освобождает CPU для асинхронных потоков
