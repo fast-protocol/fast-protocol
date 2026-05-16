@@ -347,109 +347,117 @@ class TitanGhost:
         except Exception as e: self.log(f"⚠️ ENTRY ERROR {sym}: {e}")
 
     async def monitor_logic(self):
+        """Асинхронный бронированный контроль выходов, безубытка и авто-утилизации V24.4 [BINGX]"""
         while self.memory['is_running']:
-            # 1. Делаем независимый список ключей (безопасно для удаления)
-            for sym in list(self.memory['active_pos'].keys()):
-                # 2. Извлекаем данные позиции по ключу
-                pos = self.memory['active_pos'].get(sym)
-                if not pos: continue # Защита, если позиция была удалена секунду назад
+            try:
+                # 1. Делаем независимый список ключей (безопасно для удаления)
+                for sym in list(self.memory['active_pos'].keys()):
+                    # 2. Извлекаем данные позиции по ключу
+                    pos = self.memory['active_pos'].get(sym)
+                    if not pos: continue # Защита, если позиция была удалена секунду назад
 
-                try:
-                    # Проверяем, налился ли наш капкан
-                    pos_status = pos.get('status', 'active')
-                    cur_p = self.memory['prices'].get(sym)
-                    if not cur_p: continue
+                    try:
+                        # Проверяем, налился ли наш капкан
+                        pos_status = pos.get('status', 'active')
+                        cur_p = self.memory['prices'].get(sym)
+                        if not cur_p: continue
 
-                    # Если это висящий капкан, считаем PNL относительно рынка для дебага,
-                    # но не пускаем его в логику Тейков
-                    entry_p = float(pos['price'])
-                    if pos['side'].lower() in ['buy', 'long']:
-                        pnl = (cur_p / entry_p) - 1
-                    else:
-                        pnl = (entry_p / cur_p) - 1
+                        # Считаем PNL относительно рынка
+                        entry_p = float(pos['price'])
+                        if pos['side'].lower() in ['buy', 'long']:
+                            pnl = (cur_p / entry_p) - 1
+                        else:
+                            pnl = (entry_p / cur_p) - 1
 
-                    age = time.time() - pos['entry_time']
-                    dna = pos['dna']
-#============
-                    # --- [УМНЫЙ СМАРТ-ФИЛЬТР V22.9.2] ---
-                    if age >= dna.get('cut_t', 300) and pnl < dna.get('cut_p', 0.0012):
+                        age = time.time() - pos['entry_time']
+                        dna = pos['dna']
 
-                        # СЦЕНАРИЙ 1: Это был НЕИСПОЛНЕННЫЙ лимитный капкан
+                        # --- [УМНЫЙ СМАРТ-ФИЛЬТР V24.4 — ЖЕСТКАЯ АВТО-ОЧИСТКА ВРЕМЕНИ] ---
+                        if age >= dna.get('cut_t', 300) and pnl < dna.get('cut_p', 0.0012):
+                            # СЦЕНАРИЙ 1: Это был НЕИСПОЛНЕННЫЙ лимитный капкан (Наш случай с XRP!)
+                            if pos_status == 'pending':
+                                self.log(f"🧹 СМАРТ-ФИЛЬТР: Снятие неисполненного капкана {sym} по таймеру ({int(age)} с)")
+                                await self.exchange.cancel_all_orders(sym, {'spot': False})
+                                if sym in self.memory['active_pos']: del self.memory['active_pos'][sym]
+                                self.memory['cooldown'][sym] = time.time()
+                                continue
+
+                            # СЦЕНАРИЙ 2: Это РЕАЛЬНАЯ НАЛИТАЯ позиция, которая зависла в болоте
+                            else:
+                                try:
+                                    self.log(f"⏱ SMART-FILTER: Утилизация зависшей позиции {sym} ({round(pnl*100,3)}%)")
+                                    exit_side = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
+                                    # Сначала чистим стопы, потом кроем марком
+                                    await self.exchange.cancel_all_orders(sym, {'spot': False})
+                                    await self.exchange.create_market_order(sym, exit_side, pos['vol'], {'reduceOnly': True})
+                                    self.log(f"✅ {sym} успешно утилизирован.")
+                                    self.memory['cooldown'][sym] = time.time()
+                                    if sym in self.memory['active_pos']: del self.memory['active_pos'][sym]
+                                    if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
+                                    continue
+                                except Exception as e:
+                                    self.log(f"🆘 Ошибка утилизации active позиции {sym}: {e}")
+                                    continue
+
+                        # ЕЩЕ ОДНА СТРАХОВКА: Не пускаем неисполненные лимитки к логике Тейков и Стопов
                         if pos_status == 'pending':
-                            self.log(f"🧹 Снятие неисполненного капкана {sym} по таймеру ({int(age)} с)")
-                            await self.exchange.cancel_all_orders(sym, {'spot': False})
-                            del self.memory['active_pos'][sym]
-                            self.memory['cooldown'][sym] = time.time()
                             continue
 
-                        # СЦЕНАРИЙ 2: Это РЕАЛЬНАЯ НАЛИТАЯ позиция, которая зависла в болоте
-                        else:
+                        # 3. ЛОГИКА ТЕЙКОВ: TP1 + BE (С ОБРАБОТКОЙ ОШИБОК)
+                        if sym not in self.memory['tp_fixed'] and pnl >= dna['tp1']:
                             try:
-                                self.log(f"⏱️ SMART-FILTER: Утилизация зависшей позиции {sym} ({round(pnl*100,3)}%)")
-                                exit_side = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
-
-                                # Сначала чистим стопы, потом кроем марком
+                                self.log(f"🎯 Попытка фиксации TP1 для {sym} (PNL: {round(pnl*100,2)}%)")
+                                close_qty = float(self.exchange.amount_to_precision(sym, pos['vol'] * 0.5))
+                                side_exit = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
+                                
+                                # Чистим старые ордера перед установкой новых, чтобы не было конфликтов
                                 await self.exchange.cancel_all_orders(sym, {'spot': False})
-                                await self.exchange.create_market_order(sym, exit_side, pos['vol'], {'reduceOnly': True})
-
-                                self.log(f"✅ {sym} успешно утилизирован.")
-                                self.memory['cooldown'][sym] = time.time()
-                                del self.memory['active_pos'][sym]
-                                if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
-                                continue
+                                
+                                # Закрываем 50% объема по рынку
+                                await self.exchange.create_market_order(sym, side_exit, close_qty, {'reduceOnly': True})
+                                
+                                # Safe Break-Even ордер на остаток
+                                safe_bu = cur_p * 0.9995 if pos['side'].lower() in ['buy', 'long'] else cur_p * 1.0005
+                                await self.exchange.create_order(sym, 'stop', side_exit, pos['vol']-close_qty, safe_bu, {'stopPrice': safe_bu, 'reduceOnly': True})
+                                
+                                self.memory['tp_fixed'][sym] = True
+                                pos['vol'] -= close_qty
+                                self.log(f"✅ TP1 ВЫПОЛНЕН: {sym}. Остаток в БУ.")
                             except Exception as e:
-                                self.log(f"🆘 Ошибка утилизации активной позиции {sym}: {e}")
-                                await asyncio.sleep(5)
-                                continue
+                                self.log(f"🆘 Ошибка исполнения Тейка {sym}: {e}")
 
-                    # ЕЩЕ ОДНА СТРАХОВКА: Не пускаем неисполненные лимитки к логике Тейков и Стопов
-                    if pos_status == 'pending':
-                        continue
-#============
-
-                    # 1. TP1 + BE (С ОБРАБОТКОЙ ОШИБОК)
-                    if sym not in self.memory['tp_fixed'] and pnl >= dna['tp1']:
-                        try:
-                            self.log(f"🎯 Попытка фиксации TP1 для {sym} (PNL: {round(pnl*100,2)}%)")
-                            close_qty = float(self.exchange.amount_to_precision(sym, pos['vol'] * 0.5))
-                            side_exit = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
-
-                            # Чистим старые ордера перед установкой новых, чтобы не было конфликтов
-                            await self.exchange.cancel_all_orders(sym, {'spot': False})
-
-                            # Закрываем 50%
-                            await self.exchange.create_market_order(sym, side_exit, close_qty, {'reduceOnly': True})
-
-                            # Safe Break-Even
-                            safe_bu = cur_p * 0.9995 if pos['side'].lower() in ['buy', 'long'] else cur_p * 1.0005
-                            await self.exchange.create_order(sym, 'stop', side_exit, pos['vol']-close_qty, safe_bu, {'stopPrice': safe_bu, 'reduceOnly': True})
-
+                        # Если профит очень большой, пометим Тейк как "пройденный", чтобы не спамить
+                        if pnl > dna['tp1'] * 2: 
                             self.memory['tp_fixed'][sym] = True
-                            pos['vol'] -= close_qty
-                            self.log(f"✅ TP1 ВЫПОЛНЕН: {sym}. Остаток в БУ.")
-                        except Exception as e:
-                            self.log(f"🆘 Ошибка исполнения Тейка {sym}: {e}")
-                            # Если профит очень большой, пометим Тейк как "пройденный", чтобы не спамить
-                            if pnl > dna['tp1'] * 2: self.memory['tp_fixed'][sym] = True
 
-                    # 2. INFINITY TRAIL ACTIVATION
-                    if pnl >= (dna['tp1'] * 2): self.memory['trail_active'][sym] = True
+                        # 4. АКТИВАЦИЯ ТРЕЙЛИНГА (INFINITY TRAIL)
+                        if pnl >= (dna['tp1'] * 2): 
+                            self.memory['trail_active'][sym] = True
 
-                    # 3. EXIT LOGIC
-                    sl_trigger = dna['sl']
-                    if sym in self.memory['trail_active']:
-                        sl_trigger = max(sl_trigger, pnl - dna['trail'])
+                        # 5. СИСТЕМА ФИНАЛЬНОГО ВЫХОДА ПО СТОПУ ИЛИ ТРЕЙЛИНГУ
+                        sl_trigger = dna['sl']
+                        if sym in self.memory['trail_active']:
+                            sl_trigger = max(sl_trigger, pnl - dna['trail'])
 
-                    if pnl <= sl_trigger:
-                        side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                        await self.exchange.create_market_order(sym, side_exit, pos['vol'], {'reduceOnly': True})
-                        self.log(f"🏁 EXIT: {sym} @ {round(pnl*100,2)}%")
-                        self.memory['cooldown'][sym] = time.time() # Ставим метку времени выхода
-                        del self.memory['active_pos'][sym]
-                        if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
-                        if sym in self.memory['trail_active']: del self.memory['trail_active'][sym]
-                except: continue
-            await asyncio.sleep(0.5)
+                        if pnl <= sl_trigger:
+                            side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
+                            await self.exchange.cancel_all_orders(sym, {'spot': False})
+                            await self.exchange.create_market_order(sym, side_exit, pos['vol'], {'reduceOnly': True})
+                            self.log(f"🏁 EXIT: {sym} @ {round(pnl*100,2)}%")
+                            
+                            self.memory['cooldown'][sym] = time.time() # Ставим кулдаун
+                            if sym in self.memory['active_pos']: del self.memory['active_pos'][sym]
+                            if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
+                            if sym in self.memory['trail_active']: del self.memory['trail_active'][sym]
+
+                    except Exception: 
+                        continue
+
+                # 🛑 ЖЕСТКИЙ ФИКС: Пауза перенесена ВНУТРЬ while! Освобождает CPU для асинхронных потоков
+                await asyncio.sleep(0.5)
+
+            except Exception as main_e:
+                await asyncio.sleep(1)
 
     async def main(self):
         """Жесткая монолитная инициализация всех квантовых потоков BingX V23.1.5"""
