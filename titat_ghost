@@ -28,38 +28,24 @@ class TitanGhost:
         })
         with open('dna_ghost.json', 'r') as f: self.memory['dna'] = json.load(f)
         self.log(f"💎 TITAN GHOST V22.3 READY. Slots: {MAX_SLOTS} | Assets: {len(self.memory['dna'])}")
-
     async def update_context(self):
-        """Синхронизация баланса, позиций и авто-эвакуация ручных удалений ордеров V24.3 [BINGX]"""
+        """Синхронизация баланса, позиций и авто-эвакуация ручных удалений ордеров V24.5 [BINGX]"""
         while self.memory['is_running']:
             try:
                 # 1. Синхронизируем доступный маржинальный баланс
                 bal = await self.exchange.fetch_balance()
                 self.memory['available'] = float(bal['USDT']['free'])
-
-                # --- [БРОНИРОВАННЫЙ ВЕНИК ОРДЕРОВ-СИРОТ BINGX V24.5] ---
-                # Если позиции на бирже по монете нет — сносим любые висящие лимитки прошлых дней!
-                for sym_key in list(self.memory['dna'].keys()):
-                    if sym_key not in current_active:
-                        try:
-                            clean_sym_key = sym_key.replace(':USDT', '')
-                            open_orders = await self.exchange.fetch_open_orders(clean_sym_key)
-                            if open_orders:
-                                self.log(f"🔥 ВЕНИК-ОРДЕР BINGX: Уничтожаю висящий капкан-сироту по {clean_sym_key}")
-                                await self.exchange.cancel_all_orders(clean_sym_key)
-                        except Exception:
-                            pass
-
+                
                 # 2. Получаем живой массив открытых позиций с биржи
                 pos = await self.exchange.fetch_positions()
                 current_active = []
-
+                
                 for p in pos:
                     sym = p['symbol']
                     vol = abs(float(p['contracts']))
                     if vol > 0.00001 and sym in self.memory['dna']:
                         current_active.append(sym)
-
+                        
                         # Если капкан сработал и налился в рынок — переводим из pending в active!
                         if sym in self.memory['active_pos']:
                             if self.memory['active_pos'][sym].get('status') == 'pending':
@@ -73,22 +59,18 @@ class TitanGhost:
                                 'side': p['side'].lower(), 'vol': vol, 'price': float(p['entryPrice']),
                                 'entry_time': time.time(), 'dna': self.memory['dna'][sym], 'status': 'active'
                             }
-
+                
                 # --- [ПРОТОКОЛ АВТО-ЭВАКУАЦИИ РУЧНЫХ ЗАКРЫТИЙ ОРДЕРОВ] ---
-                # Проверяем монеты, которые зависли в памяти бота со статусом 'pending'
                 for sym in list(self.memory['active_pos'].keys()):
                     pos_data = self.memory['active_pos'][sym]
-
                     if pos_data.get('status') == 'pending':
                         try:
-                            # Опрашиваем физическое наличие лимитного ордера в стакане BingX
                             open_orders = await self.exchange.fetch_open_orders(sym)
-                            # Если ордера на бирже больше нет, а в активные позиции он не попал — капкан удален руками!
                             if not open_orders and sym not in current_active:
-                                self.log(f"🧹 ЭВАКУАЦИЯ: Лимитка по {sym} удалена руками в терминале . Очищаем память бота.")
+                                self.log(f"🧹 ЭВАКУАЦИЯ: Лимитка по {sym} удалена руками в терминале. Очищаем память бота.")
                                 del self.memory['active_pos'][sym]
                                 if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
-                        except Exception as e:
+                        except Exception:
                             pass
 
                 # 3. Очистка памяти от закрытых на бирже живых позиций
@@ -100,10 +82,22 @@ class TitanGhost:
                         if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
                         if sym in self.memory.get('trail_active', {}): del self.memory['trail_active'][sym]
 
+                # --- [ФИКС: БРОНИРОВАННЫЙ ВЕНИК ОРДЕРОВ-СИРОТ ОПУЩЕН В САМЫЙ КОНЕЦ] ---
+                # Теперь current_active полностью собран! Бот безошибочно выжжет старый мусор прошлых сессий.
+                for sym_key in list(self.memory['dna'].keys()):
+                    if sym_key not in current_active:
+                        try:
+                            clean_sym_key = sym_key.replace(':USDT', '')
+                            open_orders = await self.exchange.fetch_open_orders(clean_sym_key)
+                            if open_orders:
+                                self.log(f"🔥 ВЕНИК-ОРДЕР BINGX: Уничтожаю висящий капкан-сироту по {clean_sym_key}")
+                                await self.exchange.cancel_all_orders(clean_sym_key)
+                        except Exception:
+                            pass
+                
                 await asyncio.sleep(20) # Частота синхронизации контекста — раз в 20 секунд
             except Exception as e:
                 await asyncio.sleep(5)
-
     async def price_stream(self):
         """Высокочастотный тотальный сбор цен BingX со сквозной фильтрацией ID [V24.1]"""
         self.log(f"📡 Запуск REST-мониторинга цен и объемов для {len(self.memory['dna'])} активов...")
