@@ -587,21 +587,27 @@ async def monitor_logic(exchange, symbol, pos):
             except Exception as e: log(f"🆘 Ошибка стопа {symbol}: {e}")
 
         # 4. TP1 С ИСПРАВЛЕННЫМ СТРОКОВЫМ ОБЪЕМОМ И ПЕРЕВОДОМ В РЕАЛЬНЫЙ БУ
+#==========
+        # --- [ЭТАЛОННЫЙ МОНОЛИТ ВЫХОДОВ V26.3 — БЕЗУПРЕЧНАЯ СЕПАРАЦИЯ] ---
+
+        # 4. ЛОГИКА ТЕЙК-ПРОФИТА 1 (TP1)
         if not memory.tp_fixed[symbol]['tp1'] and profit >= dna['tp1']:
             close_qty_raw = vol * 0.5
-            # ФИКС: Заменили price на cur_p для защиты от NameError
+
+            # Защита Notional $5.20
             if (close_qty_raw * cur_p) < 5.2:
                 log(f"⚠ ОБЪЕМ МАЛ ДЛЯ ДРОБЛЕНИЯ {symbol}: Закрываем 100% по рынку для защиты кошелька.")
                 await exchange.cancel_all_orders(binance_market_id)
                 await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
                 clean_memory_keys(symbol)
-                return
+                return # Выход из тика
+
+            action_triggered = False
             try:
                 close_qty = exchange.amount_to_precision(symbol, vol * 0.5)
                 await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
 
-                # Полная перезапись стопа на бирже на остаток объема по цене входа
-                await exchange.cancel_all_orders(symbol, {'spot': False})
+                await exchange.cancel_all_orders(binance_market_id)
                 bu_price = float(exchange.price_to_precision(symbol, entry_p))
                 rem_qty = exchange.amount_to_precision(symbol, vol - float(close_qty))
 
@@ -610,39 +616,50 @@ async def monitor_logic(exchange, symbol, pos):
                 memory.tp_fixed[symbol]['tp1'] = True
                 memory.stop_placed[symbol] = bu_price
                 log(f"🎯 TP1 ВЫПОЛНЕН: {symbol} (+{round(profit*100,2)}%) {bal_str}")
-                return
-            except Exception as e: log(f"⚠️ Ошибка TP1 {symbol}: {e}")
+                action_triggered = True
+            except Exception as e:
+                log(f"⚠️ Ошибка TP1 {symbol}: {e}")
 
-        # 5. TP2 С ПЕРЕХОДОМ В АДАПТИВНЫЙ ТРЕЙЛИНГ V24.3
-        if memory.tp_fixed[symbol]['tp1'] and not memory.tp_fixed[symbol]['tp2'] and profit >= (dna['tp1'] * 2):
+            if action_triggered: return # ФИКС: Обрываем тик строго ВНЕ try/except!
+
+        # 5. ЛОГИКА ТЕЙК-ПРОФИТА 2 (TP2)
+        if not memory.tp_fixed[symbol]['tp2'] and profit >= dna['tp2']:
+            action_triggered = False
             try:
-                close_qty = exchange.amount_to_precision(symbol, vol * 0.5)
-                await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
+                # Если остаток позиции слишком мал для дробления — кроем 100%
+                if (vol * cur_p) < 5.2:
+                    log(f"⚠ Остаток мал для трейлинга {symbol}: Закрываем 100% на TP2.")
+                    await exchange.cancel_all_orders(binance_market_id)
+                    await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+                    clean_memory_keys(symbol)
+                    return
+
                 memory.tp_fixed[symbol]['tp2'] = True
                 memory.trail_active[symbol] = True
                 memory.max_pnl[symbol] = profit
                 log(f"🔥 TP2 ФИКСИРОВАН: {symbol}. Включен Трейлинг [{current_mode.upper()}] {bal_str}")
-                return
-            except Exception as e: log(f"⚠️ Ошибка TP2 {symbol}: {e}")
+                action_triggered = True
+            except Exception as e:
+                log(f"⚠️ Ошибка TP2 {symbol}: {e}")
+
+            if action_triggered: return # ФИКС: Обрываем тик строго ВНЕ try/except!
 
         # 6. ВЕДЕНИЕ АДАПТИВНОГО ТРЕЙЛИНГА ПО ШАГАМ
-        # --- [ИСПРАВЛЕННЫЙ БЛОК ВЫХОДА ПО ТРЕЙЛИНГУ В MONITOR_LOGIC] ---
         if memory.trail_active[symbol]:
             trail_step = 0.0045 if current_mode == 'bull' else (0.0015 if current_mode == 'bear' else dna.get('trail', 0.0032))
-            if profit > memory.max_pnl[symbol]: memory.max_pnl[symbol] = profit
+            if profit > memory.max_pnl[symbol]:
+                memory.max_pnl[symbol] = profit
 
             if profit <= (memory.max_pnl[symbol] - trail_step):
                 log(f"🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие {symbol} @ {round(profit*100,2)}% {bal_str}")
-
-                # Жесткий снос ордеров по market_id
-                await exchange.cancel_all_orders(binance_market_id)
-
-                # ФИКС: Берем чистый, накопленный в памяти объем vol для принудительного маркет-сноса позиции
-                await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
-
-                clean_memory_keys(symbol)
-                return
-
+                try:
+                    await exchange.cancel_all_orders(binance_market_id)
+                    await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+                    clean_memory_keys(symbol)
+                except Exception as e:
+                    log(f"⚠️ Ошибка закрытия трейлинга {symbol}: {e}")
+                return # Намертво обрываем тик после закрытия сделки
+#=========
     except Exception as e: pass
 
 def clean_memory_keys(symbol):
