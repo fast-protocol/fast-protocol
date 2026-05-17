@@ -8,7 +8,7 @@ class SafeDict(dict):
         return super().__getitem__(key)
 
 # --- НАСТРОЙКИ V5.5.1 STRIKE-DUO --- MEXC ---
-API_KEY, SECRET_KEY = 'mx0vgl83gPpoR8dcim', '89d6e17b1041478aa1f8fffadaf6490e'
+API_KEY, SECRET_KEY = 
 
 # --- ПУЛЬТ MEXC V12.6 [IRON-RECOVERY] ---
 #PRIORITY_LIST = [
