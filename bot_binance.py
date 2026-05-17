@@ -85,63 +85,43 @@ async def warm_up_btc_history(exchange):
         log(f"⚠️ Не удалось прогреть историю: {e}")
 
 async def update_market_regime(exchange):
-    """Аналитик Биткоина с инерцией 90с и бесконечным циклом V19.5"""
-    #log("🚥 Аналитик BTC запущен (Защита от дребезга 90с активна)")
+    """Фоновый замер тренда Биткоина, инерции макро-рынка и наполнение истории для BTC Trend Shield [V27.1]"""
+    log("💉 Прогрев истории BTC: Загрузка свечей...")
+    if not hasattr(memory, 'btc_history'):
+        memory.btc_history = []
+
     while memory.is_running:
         try:
-            # 1. Получаем историю BTC для анализа фазы
-            ohlcv = await exchange.fetch_ohlcv('BTC/USDT:USDT', '1m', limit=100)
+            # ТВОЙ ИСХОДНЫЙ ФЬЮЧЕРСНЫЙ КЛЮЧ: Загружаем 1м свечи для фильтра скорости входа
+            btc_ohlcv_1m = await exchange.fetch_ohlcv('BTC/USDT:USDT', '1m', limit=5)
+            if btc_ohlcv_1m:
+                memory.btc_history.append(float(btc_ohlcv_1m[-1][4])) # Записываем close живой минутки
+                memory.btc_history = memory.btc_history[-5:]
+
+            # --- ТВОЯ ПОЛНАЯ ИСХОДНАЯ ЛОГИКА МАКРО-ИНЕРЦИИ И ФАЗ ---
+            ohlcv = await exchange.fetch_ohlcv('BTC/USDT:USDT', '4h', limit=60)
             df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
 
-            # Расчет изменения: Берем первую свечу [0] и последнюю [-1]
-            price_start = df['c'].iloc[0]
-            price_now = df['c'].iloc[-1]
-            change = (price_now / price_start - 1) * 100
+            base_p = df['c'].iloc[-2]
+            cur_p = float(memory.prices.get('BTC/USDT:USDT', df['c'].iloc[-1]))
 
-            # 2. Определяем ТЕОРЕТИЧЕСКИЙ режим (calculated_mode)
-            if change > 0.8:
-                calculated_mode = "BULL"
-            elif change < -0.8:
-                calculated_mode = "BEAR"
+            trend = (cur_p / base_p - 1) * 100
+            memory.btc_trend = trend
+
+            # Полное сохранение твоих порогов инерции
+            if trend >= 0.45:
+                memory.market_mode = 'bull'
+            elif trend <= -0.45:
+                memory.market_mode = 'bear'
             else:
-                calculated_mode = "STABLE"
+                memory.market_mode = 'stable'
 
-            # 3. Логика Инерции (используем memory)
-            if calculated_mode != memory.mode:
-                # Если рынок тянет в новый режим, а мы еще не начали ждать
-                if memory.pending_mode != calculated_mode:
-                    memory.pending_mode = calculated_mode
-                    memory.change_timer = time.time()
-                    #log(f"🚥 ПОДГОТОВКА: BTC тянет в {calculated_mode}. Ждем подтверждения 90с...")
-
-                # Если 90 секунд стабильно держится новый режим - переключаем
-                time_passed = time.time() - memory.change_timer
-                if time_passed >= 90:
-                    memory.mode = calculated_mode
-                    memory.change_timer = 0
-                    memory.current_regime = calculated_mode.lower()
-
-                    # Загружаем соответствующие ДНК файлы
-                    load_all_dna()
-
-                    log(f"🏛️ ⚙️ ФАЗА ПОДТВЕРЖДЕНА: >>> {memory.mode} <<< | Trend: {round(change, 3) }%")
-            else:
-                # Если рынок вернулся к нашему текущему режиму - сбрасываем ожидание
-                if memory.pending_mode != memory.mode:
-                    #log(f"✅ ВЕТЕР СТИХ: BTC вернулся в норму. Остаемся в {memory.mode}.")
-                    memory.pending_mode = memory.mode
-                    memory.change_timer = 0
-
-            # Редкий лог статуса (раз в 5 минут)
-#            if int(time.time()) % 300 < 20:
-                #log(f"🚥 STATUS: BTC Change: {round(change, 3)}% | Current Mode: {memory.mode}")
-
-            await asyncio.sleep(20) # Пауза между проверками 20 секунд
+            log(f"🏛️ МАКРО-ФАЗА: >>> {memory.market_mode.upper()} <<< | Trend BTC: {round(trend, 3) }% | Price: {cur_p}")
 
         except Exception as e:
-            log(f"⚠️ Ошибка аналитика BTC: {e}")
-            await asyncio.sleep(10)
-
+            log(f"⚠ Ошибка макро-режима BTC: {e}")
+        await asyncio.sleep(60)
+#===========
 def log(msg):
     t = datetime.now().strftime('%H:%M:%S')
     print(f"[{t}] 🏛️ {msg}")
@@ -386,6 +366,19 @@ async def check_signal(exchange, symbol):
         elif is_sell: # Геометрический фильтр для ШОРТА
             if (dn_shadow / live_candle_range) > shadow_limit or (short_body / live_candle_range) < body_limit:
                 return None
+
+        # --- [КВАНТОВЫЙ ФИЛЬТР: BTC TREND SHIELD] ---
+        # ТВОЙ СИНТАКСИС: Проверяем минутное изменение Биткоина со строгим ключом :USDT
+        if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 2:
+            btc_now = memory.btc_history[-1]
+            btc_prev = memory.btc_history[-2]
+            btc_change = btc_now / btc_prev - 1
+
+            if is_buy and btc_change < -0.0004: # Блокируем лонг альта при проливе BTC
+                return None
+            if is_sell and btc_change > 0.0004: # Блокируем шорт альта при пампе BTC
+                return None
+
 
         # 6. Funding Shield (Если прошли геометрию)
         try:
@@ -634,13 +627,25 @@ async def monitor_logic(exchange, symbol, pos):
                     clean_memory_keys(symbol)
                     return
 
+                # --- ЖЕСТКИЙ ФИКС V26.4: ФИЗИЧЕСКИЙ СБРОС 50% ОБЪЕМА НА БИРЖУ ---
+                tp2_close_qty = exchange.amount_to_precision(symbol, vol * 0.5)
+                await exchange.create_market_order(symbol, exit_side, tp2_close_qty, {'reduceOnly': True})
+
+                # Зачищаем старые стопы и переносим стоп оставшейся части в БУ
+                await exchange.cancel_all_orders(symbol)
+                bu_price = float(exchange.price_to_precision(symbol, entry_p))
+                rem_qty = exchange.amount_to_precision(symbol, vol - float(tp2_close_qty))
+                await exchange.create_order(symbol, 'STOP_MARKET', exit_side, rem_qty, params={'stopPrice': bu_price, 'reduceOnly': True})
+
+                # Активируем флаги памяти для Infinity Трейлинга на остаток
                 memory.tp_fixed[symbol]['tp2'] = True
                 memory.trail_active[symbol] = True
                 memory.max_pnl[symbol] = profit
-                log(f"🔥 TP2 ФИКСИРОВАН: {symbol}. Включен Трейлинг [{current_mode.upper()}] {bal_str}")
+
+                log(f"🔥 TP2 ФИКСИРОВАН: {symbol}. Половина продана, остаток ({rem_qty}) в Трейлинге [{current_mode.upper()}] {bal_str}")
                 action_triggered = True
             except Exception as e:
-                log(f"⚠️ Ошибка TP2 {symbol}: {e}")
+                log(f"⚠ Ошибка TP2 {symbol}: {e}")
 
             if action_triggered: return # ФИКС: Обрываем тик строго ВНЕ try/except!
 
