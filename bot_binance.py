@@ -597,7 +597,7 @@ async def monitor_logic(exchange, symbol, pos):
             # Защита Notional $5.20
             if (close_qty_raw * cur_p) < 5.2:
                 log(f"⚠ ОБЪЕМ МАЛ ДЛЯ ДРОБЛЕНИЯ {symbol}: Закрываем 100% по рынку для защиты кошелька.")
-                await exchange.cancel_all_orders(binance_market_id)
+                await exchange.cancel_all_orders(symbol)
                 await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
                 clean_memory_keys(symbol)
                 return # Выход из тика
@@ -607,7 +607,7 @@ async def monitor_logic(exchange, symbol, pos):
                 close_qty = exchange.amount_to_precision(symbol, vol * 0.5)
                 await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
 
-                await exchange.cancel_all_orders(binance_market_id)
+                await exchange.cancel_all_orders(symbol)
                 bu_price = float(exchange.price_to_precision(symbol, entry_p))
                 rem_qty = exchange.amount_to_precision(symbol, vol - float(close_qty))
 
@@ -629,7 +629,7 @@ async def monitor_logic(exchange, symbol, pos):
                 # Если остаток позиции слишком мал для дробления — кроем 100%
                 if (vol * cur_p) < 5.2:
                     log(f"⚠ Остаток мал для трейлинга {symbol}: Закрываем 100% на TP2.")
-                    await exchange.cancel_all_orders(binance_market_id)
+                    await exchange.cancel_all_orders(symbol)
                     await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
                     clean_memory_keys(symbol)
                     return
@@ -653,7 +653,7 @@ async def monitor_logic(exchange, symbol, pos):
             if profit <= (memory.max_pnl[symbol] - trail_step):
                 log(f"🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие {symbol} @ {round(profit*100,2)}% {bal_str}")
                 try:
-                    await exchange.cancel_all_orders(binance_market_id)
+                    await exchange.cancel_all_orders(symbol)
                     await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
                     clean_memory_keys(symbol)
                 except Exception as e:
@@ -670,18 +670,15 @@ def clean_memory_keys(symbol):
     if symbol in memory.max_pnl: del memory.max_pnl[symbol]
 #==============
 async def monitoring_cycle(exchange):
-    """Цикл слежения за всеми открытыми позициями одновременно [V24.5 Трейл-Синхро]"""
-    log("👁️ Мониторинг позиций запущен.")
+    """Исправленный цикл: передает полный ключ (с :USDT) для точного поиска в памяти."""
+    log("👁 Мониторинг позиций запущен.")
     while memory.is_running:
         if memory.active_pos:
             tasks = []
             for sym, data in memory.active_pos.items():
-                # Гарантируем, что ключ чистый, без двоеточий
-                clean_sym = sym.replace(':USDT', '')
-                tasks.append(monitor_logic(exchange, clean_sym, data))
-
-            if tasks:
-                await asyncio.gather(*tasks)
+                # FIX: Используем оригинальный 'sym', а не очищенный
+                tasks.append(monitor_logic(exchange, sym, data))
+            if tasks: await asyncio.gather(*tasks)
         await asyncio.sleep(0.5)
 
 async def run_titan_v1():
