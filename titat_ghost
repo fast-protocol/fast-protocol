@@ -30,28 +30,25 @@ class TitanGhost:
         self.log(f"💎 TITAN GHOST V22.3 READY. Slots: {MAX_SLOTS} | Assets: {len(self.memory['dna'])}")
 
     async def update_context(self):
-        """Синхронизация позиций через прямой API-шлюз аккаунта V24.9 [BINGX]"""
+        """Синхронизация позиций через прямой API-шлюз аккаунта V25.1 [ИСПРАВЛЕНО BINGX]"""
         while self.memory['is_running']:
             try:
-                # 1. Синхронизируем доступный маржинальный баланс
-                #bal = await self.exchange.fetch_balance()
-                #self.memory['available'] = float(bal.get('USDT', {}).get('free', 0.0))
-                # Жестко запрашиваем баланс фьючерсного аккаунта Бессрочных свопов
+                # 1. Жестко запрашиваем баланс фьючерсного аккаунта Бессрочных свопов
                 bal = await self.exchange.fetch_balance({'type': 'swap'})
 
-                # Безопасное квантовое чтение свободного остатка USDT
-                if 'USDT' in bal:
+                # БРОНИРОВАННЫЙ КВАНТОВЫЙ ПАРСИНГ ФЬЮЧЕРСНОГО БАЛАНСА В USDT
+                if 'USDT' in bal and isinstance(bal['USDT'], dict):
                     self.memory['available'] = float(bal['USDT'].get('free', bal['USDT'].get('total', 0.0)))
+                elif 'free' in bal and isinstance(bal['free'], dict) and 'USDT' in bal['free']:
+                    self.memory['available'] = float(bal['free']['USDT'])
                 else:
-                    # Резервный синтаксический перебор структуры CCXT
-                    self.memory['available'] = float(bal.get('free', {}).get('USDT', bal.get('total', {}).get('USDT', 0.0)))
+                    # Резервный синтаксический перебор структуры ответа BingX API
+                    self.memory['available'] = float(bal.get('info', {}).get('data', {}).get('balance', {}).get('availableMargin', 0.0))
 
-                # ЖЕСТКИЙ ФИКС: Используем прямой метод fetch_account_positions для рынка swap
-                # Он запрашивает эндпоинт /api/v1/position напрямую, минуя ограничения баланса
+                # 2. Используем твой надежный метод fetch_account_positions для рынка swap
                 try:
                     pos = await self.exchange.fetch_account_positions(None, {'type': 'swap'})
                 except:
-                    # Резервный шлюз, если CCXT требует fetch_positions с типом рынка
                     pos = await self.exchange.fetch_positions(None, {'type': 'swap'})
 
                 current_active = []
@@ -68,8 +65,10 @@ class TitanGhost:
 
                     # Ищем совпадение в нашей ДНК-обойме
                     dna_key = None
-                    if clean_sym in self.memory['dna']: dna_key = clean_sym
-                    elif f"{clean_sym}:USDT" in self.memory['dna']: dna_key = f"{clean_sym}:USDT"
+                    if clean_sym in self.memory['dna']:
+                        dna_key = clean_sym
+                    elif f"{clean_sym}:USDT" in self.memory['dna']:
+                        dna_key = f"{clean_sym}:USDT"
 
                     # СЦЕНАРИЙ А: Позиция наша — усыновляем или ведем
                     if dna_key:
@@ -87,14 +86,13 @@ class TitanGhost:
                                 'entry_time': time.time(), 'dna': self.memory['dna'][dna_key], 'status': 'active'
                             }
 
-                    # --- [ТОТАЛЬНЫЙ ПЫЛЕСОС ПЫЛИ: ВЫЖИГАЕМ СЛЕПЫЕ ПОЗИЦИИ XRP] ---
+                    # --- [ТОТАЛЬНЫЙ ПЫЛЕСОС ПЫЛИ: ВЫЖИГАЕМ СЛЕПЫЕ ПОЗИЦИИ] ---
                     else:
                         try:
                             self.log(f"🧹 ВЕНИК-ПОЗИЦИЯ: Обнаружен слепой остаток по {clean_sym} (Об ъем: {vol}). Выжигаю...")
                             side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
                             exit_side = 'sell' if 'long' in side_raw or 'buy' in side_raw else 'buy'
 
-                            # Чистим символ от суффикса перед маркет-ордером
                             market_id = clean_sym.replace(':USDT', '')
                             await self.exchange.create_market_order(market_id, exit_side, vol, {'reduceOnly': True})
                         except Exception as e:
@@ -109,7 +107,8 @@ class TitanGhost:
                             if not open_orders and sym not in current_active:
                                 self.log(f"🧹 ЭВАКУАЦИЯ: Лимитка по {sym} удалена руками. Очищаем па мять.")
                                 del self.memory['active_pos'][sym]
-                        except Exception: pass
+                        except Exception:
+                            pass
 
                 # 3. Очистка памяти от закрытых живых позиций
                 for sym in list(self.memory['active_pos'].keys()):
@@ -123,7 +122,7 @@ class TitanGhost:
                 await asyncio.sleep(20)
             except Exception as e:
                 await asyncio.sleep(5)
-
+#==========
     async def price_stream(self):
         """Высокочастотный тотальный сбор цен BingX со сквозной фильтрацией ID [V24.1]"""
         self.log(f"📡 Запуск REST-мониторинга цен и объемов для {len(self.memory['dna'])} активов...")
