@@ -595,7 +595,10 @@ async def monitor_logic(exchange, symbol, pos):
                         if is_long_leak or is_short_leak:
                             log(f"🚨 РАННЯЯ ЭВАКУАЦИЯ BTC: {symbol} закрыт принудительно! Поводырь против нас ({round(btc_move*100, 3)}%). Лосс: {round(profit*100, 2)}%")
                             try:
-                                await exchange.cancel_all_orders(symbol)
+#                                await exchange.cancel_all_orders(symbol)
+                                # Сносим абсолютно все лимитки и скрытые Algo-стопы по ID рынка
+                                await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                                await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
                                 await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
                             except: pass
 
@@ -609,17 +612,26 @@ async def monitor_logic(exchange, symbol, pos):
 
             # ТРИГГЕР 2: Эвакуация по затяжному флэтовому болоту альта (Time-Decay)
             if age > 300 and profit < -0.003:
-                log(f"⏱️ РАННЯЯ ЭВАКУАЦИЯ ТАЙМЕРА: {symbol} утилизирован по времени ({int(age)}с). Лосс: {round(profit*100, 2)}%")
+                log(f"⏱️ РАННЯЯ ЭВАКУАЦИЯ ТАЙМЕРА: {symbol} утилизирован по времени (Зависание: {int(age)}с). Лосс застрял: {round(profit*100, 2)}%")
+                action_triggered_decay = False
                 try:
-                    await exchange.cancel_all_orders(symbol)
+                    #await exchange.cancel_all_orders(symbol)
+                    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
                     await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
-                except: pass
+                    action_triggered_decay = True
+                except Exception as e:
+                    log(f"⚠️ Критическая ошибка эвакуации по таймеру {symbol}: {e}")
 
+                # ТОТАЛЬНАЯ ЗАЧИСТКА ВСЕХ КЛЮЧЕЙ И ТРЕЙЛИНГ-ФЛАГОВ
                 for k in [symbol, symbol.replace(':USDT', '')]:
                     if k in memory.active_pos: del memory.active_pos[k]
                     if k in memory.tp_fixed: del memory.tp_fixed[k]
                     if k in memory.stop_placed: del memory.stop_placed[k]
-                return # Намертво обрываем тик
+                    if k in memory.trail_active: del memory.trail_active[k]
+                    if k in memory.max_pnl: del memory.max_pnl[k]
+
+                if action_triggered_decay: return # Намертво обрываем тик!
 #==============
         # 3. ВЫСТАВЛЕНИЕ РЕАЛЬНОГО СТОПА НА БИРЖУ СРАЗУ ПРИ ВХОДЕ
         if not memory.stop_placed.get(symbol):
