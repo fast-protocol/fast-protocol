@@ -174,10 +174,12 @@ class TitanGhost:
         try:
             # 1. Принудительно очищаем символ от фьючерсных двоеточий CCXT
             clean_sym = sym.replace(':USDT', '')
-
             # --- ЖЕСТКИЙ ФИКС ДЛЯ МЕМ-ФЛАГМАНА PEPE НА BINGX ---
             if "1000PEPE" in clean_sym:
                 clean_sym = clean_sym.replace("1000PEPE", "PEPE")
+
+            # Гарантируем, что для отправки ордеров на BingX символ имеет канонический вид, например, "PEPE/USDT"
+            clean_sym = clean_sym.replace('_', '/')
 
             # 2. Твой надежный метод установки плеча с защитой BOTH
             await self.exchange.set_leverage(dna['lev'], clean_sym, {'side': 'BOTH'})
