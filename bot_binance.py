@@ -717,16 +717,27 @@ async def monitor_logic(exchange, symbol, pos):
 
         # 6. ВЕДЕНИЕ АДАПТИВНОГО ТРЕЙЛИНГА ПО ШАГАМ
         if memory.trail_active[symbol]:
-            trail_step = 0.0045 if current_mode == 'bull' else (0.0015 if current_mode == 'bear' else dna.get('trail', 0.0032))
+            # ЖЕСТКИЙ ФИКС СИНТАКСИСА V27.8: Переменная current_mode заменена на memory.market_mode
+            trail_step = 0.0045 if memory.market_mode == 'bull' else (0.0015 if memory.market_mode == 'bear' else dna.get('trail', 0.0032))
+
             if profit > memory.max_pnl[symbol]:
                 memory.max_pnl[symbol] = profit
 
             if profit <= (memory.max_pnl[symbol] - trail_step):
-                log(f"🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие {symbol} @ {round(profit*100,2)}% {bal_str}")
+                # Расчет чистого пикового профита, который был зафиксирован трейлингом
+                peak_profit = memory.max_pnl[symbol]
+                log(f"🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие {symbol} | Итог: +{round(profit*100,2)}% (Пик тренда был: +{round(peak_profit*100,2)}%) {bal_str}")
+
                 try:
                     await exchange.cancel_all_orders(symbol)
                     await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
-                    clean_memory_keys(symbol)
+
+                    # Полностью выжигаем все ключи из памяти для защиты от повторного тика!
+                    for k in [symbol, symbol.replace(':USDT', '')]:
+                        if k in memory.active_pos: del memory.active_pos[k]
+                        if k in memory.tp_fixed: del memory.tp_fixed[k]
+                        if k in memory.stop_placed: del memory.stop_placed[k]
+                        if k in memory.trail_active: del memory.trail_active[k]
                 except Exception as e:
                     log(f"⚠️ Ошибка закрытия трейлинга {symbol}: {e}")
                 return # Намертво обрываем тик после закрытия сделки
