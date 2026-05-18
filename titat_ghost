@@ -34,8 +34,17 @@ class TitanGhost:
         while self.memory['is_running']:
             try:
                 # 1. Синхронизируем доступный маржинальный баланс
-                bal = await self.exchange.fetch_balance()
-                self.memory['available'] = float(bal.get('USDT', {}).get('free', 0.0))
+                #bal = await self.exchange.fetch_balance()
+                #self.memory['available'] = float(bal.get('USDT', {}).get('free', 0.0))
+                # Жестко запрашиваем баланс фьючерсного аккаунта Бессрочных свопов
+                bal = await self.exchange.fetch_balance({'type': 'swap'})
+
+                # Безопасное квантовое чтение свободного остатка USDT
+                if 'USDT' in bal:
+                    self.memory['available'] = float(bal['USDT'].get('free', bal['USDT'].get('total', 0.0)))
+                else:
+                    # Резервный синтаксический перебор структуры CCXT
+                    self.memory['available'] = float(bal.get('free', {}).get('USDT', bal.get('total', {}).get('USDT', 0.0)))
 
                 # ЖЕСТКИЙ ФИКС: Используем прямой метод fetch_account_positions для рынка swap
                 # Он запрашивает эндпоинт /api/v1/position напрямую, минуя ограничения баланса
@@ -166,6 +175,10 @@ class TitanGhost:
         try:
             # 1. Принудительно очищаем символ от фьючерсных двоеточий CCXT
             clean_sym = sym.replace(':USDT', '')
+
+            # --- ЖЕСТКИЙ ФИКС ДЛЯ МЕМ-ФЛАГМАНА PEPE НА BINGX ---
+            if "1000PEPE" in clean_sym:
+                clean_sym = clean_sym.replace("1000PEPE", "PEPE")
 
             # 2. Твой надежный метод установки плеча с защитой BOTH
             await self.exchange.set_leverage(dna['lev'], clean_sym, {'side': 'BOTH'})
