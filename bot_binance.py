@@ -109,9 +109,9 @@ async def update_market_regime(exchange):
             memory.btc_trend = trend
 
             # Полное сохранение твоих порогов инерции
-            if trend >= 0.45:
+            if trend >= 0.75:
                 memory.market_mode = 'bull'
-            elif trend <= -0.45:
+            elif trend <= -0.75:
                 memory.market_mode = 'bear'
             else:
                 memory.market_mode = 'stable'
@@ -567,6 +567,46 @@ async def monitor_logic(exchange, symbol, pos):
         # --- ЖЕСТКИЙ ФИКС ОБЪЯВЛЕНИЯ ID РЫНКА ---
         binance_market_id = symbol.replace('/', '').replace(':USDT', '')
 
+        # --- [БРОНИРОВАННЫЙ КВАНТОВЫЙ МОДУЛЬ РАННЕГО ВЫХОДА V27.3] ---
+        if profit < 0:
+            # ТРИГГЕР 1: Эвакуация по импульсу Биткоина (Строго от 4 элементов в истории!)
+            if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 4:
+                btc_now = memory.btc_history[-1]
+                btc_then = memory.btc_history[-3] # Срез за 2 минуты
+
+                # Защита от нулевых и аномальных данных
+                if btc_then > 1000 and btc_now > 1000:
+                    btc_move = btc_now / btc_then - 1
+
+                    # Жесткий фильтр отсечения математического бреда (аномалий > 5%)
+                    if abs(btc_move) < 0.05:
+                        is_long_leak = side in ['long', 'buy'] and btc_move <= -0.0015  # -0.15%
+                        is_short_leak = side in ['short', 'sell'] and btc_move >= 0.0015 # +0.15%
+
+                        if is_long_leak or is_short_leak:
+                            log(f"🚨 РАННЯЯ ЭВАКУАЦИЯ BTC: {symbol} закрыт принудительно! Поводырь пошел против нас ({round(btc_move*100, 3)}%). Лосс: {round(profit*100, 2)}%")
+                            try:
+                                await exchange.cancel_all_orders(symbol)
+                                await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+                            except: pass
+
+                            # Чистим память по обоим форматам ключей для 100% гарантии от зацикливания!
+                            for k in [symbol, symbol.replace(':USDT', '')]:
+                                clean_memory_keys(k)
+                            return # Намертво обрываем тик
+
+            # ТРИГГЕР 2: Эвакуация по затяжному флэтовому болоту альта (Time-Decay)
+            if age > 300 and profit < -0.003:
+                log(f"⏱️ РАННЯЯ ЭВАКУАЦИЯ ТАЙМЕРА: {symbol} утилизирован по времени ({int(age)}с). Лосс застрял: {round(profit*100, 2)}%")
+                try:
+                    await exchange.cancel_all_orders(symbol)
+                    await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+                except: pass
+
+                for k in [symbol, symbol.replace(':USDT', '')]:
+                    clean_memory_keys(k)
+                return # Намертво обрываем тик
+#==============
         # 3. ВЫСТАВЛЕНИЕ РЕАЛЬНОГО СТОПА НА БИРЖУ СРАЗУ ПРИ ВХОДЕ
         if not memory.stop_placed.get(symbol):
             try:
