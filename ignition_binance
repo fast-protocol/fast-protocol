@@ -1,5 +1,4 @@
 
-
 class GlobalMemory:
     def __init__(self):
         self.prices = {}
@@ -198,30 +197,51 @@ async def monitor_logic(exchange):
                         memory.stop_placed[symbol] = bu_price
                     except Exception as e:
                         log(f"⚠ Ошибка TP1 {symbol}: {e}")
+                #=======
+                # --- [БРОНИРОВАННЫЙ МОНОЛИТ ВЫХОДОВ V21.9 — ФИКС ЗАЦИКЛИВАНИЯ] ---
 
+                # ЛОГИКА ТЕЙК-ПРОФИТА 2 (ФИНАЛ СДЕЛКИ)
                 if pnl >= gd['tp2']:
                     log(f"🏆 ТЕЙК-2 ФИНАЛ: {symbol} зафиксирован (+{round(gd['tp2']*100,2)}%)")
-                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                    await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
+                    action_triggered_tp2 = False
+                    try:
+                        # Чистим алгоритмические стопы и кроем остаток по рынку
+                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
+                        await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
+                        action_triggered_tp2 = True
+                    except Exception as e:
+                        log(f"⚠ Ошибка отправки ордеров Тейка-2 для {symbol}: {e}")
 
-                    del memory.active_pos[symbol]
+                    # Тотальная очистка оперативной памяти бота при любом исходе сетевого запроса
+                    if symbol in memory.active_pos: del memory.active_pos[symbol]
                     if symbol in memory.be_fixed: del memory.be_fixed[symbol]
                     if symbol in memory.stop_placed: del memory.stop_placed[symbol]
-                    memory.slots_occupied -= 1
-                    continue
+                    if symbol in memory.tp_fixed: del memory.tp_fixed[symbol]
 
+                    memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                    if action_triggered_tp2: return # Намертво обрываем тик
+
+                # ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ
                 if age > gd['time'] and pnl < gd['tp1'] and not memory.be_fixed.get(symbol, False):
-                #if age > gd['time'] and pnl < gd['tp1']:
-                    log(f"⏱️ ЗАТУХАНИЕ: {symbol} закрыт по таймеру (PNL: {round(pnl*100,2)}%)")
-                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                    await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
+                    log(f"⏱ ЗАТУХАНИЕ: {symbol} закрыт по таймеру (Age: {int(age)}с | PNL: {round(pnl*100,2)}%)")
+                    action_triggered_decay = False
+                    try:
+                        # Тотально сносим защитные стопы и эвакуируем позицию
+                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
+                        await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
+                        action_triggered_decay = True
+                    except Exception as e:
+                        log(f"⚠ Ошибка эвакуации по таймеру для {symbol}: {e}")
 
-                    del memory.active_pos[symbol]
+                    # Полная зачистка флагов
+                    if symbol in memory.active_pos: del memory.active_pos[symbol]
                     if symbol in memory.be_fixed: del memory.be_fixed[symbol]
                     if symbol in memory.stop_placed: del memory.stop_placed[symbol]
-                    memory.slots_occupied -= 1
-                    continue
+                    if symbol in memory.tp_fixed: del memory.tp_fixed[symbol]
 
+                    memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                    if action_triggered_decay: return # Намертво обрываем тик
+#===========
                 if int(time.time()) % 15 == 0:
                     try:
                         positions = await exchange.fetch_positions()
