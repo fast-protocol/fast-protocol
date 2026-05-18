@@ -111,10 +111,13 @@ async def update_market_regime(exchange):
             # Полное сохранение твоих порогов инерции
             if trend >= 0.75:
                 memory.market_mode = 'bull'
+                memory.dna_fleet = memory.all_dna['bull'] # Жесткий перенос матрицы
             elif trend <= -0.75:
                 memory.market_mode = 'bear'
+                memory.dna_fleet = memory.all_dna['bear'] # Жесткий перенос матрицы
             else:
                 memory.market_mode = 'stable'
+                memory.dna_fleet = memory.all_dna['stable'] # Жесткий перенос матрицы
 
             log(f"🏛️ МАКРО-ФАЗА: >>> {memory.market_mode.upper()} <<< | Trend BTC: {round(trend, 3) }% | Price: {cur_p}")
 
@@ -408,7 +411,8 @@ async def signal_hunter(exchange):
     while memory.is_running:
 
         if int(time.time()) % 300 == 0:
-           log(f"🏹 Охотник на чеку. Сканирую {len(memory.dna_fleet)} секторов в режиме {memory.current_regime.upper()}...")
+            # ИСПРАВЛЕНО: берем market_mode из живой коробки передач
+            log(f"🏹 Охотник на чеку. Сканирую {len(memory.dna_fleet)} секторов в режиме {memory.market_mode.upper()}...")
         # Если все слоты заняты - ждем и не тратим API вес
         if memory.slots_occupied >= MAX_ACTIVE_SLOTS:
             await asyncio.sleep(2)
@@ -551,6 +555,10 @@ async def monitor_logic(exchange, symbol, pos):
         vol = abs(float(pos['contracts']))
 
         dna = memory.dna_fleet.get(symbol)
+        if not dna:
+            # Если позиция без суффикса, принудительно добавляем его для поиска в ДНК
+            if ":USDT" not in symbol:
+                dna = memory.dna_fleet.get(f"{symbol}:USDT")
         if not dna: return
 
         # Локальная инициализация
