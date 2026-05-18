@@ -277,30 +277,20 @@ async def position_tracker(exchange):
                         await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
                     except Exception:
                         pass
-
+#===========
                 # СЦЕНАРИЙ 2: Для ЖИВЫХ позиций (SUI, PEPE, DOGE) — ЖЕСТКАЯ ЗАЩИТА БЕЗУБЫТКА
-                else:
-                    try:
+#                else:
+#                    try:
                         # Если по монете уже зафиксирован TP1, венику ЗАПРЕЩЕНО трогать ордера,
                         # чтобы случайно не сбить наш выставленный БУ-стоп!
-                        if sym_key in memory.tp_fixed and not memory.tp_fixed[sym_key].get('tp1', False):
+#                        if sym_key in memory.tp_fixed and not memory.tp_fixed[sym_key].get('tp1', False):
                             # Раз в 20 секунд убираем наводку дубликатов
-                            if int(time.time()) % 20 == 0:
-                                await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                                memory.stop_placed[sym_key] = None # Сбрасываем флаг, чтобы monitor_logic выставил ОДИН чистый стоп
-                    except Exception:
-                        pass
-#                    pass
-#                    try:
-                        # Если Тейк 1 по монете ЕЩЕ НЕ ВЫПОЛНЕН — мы можем безопасно чистить дубликаты стопов.
-                        # Но если TP1 выполнен (флаг равен True), венику ЗАПРЕЩЕНО трогать ордера,
-                        # чтобы не сбить наш выставленный БУ-стоп!
-#                        if sym_key in memory.tp_fixed and not memory.tp_fixed[sym_key]['tp1']:
-#                            if int(time.time()) % 60 < 10: # Раз в минуту убираем наводку дублей стартового стопа
+#                            if int(time.time()) % 20 == 0:
 #                                await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-#                                memory.stop_placed[sym_key] = None # Заставляем выставить один чистый стоп
+#                                memory.stop_placed[sym_key] = None # Сбрасываем флаг, чтобы monitor_logic выставил ОДИН чистый стоп
 #                    except Exception:
 #                        pass
+#============
 
             await asyncio.sleep(10)
         except Exception as e:
@@ -561,6 +551,13 @@ async def monitor_logic(exchange, symbol, pos):
         side = pos['side'].lower()
         profit = (cur_p / entry_p) - 1 if side in ['long', 'buy'] else (entry_p / cur_p) - 1
         vol = abs(float(pos['contracts']))
+
+        # ЖЕСТКИЙ ФИКС NAMEERROR: Объявляем переменную age для модулей раннего выхода!
+        if symbol in memory.entry_times:
+            age = time.time() - memory.entry_times[symbol]
+        else:
+            memory.entry_times[symbol] = time.time()
+            age = 1
 
         dna = memory.dna_fleet.get(symbol)
         if not dna:
