@@ -592,32 +592,43 @@ async def monitor_logic(exchange, symbol, pos):
                         is_long_leak = side in ['long', 'buy'] and btc_move <= -0.0015  # -0.15%
                         is_short_leak = side in ['short', 'sell'] and btc_move >= 0.0015 # +0.15%
 
+                        #
                         if is_long_leak or is_short_leak:
                             log(f"🚨 РАННЯЯ ЭВАКУАЦИЯ BTC: {symbol} закрыт принудительно! Поводырь против нас ({round(btc_move*100, 3)}%). Лосс: {round(profit*100, 2)}%")
+                            action_triggered_btc = False
                             try:
-#                                await exchange.cancel_all_orders(symbol)
-                                # Сносим абсолютно все лимитки и скрытые Algo-стопы по ID рынка
-                                await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
-                                await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                                await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
-                            except: pass
+                                # ЖЕСТКИЙ ФИКС V28.5: Выжигаем стопы по ID рынка и кроем марком
+                                clean_market_id = symbol.replace('/', '').replace(':USDT', '')
+                                await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
+                                await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': clean_market_id})
 
-                            # --- ТОТАЛЬНАЯ СТИРКА ПАМЯТИ ОТ ЗАЦИКЛИВАНИЯ ---
-                            # Сносим все возможные форматы ключей во всех словарях флагов!
+                                await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+                                action_triggered_btc = True
+                            except Exception as e:
+                                log(f"⚠️ Критическая ошибка эвакуации BTC для {symbol}: {e}")
+
+                            # Чистим память строго во всех форматах ключей
                             for k in [symbol, symbol.replace(':USDT', '')]:
                                 if k in memory.active_pos: del memory.active_pos[k]
                                 if k in memory.tp_fixed: del memory.tp_fixed[k]
                                 if k in memory.stop_placed: del memory.stop_placed[k]
-                            return # Намертво обрываем тик, запрещая коду скользить вниз!
+                                if k in memory.trail_active: del memory.trail_active[k]
+                                if k in memory.max_pnl: del memory.max_pnl[k]
+
+                            if action_triggered_btc: return # Намертво обрываем тик
 
             # ТРИГГЕР 2: Эвакуация по затяжному флэтовому болоту альта (Time-Decay)
             if age > 300 and profit < -0.003:
                 log(f"⏱️ РАННЯЯ ЭВАКУАЦИЯ ТАЙМЕРА: {symbol} утилизирован по времени (Зависание: {int(age)}с). Лосс застрял: {round(profit*100, 2)}%")
                 action_triggered_decay = False
                 try:
-                    #await exchange.cancel_all_orders(symbol)
-                    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
-                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
+                    # ЖЕСТКИЙ СИНТАКСИЧЕСКИЙ ФИКС V28.4: Генерируем ID рынка прямо в запросе, уходя от NameError!
+                    clean_market_id = symbol.replace('/', '').replace(':USDT', '')
+
+                    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
+                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': clean_market_id})
+
+                    # Закрываем позицию по рынку
                     await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
                     action_triggered_decay = True
                 except Exception as e:
