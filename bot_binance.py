@@ -288,6 +288,20 @@ async def check_signal(exchange, symbol):
         dna = memory.dna_fleet.get(symbol)
         if not dna: return None
 
+#=====
+        # --- [ВРЕЗКА V29.0: ПРОВЕРКА КУЛДАУНА ЭВАКУАЦИИ (3 ЧАСА)] ---
+        if hasattr(memory, 'cooldown_fleet'):
+            last_evac_time = memory.cooldown_fleet.get(symbol)
+            if last_evac_time:
+                time_passed = time.time() - last_evac_time
+                if time_passed < 10800: # 3 часа в секундах
+                    # log(f"🛡️ Cooldown Shield: {symbol} заблокирован. Осталось бана: {int(10800 -  time_passed)}с")
+                    return None
+                else:
+                    # Снимаем бан, если время истекло
+                    del memory.cooldown_fleet[symbol]
+#=====
+
         # 1. Данные рынка (limit=30 для точности MA20)
         ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
         df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
@@ -306,7 +320,28 @@ async def check_signal(exchange, symbol):
         if not (dna.get('min_w', 0.8) <= width <= dna.get('width', 2.0)): return None
         candle_size = (df['h'].iloc[-1] / df['l'].iloc[-1] - 1)
         if candle_size > 0.008: return None
+#====
+        # --- [ВРЕЗКА V29.0: 4-ЧАСОВОЙ ФИЛЬТР ХОДА ЦЕНЫ (4H RANGE SHIELD)] ---
+        try:
+            # Запрашиваем две 4-часовые свечи (текущую живую и предыдущую закрытую)
+            ohlcv_4h = await exchange.fetch_ohlcv(symbol, '4h', limit=2)
+            if len(ohlcv_4h) >= 2:
+                # Находим абсолютный максимум и минимум за это окно
+                high_4h = max(float(ohlcv_4h[0][2]), float(ohlcv_4h[1][2]))
+                low_4h = min(float(ohlcv_4h[0][3]), float(ohlcv_4h[1][3]))
 
+                # Расчет общего хода цены в процентах
+                rolling_range_4h = (high_4h / low_4h - 1) * 100
+
+                # Если ход монеты за последние 4 часа > 4.5%, это опасная фаза — АННУЛИРУЕМ СИГНАЛ
+                if rolling_range_4h > 4.5:
+                    # log(f"🛡️ 4H Range Shield: Сигнал {symbol} заблокирован. Ход: {round(rolling_r ange_4h, 2)}% > 4.5%")
+                    return None
+        except Exception as e:
+            # Предохранитель: если API Binance лагануло на запросе 4ч, пропускаем фильтр, чтобы не вешать сканер
+            pass
+
+#====
         # 4. Параметры предыдущей свечи (Engulfing)
         prev_open = df['o'].iloc[-1]
         prev_close = df['c'].iloc[-1]
@@ -353,7 +388,29 @@ async def check_signal(exchange, symbol):
         elif is_sell: # Геометрический фильтр для ШОРТА
             if (dn_shadow / live_candle_range) > shadow_limit or (short_body / live_candle_range) < body_limit:
                 return None
+#=====
+        # --- [ВРЕЗКА V29.0: ФИЛЬТР ПРЕДЫСТОРИИ КАСКАДНЫЙ НОЖ (PRE-CANDLE SHIELD)] ---
+        # Анализируем 3 предыдущие закрытые свечи (индексы -2, -3, -4)
+        if len(df) >= 5:
+            p_c1 = df.iloc[-2] # Прошлая минута
+            p_c2 = df.iloc[-3] # 2 минуты назад
+            p_c3 = df.iloc[-4] # 3 минуты назад
 
+            # Проверяем, направлены ли они все в одну сторону
+            is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
+            is_3_red   = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+
+            if is_buy and is_3_red:
+                # Если ловим лонг, но цена валится каскадом 3 минуты вниз без остановки — ОТМЕНА
+                # log(f"🛡️ Pre-Candle Shield: Заблокирован вход в ЛОНГ по {symbol}. Обнаружен падаю щий каскад.")
+                return None
+
+            if is_sell and is_3_green:
+                # Если ловим шорт, но цена летит ракетой 3 минуты вверх без откатов — ОТМЕНА
+                # log(f"🛡️ Pre-Candle Shield: Заблокиров ан вход в ШОРТ по {symbol}. Обнаружен растущий каскад.")
+                return None
+
+#=====
         # --- [КВАНТОВЫЙ ФИЛЬТР: BTC TREND SHIELD] ---
         # ТВОЙ СИНТАКСИС: Проверяем минутное изменение Биткоина со строгим ключом :USDT
         if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 2:
@@ -617,6 +674,14 @@ async def monitor_logic(exchange, symbol, pos):
                     action_triggered_decay = True
                 except Exception as e:
                     log(f"⚠️ Критическая ошибка эвакуации по таймеру {symbol}: {e}")
+
+                # --- [ВРЕЗКА V29.0: ЗАПИСЬ КУЛДАУНА ИМЕННО ДЛЯ ВЯЛОГО ТАЙМЕРА] ---
+                if not hasattr(memory, 'cooldown_fleet'):
+                    memory.cooldown_fleet = {}
+                # Вешаем жесткий бан 3 часа только на увядшую в болоте монету
+                memory.cooldown_fleet[symbol] = time.time()
+                memory.cooldown_fleet[symbol.replace(':USDT', '')] = time.time()
+
 
                 # ТОТАЛЬНАЯ ЗАЧИСТКА ВСЕХ КЛЮЧЕЙ И ТРЕЙЛИНГ-ФЛАГОВ
                 for k in [symbol, symbol.replace(':USDT', '')]:
