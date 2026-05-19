@@ -1,4 +1,5 @@
 
+
 class GlobalMemory:
     def __init__(self):
         self.prices = {}
