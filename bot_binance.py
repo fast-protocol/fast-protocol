@@ -119,7 +119,7 @@ async def update_market_regime(exchange):
                 memory.market_mode = 'stable'
                 memory.dna_fleet = memory.all_dna['stable'] # Жесткий перенос матрицы
 
-            log(f"🏛️ МАКРО-ФАЗА: >>> {memory.market_mode.upper()} <<< | Trend BTC: {round(trend, 3) }% | Price: {cur_p}")
+            #log(f"🏛️ МАКРО-ФАЗА: >>> {memory.market_mode.upper()} <<< | Trend BTC: {round(trend, 3 )}% | Price: {cur_p}")
 
         except Exception as e:
             log(f"⚠ Ошибка макро-режима BTC: {e}")
@@ -277,20 +277,6 @@ async def position_tracker(exchange):
                         await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
                     except Exception:
                         pass
-#===========
-                # СЦЕНАРИЙ 2: Для ЖИВЫХ позиций (SUI, PEPE, DOGE) — ЖЕСТКАЯ ЗАЩИТА БЕЗУБЫТКА
-#                else:
-#                    try:
-                        # Если по монете уже зафиксирован TP1, венику ЗАПРЕЩЕНО трогать ордера,
-                        # чтобы случайно не сбить наш выставленный БУ-стоп!
-#                        if sym_key in memory.tp_fixed and not memory.tp_fixed[sym_key].get('tp1', False):
-                            # Раз в 20 секунд убираем наводку дубликатов
-#                            if int(time.time()) % 20 == 0:
-#                                await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-#                                memory.stop_placed[sym_key] = None # Сбрасываем флаг, чтобы monitor_logic выставил ОДИН чистый стоп
-#                    except Exception:
-#                        pass
-#============
 
             await asyncio.sleep(10)
         except Exception as e:
@@ -408,9 +394,9 @@ async def signal_hunter(exchange):
 
     while memory.is_running:
 
-        if int(time.time()) % 300 == 0:
+#        if int(time.time()) % 300 == 0:
             # ИСПРАВЛЕНО: берем market_mode из живой коробки передач
-            log(f"🏹 Охотник на чеку. Сканирую {len(memory.dna_fleet)} секторов в режиме {memory.market_mode.upper()}...")
+            #log(f"🏹 Охотник на чеку. Сканирую {len(memory.dna_fleet)} секторов в режиме {memory.market_mode.upper()}...")
         # Если все слоты заняты - ждем и не тратим API вес
         if memory.slots_occupied >= MAX_ACTIVE_SLOTS:
             await asyncio.sleep(2)
@@ -532,8 +518,6 @@ async def safe_close_all_orders(exchange, symbol):
 async def monitor_logic(exchange, symbol, pos):
     try:
         # 1. ЧИСТОЕ ЧТЕНИЕ ЦЕНЫ ИЗ WEBSOCKET (Без лагов и мусора)
-#        cur_p = memory.prices.get(symbol)
-#        if not cur_p: return
         # БРОНИРОВАННОЕ ЧТЕНИЕ ЦЕНЫ: Ищем оба формата ключа в WebSocket-потоке
         cur_p = memory.prices.get(symbol)
         if not cur_p:
