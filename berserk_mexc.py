@@ -1,14 +1,3 @@
-import math
-import ccxt, time, pandas as pd
-from datetime import datetime
-# Класс защиты словарей (ОБЯЗАТЕЛЬНО ДОБАВЬ ЭТО)
-class SafeDict(dict):
-    def __getitem__(self, key):
-        if key not in self: self[key] = False
-        return super().__getitem__(key)
-
-# --- НАСТРОЙКИ V5.5.1 STRIKE-DUO --- MEXC ---
-API_KEY, SECRET_KEY = 
 
 # --- ПУЛЬТ MEXC V12.6 [IRON-RECOVERY] ---
 #PRIORITY_LIST = [
@@ -57,10 +46,10 @@ MAX_CANDLE_SIZE = 0.0075 # Анти-Шип (0.75%)
 
 # --- ПРЕДОХРАНИТЕЛЬ (QUICK CUT) ---
 # Теперь применяем ко всем активным монетам, так как они все волатильны
-DANGER_COINS = ['SOL', 'NEAR', 'LDO', 'OP', 'APT', 'MANA', 'POL', '1INCH'] 
+DANGER_COINS = ['SOL', 'NEAR', 'LDO', 'OP', 'APT', 'MANA', 'POL', '1INCH']
 QC_TIME = 110           # 2 минуты
-QC_LIMIT = -0.0052       # -0.4%   
-# ==========================================   
+QC_LIMIT = -0.0052       # -0.4%
+# ==========================================
 MAX_BATCH = 1000000 #1500000
 LIMIT_ORDER_TTL = 75  # Время жизни капкана в секундах
 #--------
@@ -75,7 +64,7 @@ order_creation_time = SafeDict() # Новый словарь для таймин
 entry_times = SafeDict()
 lock_activated = SafeDict() # Для замка профита
 # К твоим словарям добавь:
-take_placed = SafeDict() 
+take_placed = SafeDict()
 partial_fixed = SafeDict() # Чтобы MEXC тоже стал многозадачным!
 just_closed = SafeDict()   # Фикс петли
 tp1_fixed = SafeDict()
@@ -204,7 +193,7 @@ def run_titan_stable():
                 # ФИКС: Проверяем, что биржа прислала данные, а не True/False/None
                 if not isinstance(ticker, dict):
                     log(f"⚠️ Биржа вернула пустой тикер для {symbol}, ждем...")
-                    time.sleep(1); continue 
+                    time.sleep(1); continue
 
 
                 price = float(ticker.get('last', 0))
@@ -247,7 +236,7 @@ def run_titan_stable():
 
                 # Шаг 2. Каскадная фиксация
                 side_exit = 'sell' if side in ['long', 'buy'] else 'buy'
-                
+
                 # ТЕЙК №1 (30% от текущего объема)
                 if not tp1_fixed.get(symbol, False) and profit >= TP1_PCT:
                     qty = float(exchange.amount_to_precision(symbol, size * TP1_SHARE))
@@ -259,7 +248,7 @@ def run_titan_stable():
                 # ТЕЙК №2 (40% от первоначального объема -> это ~57% от остатка)
                 if tp1_fixed.get(symbol, False) and not tp2_fixed.get(symbol, False) and profit >= TP2_PCT:
                     # Считаем 40% от базы через текущий размер
-                    qty = float(exchange.amount_to_precision(symbol, size * 0.57)) 
+                    qty = float(exchange.amount_to_precision(symbol, size * 0.57))
                     if qty > 0 and smart_order(symbol, side_exit, qty, True, price, is_exit=True):
                         tp2_fixed[symbol] = True
                         log(f"🎯 ТЕЙК №2 (+{round(profit*100,2)}%) взят по {symbol}")
@@ -288,10 +277,10 @@ def run_titan_stable():
                 # Добавили is_qc в список условий!
 #====
                 is_sl_full = profit <= -PRIMARY_SL_PCT
-                
+
                 # Если это КВИК-КАТ или жесткий СТОП-ЛОСС — выходим только МАРКЕТОМ (спасаем депо)
                 if is_qc or is_sl_full:
-                    use_limit_exit = False 
+                    use_limit_exit = False
                 else:
                     # Для Хирурга, Тейка 2, Тайм-аута или Замка — используем ЛИМИТКУ (экономим деньги)
                     use_limit_exit = True
@@ -309,9 +298,9 @@ def run_titan_stable():
                         log(f"🚨 {res} ВЫХОД: {symbol} | Profit: {round(profit*100, 2)}%")
 
                         # ВАЖНО: Защищаем выход от ошибок API при отмене
-                        try: 
+                        try:
                             exchange.cancel_all_orders(symbol)
-                        except: 
+                        except:
                             pass # Если ордеров уже нет или биржа чихнула - идем дальше на выход
 
 #                       exchange.cancel_all_orders(symbol)
@@ -337,7 +326,7 @@ def run_titan_stable():
                         tp2_fixed[symbol] = False
                         step_be[symbol] = -PRIMARY_SL_PCT
                         last_stop_time = time.time()
-                        time.sleep(2) 
+                        time.sleep(2)
                     except Exception as e:
                         log(f"❌ Ошибка выхода: {e}")
                         # Сбрасываем флаги, чтобы попробовать закрыться снова на следующем круге
@@ -360,7 +349,7 @@ def run_titan_stable():
             # Если мы уже в сделке, не нужно лихорадочно опрашивать весь список
             # Просто ждем 5 секунд и идем сразу в мониторинг (ниже)
             if len(active_positions) > 0:
-                time.sleep(5) 
+                time.sleep(5)
                 # Мы не делаем continue, чтобы бот ОБЯЗАТЕЛЬНО дошел до мониторинга ниже!
             else:
                 # А если позиции нет — работаем на полной скорости
@@ -402,7 +391,7 @@ def run_titan_stable():
                     continue
             except Exception as e:
                 # Если биржа лагает на фандинге - просто идем дальше, не падаем
-                pass 
+                pass
 #==
             df = pd.DataFrame(exchange.fetch_ohlcv(symbol, '1m', limit=50), columns=['t','o','h','l','c','v'])
             # ATR Filter
@@ -418,7 +407,7 @@ def run_titan_stable():
               # --- РАСЧЕТ ГРАНИЦ И ШИРИНЫ ---
             upper_band = ma20 + (std * 2.2)
             lower_band = ma20 - (std * 2.2)
-            
+
             # НОВАЯ СТРОКА: Считаем текущую ширину в %
             current_bandwidth = (upper_band - lower_band) / ma20 * 100
             # Мы заходим только если цена вылетела ЗА полосу еще на 0.08%
@@ -428,12 +417,12 @@ def run_titan_stable():
              # Сигнал Боллинджера с подтверждением отступа
              # ВАЖНО: Добавляем проверку ширины
             if (is_sell_trigger or is_buy_trigger):
-                
+
                 # Если рынок слишком "раздут" - пропускаем
                 if current_bandwidth > MAX_BANDWIDTH:
                     log(f"🚫 Пропуск {symbol}: Ширина {round(current_bandwidth, 2)}% (Паника)")
                     current_idx = (current_idx + 1) % len(PRIORITY_LIST); continue
-                
+
                 # Если прошли фильтр - действуем
                 side = 'sell' if is_sell_trigger else 'buy'
 
@@ -448,7 +437,7 @@ def run_titan_stable():
                 raw_amt = (usable_bal * RISK_PERCENT * LEVERAGE) / cur_p
                 # Умножаем на 10, так как MEXC дробит контракты ORDI/LPT в 10 раз
                 if 'ORDI' in symbol or 'LPT' in symbol:
-                    raw_amt = raw_amt * 10 
+                    raw_amt = raw_amt * 10
 
                 order_p = upper_band * (1 + ENTRY_ORDER_OFFSET) if is_sell_trigger else lower_band * (1 - ENTRY_ORDER_OFFSET)
                 # ИСПОЛЬЗУЕМ КЛАССИЧЕСКИЙ ОКРУГЛИТЕЛЬ (как был раньше)
