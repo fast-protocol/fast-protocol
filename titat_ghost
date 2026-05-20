@@ -28,6 +28,29 @@ class TitanGhost:
         })
         with open('dna_ghost.json', 'r') as f: self.memory['dna'] = json.load(f)
         self.log(f"💎 TITAN GHOST V22.3 READY. Slots: {MAX_SLOTS} | Assets: {len(self.memory['dna'])}")
+        # --- [ВРЕЗКА V25.4: ИСТИННЫЙ СБОР ФЬЮЧЕРСНОЙ МАРЖИ BINGX] ---
+        try:
+            # Запрашиваем баланс Бессрочных контрактов
+            bal = await self.exchange.fetch_balance({'type': 'swap'})
+
+            # 1. ПРЯМОЙ ПАРСИНГ СЫРОГО ОТВЕТА BINGX (Доступный баланс Swap)
+            raw_data = bal.get('info', {}).get('data', {}).get('balance', {})
+            if isinstance(raw_data, dict) and 'availableMargin' in raw_data:
+                self.memory['available'] = float(raw_data['availableMargin'])
+
+            # 2. РЕЗЕРВНЫЙ ПЕРЕБОР СТРУКТУРЫ CCXT (Если биржа обновила API)
+            elif 'USDT' in bal and isinstance(bal['USDT'], dict):
+                self.memory['available'] = float(bal['USDT'].get('free', bal['USDT'].get('total', 0.0)))
+            elif 'free' in bal and isinstance(bal['free'], dict) and 'USDT' in bal['free']:
+                self.memory['available'] = float(bal['free']['USDT'])
+            else:
+                self.memory['available'] = 0.0
+
+        except Exception as e:
+            self.log(f"🆘 КРИТИЧЕСКАЯ ОШИБКА API BINGX: {e}")
+            self.memory['available'] = 0.0
+
+        self.log(f"💎 TITAN GHOST READY. Доступная маржа Swap: ${self.memory['available']}")
 
     async def update_context(self):
         """Синхронизация позиций через прямой API-шлюз аккаунта V25.1 [ИСПРАВЛЕНО BINGX]"""
@@ -163,7 +186,7 @@ class TitanGhost:
                         self.memory['vol_history'][target_key].append((last_price, q_vol))
                         self.memory['vol_history'][target_key] = self.memory['vol_history'][target_key][-65:]
 
-                await asyncio.sleep(1) # Опрос раз в секунду
+                await asyncio.sleep(3) # Опрос раз в секунду
             except Exception as e:
                 # Если произошла сетевая заминка, выводим её для прозрачности дебага
                 # print(f"DEBUG PRICE STREAM ERROR: {e}")
