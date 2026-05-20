@@ -167,12 +167,12 @@ async def price_stream():
                     memory.prices[symbol] = val
 
                     # 2. Ловим Биткоина (любой формат: BTC/USDT, BTC/USDT:USDT, BTCUSDT)
-                    if not btc_captured and 'BTC' in symbol and 'USDT' in symbol:
-                        if (now - memory.last_btc_push) >= 10:
-                            memory.btc_history.append(val)
-                            if len(memory.btc_history) > 100: memory.btc_history.pop(0)
-                            memory.last_btc_push = now
-                            btc_captured = True
+      #              if not btc_captured and 'BTC' in symbol and 'USDT' in symbol:
+      #                  if (now - memory.last_btc_push) >= 10:
+      #                      memory.btc_history.append(val)
+      #                      if len(memory.btc_history) > 100: memory.btc_history.pop(0)
+      #                      memory.last_btc_push = now
+      #                      btc_captured = True
 #                            log(f"✅ BTC Hist Update: {len(memory.btc_history)}/60") # Раскомментируй для проверки
 
         except Exception as e:
@@ -301,7 +301,22 @@ async def check_signal(exchange, symbol):
                     # Снимаем бан, если время истекло
                     del memory.cooldown_fleet[symbol]
 #=====
+        # --- [ВРЕЗКА V31.0: ФИЛЬТР СПРЕДА БИТКОИНА (BTC SPREAD SHIELD)] ---
+        # Проверяем 15-минутное окно истории Биткоина (15 свечей в btc_history)
+        if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 15:
+            # Берем срез последних 15 минут закрытий
+            btc_window = memory.btc_history[-15:]
+            btc_max = max(btc_window)
+            btc_min = min(btc_window)
 
+            if btc_min > 0:
+                btc_spread = (btc_max / btc_min - 1) * 100
+
+                # Если Биткоин зажался в мертвый коридор менее 0.06% ($45-50 движения) — ИГНОРИРУЕМ ВСЕ СИГНАЛЫ
+                if btc_spread < 0.06:
+                    # log(f"🛡️ BTC Spread Shield: Сканирование заблокировано. Спред BTC: {round(btc _spread, 3)}% < 0.06%")
+                    return None
+#=====
         # 1. Данные рынка (limit=30 для точности MA20)
         ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
         df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
@@ -409,6 +424,33 @@ async def check_signal(exchange, symbol):
                 # Если ловим шорт, но цена летит ракетой 3 минуты вверх без откатов — ОТМЕНА
                 # log(f"🛡️ Pre-Candle Shield: Заблокирован вход в ШОРТ по {symbol}. Обнаружен расту щий каскад.")
                 return None
+
+#=====
+        # --- [ВРЕЗКА V31.0: АДАПТИВНЫЙ ФИЛЬТР ОБЪЕМА (VOLUME SPIKE SHIELD)] ---
+        try:
+            if len(df) >= 7:
+                # Объем текущей сигнальной минутной свечи
+                live_volume = float(df['v'].iloc[-1])
+
+                # Средний объем предыдущих 5 свечей (отсекая сигнальную)
+                mean_volume = float(df['v'].iloc[-6:-1].mean())
+
+                if mean_volume > 0:
+                    volume_ratio = live_volume / mean_volume
+
+                    # Маркер сепарации: определяем, является ли актив мем-коином
+                    is_meme = any(meme_name in symbol.upper() for meme_name in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+
+                    # Выставляем адаптивный порог объема
+                    required_ratio = 1.8 if is_meme else 1.1
+
+                    # Если объем сквиза меньше требуемого порога — блокируем шумовой вход
+                    if volume_ratio < required_ratio:
+                        # log(f"🛡️ Volume Shield: Сигнал {symbol} заблокирован. Ratio: {round(volum e_ratio, 2)} < {required_ratio}")
+                        return None
+        except Exception as e:
+            # Предохранитель: если данные объема повреждены, пропускаем шаг, чтобы не вешать сканер
+            pass
 
 #=====
         # --- [КВАНТОВЫЙ ФИЛЬТР: BTC TREND SHIELD] ---
@@ -661,7 +703,7 @@ async def monitor_logic(exchange, symbol, pos):
             # ТРИГГЕР 2: Эвакуация по затяжному флэтовому болоту альта (Time-Decay)
             # --- [УЗЕЛ V30.0: КВАНТОВЫЙ ТАЙМЕР 180с + ПОРОГ -0.2% + 6H КУЛДАУН] ---
             # Зажимаем тиски времени: если за 3 минуты монета не дала отскок и сидит в лоссе > -0.2%
-            if age > 180 and profit < -0.002:
+            if age > 120 and profit < -0.0015:
                 log(f"⏱️ КВАНТОВАЯ ЭВАКУАЦИЯ ТАЙМЕРА: {symbol} утилизирован (Лосс застрял: {round(profit*100, 2)}% | Age: {int(age)}с)")
                 action_triggered_decay = False
                 try:
@@ -674,10 +716,10 @@ async def monitor_logic(exchange, symbol, pos):
                     log(f"⚠️ Критическая ошибка утилизации по таймеру {symbol}: {e}")
 
                 # ЗАПИСЬ ЖЕСТКОГО 6-ЧАСОВОГО КУЛДАУНА ДЛЯ ВЯЛЫХ МОНЕТ (21600 СЕКУНД)
-                if not hasattr(memory, 'cooldown_fleet'):
-                    memory.cooldown_fleet = {}
-                memory.cooldown_fleet[symbol] = time.time() + 10800 # Добавляем +3 часа к базовому (итого 6 часов бана)
-                memory.cooldown_fleet[symbol.replace(':USDT', '')] = time.time() + 10800
+#                if not hasattr(memory, 'cooldown_fleet'):
+#                    memory.cooldown_fleet = {}
+#                memory.cooldown_fleet[symbol] = time.time() + 10800 # Добавляем +3 часа к базовому (итого 6 часов бана)
+#                memory.cooldown_fleet[symbol.replace(':USDT', '')] = time.time() + 10800
 
                 # Тотальная зачистка флагов оперативной памяти
                 for k in [symbol, symbol.replace(':USDT', '')]:
