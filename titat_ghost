@@ -28,24 +28,19 @@ class TitanGhost:
         })
         with open('dna_ghost.json', 'r') as f: self.memory['dna'] = json.load(f)
         self.log(f"💎 TITAN GHOST V22.3 READY. Slots: {MAX_SLOTS} | Assets: {len(self.memory['dna'])}")
-        # --- [ВРЕЗКА V25.4: ИСТИННЫЙ СБОР ФЬЮЧЕРСНОЙ МАРЖИ BINGX] ---
+        # --- [ЖЕСТКИЙ ФИКС V25.5: БЕЗОПАСНЫЙ ПАРСИНГ BALANCE] ---
         try:
-            # Запрашиваем баланс Бессрочных контрактов
             bal = await self.exchange.fetch_balance({'type': 'swap'})
-
-            # 1. ПРЯМОЙ ПАРСИНГ СЫРОГО ОТВЕТА BINGX (Доступный баланс Swap)
-            raw_data = bal.get('info', {}).get('data', {}).get('balance', {})
-            if isinstance(raw_data, dict) and 'availableMargin' in raw_data:
-                self.memory['available'] = float(raw_data['availableMargin'])
-
-            # 2. РЕЗЕРВНЫЙ ПЕРЕБОР СТРУКТУРЫ CCXT (Если биржа обновила API)
-            elif 'USDT' in bal and isinstance(bal['USDT'], dict):
-                self.memory['available'] = float(bal['USDT'].get('free', bal['USDT'].get('total', 0.0)))
-            elif 'free' in bal and isinstance(bal['free'], dict) and 'USDT' in bal['free']:
-                self.memory['available'] = float(bal['free']['USDT'])
+            # Безопасно обрабатываем ответ, который может быть списком (list)
+            if isinstance(bal, dict) and 'USDT' in bal:
+                self.memory['available'] = float(bal['USDT'].get('free', 0.0))
+            elif isinstance(bal, list):
+                # Если CCXT вернул список, ищем USDT в первом элементе
+                usdt_data = next((item for item in bal if item.get('coin') == 'USDT'), None)
+                if usdt_data:
+                    self.memory['available'] = float(usdt_data.get('free', 0.0))
             else:
                 self.memory['available'] = 0.0
-
         except Exception as e:
             self.log(f"🆘 КРИТИЧЕСКАЯ ОШИБКА API BINGX: {e}")
             self.memory['available'] = 0.0
@@ -59,14 +54,19 @@ class TitanGhost:
                 # 1. Жестко запрашиваем баланс фьючерсного аккаунта Бессрочных свопов
                 bal = await self.exchange.fetch_balance({'type': 'swap'})
 
-                # БРОНИРОВАННЫЙ КВАНТОВЫЙ ПАРСИНГ ФЬЮЧЕРСНОГО БАЛАНСА В USDT
-                if 'USDT' in bal and isinstance(bal['USDT'], dict):
+                # --- [ФИКС V25.5: Сквозной парсинг типов данных LIST/DICT для BingX] ---
+                if isinstance(bal, dict) and 'USDT' in bal:
                     self.memory['available'] = float(bal['USDT'].get('free', bal['USDT'].get('total', 0.0)))
-                elif 'free' in bal and isinstance(bal['free'], dict) and 'USDT' in bal['free']:
-                    self.memory['available'] = float(bal['free']['USDT'])
+                elif isinstance(bal, list):
+                    usdt_data = next((item for item in bal if isinstance(item, dict) and item.get('coin') == 'USDT'), None)
+                    if usdt_data:
+                        self.memory['available'] = float(usdt_data.get('free', usdt_data.get('total', 0.0)))
                 else:
-                    # Резервный синтаксический перебор структуры ответа BingX API
-                    self.memory['available'] = float(bal.get('info', {}).get('data', {}).get('balance', {}).get('availableMargin', 0.0))
+                    try:
+                        # Попытка выудить из сырого API-ответа биржи
+                        self.memory['available'] = float(bal.get('info', {}).get('data', {}).get('balance', {}).get('availableMargin', 0.0))
+                    except:
+                        self.memory['available'] = 0.0
 
                 # 2. Используем твой надежный метод fetch_account_positions для рынка swap
                 try:
