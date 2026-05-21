@@ -1,4 +1,9 @@
 
+# --- УПРАВЛЕНИЕ КАПИТАЛОМ ---
+MAX_ACTIVE_SLOTS = 1       # Динамика: 1 (при <$150), 2 (при <$500), 3 (при >$500)
+RISK_GEAR = 0.95           # Общий множитель объема (0.1 - 1.0)
+RESERVE_CASH = 0.5         # Буфер на комиссии (USDT)
+
 # --- ГЛОБАЛЬНЫЕ ФИЛЬТРЫ (Безопасность) ---
 GLOBAL_MAX_BANDWIDTH = 2   # Если рынок разорвало в клочья - стоп входы
 FUNDING_SHIELD = 0.0003    # Пропуск при ставке > 0.03%
@@ -378,8 +383,12 @@ async def check_signal(exchange, symbol):
         short_trigger = upper * (1 + dna['s_off'])
 
         # 5. Первичная логика входа (Оффсет + Поглощение + Фитиль)
-        is_buy = (cur_p >= long_trigger) and (cur_p > prev_open) and (wick_ratio_long > 0.35)
-        is_sell = (cur_p <= short_trigger) and (cur_p < prev_open) and (wick_ratio_short > 0.35)
+        #is_buy = (cur_p >= long_trigger) and (cur_p > prev_open) and (wick_ratio_long > 0.35)
+        #is_sell = (cur_p <= short_trigger) and (cur_p < prev_open) and (wick_ratio_short > 0.35)
+        # --- [ЖЕСТКИЙ ПЕРЕВОД V35.0 НА МГНОВЕННЫЙ ПЕРЕХВАТ ТИКА] ---
+        # Сравниваем живую секундную цену cur_p с оффсетами, не дожидаясь закрытия минуты!
+        is_buy = (cur_p <= long_trigger) and (wick_ratio_long > 0.35)
+        is_sell = (cur_p >= short_trigger) and (wick_ratio_short > 0.35)
 
         if not (is_buy or is_sell): return None
 
