@@ -27,19 +27,48 @@ def log(msg):
         pass
 
 async def update_balance(exchange):
-    """Фоновое асинхронное обновление кошелька из bot_binance.py"""
+    """Фоновое обновление баланса + ИМПУЛЬСНОЕ УСЫНОВЛЕНИЕ СИРОТ V22.2"""
+    first_run_sync = True
     while memory.is_running:
         try:
             bal = await exchange.fetch_balance()
             total = float(bal.get('total', {}).get('USDT', 0))
             free = float(bal.get('free', {}).get('USDT', 0))
-
             memory.available = free
             memory.total_wallet = total
 
             if memory.start_balance == 0:
                 memory.start_balance = free
                 log(f"💰 Стартовый баланс успешно считан: ${round(free, 2)}")
+
+            # --- [ШЛЮЗ СИНХРОНИЗАЦИИ ПОЗИЦИЙ ПОСЛЕ РЕСТАРТА] ---
+            if first_run_sync:
+                try:
+                    positions = await exchange.fetch_positions()
+                    for p in positions:
+                        vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
+                        if vol > 0.00001:
+                            raw_sym = p['symbol']
+
+                            if raw_sym not in memory.active_pos and raw_sym in memory.all_dna:
+                                entry_p = float(p.get('entryPrice', p.get('price', 0)))
+                                side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
+                                side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
+                                dna = memory.all_dna[raw_sym]
+
+                                memory.active_pos[raw_sym] = {
+                                    'side': side, 'vol': vol, 'price': entry_p,
+                                    'gear': 'g1', 'gear_data': dna['g1'], 'dna': dna,
+                                    'entry_time': time.time()
+                                }
+                                memory.tp_fixed[raw_sym] = False
+                                memory.be_fixed[raw_sym] = False
+                                memory.stop_placed[raw_sym] = entry_p
+                                memory.slots_occupied += 1
+                                log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {raw_sym} ({vol} единиц). Успешно подхвачен ядром выходов!")
+                except Exception as sync_err:
+                    log(f"⚠ Ошибка синхронизации позиций при старте: {sync_err}")
+                first_run_sync = False
 
         except Exception as e:
             log(f"⚠ Balance Error: {e}")
@@ -159,13 +188,18 @@ async def monitor_logic(exchange):
                         sl_price = pos['price'] * (1 - abs(pos['dna']['sl'])) if pos['side'] == 'buy' else pos['price'] * (1 + abs(pos['dna']['sl']))
                         sl_price = float(exchange.price_to_precision(symbol, sl_price))
                         await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                        await exchange.create_order(symbol, 'STOP_MARKET', exit_side, pos['vol'], params={
+
+                        # Округляем объем строго по правилам лотов биржи
+                        exact_vol = exchange.amount_to_precision(symbol, pos['vol'])
+                        await exchange.create_order(symbol, 'STOP_MARKET', exit_side, exact_vol, params={
                             'stopPrice': sl_price, 'reduceOnly': True
                         })
                         memory.stop_placed[symbol] = sl_price
                         log(f"🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: {symbol} @ {sl_price}")
                     except Exception as e:
-                        log(f"🆘 Ошибка автостопа {symbol}: {e}")
+                        log(f"🆘 КРИТИЧЕСКАЯ ОТМЕНА СТОПА БИРЖЕЙ для {symbol}: {e}")
+                        # Выставляем флаг аварийно, чтобы код не застревал в цикле
+                        memory.stop_placed[symbol] = pos['price']
 
                 # --- [УЗЕЛ V22.0: АКТИВАЦИЯ ПRE-ТРЕЙЛИНГА НА 75% ПУТИ ДО ТЕЙКА 1] ---
                 pre_trail_trigger = gd['tp1'] * 0.75
@@ -204,23 +238,43 @@ async def monitor_logic(exchange):
                         memory.slots_occupied = max(0, memory.slots_occupied - 1)
                         if action_triggered_pre: return
 
-                # 2. ШТАТНАЯ ФИКСАЦИЯ ТЕЙКА 1 (Если ракета долетела до 100% цели без откатов)
-                if not memory.tp_fixed.get(symbol) and pnl >= gd['tp1']:
+                # 2. ШТАТНАЯ ФИКСАЦИЯ ТЕЙКА 1 (С ЗАЩИТОЙ ДРОБЛЕНИЯ ЛОТА V22.3)
+                if not memory.tp_fixed.get(symbol, False) and pnl >= gd['tp1']:
                     try:
-                        close_qty = exchange.amount_to_precision(symbol, pos['vol'] * 0.5)
-                        await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
+                        # Считаем чистую математическую половину
+                        raw_close_qty = pos['vol'] * 0.5
+                        close_qty_str = exchange.amount_to_precision(symbol, raw_close_qty)
+                        close_qty = float(close_qty_str)
+
+                        # ЗАЩИТА ОКРУГЛЕНИЯ: Если половина объема округлилась в 0 или равна исходному объему
+                        if close_qty <= 0 or close_qty >= pos['vol']:
+                            log(f"⚠ ЛОТ {symbol} СЛИШКОМ МАЛ ДЛЯ ДРОБЛЕНИЯ ({pos['vol']}): Фиксируем 100% объема по рынку.")
+                            await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
+                            await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
+
+                            if symbol in memory.active_pos: del memory.active_pos[symbol]
+                            if symbol in memory.be_fixed: del memory.be_fixed[symbol]
+                            if symbol in memory.stop_placed: del memory.stop_placed[symbol]
+                            if symbol in memory.tp_fixed: del memory.tp_fixed[symbol]
+                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                            return
+
+                        # Если лот позволяет дробить — идем по штатному сценарию
+                        await exchange.create_market_order(symbol, exit_side, close_qty_str, {'reduceOnly': True})
                         memory.tp_fixed[symbol] = True
-                        pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - float(close_qty)))
-                        log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксирован (+{round(gd['tp1']*100,2)}%) | Общий баланс: ${round(memory.total_wallet, 2)}")
+
+                        # Пересчитываем остаток
+                        pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
+                        log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксирован (+{round(gd['tp1']*100,2)}%)")
 
                         await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
                         bu_price = float(exchange.price_to_precision(symbol, pos['price']))
-                        await exchange.create_order(symbol, 'STOP_MARKET', exit_side, pos['vol'], params={
+                        await exchange.create_order(symbol, 'STOP_MARKET', exit_side, exchange.amount_to_precision(symbol, pos['vol']), params={
                             'stopPrice': bu_price, 'reduceOnly': True
                         })
                         memory.stop_placed[symbol] = bu_price
                     except Exception as e:
-                        log(f"⚠ Ошибка TP1 {symbol}: {e}")
+                        log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
 
                 # 3. ЛОГИКА ТЕЙК-ПРОФИТА 2 (ФИНАЛ СДЕЛКИ ПРИ ИСТИННОМ ПРОБОЕ)
                 if pnl >= gd['tp2']:
