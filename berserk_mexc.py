@@ -1,474 +1,548 @@
 
-# --- ПУЛЬТ MEXC V12.6 [IRON-RECOVERY] ---
-#PRIORITY_LIST = [
-#    'APT/USDT:USDT', 'WLD/USDT:USDT', 'ORDI/USDT:USDT',
-#    'OP/USDT:USDT', 'LDO/USDT:USDT', 'ARKM/USDT:USDT', 'LPT/USDT:USDT'
-#]
-# --- ПУЛЬТ MEXC V15.0 [GOLDEN-RATIO] ---
+MAX_SLOTS = 2               # Максимум параллельных позиций
+RISK_GEAR = 0.50            # Множитель маржи слота (0.1 - 1.0)
+PRIMARY_SL_PCT = 0.012      # Жесткий серверный Стоп-Лосс (-1.2%)
+
+# --- ЦЕЛИ TRIPLE-GEAR V16.2 ---
+TP1_PCT = 0.0065            # Тейк 1 (+0.65%) - Закрытие 30% объема
+TP2_PCT = 0.0185            # Тейк 2 (+1.85%) - Закрытие 40% объема
+TP3_PCT = 0.0420            # Тейк 3 (+4.20%) - Закрытие остатка 30%
+
+# Геометрия полос Боллинджера и Капкана
+BB_PERIOD = 20
+BB_STD = 2.2
+ENTRY_TRIGGER_OFFSET = 0.0018  # Сигнальный вылет (0.18%)
+ENTRY_ORDER_OFFSET = 0.0020    # Снайперский отступ лимитного капкана (0.20% от полосы)
+LIMIT_ORDER_TTL = 75           # Время жизни лимитки в стакане (секунды)
+
+# Список приоритетных фьючерсных секторов MEXC
 PRIORITY_LIST = [
     'SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT',
     'APT/USDT:USDT', 'MANA/USDT:USDT', 'POL/USDT:USDT', '1INCH/USDT:USDT'
 ]
 
-# --- РИСК И ПЛЕЧО ---
-LEVERAGE, RISK_PERCENT = 25, 0.85
-BUFFER_CASH = 0.0
-MAX_BANDWIDTH = 2.2      # Фильтр паники (в процентах)
+class GlobalMemory:
+    def __init__(self):
+        self.is_running = True
+        self.available = 0.0
+        self.total_wallet = 0.0
+        self.slots_occupied = 0
 
-# --- УМНЫЙ ПУЛЬТ УПРАВЛЕНИЯ ---
-BASE_RISK = 0.85         # Базовый риск (переключатель скоростей)
+        # Потоки цен и истории Поводыря
+        self.prices = {}
+        self.btc_history = []
+        self.last_btc_push = 0
 
-# --- ЦЕЛИ (TAKE PROFIT) ---
-# --- ЦЕЛИ V16.0 [TRIPLE-GEAR] ---
-TP1_PCT = 0.0065         # Тейк 1 (+0.65%) - Фикс 30%
-TP2_PCT = 0.0185         # Тейк 2 (+1.85%) - Фикс 40%
-TP3_PCT = 0.0420         # Тейк 3 (+4.20%) - Фикс остаток 30%
+        # Снайперские кэш-таблицы состояний (Защита от KeyError)
+        self.active_pos = {}
+        self.stop_placed = {}
+        self.tp1_fixed = {}
+        self.tp2_fixed = {}
+        self.step_be = {}
+        self.max_pnl_observed = {}
+        self.limit_orders = {} # Трекер выставленных капканов: {symbol: {id, time, price, side, qty}}
 
-TP1_SHARE = 0.30         # Доля первого тейка
-TP2_SHARE = 0.40         # Доля второго тейка
-
-# --- НОВЫЙ ФИЛЬТР (ENTRY_OFFSET) ---
-#ENTRY_OFFSET = 0.0011    # 0.08% зазор безопасности
-ENTRY_TRIGGER_OFFSET = 0.0018  # Когда "просыпаемся"
-ENTRY_ORDER_OFFSET = 0.0020  # Где реально ставим капкан
-
-# --- ЗАЩИТА (STOP LOSS) ---
-PRIMARY_SL_PCT = 0.012   # Основной стоп (-1.2%)
-SOFT_BE_PCT = -0.003     # Мягкий безубыток (-0.3%)
-LOCK_THRESHOLD = 0.0055  # Порог включения замка (+0.5%)
-LOCK_PROFIT = 0.0015     # Уровень замка (+0.15%)
-
-# --- КОНВЕЙЕР И ТАЙМИНГИ ---
-SURGEON_TIME = 1200       # Хирург (10 минут)
-SURGEON_PROFIT = 0.0045  # Порог Хирурга (+0.28%)
-TIME_LIMIT = 8400        # Тайм-аут (140 минут)
-MAX_CANDLE_SIZE = 0.0075 # Анти-Шип (0.75%)
-
-# --- ПРЕДОХРАНИТЕЛЬ (QUICK CUT) ---
-# Теперь применяем ко всем активным монетам, так как они все волатильны
-DANGER_COINS = ['SOL', 'NEAR', 'LDO', 'OP', 'APT', 'MANA', 'POL', '1INCH']
-QC_TIME = 110           # 2 минуты
-QC_LIMIT = -0.0052       # -0.4%
-# ==========================================
-MAX_BATCH = 1000000 #1500000
-LIMIT_ORDER_TTL = 75  # Время жизни капкана в секундах
-#--------
-# Порог проверки исполнения тейка (Формула)
-# Если фиксируем 50%, то проверка сработает, когда останется меньше 75% позиции
-# Это дает запас 25% на проскальзывание и частичное исполнение
-#TAKE_CHECK_THRESHOLD = 1.0 - (TP1_SHARE / 2)
-#LIMIT_ORDER_TTL = 75  # Время жизни капкана в секундах
-order_creation_time = SafeDict() # Новый словарь для тайминга ордеров
-#===========================================
-# Добавь новый словарь к остальным
-entry_times = SafeDict()
-lock_activated = SafeDict() # Для замка профита
-# К твоим словарям добавь:
-take_placed = SafeDict()
-partial_fixed = SafeDict() # Чтобы MEXC тоже стал многозадачным!
-just_closed = SafeDict()   # Фикс петли
-tp1_fixed = SafeDict()
-tp2_fixed = SafeDict()
-step_be = SafeDict()     # Уровень ступенчатого БУ
-#--------
-
-exchange = ccxt.mexc({
-    'apiKey': API_KEY,
-    'secret': SECRET_KEY,
-    'options': {'defaultType': 'swap', 'positionMode': False},
-    'enableRateLimit': True
-})
-
-last_stop_time, full_exit_triggered, current_idx = 0, False, 0
+memory = GlobalMemory()
 
 def log(msg):
+    """Каноническое двойное логирование: Экран + Файл"""
     t = datetime.now().strftime('%H:%M:%S')
-    with open("berserk_log.txt", "a") as f: f.write(f"[{t}] {msg}\n")
-    print(f"[{t}] 🏛️ {msg}")
+    # Дублируем запись в файл
+    try:
+        with open("berserk_log.txt", "a", encoding="utf-8") as f:
+            f.write(f"[{t}] {msg}\n")
+    except:
+        pass
+    print(f"[{t}] 🏛️ {msg}", flush=True)
 
-def smart_order(symbol, side, amount, is_limit=False, price=None, is_exit=False):
-    """Ультра-стриминг с Liquidity Guard + Fix 2005"""
-    success = True # <-- ДОБАВЬ ЭТУ СТРОКУ (Инициализация)
-    if not is_exit and (amount / MAX_BATCH) > 80:
-        log(f"⚠️ Низкая ликвидность {symbol}, пропуск."); return False
-    remaining = amount
-    while remaining > 0:
-        batch = int(min(remaining, MAX_BATCH))
+async def init_exchange():
+    """Бронированная инициализация MEXC в режиме Односторонней ИЗОЛИРОВАННОЙ маржи V16.9"""
+    exchange = ccxt.mexc({
+        'apiKey': API_KEY,
+        'secret': SECRET_KEY,
+        'options': {'defaultType': 'swap', 'positionMode': False},
+        'enableRateLimit': True
+    })
+
+    # Жесткий прогрев баланса кошелька до старта
+    try:
+        bal = exchange.fetch_balance({'type': 'swap'})
+        if isinstance(bal, dict) and 'USDT' in bal:
+            memory.available = float(bal['USDT'].get('free', 0.0))
+            memory.total_wallet = float(bal['USDT'].get('total', 0.0))
+    except Exception as e:
+        log(f"⚠️ Ошибка прогрева стартового баланса MEXC: {e}")
+        memory.available = 0.0
+
+    # ПРИНУДИТЕЛЬНЫЙ ЖЕСТКИЙ ПЕРЕВОД ВСЕГО ФЛОТА В РЕЖИМ ISOLATED
+    log("🔒 Синхронизация маржинальных шлюзов: перевод флота в ISOLATED...")
+    for symbol in PRIORITY_LIST:
         try:
-            # ЖЕСТКАЯ ПРОВЕРКА ДЛЯ ВЫХОДА ПО МАРКЕТУ (FIX 2005)
-            # МЫ ЯВНО ГОВОРИМ БИРЖЕ: ЭТОТ ОРДЕР ДОЛЖЕН БЫТЬ ISOLATED
-            params = {
-                'openType': 1,           # 1: Isolated
-                'leverage': int(LEVERAGE) # ТРЕБОВАНИЕ БИРЖИ ДЛЯ ISO
-            }
-            if is_exit: params['reduceOnly'] = True
-
-            if is_limit and price is not None:
-                exchange.create_order(symbol, 'limit', side, batch, price, params)
-                mode = "Limit"
-            else:
-                exchange.create_order(symbol, 'market', side, batch, None, params)
-                mode = "Market"
-            log(f"📦 Стрим {symbol} ({mode}): {side} {batch} [ISO-MODE]")
-
-            # ЭТИ СТРОКИ ОСТАВЛЯЕМ (ОНИ ВАЖНЫ!)
-            remaining -= batch
-            time.sleep(1.0)
-        except Exception as e:
-            # ТВОЯ АВАРИЙНАЯ ЛОГИКА (СОХРАНЯЕМ):
-            if "7008" in str(e) and is_exit:
-                p = price if price else float(exchange.fetch_ticker(symbol).get('last', 0))
-                exchange.create_order(symbol, 'limit', side, int(remaining), p, {'reduceOnly': True})
-                log(f"⚠️ Аварийная лимитка {symbol} по {p}"); break
-            if "2051" in str(e):
-                log(f"📉 Ликвидность {symbol} слишком мала (Limit Exceeded). Пропускаю монету.")
-                return False # Выходим из функции немедленно и тихо
-            log(f"❌ Order Error: {e}"); success = False; return False
-    return {'status': 'success'} if success else False
-
-def run_titan_stable():
-    global last_stop_time, full_exit_triggered, current_idx
-    log("🚀MEXC V12.6 [IRON-RECOVERY] - СТАРТ. True Partial + 1.5M Stream.")
-    # --- ПРЕДПОЛЕТНАЯ ПОДГОТОВКА (Startup Setup) ---
-    log("🔧 Настройка параметров плеча и маржи для флота...")
-    for sym in PRIORITY_LIST:
-        try:
-        # Используем прямой метод request к эндпоинту из твоей документации
-            params = {
-                'symbol': sym,
-                'leverage': int(LEVERAGE),
-                'openType': 1 # 1: Isolated
-            }
-            # Путь берем из доков: /api/v1/private/position/change_leverage
-            response = exchange.private_post_position_change_leverage(params)
-            # Если снова будет NameError, используем exchange.request:
+            clean_sym = symbol.replace(':USDT', '')
+            # Жестко шлем приказ на изоляцию маржи на сервера MEXC
+            await exchange.set_margin_mode('isolated', clean_sym)
         except:
-            try:
-                # Ультимативный вариант через request
-                exchange.request('position/change_leverage', 'private', 'POST', {
-                    'symbol': sym, 'leverage': int(LEVERAGE), 'openType': 1
-                })
-            except: pass
-    log("✅ Флот готов к бою.")
-    bal = exchange.fetch_balance()
-    total_bal = float(bal.get('total', {}).get('USDT', 0))
-    # --- ДОБАВЬ ЭТУ СТРОКУ ЗДЕСЬ ---
-    log(f"📡 МАЯК: MEXC в сети | Баланс: ${round(total_bal, 2)} | Оффсет: {ENTRY_ORDER_OFFSET}")
-    # -----------------------------------------------
-    while True:
+            pass # Если уже изолирован, биржа пропустит шаг
+
+    log(f"ЛИМИТНЫЙ СНАЙПЕР BERSERK V16.9 ОНЛАЙН. Доступная маржа Swap: ${round(memory.available, 2)}")
+    return exchange
+
+async def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_exit=False, is_stop=False):
+    """Исполнительный шлюз Liquidity Guard V16.2 с поддержкой серверных стопов"""
+    success = True
+    try:
+        # Округляем объемы под спецификацию лотов биржи MEXC
+        amount_str = exchange.amount_to_precision(symbol, amount)
+        qty = float(amount_str)
+        if qty <= 0:
+            return False
+
+        params = {}
+        if is_exit or is_stop:
+            params['reduceOnly'] = True
+
+        # СЦЕНАРИЙ 1: Жесткий серверный СТОП-МАРКЕТ
+        if is_stop:
+            if price is None:
+                return False
+            params['stopPrice'] = float(exchange.price_to_precision(symbol, price))
+            # Для MEXC тип стоп-ордера передается в params или как 'STOP_MARKET'
+            order = await exchange.create_order(symbol, 'STOP_MARKET', side, qty, price=None, params=params)
+            return order
+
+        # СЦЕНАРИЙ 2: Пассивный Лимитный Капкан (Maker)
+        elif is_limit:
+            if price is None:
+                return False
+            exact_price = float(exchange.price_to_precision(symbol, price))
+            order = await exchange.create_order(symbol, 'limit', side, qty, price=exact_price, params=params)
+            return order
+
+        # СЦЕНАРИЙ 3: Агрессивный Рыночный Тейк / Эвакуация (Taker)
+        else:
+            order = await exchange.create_order(symbol, 'market', side, qty, price=None, params=params)
+            return order
+
+    except Exception as e:
+        log(f"⚠ Сбой шлюза ордеров {symbol} ({side.upper()}): {e}")
+        return False
+
+async def price_stream(exchange_pro):
+    """Высокочастотный WebSocket-стриминг цен + Посекундный трекер Поводыря BTC"""
+    log(f"📡 Запуск квантового WebSocket-потока цен для {len(PRIORITY_LIST)} активов...")
+
+    # Инициализируем стартовые отметки цен, чтобы избежать KeyError
+    for sym in PRIORITY_LIST:
+        memory.prices[sym] = 0.0
+
+    while memory.is_running:
         try:
-#=====
-            # Сначала получаем статус
-            # БЛОКИРУЕМ ТОЛЬКО ЕСЛИ ВИСИТ ОРДЕР НА ВХОД
+            # Читаем живые тикеры в реальном времени через ccxt.pro
+            tickers = await exchange_pro.watch_tickers(PRIORITY_LIST)
+            now = time.time()
 
+            for symbol, t_data in tickers.items():
+                if symbol in memory.prices:
+                    val = float(t_data.get('last', t_data.get('close', 0.0)))
+                    if val > 0:
+                        memory.prices[symbol] = val
 
-            bal = exchange.fetch_balance()
-            total_bal = float(bal.get('total', {}).get('USDT', 0))
-            # --- ДОБАВЬ ЭТУ СТРОКУ ЗДЕСЬ ---
-            #log(f"📡 МАЯК: MEXC в сети | Баланс: ${round(total_bal, 2)} | Оффсет: {ENTRY_ORDER_OFFSET}")
-            # -------------------------------
-            # --- ПЕРЕКЛЮЧАТЕЛЬ СКОРОСТЕЙ (Adaptive Risk) ---
-            # Если баланс выше $35 - включаем Форсаж 0.70
-            # Если ниже $25 - включаем Защиту 0.40
-            if total_bal > 50:
-                RISK_PERCENT = 0.85
-            elif total_bal < 20:
-                RISK_PERCENT = 0.40
-            else:
-                RISK_PERCENT = BASE_RISK # Стандарт 0.55
-            # -----------------------------------------------
-            pos_all = exchange.fetch_positions()
-            active_positions = [p for p in pos_all if float(p.get('contracts', 0)) > 0]
-#=====
-            if active_positions:
-              for active in active_positions: # ТЕПЕРЬ ОБРАБАТЫВАЕМ ВСЕ!
-                symbol, side = active['symbol'], active['side'].lower()
-                size, entry_raw = float(active['contracts']), active.get('entryPrice')
-                # 2. ПОЛУЧЕНИЕ ЦЕНЫ (Единственный и безопасный запрос)
-                try:
-                    ticker = exchange.fetch_ticker(symbol)
-                except:
-                    ticker = None # Защита от вылета при сетевой ошибке
+                    # СИНХРОНИЗАЦИЯ ПОВОДЫРЯ: Ловим Биткоин для наполнения 15-минутной истории
+                    if "BTC/USDT" in symbol:
+                        # Записываем чистую цену закрытия строго раз в 60 секунд (без тикового каша-шума)
+                        if now - memory.last_btc_push >= 60:
+                            memory.btc_history.append(val)
+                            if len(memory.btc_history) > 100:
+                                memory.btc_history.pop(0)
+                            memory.last_btc_push = now
 
-                # ФИКС: Проверяем, что биржа прислала данные, а не True/False/None
-                if not isinstance(ticker, dict):
-                    log(f"⚠️ Биржа вернула пустой тикер для {symbol}, ждем...")
-                    time.sleep(1); continue
+        except Exception as ws_err:
+            log(f"⚠️ Ошибка WebSocket потока цен: {ws_err}")
+            await asyncio.sleep(1)
 
+async def check_signal(exchange, symbol):
+    """Снайперский сканер V16.2 с фильтрами Синдиката, Каскадных ножей и Адаптивного Объема"""
+    try:
+        cur_p = memory.prices.get(symbol, 0.0)
+        if cur_p <= 0:
+            return None
 
-                price = float(ticker.get('last', 0))
-                m_raw = ticker.get('markPrice')
-                mark_p = float(m_raw) if m_raw is not None else price
-                # ... дальше твой расчет профита ...
-                if entry_raw is None or float(entry_raw) == 0 or price == 0:
-                    time.sleep(5); pass #continue
+        # --- [ФИЛЬТР 1: BTC SPREAD SHIELD — 15М СПРЕД ПОВОДЫРЯ] ---
+        if len(memory.btc_history) >= 15:
+            btc_window = memory.btc_history[-15:]
+            btc_spread = (max(btc_window) / min(btc_window) - 1) * 100
+            if btc_spread < 0.06:
+                return None  # Биткоин в мертвом флэте — капли не тратим
 
-#====
-                entry = float(entry_raw)
-                profit = (price/entry-1) if side in ['long', 'buy'] else (entry/price-1)
-                m_profit = (mark_p/entry-1) if side in ['long', 'buy'] else (entry/mark_p-1)
+        # --- [ВРЕЗКА V16.5: ФИЛЬТР ПЛОТНОСТИ ТРЕНДА БИТКОИНА (BTC MOMENTUM SHIELD)] ---
+        if len(memory.btc_history) >= 3:
+            btc_momentum_window = memory.btc_history[-3:]
+            m1_diff = abs(btc_momentum_window[-1] - btc_momentum_window[-2])
+            m2_diff = abs(btc_momentum_window[-2] - btc_momentum_window[-3])
+            avg_min_move_pct = ((m1_diff + m2_diff) / 2) / btc_momentum_window[-1] * 100
 
-                # --- УМНЫЙ ЧИСТИЛЬЩИК V5.9.4.4 [FINAL] ---
-                position_value = (size * price) / LEVERAGE
-                if full_exit_triggered and position_value < 1.0:
-                    log(f"🧹 Удаление пыли {symbol}: Vol {size} (${round(position_value, 2)}).")
-                    try: exchange.cancel_all_orders(symbol)
-                    except: pass
-                    smart_order(symbol, 'sell' if side in ['long', 'buy'] else 'buy', size, False, None, True)
-                    full_exit_triggered = False; partial_fixed[symbol]  = False;  pass #continue # Вернули continue для скорости
+            # Если Биткоин вяло ползет со скоростью менее 0.025% в минуту — блокируем взвод капкана
+            if avg_min_move_pct < 0.025:
+                return None
 
-#====
-                # --- 1. РАСЧЕТ ТАЙМЕРОВ (V16.0) ---
-                pos_ts = active.get('timestamp', 0)
-                elapsed = (time.time() * 1000 - pos_ts) / 1000 if pos_ts > 0 else (time.time() - entry_times.get(symbol, time.time()))
+        # --- [ЖЕСТКИЙ ФИКС V16.8: СИНХРОННЫЙ СБОР СКОЛЬЗЯЩЕГО 4H ОКНА НА МЕХС] ---
+        try:
+            # Очищаем символ от фьючерсного хвоста для REST-метода MEXC (из 'SOL/USDT:USDT' делаем 'SOL/USDT')
+            clean_rest_symbol = symbol.split(':')[0]
 
-                # --- 2. ЛОГИКА V16.0 [КАСКАДНЫЙ ТЕЙК + ХРАПОВИК] ---
-                # Шаг 1. Ступенчатый БУ (Храповик)
-                # Инициализируем уровень БУ для монеты, если его нет
-                if symbol not in step_be: step_be[symbol] = -PRIMARY_SL_PCT
+            # Запрашиваем 48 пятиминутных свечей (48 * 5 мин = 240 мин = ровно 4 часа скользящего трека)
+            ohlcv_4h = exchange.fetch_ohlcv(clean_rest_symbol, '5m', limit=48)
+            if len(ohlcv_4h) >= 10:
+                # В массиве OHLCV CCXT: индекс 2 — это High, индекс 3 — это Low
+                highs_4h = [float(candle[2]) for candle in ohlcv_4h]
+                lows_4h = [float(candle[3]) for candle in ohlcv_4h]
 
-                if profit >= 0.0120 and step_be[symbol] < 0.0040:
-                    step_be[symbol] = 0.0040
-                    log(f"🛡️ Храповик {symbol}: БУ поднят до +0.4%")
-                if profit >= 0.0200 and step_be[symbol] < 0.0100:
-                    step_be[symbol] = 0.0100
-                    log(f"🛡️ Храповик {symbol}: БУ поднят до +1.0%")
+                max_4h = max(highs_4h)
+                min_4h = min(lows_4h)
 
-                # Шаг 2. Каскадная фиксация
-                side_exit = 'sell' if side in ['long', 'buy'] else 'buy'
-
-                # ТЕЙК №1 (30% от текущего объема)
-                if not tp1_fixed.get(symbol, False) and profit >= TP1_PCT:
-                    qty = float(exchange.amount_to_precision(symbol, size * TP1_SHARE))
-                    if qty > 0 and smart_order(symbol, side_exit, qty, True, price, is_exit=True):
-                        tp1_fixed[symbol] = True
-                        log(f"🎯 ТЕЙК №1 (+{round(profit*100,2)}%) взят по {symbol}")
-                        step_be[symbol] = 0.0015
-
-                # ТЕЙК №2 (40% от первоначального объема -> это ~57% от остатка)
-                if tp1_fixed.get(symbol, False) and not tp2_fixed.get(symbol, False) and profit >= TP2_PCT:
-                    # Считаем 40% от базы через текущий размер
-                    qty = float(exchange.amount_to_precision(symbol, size * 0.57))
-                    if qty > 0 and smart_order(symbol, side_exit, qty, True, price, is_exit=True):
-                        tp2_fixed[symbol] = True
-                        log(f"🎯 ТЕЙК №2 (+{round(profit*100,2)}%) взят по {symbol}")
-
-                # Определяем итоговый уровень выхода
-                current_be = step_be[symbol]
-#================================
-                # 3. ТРИГГЕРЫ ХИРУРГА И ТАЙМ-АУТА
-                # Универсальная логика:
-                is_qc = any(x in symbol for x in DANGER_COINS) and elapsed > QC_TIME and profit < QC_LIMIT
-#============
-                # 1. Берем статус фиксации из нового словаря V16.0
-                is_p_fixed = tp1_fixed.get(symbol, False)
-
-                # 2. УМНЫЙ ХИРУРГ (Отключается после фиксации первой прибыли)
-                if is_p_fixed:
-                    is_surgeon = False
-                else:
-                    is_surgeon = elapsed > SURGEON_TIME and profit < SURGEON_PROFIT
-#============
-                is_time_out = elapsed > TIME_LIMIT                 # Режем через 150 мин
-
-                log(f"📡 {symbol} | Prof: {round(profit*100, 2)}% | BE: {round(current_be*100,2)}% | Time: {int(elapsed/60)}m | Vol: {int(size)} | Баланс: ${round(total_bal, 2)} ")
-
-                # 4. УСЛОВИЕ ВЫХОДА (V7.2.0 [ARCHITECT])
-                # Добавили is_qc в список условий!
-#====
-                is_sl_full = profit <= -PRIMARY_SL_PCT
-
-                # Если это КВИК-КАТ или жесткий СТОП-ЛОСС — выходим только МАРКЕТОМ (спасаем депо)
-                if is_qc or is_sl_full:
-                    use_limit_exit = False
-                else:
-                    # Для Хирурга, Тейка 2, Тайм-аута или Замка — используем ЛИМИТКУ (экономим деньги)
-                    use_limit_exit = True
-#====
-
-                if profit >= TP3_PCT or profit <= current_be or m_profit <= -PRIMARY_SL_PCT or is_surgeon or is_qc or is_time_out:
-                    try:
-                        if profit >= TP3_PCT: res = "🎯 BERSERK-TP3"
-                        elif is_qc: res = f"✂️ QUICK-CUT ({symbol})" # Добавили причину
-                        elif is_surgeon: res = f"⚔️ SURGEON ({round(SURGEON_PROFIT*100,2)}%)"
-                        elif is_time_out: res = "⏱️ TIME-EXIT"
-                        elif lock_activated[symbol]: res = "🛡️ PROFIT-LOCK (+0.15%)"
-                        else: res = "🛡️ SL/BE"
-
-                        log(f"🚨 {res} ВЫХОД: {symbol} | Profit: {round(profit*100, 2)}%")
-
-                        # ВАЖНО: Защищаем выход от ошибок API при отмене
-                        try:
-                            exchange.cancel_all_orders(symbol)
-                        except:
-                            pass # Если ордеров уже нет или биржа чихнула - идем дальше на выход
-
-#                       exchange.cancel_all_orders(symbol)
-                        side_exit = 'sell' if side in ['long', 'buy'] else 'buy'
-
-                        # Используем твой стриминг для выхода!
-
-                        # В блоке мониторинга, перед smart_order добавь:
-                        ticker = exchange.fetch_ticker(symbol)
-                        cur_p = float(ticker['last']) # Гарантируем наличие цены
-
-                        # ИСПОЛЬЗУЕМ MARKET ДЛЯ ГАРАНТИРОВАННОГО ВЫХОДА
-                        # На малых балансах в режиме RECOVERY надежность важнее 0.02% комиссии
-                        #smart_order(symbol, side_exit, size, is_limit=False, price=None, is_exit=True)
-                        smart_order(symbol, side_exit, size, is_limit=use_limit_exit, price=cur_p, is_exit=True)
-
-                        # АТОМАРНАЯ ОЧИСТКА ПАМЯТИ
-                        just_closed[symbol] = time.time()
-                        partial_fixed[symbol] = False
-                        take_placed[symbol] = False
-                        lock_activated[symbol] = False
-                        tp1_fixed[symbol] = False
-                        tp2_fixed[symbol] = False
-                        step_be[symbol] = -PRIMARY_SL_PCT
-                        last_stop_time = time.time()
-                        time.sleep(2)
-                    except Exception as e:
-                        log(f"❌ Ошибка выхода: {e}")
-                        # Сбрасываем флаги, чтобы попробовать закрыться снова на следующем круге
-                        partial_fixed[symbol] = False # Очищаем словарь для этой монеты
-                        take_placed[symbol] = False # СБРАСЫВАЕМ ПРИ ВЫХОДЕ
-                        full_exit_triggered = False
-                        tp1_fixed[symbol] = False
-                        tp2_fixed[symbol] = False
-                        step_be[symbol] = -PRIMARY_SL_PCT
-                        time.sleep(5)
-                        pass #continue
-
-              time.sleep(2);
-              continue
-
-            if time.time() - last_stop_time < 300:
-                time.sleep(2);
-                continue
-#====
-            # Если мы уже в сделке, не нужно лихорадочно опрашивать весь список
-            # Просто ждем 5 секунд и идем сразу в мониторинг (ниже)
-            if len(active_positions) > 0:
-                time.sleep(5)
-                # Мы не делаем continue, чтобы бот ОБЯЗАТЕЛЬНО дошел до мониторинга ниже!
-            else:
-                # А если позиции нет — работаем на полной скорости
-                pass
-#====
-            symbol = PRIORITY_LIST[current_idx]
-            # --- УМНАЯ ЧИСТКА V8.8.5 [HYBRID-WAIT] ---
-            is_in_position = any(p['symbol'] == symbol for p in active_positions)
-
-            if not is_in_position:
-                # Проверяем, как давно стоит этот капкан
-                now = time.time()
-                order_age = now - order_creation_time.get(symbol, 0)
-
-                if order_age > LIMIT_ORDER_TTL:
-                    try:
-                        exchange.cancel_all_orders(symbol)
-                        order_creation_time[symbol] = 0 # Сбрасываем после отмены
-                    except: pass
-            else:
-                # Если мы уже в позе - сбрасываем таймер ордера на вход
-                order_creation_time[symbol] = 0
-            # ---------------------------------------------
-
-            # --- УНИВЕРСАЛЬНЫЙ FUNDING SHIELD (Bybit / BingX / MEXC) ---
-            try:
-                f_data = exchange.fetch_funding_rate(symbol)
-                # Извлекаем ставку (универсальный способ для CCXT)
-                rate = float(f_data.get('fundingRate', f_data.get('rate', 0)))
-
-                # ЛОГИРОВАНИЕ (Теперь ты видишь реальную картину в %)
-                # Если rate = 0.0001, в логе будет 0.01%
-                #log(f"📊 Funding {symbol}: {round(rate * 100, 4)}%")
-
-                # ПРОВЕРКА ПОРОГА (0.0003 = 0.03%)
-                if abs(rate) > 0.0003:
-#                    log(f"🚫 Пропуск {symbol}: Высокий фандинг ({round(rate * 100, 2)}%)")
-                    current_idx = (current_idx + 1) % len(PRIORITY_LIST)
-                    continue
-            except Exception as e:
-                # Если биржа лагает на фандинге - просто идем дальше, не падаем
-                pass
-#==
-            df = pd.DataFrame(exchange.fetch_ohlcv(symbol, '1m', limit=50), columns=['t','o','h','l','c','v'])
-            # ATR Filter
-            if (df['h'].iloc[-1]/df['l'].iloc[-1]-1) > 0.015:
-                current_idx = (current_idx+1)%len(PRIORITY_LIST); continue
-
-            ma20, std = df['c'].rolling(20).mean().iloc[-1], df['c'].rolling(20).std().iloc[-1]
-            cur_p = df['c'].iloc[-1]
-
-            # Сигнал Боллинджера
-            # --- 1. РАСЧЕТ ГРАНИЦ С ОТСТУПОМ (ENTRY_OFFSET) ---
-
-              # --- РАСЧЕТ ГРАНИЦ И ШИРИНЫ ---
-            upper_band = ma20 + (std * 2.2)
-            lower_band = ma20 - (std * 2.2)
-
-            # НОВАЯ СТРОКА: Считаем текущую ширину в %
-            current_bandwidth = (upper_band - lower_band) / ma20 * 100
-            # Мы заходим только если цена вылетела ЗА полосу еще на 0.08%
-            is_sell_trigger = cur_p >= upper_band * (1 + ENTRY_TRIGGER_OFFSET)
-            is_buy_trigger = cur_p <= lower_band * (1 - ENTRY_TRIGGER_OFFSET)
-
-             # Сигнал Боллинджера с подтверждением отступа
-             # ВАЖНО: Добавляем проверку ширины
-            if (is_sell_trigger or is_buy_trigger):
-
-                # Если рынок слишком "раздут" - пропускаем
-                if current_bandwidth > MAX_BANDWIDTH:
-                    log(f"🚫 Пропуск {symbol}: Ширина {round(current_bandwidth, 2)}% (Паника)")
-                    current_idx = (current_idx + 1) % len(PRIORITY_LIST); continue
-
-                # Если прошли фильтр - действуем
-                side = 'sell' if is_sell_trigger else 'buy'
-
-                # Фильтр Анти-Шип
-                candle_size = (df['h'].iloc[-1] / df['l'].iloc[-1] - 1)
-                if candle_size > MAX_CANDLE_SIZE:
-                    log(f"🚫 Пропуск {symbol}: Шип {round(candle_size*100,2)}%")
-                    current_idx = (current_idx + 1) % len(PRIORITY_LIST); continue
-
-                # Расчет объема (используем динамический RISK_PERCENT)
-                usable_bal = total_bal - 0.5
-                raw_amt = (usable_bal * RISK_PERCENT * LEVERAGE) / cur_p
-                # Умножаем на 10, так как MEXC дробит контракты ORDI/LPT в 10 раз
-                if 'ORDI' in symbol or 'LPT' in symbol:
-                    raw_amt = raw_amt * 10
-
-                order_p = upper_band * (1 + ENTRY_ORDER_OFFSET) if is_sell_trigger else lower_band * (1 - ENTRY_ORDER_OFFSET)
-                # ИСПОЛЬЗУЕМ КЛАССИЧЕСКИЙ ОКРУГЛИТЕЛЬ (как был раньше)
-                # Иногда amount_to_precision на MEXC глючит с мелкими монетами
-                #amt = float(math.floor(raw_amt))
-                # Вместо math.floor используем округление через precision биржи
-                amt_str = exchange.amount_to_precision(symbol, raw_amt)
-                amt = float(amt_str)
-                if amt < 1 and '1000' not in symbol: amt = 1.0 # Минималка для дорогих монет
-
-                # Входим, только если сумма ОК и у нас НЕТ других открытых позиций
-                if amt >= 1 and len(active_positions) == 0:
-                    log(f"🎯 ЛОВУШКА {symbol}...")
-                    log(f"🎯 ЛОВУШКА {symbol} {side.upper()} (Trig: {ENTRY_TRIGGER_OFFSET*100}% | Order: {ENTRY_ORDER_OFFSET*100}%)")
-                    # ОТПРАВЛЯЕМ order_p
-                    res = smart_order(symbol, side, amt, True, order_p, is_exit=False)
-                    if res: # Теперь res - это словарь или True, проверка пройдет
-                    #if smart_order(symbol, side, amt, True, order_p, is_exit=False):
-                        order_creation_time[symbol] = time.time() # ФИКСИРУЕМ ВРЕМЯ ПОСТАНОВКИ
-                        partial_fixed[symbol]  = False
-                        entry_times[symbol] = time.time()
-                        lock_activated[symbol] = False
-                        tp1_fixed[symbol] = False
-                        tp2_fixed[symbol] = False
-                        step_be[symbol] = -PRIMARY_SL_PCT
-                else:
-                    log(f"⚠️ Пропуск {symbol}: Баланс слишком мал для входа.")
-
-            current_idx = (current_idx + 1) % len(PRIORITY_LIST); time.sleep(1.1) #оптимальный тайминг, был 5
+                rolling_range_4h = (max_4h / min_4h - 1) * 100
+                if rolling_range_4h > 4.5:
+                    return None # Монета перегрета — пропускаем сигнал
         except Exception as e:
-            if "510" in str(e): log("⏳ Rate limit! Пауза 30с..."); time.sleep(30)
-            else: log(f"⚠️ Error  {e}"); time.sleep(15)
+            log(f"⚠️ Ошибка 4H фильтра: {e}")
+            pass
 
-run_titan_stable()
+        # Запрашиваем историю минутных свечей альта через REST шлюз MEXC
+        df_candles = exchange.fetch_ohlcv(symbol, '1m', limit=25)
+        if len(df_candles) < BB_PERIOD + 5:
+            return None
+
+        # Расчет Боллинджера по канонической формуле
+        closes = [float(c[4]) for c in df_candles[-BB_PERIOD-1:-1]] # Строго по закрытым свечам
+        ma20 = sum(closes) / BB_PERIOD
+        variance = sum((x - ma20) ** 2 for x in closes) / BB_PERIOD
+        std = variance ** 0.5
+        upper_band = ma20 + (std * BB_STD)
+        lower_band = ma20 - (std * BB_STD)
+
+        # Флаги первичного вылета за границы Боллинджера
+        is_sell_candidate = cur_p >= upper_band
+        is_buy_candidate = cur_p <= lower_band
+
+        if not (is_sell_candidate or is_buy_candidate):
+            return None
+
+        # --- [ФИЛЬТР 2: ADAPTIVE VOLUME SHIELD — АДАПТИВНЫЙ ФИЛЬТР ОБЪЕМА] ---
+        live_volume = float(df_candles[-1][5])  # Объем текущей живой минутки
+        mean_volume = sum(float(c[5]) for c in df_candles[-6:-1]) / 5  # Средний за прошлые 5 минут
+
+        if mean_volume <= 0:
+            return None
+
+        volume_ratio = live_volume / mean_volume
+        is_meme = any(m in symbol.upper() for m in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'BONK'])
+        required_ratio = 1.8 if is_meme else 1.1
+
+        if volume_ratio < required_ratio:
+            return None  # Пустой шумовой прокол стакана без плотности ордеров
+
+        # --- [ФИЛЬТР 3: PRE-CANDLE SHIELD — КАСКАДНЫЙ НОЖ ПРЕДЫСТОРИИ] ---
+        p_c1 = df_candles[-2]  # Прошлая закрытая минута
+        p_c2 = df_candles[-3]  # 2 минуты назад
+        p_c3 = df_candles[-4]  # 3 минуты назад
+
+        is_3_green = (p_c1[4] > p_c1[1]) and (p_c2[4] > p_c2[1]) and (p_c3[4] > p_c3[1])
+        is_3_red   = (p_c1[4] < p_c1[1]) and (p_c2[4] < p_c2[1]) and (p_c3[4] < p_c3[1])
+
+        if is_buy_candidate and is_3_red:
+            return None  # Падающий каскадный нож продавца — ловить лимиткой запрещено
+        if is_sell_candidate and is_3_green:
+            return None  # Растущая вертикальная ракета покупателя — шортить капканом запрещено
+
+        # --- [ФИЛЬТР 4: ГЕОМЕТРИЯ СВЕЧИ (ТВОЯ СЕРВЕРНАЯ СТРУКТУРА MARUBOZU)] ---
+        c_open, c_high, c_low, c_close = float(df_candles[-1][1]), float(df_candles[-1][2]), float(df_candles[-1][3]), float(df_candles[-1][4])
+        live_candle_range = abs(c_high - c_low)
+        if live_candle_range <= 0:
+            return None
+
+        # Жесткие лимиты теней Marubozu из твоей оригинальной версии V16.0
+        shadow_limit = 0.40
+        body_limit = 0.50
+
+        if is_buy_candidate:
+            up_shadow = abs(c_high - max(c_open, c_close))
+            long_body = abs(c_open - c_close)
+            if (up_shadow / live_candle_range) > shadow_limit or (long_body / live_candle_range) < body_limit:
+                return None
+
+            # Вычисляем точную ювелирную цену лимитного капкана под нижней полосой
+            order_price = lower_band * (1 - ENTRY_ORDER_OFFSET)
+            return {'side': 'buy', 'price': order_price, 'upper_band': upper_band, 'lower_band': lower_band}
+
+        elif is_sell_candidate:
+            dn_shadow = abs(min(c_open, c_close) - c_low)
+            short_body = abs(c_open - c_close)
+            if (dn_shadow / live_candle_range) > shadow_limit or (short_body / live_candle_range) < body_limit:
+                return None
+
+            # Вычисляем точную ювелирную цену лимитного капкана над верхней полосой
+            order_price = upper_band * (1 + ENTRY_ORDER_OFFSET)
+            return {'side': 'sell', 'price': order_price, 'upper_band': upper_band, 'lower_band': lower_band}
+
+    except Exception as scan_err:
+        log(f"⚠ Ошибка сканирования {symbol}: {scan_err}")
+        return None
+    return None
+
+async def monitor_logic(exchange):
+    """Адаптивное управление выходами V16.9: Фикс лотов SOL, Квантовый Храповик 60с и Синдром Сползания"""
+    while memory.is_running:
+        for symbol, pos in list(memory.active_pos.items()):
+            try:
+                cur_p = memory.prices.get(symbol, 0.0)
+                if cur_p <= 0: continue
+
+                # Расчет чистого PNL и времени жизни позиции
+                profit = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
+                age = time.time() - pos['entry_time']
+                exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
+                mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
+
+                # --- 1. ВЫСТАВЛЕНИЕ ЖЕСТКОГО СЕРВЕРНОГО СТОП-ЛОССА НА МЕХС ---
+                if not memory.stop_placed.get(symbol):
+                    try:
+                        sl_price = pos['price'] * (1 - PRIMARY_SL_PCT) if pos['side'] == 'buy' else pos['price'] * (1 + PRIMARY_SL_PCT)
+                        sl_price_precision = float(exchange.price_to_precision(symbol, sl_price))
+                        exact_vol = exchange.amount_to_precision(symbol, pos['vol'])
+
+                        try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                        except: pass
+
+                        await smart_order(exchange, symbol, exit_side, float(exact_vol), price=sl_price_precision, is_stop=True)
+                        memory.stop_placed[symbol] = sl_price_precision
+                        log(f"🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: {symbol} @ {sl_price_precision}")
+                    except Exception as e:
+                        log(f"🆘 Ошибка автостопа MEXC для {symbol}: {e}")
+                        memory.stop_placed[symbol] = pos['price']
+
+                # --- [УЗЕЛ V16.9: КВАНТОВЫЙ ДЕЦЕНТРАЛИЗОВАННЫЙ ВЕНТИЛЬ ВЫХОДОВ НА МЕХС] ---
+                if profit > 0:
+                    memory.max_pnl_observed[symbol] = max(profit, memory.max_pnl_observed.get(symbol, profit))
+
+                # ТРИГГЕР А: Раннее отсечение сползания альта с учетом проскальзывания на MEXC (60с / -0.08%)
+                if age > 60 and profit < -0.0008:
+                    log(f"🛡️ Decay Shield V16.9: {symbol} срезан на 60с (Лосс: {round(profit*100, 2 )}%)")
+                    action_triggered_decay = False
+                    try:
+                        try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                        except: pass
+                        await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                        action_triggered_decay = True
+                    except Exception as e: log(f"⚠️ Ошибка утилизации: {e}")
+
+                    if action_triggered_decay:
+                        for k in [symbol, symbol.replace(':USDT', '')]:
+                            if k in memory.active_pos: del memory.active_pos[k]
+                            if k in memory.tp1_fixed: del memory.tp1_fixed[k]
+                            if k in memory.tp2_fixed: del memory.tp2_fixed[k]
+                            if k in memory.stop_placed: del memory.stop_placed[k]
+                            if k in memory.step_be: del memory.step_be[k]
+                            if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
+                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                        return
+
+                # ТРИГГЕР Б: Синдром Сползания Импульса (Выдох крупного игрока на МЕХС)
+                if symbol in memory.max_pnl_observed and memory.max_pnl_observed[symbol] >= 0.0025:
+                    current_decay_pct = (1 - (profit / memory.max_pnl_observed[symbol])) * 100
+                    if current_decay_pct > 70.0:
+                        log(f"🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: {symbol} закрыт на МЕХС. ММ выдохся (Пик: +{round(memory.max_pnl_observed[symbol]*100,2)}%)")
+                        action_triggered_momentum_dead = False
+                        try:
+                            try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                            except: pass
+                            await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                            action_triggered_momentum_dead = True
+                        except Exception as e: log(f"⚠️ Ошибка Синдрома Сползания: {e}")
+
+                        if action_triggered_momentum_dead:
+                            for k in [symbol, symbol.replace(':USDT', '')]:
+                                if k in memory.active_pos: del memory.active_pos[k]
+                                if k in memory.tp1_fixed: del memory.tp1_fixed[k]
+                                if k in memory.tp2_fixed: del memory.tp2_fixed[k]
+                                if k in memory.stop_placed: del memory.stop_placed[k]
+                                if k in memory.step_be: del memory.step_be[k]
+                                if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
+                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                            return
+
+                # --- 3. ШТАТНАЯ ФИКСАЦИЯ ТЕЙКА 1 (С ЖЕСТКИМ ФИКСОМ ОКРУГЛЕНИЯ МАЛЫХ ЛОТОВ SOL) ---
+                if not memory.tp1_fixed.get(symbol) and profit >= TP1_PCT:
+                    try:
+                        raw_close_qty = pos['vol'] * 0.30
+                        close_qty_str = exchange.amount_to_precision(symbol, raw_close_qty)
+                        close_qty = float(close_qty_str)
+
+                        # ЗАЩИТА ОТ ОКРУГЛЕНИЯ В НOЛЬ (Для лотов SOL/LDO)
+                        if close_qty <= 0 or close_qty >= pos['vol']:
+                            log(f"⚠ ЛОТ {symbol} СЛИШКОМ МАЛ ДЛЯ ДРОБЛЕНИЯ ({pos['vol']}): Фиксируем 100% объема в Тейк 1 по рынку!")
+                            try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                            except: pass
+                            await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+
+                            for k in [symbol, symbol.replace(':USDT', '')]:
+                                if k in memory.active_pos: del memory.active_pos[k]
+                                if k in memory.tp1_fixed: del memory.tp1_fixed[k]
+                                if k in memory.tp2_fixed: del memory.tp2_fixed[k]
+                                if k in memory.stop_placed: del memory.stop_placed[k]
+                                if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
+                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                            return
+
+                        # Если лот позволяет дробить — фиксируем базовые 30%
+                        await smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
+                        memory.tp1_fixed[symbol] = True
+                        pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
+                        log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксировано 30% объема (+{round(TP1_PCT*100,2)}%)")
+
+                        try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                        except: pass
+                        bu_price = pos['price'] * (1 + 0.0015) if pos['side'] == 'buy' else pos['price'] * (1 - 0.0015)
+                        bu_price_precision = float(exchange.price_to_precision(symbol, bu_price))
+                        await smart_order(exchange, symbol, exit_side, pos['vol'], price=bu_price_precision, is_stop=True)
+                        memory.stop_placed[symbol] = bu_price_precision
+                    except Exception as e:
+                        log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
+
+                # --- 4. ЛОГИКА ТЕЙК-ПРОФИТА 2 ---
+                if memory.tp1_fixed.get(symbol) and not memory.tp2_fixed.get(symbol) and profit >= TP2_PCT:
+                    try:
+                        close_qty = float(exchange.amount_to_precision(symbol, pos['vol'] * 0.57))
+                        if close_qty > 0:
+                            await smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
+                            memory.tp2_fixed[symbol] = True
+                            pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
+                            log(f"🏆 ТЕЙК-2 ВЫПОЛНЕН: {symbol} зафиксировано 40% объема (+{round(TP2_PCT*100,2)}%)")
+                    except Exception as e: log(f"🆘 Ошибка Тейка 2 {symbol}: {e}")
+
+                # --- 5. ЛОГИКА ТЕЙК-ПРОФИТА 3 ---
+                if memory.tp2_fixed.get(symbol) and profit >= TP3_PCT:
+                    log(f"👑 ТЕЙК-3 МЕГА-ФИНАЛ: {symbol} полностью закрыт (+{round(TP3_PCT*100,2)}%)")
+                    action_triggered_tp3 = False
+                    try:
+                        try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                        except: pass
+                        await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                        action_triggered_tp3 = True
+                    except Exception as e: log(f"⚠ Ошибка Тейка 3 для {symbol}: {e}")
+
+                    if symbol in memory.active_pos: del memory.active_pos[symbol]
+                    if symbol in memory.tp1_fixed: del memory.tp1_fixed[symbol]
+                    if symbol in memory.tp2_fixed: del memory.tp2_fixed[symbol]
+                    if symbol in memory.stop_placed: del memory.stop_placed[symbol]
+                    if symbol in memory.max_pnl_observed: del memory.max_pnl_observed[symbol]
+                    memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                    if action_triggered_tp3: return
+
+            except Exception as loop_err: pass
+        await asyncio.sleep(0.1)
+
+async def main_logic():
+    """Генеральный оркестратор Берсерка V16.9: Фикс балансов, CROSS-защита и REST-пушер"""
+    exchange = await init_exchange()
+    exchange_pro = ccxtpro.mexc({'apiKey': API_KEY, 'secret': SECRET_KEY, 'options': {'defaultType': 'swap'}})
+
+    # Запускаем параллельные квантовые потоки цен и ведения позиций
+    asyncio.create_task(price_stream(exchange_pro))
+    asyncio.create_task(monitor_logic(exchange))
+
+    log("🏹 Охота лимитными капканами Berserk V16.9 активирована. Патрулирую стаканы...")
+
+    memory.last_btc_push = 0
+    last_balance_update = 0
+
+    while memory.is_running:
+        try:
+            now = time.time()
+
+            # 1. АВТОНОМНЫЙ REST-ПУШЕР БИТКОИНА ДЛЯ MEXC
+            if now - memory.last_btc_push >= 60:
+                try:
+                    btc_ticker = exchange.fetch_ticker('BTC/USDT:USDT')
+                    btc_price = float(btc_ticker.get('last', btc_ticker.get('close', 0.0)))
+                    if btc_price > 0:
+                        memory.btc_history.append(btc_price)
+                        if len(memory.btc_history) > 30: memory.btc_history.pop(0)
+                        log(f"🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC @ ${btc_price} | История: {le n(memory.btc_history)}м")
+                        memory.last_btc_push = now
+                except Exception as btc_err:
+                    log(f"⚠️ Ошибка REST-запроса Поводыря: {btc_err}")
+
+            # 2. ФОНОВОЕ ОБНОВЛЕНИЕ БАЛАНСА (ЗАЩИТА ОТ ОБНУЛЕНИЯ И CODE 2005)
+            if now - last_balance_update >= 15:
+                try:
+                    bal = exchange.fetch_balance({'type': 'swap'})
+                    if isinstance(bal, dict) and 'USDT' in bal:
+                        memory.available = float(bal['USDT'].get('free', 0.0))
+                        last_balance_update = now
+                except:
+                    pass
+
+            # 3. СКАНЕР СИГНАЛОВ И ВЫСТАВЛЕНИЕ КАПКАНОВ
+            if memory.slots_occupied < MAX_SLOTS:
+                for symbol in PRIORITY_LIST:
+                    if symbol in memory.active_pos or symbol in memory.limit_orders:
+                        continue
+
+                    signal = await check_signal(exchange, symbol)
+                    if signal and memory.slots_occupied < MAX_SLOTS:
+                        leverage = 25
+                        clean_sym = symbol.replace(':USDT', '')
+
+                        # БРОНИРОВАННЫЙ КЛУБ ИЗОЛЯЦИИ: Сначала выставляем плечо БЕЗ сброса в Cross
+                        try:
+                            exchange.set_leverage(leverage, clean_sym)
+                            exchange.set_margin_mode('isolated', clean_sym)
+                        except: pass
+
+                        # Расчет объема снайперского лота
+                        amount_usdt = memory.available * RISK_GEAR * leverage
+                        qty = amount_usdt / signal['price']
+
+                        # Выставляем пассивный лимитный капкан Maker
+                        order = await smart_order(exchange, symbol, signal['side'], qty, is_limit=True, price=signal['price'])
+                        if order and isinstance(order, dict):
+                            order_id = order.get('id')
+                            memory.limit_orders[symbol] = {
+                                'id': order_id, 'time': time.time(), 'price': signal['price'],
+                                'side': signal['side'], 'qty': qty, 'dna': signal
+                            }
+                            log(f"🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): {symbol} {signal['side'].upper()} @ {signal['price']}")
+
+            # --- [ВЕНИК АВТОСНОСА НЕИСПОЛНЕННЫХ ЛИМИТОК ПО TTL = 75с] ---
+            for symbol in list(memory.limit_orders.keys()):
+                order_data = memory.limit_orders[symbol]
+                try:
+                    open_orders = await exchange.fetch_open_orders(symbol)
+                    is_still_open = any(o['id'] == order_data['id'] for o in open_orders)
+
+                    if not is_still_open:
+                        log(f"🔥 КАПКАН СРАБОТАЛ! {symbol} налит шпилькой по цене {order_data['price']}.")
+                        memory.active_pos[symbol] = {
+                            'side': order_data['side'], 'vol': order_data['qty'], 'price': order_data['price'],
+                            'entry_time': time.time(), 'dna': order_data['dna']
+                        }
+                        memory.slots_occupied += 1
+                        del memory.limit_orders[symbol]
+                        continue
+                except: pass
+
+                if now - order_data['time'] > LIMIT_ORDER_TTL:
+                    log(f"🧹 ВЕНИК ЛИМИТОК: Капкан по {symbol} утилизирован по времени TTL ({LIMIT_O RDER_TTL}с).")
+                    try:
+                        mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
+                        await exchange.fapiPrivateCancelOrder({'symbol': mexc_market_id, 'orderId': order_data['id']})
+                    except: pass
+                    if symbol in memory.limit_orders: del memory.limit_orders[symbol]
+
+        except Exception as main_err:
+            await asyncio.sleep(1)
+        await asyncio.sleep(0.5)
+
+if __name__ == "__main__":
+    try: asyncio.run(main_logic())
+    except KeyboardInterrupt: log("🛑 Снайпер Берсерк принудительно остановлен.")
