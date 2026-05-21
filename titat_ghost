@@ -1,22 +1,25 @@
 MAX_SLOTS = 1
-RISK_PER_SLOT = 0.9 # Агрессивный риск для разгона
-LOG_FILE = "ghost_v22_log.txt"
+RISK_PER_SLOT = 0.9  # Агрессивный риск для разгона
+LOG_FILE = "ghost_log.txt"
 
 class TitanGhost:
     def __init__(self):
         self.memory = {
             'prices': {}, 'active_pos': {}, 'dna': {}, 'is_running': True,
-            'available': 0.0, 'tp_fixed': {}, 'trail_active': {}
+            'available': 0.0, 'tp_fixed': {}, 'trail_active': {},
+            'vol_history': {}, 'cooldown': {}
         }
-        self.memory['vol_history'] = {} # Хранилище для rolling-объема
-        self.memory['cooldown'] = {}
         self.exchange = None
 
     def log(self, msg):
         t = time.strftime('%H:%M:%S')
         out = f"[{t}] {msg}"
-        print(out)
-        with open(LOG_FILE, "a", encoding="utf-8") as f: f.write(out + "\n")
+        print(out, flush=True)
+        try:
+            with open(LOG_FILE, "a", encoding="utf-8") as f:
+                f.write(out + "\n")
+        except:
+            pass
 
     async def init_exchange(self):
         if self.exchange:
@@ -26,20 +29,33 @@ class TitanGhost:
             'apiKey': API_KEY, 'secret': API_SECRET,
             'options': {'defaultType': 'swap'}, 'enableRateLimit': True
         })
-        with open('dna_ghost.json', 'r') as f: self.memory['dna'] = json.load(f)
+        with open('dna_ghost.json', 'r') as f:
+            self.memory['dna'] = json.load(f)
+
         self.log(f"💎 TITAN GHOST V22.3 READY. Slots: {MAX_SLOTS} | Assets: {len(self.memory['dna'])}")
-        # --- [ЖЕСТКИЙ ФИКС V25.5: БЕЗОПАСНЫЙ ПАРСИНГ BALANCE] ---
-        # --- [ВРЕЗКА V25.6: ИСТИННЫЙ ПРОГРЕВ МАРЖИ BINGX SWAP] ---
+
+        # --- [ВРЕЗКА V25.9: АБСОЛЮТНЫЙ УНИВЕРСАЛЬНЫЙ ПАРСИНГ BINGX SWAP] ---
         try:
-            bal = await self.exchange.fetch_balance({'type': 'swap'})
-            # Канонический синтаксис CCXT BingX: свободные средства лежат в bal['free']['USDT']
-            if isinstance(bal, dict) and 'free' in bal and 'USDT' in bal['free']:
-                self.memory['available'] = float(bal['free']['USDT'])
-            elif isinstance(bal, dict) and 'USDT' in bal and isinstance(bal['USDT'], dict):
-                self.memory['available'] = float(bal['USDT'].get('free', 0.0))
-            else:
-                # Резервный парсинг сырого ответа шлюза биржи
-                self.memory['available'] = float(bal.get('info', {}).get('data', {}).get('balance', {}).get('availableMargin', 0.0))
+            bal = self.exchange.fetch_balance({'type': 'swap'})
+            self.memory['available'] = 0.0
+
+            if isinstance(bal, dict):
+                if 'free' in bal and isinstance(bal['free'], dict) and 'USDT' in bal['free']:
+                    self.memory['available'] = float(bal['free']['USDT'])
+                elif 'USDT' in bal and isinstance(bal['USDT'], dict):
+                    self.memory['available'] = float(bal['USDT'].get('free', 0.0))
+
+                if self.memory['available'] <= 0 and 'info' in bal:
+                    raw_info = bal['info']
+                    if isinstance(raw_info, str):
+                        try:
+                            parsed_info = json.loads(raw_info)
+                            margin_val = parsed_info.get('data', {}).get('balance', {}).get('availableMargin')
+                            if margin_val is not None: self.memory['available'] = float(margin_val)
+                        except: pass
+                    elif isinstance(raw_info, dict):
+                        margin_val = raw_info.get('data', {}).get('balance', {}).get('availableMargin')
+                        if margin_val is not None: self.memory['available'] = float(margin_val)
         except Exception as e:
             self.log(f"🆘 Ошибка прогрева маржи в init_exchange: {e}")
             self.memory['available'] = 0.0
@@ -47,53 +63,50 @@ class TitanGhost:
         self.log(f"💎 TITAN GHOST READY. Доступная маржа Swap: ${self.memory['available']}")
 
     async def update_context(self):
-        """Синхронизация позиций через прямой API-шлюз аккаунта V25.1 [ИСПРАВЛЕНО BINGX]"""
+        """Синхронизация позиций через прямой API-шлюз аккаунта V25.9 [БЕЗ ОБНУЛЕНИЯ + ПОЛНЫЙ ВЕНИК]"""
         while self.memory['is_running']:
             try:
-                # 1. Жестко запрашиваем баланс фьючерсного аккаунта Бессрочных свопов
                 bal = await self.exchange.fetch_balance({'type': 'swap'})
 
-                # --- [ВРЕЗКА V25.6: ИСТИННЫЙ ФОНОВЫЙ ОБНОВИТЕЛЬ МАРЖИ BINGX] ---
-                if isinstance(bal, dict) and 'free' in bal and 'USDT' in bal['free']:
-                    self.memory['available'] = float(bal['free']['USDT'])
-                elif isinstance(bal, dict) and 'USDT' in bal and isinstance(bal['USDT'], dict):
-                    self.memory['available'] = float(bal['USDT'].get('free', 0.0))
-                else:
-                    try:
-                        self.memory['available'] = float(bal.get('info', {}).get('data', {}).get('balance', {}).get('availableMargin', 0.0))
-                    except:
-                        pass # НЕ обнуляем баланс, если биржа лагнула на секунду, сохраняем старое значение!
+                # ИСТИННЫЙ ФОНОВЫЙ ОБНОВИТЕЛЬ МАРЖИ BINGX С АНТИ-КРАШ ОБЕРТКОЙ
+                if isinstance(bal, dict):
+                    if 'free' in bal and isinstance(bal['free'], dict) and 'USDT' in bal['free']:
+                        self.memory['available'] = float(bal['free']['USDT'])
+                    elif 'USDT' in bal and isinstance(bal['USDT'], dict):
+                        self.memory['available'] = float(bal['USDT'].get('free', 0.0))
 
-                # 2. Используем твой надежный метод fetch_account_positions для рынка swap
-                try:
-                    pos = await self.exchange.fetch_account_positions(None, {'type': 'swap'})
-                except:
-                    pos = await self.exchange.fetch_positions(None, {'type': 'swap'})
+                    if 'info' in bal:
+                        raw_info = bal['info']
+                        try:
+                            if isinstance(raw_info, str):
+                                parsed_info = json.loads(raw_info)
+                                margin_val = parsed_info.get('data', {}).get('balance', {}).get('availableMargin')
+                                if margin_val is not None: self.memory['available'] = float(margin_val)
+                            elif isinstance(raw_info, dict):
+                                margin_val = raw_info.get('data', {}).get('balance', {}).get('availableMargin')
+                                if margin_val is not None: self.memory['available'] = float(margin_val)
+                        except: pass
+
+                try: pos = await self.exchange.fetch_account_positions(None, {'type': 'swap'})
+                except: pos = await self.exchange.fetch_positions(None, {'type': 'swap'})
 
                 current_active = []
-
                 for p in pos:
                     vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
                     if vol <= 0.00001: continue
-
                     raw_sym = p.get('symbol', p.get('pair', ''))
-                    # Приводим к каноническому виду CCXT (например, XRP/USDT)
+
                     clean_sym = raw_sym.replace('_', '/').replace(':USDT', '')
                     if '/' not in clean_sym and 'USDT' in clean_sym:
                         clean_sym = clean_sym.replace('USDT', '/USDT')
 
-                    # Ищем совпадение в нашей ДНК-обойме
                     dna_key = None
-                    if clean_sym in self.memory['dna']:
-                        dna_key = clean_sym
-                    elif f"{clean_sym}:USDT" in self.memory['dna']:
-                        dna_key = f"{clean_sym}:USDT"
+                    if clean_sym in self.memory['dna']: dna_key = clean_sym
+                    elif f"{clean_sym}:USDT" in self.memory['dna']: dna_key = f"{clean_sym}:USDT"
 
-                    # СЦЕНАРИЙ А: Позиция наша — усыновляем или ведем
                     if dna_key:
                         current_active.append(dna_key)
                         current_active.append(clean_sym)
-
                         entry_price = float(p.get('entryPrice', p.get('price', 0)))
                         side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
                         side = 'buy' if 'long' in side_raw or 'buy' in side_raw else 'sell'
@@ -104,20 +117,15 @@ class TitanGhost:
                                 'side': side, 'vol': vol, 'price': entry_price,
                                 'entry_time': time.time(), 'dna': self.memory['dna'][dna_key], 'status': 'active'
                             }
-
-                    # --- [ТОТАЛЬНЫЙ ПЫЛЕСОС ПЫЛИ: ВЫЖИГАЕМ СЛЕПЫЕ ПОЗИЦИИ] ---
                     else:
                         try:
                             self.log(f"🧹 ВЕНИК-ПОЗИЦИЯ: Обнаружен слепой остаток по {clean_sym} (Об ъем: {vol}). Выжигаю...")
                             side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
                             exit_side = 'sell' if 'long' in side_raw or 'buy' in side_raw else 'buy'
-
-                            market_id = clean_sym.replace(':USDT', '')
-                            await self.exchange.create_market_order(market_id, exit_side, vol, {'reduceOnly': True})
+                            await self.exchange.create_market_order(clean_sym.replace(':USDT', ''), exit_side, vol, {'reduceOnly': True})
                         except Exception as e:
                             self.log(f"🆘 Отлуп веника по пыли {clean_sym}: {e}")
 
-                # --- [ПРОТОКОЛ АВТО-ЭВАКУАЦИИ РУЧНЫХ ЗАКРЫТИЙ ОРДЕРОВ] ---
                 for sym in list(self.memory['active_pos'].keys()):
                     pos_data = self.memory['active_pos'][sym]
                     if pos_data.get('status') == 'pending':
@@ -126,10 +134,8 @@ class TitanGhost:
                             if not open_orders and sym not in current_active:
                                 self.log(f"🧹 ЭВАКУАЦИЯ: Лимитка по {sym} удалена руками. Очищаем па мять.")
                                 del self.memory['active_pos'][sym]
-                        except Exception:
-                            pass
+                        except Exception: pass
 
-                # 3. Очистка памяти от закрытых живых позиций
                 for sym in list(self.memory['active_pos'].keys()):
                     pos_data = self.memory['active_pos'][sym]
                     if sym not in current_active and pos_data.get('status') != 'pending':
@@ -141,14 +147,12 @@ class TitanGhost:
                 await asyncio.sleep(20)
             except Exception as e:
                 await asyncio.sleep(5)
-#==========
+
     async def price_stream(self):
-        """Высокочастотный тотальный сбор цен BingX со сквозной фильтрацией ID [V24.1]"""
+        """Высокочастотный тотальный сбор цен BingX со сквозной разгрузкой Event Loop [V25.9]"""
         self.log(f"📡 Запуск REST-мониторинга цен и объемов для {len(self.memory['dna'])} активов...")
         while self.memory['is_running']:
             try:
-                # ЖЕСТКИЙ ФИКС: Вызываем fetch_tickers БЕЗ аргументов.
-                # Это заставляет CCXT забрать ВСЕ рыночные пары BingX без вылета по ошибке Invalid Symbol!
                 tickers = await self.exchange.fetch_tickers()
                 if not tickers:
                     await asyncio.sleep(1)
@@ -156,12 +160,8 @@ class TitanGhost:
 
                 for raw_symbol, data in tickers.items():
                     if not data.get('last'): continue
-
-                    # Приводим сырой символ к каноническому виду (чистим от двоеточий)
                     clean_sym = raw_symbol.replace(':USDT', '')
 
-                    # Проверяем, есть ли эта монета в нашей ДНК-обойме
-                    # Проверка сработает для любого формата: "SOL/USDT", "SOL/USDT:USDT" или "SOLUSDT"
                     target_key = None
                     if clean_sym in self.memory['dna']: target_key = clean_sym
                     elif f"{clean_sym}:USDT" in self.memory['dna']: target_key = f"{clean_sym}:USDT"
@@ -171,159 +171,147 @@ class TitanGhost:
                         last_price = float(data['last'])
                         q_vol = float(data['quoteVolume']) if data.get('quoteVolume') else 0.0
 
-                        # Записываем цену по обоим ключам, чтобы hunter_loop её гарантированно увидел
                         self.memory['prices'][target_key] = last_price
                         self.memory['prices'][clean_sym] = last_price
 
-                        # Наполняем историю тиков
                         if target_key not in self.memory['vol_history']:
                             self.memory['vol_history'][target_key] = []
-
                         self.memory['vol_history'][target_key].append((last_price, q_vol))
                         self.memory['vol_history'][target_key] = self.memory['vol_history'][target_key][-65:]
 
-                await asyncio.sleep(3) # Опрос раз в секунду
+                # ТОЧНЫЙ ТАЙМИНГ РАЗГРУЗКИ: Даем 3 секунды тишины для update_context
+                await asyncio.sleep(0.5)
             except Exception as e:
-                # Если произошла сетевая заминка, выводим её для прозрачности дебага
-                # print(f"DEBUG PRICE STREAM ERROR: {e}")
                 await asyncio.sleep(3)
 
     async def execute_limit_entry(self, sym, side, limit_price, dna):
-        """Выставление лимитного капкана с люфтом и очисткой суффиксов V24.6.1 [BINGX]"""
+        """Выставление лимитного капкана с фиксом 1000PEPE и защитой One-way [BINGX]"""
         try:
-            # 1. Принудительно очищаем символ от фьючерсных двоеточий CCXT
-            clean_sym = sym.replace(':USDT', '')
-            # --- ЖЕСТКИЙ ФИКС ДЛЯ МЕМ-ФЛАГМАНА PEPE НА BINGX ---
+            # 1. Вырезаем фьючерсные двоеточия и канонизируем слэш
+            clean_sym = sym.replace(':USDT', '').replace('_', '/')
+
+            # ЖЕСТКИЙ СНАЙПЕРСКИЙ ФИКС ОФФЛАЙНА 1000PEPE
             if "1000PEPE" in clean_sym:
                 clean_sym = clean_sym.replace("1000PEPE", "PEPE")
 
-            # Гарантируем, что для отправки ордеров на BingX символ имеет канонический вид, например, "PEPE/USDT"
-            clean_sym = clean_sym.replace('_', '/')
+            # 2. Установка плеча в режиме Односторонней позиции BOTH
+            try:
+                await self.exchange.set_leverage(dna['lev'], clean_sym, {'side': 'BOTH'})
+            except:
+                pass
 
-            # 2. Твой надежный метод установки плеча с защитой BOTH
-            await self.exchange.set_leverage(dna['lev'], clean_sym, {'side': 'BOTH'})
-
-            # 3. Добавляем микро-люфт 0.05% для гарантированного зацепа на импульсе
+            # 3. Микро-люфт 0.05% для гарантированного зацепа импульса наружу
             if side == 'buy':
-                limit_price = limit_price * 1.0005 # Ставим чуть выше для лонга
+                limit_price = limit_price * 1.0005
             else:
-                limit_price = limit_price * 0.9995 # Ставим чуть ниже для шорта
+                limit_price = limit_price * 0.9995
 
-            # 4. Расчет объема позиции от свободного капитала
+            # 4. Расчет объема от актуального, защищенного от нулей капитала
             avail = self.memory['available']
             usdt_vol = avail * RISK_PER_SLOT * dna['lev']
             qty = float(self.exchange.amount_to_precision(clean_sym, usdt_vol / limit_price))
             if qty <= 0: return
 
-            # 5. Снос старых ордеров по очищенному символу
-            await self.exchange.cancel_all_orders(clean_sym, {'spot': False})
+            # 5. Снос старых лимитных приказов
+            try:
+                await self.exchange.cancel_all_orders(clean_sym, {'spot': False})
+            except:
+                pass
+
             exact_price = float(self.exchange.price_to_precision(clean_sym, limit_price))
 
-            # 6. Отправка лимитного ордера на биржу
+            # 6. Отправка лимитного ордера-капкана на BingX
             order = await self.exchange.create_order(clean_sym, 'limit', side, qty, exact_price)
             if order:
-                self.log(f"🕸 ЛИМИТНЫЙ КАПКАН ВЫСТАВЛЕН: {clean_sym} {side.upper()} по {exact_price} ")
+                self.log(f"🕸️ ЛИМИТНЫЙ КАПКАН В ЫСТАВЛЕН: {clean_sym} {side.upper()} по {exact_price}")
                 self.memory['active_pos'][sym] = {
                     'side': side, 'vol': qty, 'price': exact_price, 'entry_time': time.time(),
                     'dna': dna, 'status': 'pending'
                 }
         except Exception as e:
-            self.log(f"⚠ Ошибка выставления капкана {sym}: {e}")
-#================
+            self.log(f"⚠️ Ошибка выставления капкана {sym}: {e}")
+
     async def hunter_loop(self):
-        """Ядро сканирования Ghost Strike V23.1.2 Квантовая Геометрия [ИСПРАВЛЕНО]"""
+        """Ядро сканирования Ghost Strike V23.1.2 Квантовая Геометрия"""
         self.log("🚀 Охота Ghost Strike [V23.1.2 Квантовая Геометрия] активирована...")
         await asyncio.sleep(5)
-        last_debug_t = 0
 
+        # Переменная для контроля частоты вывода дебаг-маяка (раз в 5 минут / 300 секунд)
+        last_hunter_beacon = 0
         while self.memory['is_running']:
-            for sym, dna in self.memory['dna'].items():
+            now = time.time()
 
-                # 1. АНТИ-ПОВТОР: Кулдаун для защиты от распила
+            # --- [ВРЕЗКА V26.0: СИСТЕМНЫЙ ДЕБАГ-МАЯК СКАНЕРА GHOST] ---
+            if now - last_hunter_beacon > 300:
+                active_symbols = list(self.memory['active_pos'].keys())
+                self.log(f"📡 МАЯК GHOST СТАБИЛЕН: Мониторинг {len(self.memory['dna'])} секторов фьючерсов BingX.")
+                self.log(f"💰 Маржа: ${round(self.memory['available'], 2)} | Занято слотов: {len(active_symbols)}/{MAX_SLOTS} | Активные ордера: {active_symbols}")
+                last_hunter_beacon = now
+            for sym, dna in self.memory['dna'].items():
                 cd_time = dna.get('cooldown', 300)
                 if sym in self.memory.get('cooldown', {}) and (time.time() - self.memory['cooldown'][sym] < cd_time):
                     continue
 
-                # Извлекаем живую цену для проверки пульса
-                cur_p = self.memory['prices'].get(sym)
-
-                # --- [ТОТАЛЬНЫЙ ДЕБАГ В САМОМ ВЕРХУ ЦИКЛА V23.1.8] ---
-                # Радар стоит ДО всех фильтров слотов и свечей! Он обязан ожить!
-                #if 'last_debug' not in self.memory: self.memory['last_debug'] = {}
-                #if sym not in self.memory['last_debug']: self.memory['last_debug'][sym] = 0
-
-                #if time.time() - self.memory['last_debug'][sym] > 15:
-                #    vol_hist = self.memory['vol_history'].get(sym, [])
-                #    pos_count = len(self.memory['active_pos'])
-
-                    # Компактный отчет о состоянии системной памяти по монете
-                #    self.log(f"📡 ВЕРХНИЙ РАДАР {sym} | Живая Цена: {cur_p} | Занято слотов: {pos_count}/{MAX_SLOTS} | Накоплено тиков: {len(vol_hist)}")
-                #    self.memory['last_debug'][sym] = time.time()
-                # === КОНЕЦ ВЕРХНЕГО РАДАРА ---
-
-                # 2. БЕЗОПАСНОСТЬ: Проверка свободных слотов (теперь идет ПОСЛЕ лога радара!)
                 if sym in self.memory['active_pos'] or len(self.memory['active_pos']) >= MAX_SLOTS:
                     continue
 
                 try:
-                    if not cur_p: continue
+                    #cur_p = self.memory['prices'].get(sym)
+                    #if not cur_p: continue
 
-                    # Запрос свечей для расчета Боллинджера
+                    #ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
+                    #df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+                    # УБИРАЕМ СКРЫТЫЙ ЛАГ ПАМЯТИ: запрашиваем свечи первыми
+#======
                     ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
-#=====
+                    if not ohlcv or len(ohlcv) < 25: continue
+
                     df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
 
-                    cur_p = self.memory['prices'].get(sym)
-                    if not cur_p: continue
+                    # ИСТИННАЯ ЖИВАЯ ЦЕНА С ПЕРВОЙ ЛИНИИ СТAКАНА БИРЖИ (Close текущей минутки)
+                    cur_p = float(df['c'].iloc[-1])
+                    if cur_p <= 0: continue
 
-                    # Математика BB по закрытой свече (Lag-1)
+                    # Записываем её в общую память для мониторинга выходов
+                    self.memory['prices'][sym] = cur_p
+#=======
+                    # Расчет полос Боллинджера (Lag-1)
                     df['ma'] = df['c'].rolling(20).mean()
                     df['std'] = df['c'].rolling(20).std()
-
                     ma_prev = df['ma'].iloc[-2]
                     std_prev = df['std'].iloc[-2]
+
                     p_up = ma_prev + (2.1 * std_prev)
                     p_dn = ma_prev - (2.1 * std_prev)
                     p_w = p_up - p_dn
 
-                    # Ghost Strike уровни (Пространственный фильтр)
                     strike_up = p_up - (p_w * dna['ghost_p'])
                     strike_dn = p_dn + (p_w * dna['ghost_p'])
 
-                    # 3. ДАТЧИК СКОРОСТИ И ОБЪЕМА (Tick Velocity) за 3 секунды (С ИСПРАВЛЕННЫМИ ИНДЕКСАМИ)
+                    # Скорость тиков и объемы за 3 секунды
                     vol_history = self.memory['vol_history'].get(sym, [])
                     if len(vol_history) >= 4:
-                        # Извлекаем quoteVolume (индекс 1 из кортежа)
                         diff_vol = vol_history[-1][1] - vol_history[-4][1]
                         vol_now_usdt = diff_vol if diff_vol > 0 else 0.0
                         vol_now = vol_now_usdt / cur_p
-
-                        # Извлекаем цену (индекс 0 из кортежа) для замера скорости за 3 секунды
                         price_3s_ago = vol_history[-4][0]
                         price_change_pct = abs(cur_p / price_3s_ago - 1) if price_3s_ago > 0 else 0.0
                     else:
-                        vol_now = 0.0
-                        price_change_pct = 0.0
+                        vol_now, price_change_pct = 0.0, 0.0
 
-                    # Средний исторический объем в монетах
                     vol_avg = float(df['v'].rolling(10).mean().iloc[-2]) if not df['v'].empty else 0.0
-                    vol_ratio = vol_now / vol_avg if vol_avg > 0 else 0
-
-                    # Синхронизация флагов
-                    open_now = df['o'].iloc[-1]
-                    vol_ok = vol_ratio >= dna['vol']
+                    vol_ok = (vol_now / vol_avg >= dna['vol']) if vol_avg > 0 else False
                     speed_ok = price_change_pct >= dna.get('min_speed', 0.0015)
 
-                    # Восстанавливаем чистую математику пробоя лент
                     hit_up = cur_p >= strike_up
                     hit_dn = cur_p <= strike_dn
 
-                    # --- [АНАЛИЗАТОР ГЕОМЕТРИИ СВЕЧИ V23.1] ---
+                    # Геометрия свечей фитилей Marubozu
+                    open_now = df['o'].iloc[-1]
                     high_now = max(df['h'].iloc[-1], cur_p)
                     low_now = min(df['l'].iloc[-1], cur_p)
                     candle_range = high_now - low_now if (high_now - low_now) > 0 else 0.000001
 
-                    # Геометрия фитилей и полноты тела
                     up_shadow = high_now - cur_p
                     long_body = cur_p - open_now
                     dn_shadow = cur_p - low_now
@@ -337,97 +325,66 @@ class TitanGhost:
                     shadow_short_ok = (dn_shadow / candle_range) <= shadow_limit
                     body_short_ok = (short_body / candle_range) >= body_limit
 
-                    # Финальные триггеры жесткой свечной синхронности
-                 #   is_long = hit_up and (cur_p > open_now) and vol_ok and speed_ok and shadow_long_ok and body_long_ok
-                 #   is_short = hit_dn and (cur_p < open_now) and vol_ok and speed_ok and shadow_short_ok and body_short_ok
+#                    is_long = hit_up and (cur_p > open_now) and vol_ok and speed_ok and shadow_long_ok and body_long_ok
+#                    is_short = hit_dn and (cur_p < open_now) and vol_ok and speed_ok and shadow_short_ok and body_short_ok
+                    # --- [УЗЕЛ V26.1: ИНТЕЛЛЕКТУАЛЬНЫЙ ДЕБАГ ФИЛЬТРOВ ВХОДА БИНГХ] ---
+#===== БЛОК ЛОГОВ, если не надо удаляем и мнимаем  комменты для двух строк выше
+                    is_long = False
+                    is_short = False
 
-                    # Финальные триггеры жесткой свечной синхронности
-                    is_long = hit_up and (cur_p > open_now) and vol_ok and speed_ok and shadow_long_ok and body_long_ok
-                    is_short = hit_dn and (cur_p < open_now) and vol_ok and speed_ok and shadow_short_ok and body_short_ok
+                    # Сценарий А: Есть пробой или касание ВЕРХНЕЙ границы Боллинджера
+                    if hit_up:
+                        if not (cur_p > open_now):
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен шорт. Свеча не красная (Текущая цена выше открытия).")
+                        elif not vol_ok:
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен шорт. Не прошел объем: {round(vol_now/vol_avg, 2)}x < {dna['vol']}x")
+                        elif not speed_ok:
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен шорт. Не прошла тиковая скорость: {round(price_change_pct*100, 3)}% < {dna.get('min_speed', 0.0015)*100}%")
+                        elif not shadow_long_ok:
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен шорт. Нарушена геометрия тени фитиля: {round(up_shadow/candle_range, 2)} > {shadow_limit}")
+                        elif not body_long_ok:
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен шорт. Слишком слабое тело свечи Marubozu: {round(long_body/candle_range, 2)} < {body_limit}")
+                        else:
+                            is_long = True # Все фильтры пройдены идеально!
 
-                    # --- [ПРОЗРАЧНЫЙ ДЕБАГ РАДАР V23.1.1] ---
-                    #near_up = cur_p >= (strike_up * 0.985)
-                    #near_dn = cur_p <= (strike_dn * 1.015)
+                    # Сценарий Б: Есть пробой или касание НИЖНЕЙ границы Боллинджера
+                    if hit_dn:
+                        if not (cur_p < open_now):
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен лонг. Свеча не зеленая (Текущая цена ниже открытия).")
+                        elif not vol_ok:
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен лонг. Не прошел объем: {round(vol_now/vol_avg, 2)}x < {dna['vol']}x")
+                        elif not speed_ok:
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен лонг. Не прошла тиковая скорость: {round(price_change_pct*100, 3)}% < {dna.get('min_speed', 0.0015)*100}%")
+                        elif not shadow_short_ok:
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен лонг. Нарушена геометрия тени фитиля: {round(dn_shadow/candle_range, 2)} > {shadow_limit}")
+                        elif not body_short_ok:
+                            self.log(f"🔍 [ФИЛЬТР {sym}]: Отклонен лонг. Слишком слабое тело свечи Marubozu: {round(short_body/candle_range, 2)} < {body_limit}")
+                        else:
+                            is_short = True # Все фильтры пройдены идеально!
+#=====
 
-                    # --- [ТОТАЛЬНЫЙ ДЕБАГ ВЕРИФИКАЦИИ V23.1.4] ---
-                    # --- [ТОТАЛЬНЫЙ ДЕБАГ ВЕРИФИКАЦИИ V23.1.7] ---
-#                    near_up = True
-#                    near_dn = True
-
-                    #if (near_up or near_dn) and not (is_long or is_short):
-                        # Инициализируем персональный таймер монеты, если его нет в памяти
-                    #    if 'last_debug' not in self.memory: self.memory['last_debug'] = {}
-                    #    if sym not in self.memory['last_debug']: self.memory['last_debug'][sym] = 0
-
-                        # Проверяем индивидуальные 15 секунд для конкретного актива
-                    #    if time.time() - self.memory['last_debug'][sym] > 15:
-
-                            # 1. Расчет расстояний до страйков
-                    #        dist_up = (cur_p / strike_up - 1) * 100
-                    #        dist_dn = (1 - cur_p / strike_dn) * 100
-
-                            # 2. Безопасный расчет процентов фитилей (Защита от ZeroDivisionError)
-                    #        pct_up_shadow = round(up_shadow / candle_range * 100, 1) if candle_range > 0 else 0.0
-                    #        pct_dn_shadow = round(dn_shadow / candle_range * 100, 1) if candle_range > 0 else 0.0
-
-                            # 3. Формирование строки отчета
-                    #        reason = f"| Тиков: {len(vol_history)} | Цена: {cur_p} | "
-                    #        if cur_p >= strike_up and cur_p <= open_now: reason += "[Цвет не LONG ❌] "
-                    #        if cur_p <= strike_dn and cur_p >= open_now: reason += "[Цвет не SHORT ❌] "
-                    #        if not vol_ok: reason += f"[Объем {round(vol_ratio,1)}x < {dna['vol']}x ❌] "
-                    #        if not speed_ok: reason += f"[Скорость {round(price_change_pct*100,3)}% < Мин ❌] "
-                    #        if cur_p >= strike_up and not shadow_long_ok: reason += f"[Фитиль сверху {pct_up_shadow}% > 30% ❌] "
-                    #        if cur_p <= strike_dn and not shadow_short_ok: reason += f"[Фитиль снизу {pct_dn_shadow}% > 30% ❌] "
-
-                            # 4. Печать лога и фиксация времени строго для этой монеты
-                    #        self.log(f"📡 РАДАР {sym}: (Up: {round(dist_up,2)}%, Dn: {round(dist_dn,2)}%) {reason}")
-                    #        self.memory['last_debug'][sym] = time.time()
-                    # --- КОНЕЦ ДЕБАГА ---
-
-                    # 5. ИСПОЛНЕНИЕ: Стреляем лимиткой строго при выполнении ВСЕХ условий
                     if is_long:
-                        if vol_ratio < dna['vol']: continue
                         await self.execute_limit_entry(sym, 'buy', strike_up, dna)
                     elif is_short:
-                        if vol_ratio < dna['vol']: continue
                         await self.execute_limit_entry(sym, 'sell', strike_dn, dna)
 
-                except Exception as e:
+                except Exception:
                     continue
             await asyncio.sleep(0.4)
-#====================
-    async def execute_entry(self, sym, side, price, dna):
-        try:
-            # Исправление 109400: для One-way mode всегда передаем BOTH
-            await self.exchange.set_leverage(dna['lev'], sym, {'side': 'BOTH'})
-
-            # Расчет объема
-            qty = float(self.exchange.amount_to_precision(sym, (self.memory['available'] * RISK_PER_SLOT * dna['lev']) / price))
-            if qty <= 0: return
-
-            order = await self.exchange.create_market_order(sym, side, qty)
-            if order:
-                self.log(f"🚀 GHOST STRIKE: {sym} {side.upper()} @ {price}")
-                self.memory['active_pos'][sym] = {'side': side, 'vol': qty, 'price': price, 'entry_time': time.time(), 'dna': dna}
-        except Exception as e: self.log(f"⚠️ ENTRY ERROR {sym}: {e}")
 
     async def monitor_logic(self):
-        """Асинхронный бронированный контроль выходов, безубытка и авто-утилизации V24.4 [BINGX]"""
+        """Асинхронный контроль выходов, безубытка и авто-утилизации болота [V25.9]"""
         while self.memory['is_running']:
             try:
-                # 1. Делаем независимый список ключей (безопасно для удаления)
                 for sym in list(self.memory['active_pos'].keys()):
-                    # 2. Извлекаем данные позиции по ключу
                     pos = self.memory['active_pos'].get(sym)
-                    if not pos: continue # Защита, если позиция была удалена секунду назад
+                    if not pos: continue
 
                     try:
-                        # Проверяем, налился ли наш капкан
                         pos_status = pos.get('status', 'active')
                         cur_p = self.memory['prices'].get(sym)
                         if not cur_p: continue
 
-                        # Считаем PNL относительно рынка
                         entry_p = float(pos['price'])
                         if pos['side'].lower() in ['buy', 'long']:
                             pnl = (cur_p / entry_p) - 1
@@ -437,106 +394,83 @@ class TitanGhost:
                         age = time.time() - pos['entry_time']
                         dna = pos['dna']
 
-                        # --- [УМНЫЙ СМАРТ-ФИЛЬТР V24.4 — ЖЕСТКАЯ АВТО-ОЧИСТКА ВРЕМЕНИ] ---
+                        # Авто-очистка зависшего болота по таймеру
                         if age >= dna.get('cut_t', 300) and pnl < dna.get('cut_p', 0.0012):
-                            # СЦЕНАРИЙ 1: Это был НЕИСПОЛНЕННЫЙ лимитный капкан (Наш случай с XRP!)
+                            clean_id = sym.replace(':USDT', '')
                             if pos_status == 'pending':
-                                self.log(f"🧹 СМАРТ-ФИЛЬТР: Снятие неисполненного капкана {sym} по т аймеру ({int(age)} с)")
-                                #await self.exchange.cancel_all_orders(sym, {'spot': False})
-                                await self.exchange.cancel_all_orders(sym.replace(':USDT', ''))
+                                self.log(f"🧹 СМАРТ-ФИЛЬТР: Снятие неисполненного капкана {sym} ({in t(age)}с)")
+                                await self.exchange.cancel_all_orders(clean_id)
                                 if sym in self.memory['active_pos']: del self.memory['active_pos'][sym]
                                 self.memory['cooldown'][sym] = time.time()
                                 continue
-
-                            # СЦЕНАРИЙ 2: Это РЕАЛЬНАЯ НАЛИТАЯ позиция, которая зависла в болоте
                             else:
                                 try:
-                                    self.log(f"⏱ SMART-FILTER: Утилизация зависшей позиции {sym} ({round(pnl*100,3)}%)")
+                                    self.log(f"⏱️ SMART-FILTER: Утилизация болотной позиции {sym} ({round(pnl*100,3)}%)")
                                     exit_side = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
-                                    # Сначала чистим стопы, потом кроем марком
-                                    #await self.exchange.cancel_all_orders(sym, {'spot': False})
-                                    await self.exchange.cancel_all_orders(sym.replace(':USDT', ''))
-                                    #await self.exchange.create_market_order(sym, exit_side, pos['vol'], {'reduceOnly': True})
-                                    await self.exchange.create_market_order(sym.replace(':USDT', ''), exit_side, pos['vol'], {'reduceOnly': True})
-                                    self.log(f"✅ {sym} успешно утилизирован.")
+                                    await self.exchange.cancel_all_orders(clean_id)
+                                    await self.exchange.create_market_order(clean_id, exit_side, pos['vol'], {'reduceOnly': True})
                                     self.memory['cooldown'][sym] = time.time()
                                     if sym in self.memory['active_pos']: del self.memory['active_pos'][sym]
                                     if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
                                     continue
                                 except Exception as e:
-                                    self.log(f"🆘 Ошибка утилизации active позиции {sym}: {e}")
+                                    self.log(f"🆘 Ошибка утилизации {sym}: {e}")
                                     continue
 
-                        # ЕЩЕ ОДНА СТРАХОВКА: Не пускаем неисполненные лимитки к логике Тейков и Стопов
-                        if pos_status == 'pending':
-                            continue
+                        if pos_status == 'pending': continue
 
-                        # 3. ЛОГИКА ТЕЙКОВ: TP1 + BE (С ОБРАБОТКОЙ ОШИБОК)
+                        # Логика Тейк-Профита 1 + Безубыток
                         if sym not in self.memory['tp_fixed'] and pnl >= dna['tp1']:
                             try:
                                 self.log(f"🎯 Попытка фиксации TP1 для {sym} (PNL: {round(pnl*100,2)}%)")
+                                clean_id = sym.replace(':USDT', '')
                                 close_qty = float(self.exchange.amount_to_precision(sym, pos['vol'] * 0.5))
                                 side_exit = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
 
-                                # Чистим старые ордера перед установкой новых, чтобы не было конфликтов
-                                #await self.exchange.cancel_all_orders(sym, {'spot': False})
-                                await self.exchange.cancel_all_orders(sym.replace(':USDT', ''))
-                                # Закрываем 50% объема по рынку
-                                await self.exchange.create_market_order(sym.replace(':USDT', ''), side_exit, close_qty, {'reduceOnly': True})
+                                await self.exchange.cancel_all_orders(clean_id)
+                                await self.exchange.create_market_order(clean_id, side_exit, close_qty, {'reduceOnly': True})
 
-                                # Safe Break-Even ордер на остаток
                                 safe_bu = cur_p * 0.9995 if pos['side'].lower() in ['buy', 'long'] else cur_p * 1.0005
-                                await self.exchange.create_order(sym.replace(':USDT', ''), 'stop', side_exit, pos['vol']-close_qty, safe_bu, {'stopPrice': safe_bu, 'reduceOnly': True})
+                                await self.exchange.create_order(clean_id, 'stop', side_exit, pos['vol']-close_qty, safe_bu, {'stopPrice': safe_bu, 'reduceOnly': True})
 
                                 self.memory['tp_fixed'][sym] = True
                                 pos['vol'] -= close_qty
-                                self.log(f"✅ TP1 ВЫПОЛНЕН: {sym}. Остаток в БУ.")
+                                self.log(f"✅ TP1 ВЫПОЛНЕН: {sym}. Остаток заперт в БУ.")
                             except Exception as e:
-                                self.log(f"🆘 Ошибка исполнения Тейка {sym}: {e}")
+                                self.log(f"🆘 Ошибка фиксации TP1 {sym}: {e}")
 
-                        # Если профит очень большой, пометим Тейк как "пройденный", чтобы не спамить
                         if pnl > dna['tp1'] * 2:
                             self.memory['tp_fixed'][sym] = True
 
-                        # 4. АКТИВАЦИЯ ТРЕЙЛИНГА (INFINITY TRAIL)
                         if pnl >= (dna['tp1'] * 2):
                             self.memory['trail_active'][sym] = True
 
-                        # 5. СИСТЕМА ФИНАЛЬНОГО ВЫХОДА ПО СТОПУ ИЛИ ТРЕЙЛИНГУ
+                        # Глобальный выход по стопу или трейлингу
                         sl_trigger = dna['sl']
                         if sym in self.memory['trail_active']:
                             sl_trigger = max(sl_trigger, pnl - dna['trail'])
 
                         if pnl <= sl_trigger:
+                            clean_id = sym.replace(':USDT', '')
                             side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
-                            #await self.exchange.cancel_all_orders(sym, {'spot': False})
-                            await self.exchange.cancel_all_orders(sym.replace(':USDT', ''))
-                            #await self.exchange.create_market_order(sym, side_exit, pos['vol'], {'reduceOnly': True})
-                            await self.exchange.create_market_order(sym.replace(':USDT', ''), side_exit, pos['vol'], {'reduceOnly': True})
-                            self.log(f"🏁 EXIT: {sym} @ {round(pnl*100,2)}%")
+                            await self.exchange.cancel_all_orders(clean_id)
+                            await self.exchange.create_market_order(clean_id, side_exit, pos['vol'], {'reduceOnly': True})
+                            self.log(f"🏁 EXIT INFINITY TRAIL: {sym} @ {round(pnl*100,2)}%")
+                            self.memory['cooldown'][sym] = time.time()
 
-                            self.memory['cooldown'][sym] = time.time() # Ставим кулдаун
                             if sym in self.memory['active_pos']: del self.memory['active_pos'][sym]
                             if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
                             if sym in self.memory['trail_active']: del self.memory['trail_active'][sym]
-
                     except Exception:
                         continue
-
-                # 🛑 ЖЕСТКИЙ ФИКС: Пауза перенесена ВНУТРЬ while! Освобождает CPU для асинхронных потоков
                 await asyncio.sleep(0.5)
-
-            except Exception as main_e:
+            except Exception:
                 await asyncio.sleep(1)
 
     async def main(self):
-        """Жесткая монолитная инициализация всех квантовых потоков BingX V23.1.5"""
+        """Жесткая монолитная инициализация параллельных модулей BingX V25.9"""
         await self.init_exchange()
-
         self.log("🔗 Запуск параллельных квантовых модулей ядра...")
-
-        # БРОНИРОВАННЫЙ ФИКС: Запускаем все процессы параллельно через gather.
-        # Теперь потоки цен и контекста будут выполняться одновременно с охотой!
         try:
             await asyncio.gather(
                 self.update_context(),
@@ -546,5 +480,6 @@ class TitanGhost:
             )
         except Exception as e:
             self.log(f"❌ КРИТИЧЕСКИЙ СБОЙ ЯДРА GHOST: {e}")
+
 if __name__ == "__main__":
     asyncio.run(TitanGhost().main())
