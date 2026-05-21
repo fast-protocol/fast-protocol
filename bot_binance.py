@@ -96,7 +96,7 @@ async def update_market_regime(exchange):
             btc_ohlcv_1m = await exchange.fetch_ohlcv('BTC/USDT:USDT', '1m', limit=5)
             if btc_ohlcv_1m:
                 memory.btc_history.append(float(btc_ohlcv_1m[-1][4])) # Записываем close живой минутки
-                memory.btc_history = memory.btc_history[-5:]
+                memory.btc_history = memory.btc_history[-30:]
 
             # --- ТВОЯ ПОЛНАЯ ИСХОДНАЯ ЛОГИКА МАКРО-ИНЕРЦИИ И ФАЗ ---
             ohlcv = await exchange.fetch_ohlcv('BTC/USDT:USDT', '4h', limit=60)
@@ -162,10 +162,27 @@ async def price_stream():
 
             for symbol, price_data in tickers.items():
                 # 1. Сохраняем все цены USDT
+                #if 'USDT' in symbol:
+                #    val = float(price_data['last'])
+                #    memory.prices[symbol] = val
+
+                # 1. Сохраняем все цены USDT
                 if 'USDT' in symbol:
-                    val = float(price_data['last'])
+                    # Защита от пустых значений живой цены 'last'
+                    raw_last = price_data.get('last')
+                    if raw_last is None:
+                        continue
+
+                    val = float(raw_last)
                     memory.prices[symbol] = val
 
+                    # --- [ЖЕСТКИЙ ФИКС V34.1: ЗАЩИТА СТАKАНА ОТ NONETYPE НА БИНАНСЕ] ---
+                    # Вытаскиваем значения, если они прилетели пустыми — страхуемся живой ценой val
+                    raw_bid = price_data.get('bid')
+                    raw_ask = price_data.get('ask')
+
+                    memory.prices[f"{symbol}_bid"] = float(raw_bid) if raw_bid is not None else val
+                    memory.prices[f"{symbol}_ask"] = float(raw_ask) if raw_ask is not None else val
                     # 2. Ловим Биткоина (любой формат: BTC/USDT, BTC/USDT:USDT, BTCUSDT)
       #              if not btc_captured and 'BTC' in symbol and 'USDT' in symbol:
       #                  if (now - memory.last_btc_push) >= 10:
@@ -317,7 +334,38 @@ async def check_signal(exchange, symbol):
                     # log(f"🛡️ BTC Spread Shield: Сканирование заблокировано. Спред BTC: {round(btc _spread, 3)}% < 0.06%")
                     return None
 #=====
-        # 1. Данные рынка (limit=30 для точности MA20)
+        # --- [ВРЕЗКА V31.5: ФИЛЬТР ПЛОТНОСТИ ТРЕНДА БИТКОИНА (BTC MOMENTUM POWER SHIELD)] ---
+        # Проверяем минутный импульс скорости за последние 3 минуты (3 закрытия в btc_history)
+        if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 3:
+            btc_momentum_window = memory.btc_history[-3:]
+
+            # Считаем среднюю скорость изменения цены между минутными свечами
+            m1_diff = abs(btc_momentum_window[-1] - btc_momentum_window[-2])
+            m2_diff = abs(btc_momentum_window[-2] - btc_momentum_window[-3])
+            avg_min_move_pct = ((m1_diff + m2_diff) / 2) / btc_momentum_window[-1] * 100
+
+            # Если средняя скорость Биткоина за минуту менее 0.025% (рынок вяло ползет без объемов) — ОТМЕНА
+            if avg_min_move_pct < 0.025:
+                # log(f"🛡️ BTC Momentum Shield V31.5: Сигнал заблокирован. Скорость BTC: {round(avg _min_move_pct, 4)}% < 0.025%")
+                return None
+#=====
+        # --- [ВРЕЗКА V34.0: ФИЛЬТР ПЛОТНОСТИ СТАКАHА АЛЬТА (ASK-BID SPREAD SHIELD)] ---
+        # Мгновенно проверяем текущий спред монеты из памяти WebSocket-потока
+        bid_key = f"{symbol}_bid"
+        ask_key = f"{symbol}_ask"
+        if bid_key in memory.prices and ask_key in memory.prices:
+            best_bid = memory.prices[bid_key]
+            best_ask = memory.prices[ask_key]
+
+            if best_bid > 0:
+                ticker_spread = (best_ask / best_bid - 1) * 100
+
+                # Если стакан пустой и спред расширен шире 0.05% — ЖЕСТКАЯ БЛОКИРОВКА (Идет каскад ликвидаций)
+                if ticker_spread > 0.05:
+                    # log(f"🛡️ Ask-Bid Shield V34.0: Сигнал {symbol} заблокирован. Спред: {round(ti cker_spread, 3)}% > 0.05%")
+                    return None
+#=====
+        #1. Данные рынка (limit=30 для точности MA20)
         ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
         df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
         cur_p = memory.prices.get(symbol, df['c'].iloc[-1])
@@ -336,26 +384,27 @@ async def check_signal(exchange, symbol):
         candle_size = (df['h'].iloc[-1] / df['l'].iloc[-1] - 1)
         if candle_size > 0.008: return None
 #====
-        # --- [ВРЕЗКА V29.0: 4-ЧАСОВОЙ ФИЛЬТР ХОДА ЦЕНЫ (4H RANGE SHIELD)] ---
+        # --- [ЖЕСТКИЙ ФИКС V31.3: ИСТИННОЕ СКОЛЬЗЯЩЕЕ 4-ЧАСОВОЕ ОКНО ХОДА ЦЕНЫ] ---
         try:
-            # Запрашиваем две 4-часовые свечи (текущую живую и предыдущую закрытую)
-            ohlcv_4h = await exchange.fetch_ohlcv(symbol, '4h', limit=2)
-            if len(ohlcv_4h) >= 2:
-                # Находим абсолютный максимум и минимум за это окно
-                high_4h = max(float(ohlcv_4h[0][2]), float(ohlcv_4h[1][2]))
-                low_4h = min(float(ohlcv_4h[0][3]), float(ohlcv_4h[1][3]))
+            # Запрашиваем 240 минутных свечей, чтобы получить честные скользящие 4 часа без слепых зон
+            ohlcv_4h = await exchange.fetch_ohlcv(symbol, '1m', limit=240)
+            if len(ohlcv_4h) >= 30:
+                # Вытаскиваем все максимумы и минимумы за этот 4-часовой период
+                highs_4h = [float(candle[2]) for candle in ohlcv_4h]
+                lows_4h = [float(candle[3]) for candle in ohlcv_4h]
 
-                # Расчет общего хода цены в процентах
-                rolling_range_4h = (high_4h / low_4h - 1) * 100
+                max_4h = max(highs_4h)
+                min_4h = min(lows_4h)
 
-                # Если ход монеты за последние 4 часа > 4.5%, это опасная фаза — АННУЛИРУЕМ СИГНАЛ
+                # Истинный скользящий ход цены за 4 часа
+                rolling_range_4h = (max_4h / min_4h - 1) * 100
+
+                # Если ход монеты за последние 4 часа > 4.5% — ЖЕСТКАЯ БЛОКИРОВКА (Монета в мясорубке)
                 if rolling_range_4h > 4.5:
-                    # log(f"🛡️ 4H Range Shield: Сигнал {symbol} заблокирован. Ход: {round(rolling_r ange_4h, 2)}% > 4.5%")
+                    # log(f"🛡️ 4H Range Shield V31.3: Сигнал {symbol} заблокирован. Скользящий ход:  {round(rolling_range_4h, 2)}% > 4.5%")
                     return None
         except Exception as e:
-            # Предохранитель: если API Binance лагануло на запросе 4ч, пропускаем фильтр, чтобы не вешать сканер
             pass
-
 #====
         # 4. Параметры предыдущей свечи (Engulfing)
         prev_open = df['o'].iloc[-1]
@@ -703,7 +752,7 @@ async def monitor_logic(exchange, symbol, pos):
             # ТРИГГЕР 2: Эвакуация по затяжному флэтовому болоту альта (Time-Decay)
             # --- [УЗЕЛ V30.0: КВАНТОВЫЙ ТАЙМЕР 180с + ПОРОГ -0.2% + 6H КУЛДАУН] ---
             # Зажимаем тиски времени: если за 3 минуты монета не дала отскок и сидит в лоссе > -0.2%
-            if age > 120 and profit < -0.0015:
+            if age > 60 and profit < -0.0008:
                 log(f"⏱️ КВАНТОВАЯ ЭВАКУАЦИЯ ТАЙМЕРА: {symbol} утилизирован (Лосс застрял: {round(profit*100, 2)}% | Age: {int(age)}с)")
                 action_triggered_decay = False
                 try:
@@ -730,6 +779,30 @@ async def monitor_logic(exchange, symbol, pos):
                     if k in memory.max_pnl: del memory.max_pnl[k]
 
                 if action_triggered_decay: return # Намертво обрываем тик
+#===
+            # ТРИГГЕР Б: Синдром Сползания Импульса (Выдох крупного игрока — без изменений)
+            if symbol in memory.max_pnl and memory.max_pnl[symbol] >= 0.0025:
+                current_decay_pct = (1 - (profit / memory.max_pnl[symbol])) * 100
+                if current_decay_pct > 70.0:
+                    log(f"🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: {symbol} закрыт. ММ выдохся (Пик: +{round(memory.max_pnl[symbol]*100,2)}% | Сползло на: {round(current_decay_pct,1)}%)")
+                    action_triggered_momentum_dead = False
+                    try:
+                        clean_market_id = symbol.replace('/', '').replace(':USDT', '')
+                        await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
+                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': clean_market_id})
+                        await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+                        action_triggered_momentum_dead = True
+                    except Exception as e: log(f"⚠️ Ошибка Синдрома Сползания: {e}")
+
+                    if action_triggered_momentum_dead:
+                        for k in [symbol, symbol.replace(':USDT', '')]:
+                            if k in memory.active_pos: del memory.active_pos[k]
+                            if k in memory.tp_fixed: del memory.tp_fixed[k]
+                            if k in memory.stop_placed: del memory.stop_placed[k]
+                            if k in memory.trail_active: del memory.trail_active[k]
+                            if k in memory.max_pnl: del memory.max_pnl[k]
+                        return
+#===
 
             # --- [УЗЕЛ V30.0: АБСОЛЮТНЫЙ DEADTIME LOCK НА 25 МИНУТ] ---
             # Если сделка выжила, но висит в рынке 25 минут (1500с) — выжигаем её при ЛЮБОМ PNL, высвобождая маржу
