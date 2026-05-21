@@ -1,9 +1,4 @@
 
-# --- УПРАВЛЕНИЕ КАПИТАЛОМ ---
-MAX_ACTIVE_SLOTS = 1       # Динамика: 1 (при <$150), 2 (при <$500), 3 (при >$500)
-RISK_GEAR = 0.95           # Общий множитель объема (0.1 - 1.0)
-RESERVE_CASH = 0.5         # Буфер на комиссии (USDT)
-
 # --- ГЛОБАЛЬНЫЕ ФИЛЬТРЫ (Безопасность) ---
 GLOBAL_MAX_BANDWIDTH = 2   # Если рынок разорвало в клочья - стоп входы
 FUNDING_SHIELD = 0.0003    # Пропуск при ставке > 0.03%
@@ -150,51 +145,22 @@ async def init_exchange():
     return exchange
 
 async def price_stream():
+    """V35.0: Ультра-высокочастотный сбор тиков и стакана"""
     client = await init_exchange()
-    log("📡 Запуск WebSocket-потока цен...")
+    log("📡 Запуск WebSocket-потока цен [V35.0 Instant Market]...")
     while memory.is_running:
         try:
             tickers = await client.watch_tickers()
             if not tickers: continue
-
-            now = time.time()
-            btc_captured = False
-
             for symbol, price_data in tickers.items():
-                # 1. Сохраняем все цены USDT
-                #if 'USDT' in symbol:
-                #    val = float(price_data['last'])
-                #    memory.prices[symbol] = val
-
-                # 1. Сохраняем все цены USDT
-                if 'USDT' in symbol:
-                    # Защита от пустых значений живой цены 'last'
-                    raw_last = price_data.get('last')
-                    if raw_last is None:
-                        continue
-
-                    val = float(raw_last)
+                if 'USDT' in symbol and (last := price_data.get('last')):
+                    val = float(last)
                     memory.prices[symbol] = val
-
-                    # --- [ЖЕСТКИЙ ФИКС V34.1: ЗАЩИТА СТАKАНА ОТ NONETYPE НА БИНАНСЕ] ---
-                    # Вытаскиваем значения, если они прилетели пустыми — страхуемся живой ценой val
-                    raw_bid = price_data.get('bid')
-                    raw_ask = price_data.get('ask')
-
-                    memory.prices[f"{symbol}_bid"] = float(raw_bid) if raw_bid is not None else val
-                    memory.prices[f"{symbol}_ask"] = float(raw_ask) if raw_ask is not None else val
-                    # 2. Ловим Биткоина (любой формат: BTC/USDT, BTC/USDT:USDT, BTCUSDT)
-      #              if not btc_captured and 'BTC' in symbol and 'USDT' in symbol:
-      #                  if (now - memory.last_btc_push) >= 10:
-      #                      memory.btc_history.append(val)
-      #                      if len(memory.btc_history) > 100: memory.btc_history.pop(0)
-      #                      memory.last_btc_push = now
-      #                      btc_captured = True
-#                            log(f"✅ BTC Hist Update: {len(memory.btc_history)}/60") # Раскомментируй для проверки
-
+                    # Сбор стакана для мгновенных оффсетов
+                    memory.prices[f"{symbol}_bid"] = float(price_data.get('bid', val))
+                    memory.prices[f"{symbol}_ask"] = float(price_data.get('ask', val))
         except Exception as e:
-            log(f"⚠️ Ошибка WS-Stream: {e}")
-            await asyncio.sleep(1)
+            log(f"⚠️ Ошибка WS-Stream: {e}"); await asyncio.sleep(1)
     await client.close()
 
 async def update_balance(exchange):
@@ -301,72 +267,57 @@ async def position_tracker(exchange):
             await asyncio.sleep(15)
 
 async def check_signal(exchange, symbol):
+    """V35.0 Instant Market: Квантовый перехват оффсетов по живой цене тика"""
     try:
         dna = memory.dna_fleet.get(symbol)
         if not dna: return None
 
-#=====
         # --- [ВРЕЗКА V29.0: ПРОВЕРКА КУЛДАУНА ЭВАКУАЦИИ (3 ЧАСА)] ---
         if hasattr(memory, 'cooldown_fleet'):
             last_evac_time = memory.cooldown_fleet.get(symbol)
             if last_evac_time:
                 time_passed = time.time() - last_evac_time
-                if time_passed < 10800: # 3 часа в секундах
-                    # log(f"🛡️ Cooldown Shield: {symbol} заблокирован. Осталось бана: {int(10800 -  time_passed)}с")
+                if time_passed < 10800:
                     return None
                 else:
-                    # Снимаем бан, если время истекло
                     del memory.cooldown_fleet[symbol]
-#=====
+
+        # Мгновенно извлекаем живую секундную цену из памяти WebSocket
+        cur_p = memory.prices.get(symbol, 0.0)
+        if cur_p <= 0:
+            return None
+
         # --- [ВРЕЗКА V31.0: ФИЛЬТР СПРЕДА БИТКОИНА (BTC SPREAD SHIELD)] ---
-        # Проверяем 15-минутное окно истории Биткоина (15 свечей в btc_history)
         if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 15:
-            # Берем срез последних 15 минут закрытий
             btc_window = memory.btc_history[-15:]
-            btc_max = max(btc_window)
-            btc_min = min(btc_window)
+            btc_spread = (max(btc_window) / min(btc_window) - 1) * 100
+            if btc_spread < 0.06:
+                return None
 
-            if btc_min > 0:
-                btc_spread = (btc_max / btc_min - 1) * 100
-
-                # Если Биткоин зажался в мертвый коридор менее 0.06% ($45-50 движения) — ИГНОРИРУЕМ ВСЕ СИГНАЛЫ
-                if btc_spread < 0.06:
-                    # log(f"🛡️ BTC Spread Shield: Сканирование заблокировано. Спред BTC: {round(btc _spread, 3)}% < 0.06%")
-                    return None
-#=====
         # --- [ВРЕЗКА V31.5: ФИЛЬТР ПЛОТНОСТИ ТРЕНДА БИТКОИНА (BTC MOMENTUM POWER SHIELD)] ---
-        # Проверяем минутный импульс скорости за последние 3 минуты (3 закрытия в btc_history)
         if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 3:
             btc_momentum_window = memory.btc_history[-3:]
-
-            # Считаем среднюю скорость изменения цены между минутными свечами
             m1_diff = abs(btc_momentum_window[-1] - btc_momentum_window[-2])
             m2_diff = abs(btc_momentum_window[-2] - btc_momentum_window[-3])
             avg_min_move_pct = ((m1_diff + m2_diff) / 2) / btc_momentum_window[-1] * 100
-
-            # Если средняя скорость Биткоина за минуту менее 0.025% (рынок вяло ползет без объемов) — ОТМЕНА
             if avg_min_move_pct < 0.025:
-                # log(f"🛡️ BTC Momentum Shield V31.5: Сигнал заблокирован. Скорость BTC: {round(avg _min_move_pct, 4)}% < 0.025%")
                 return None
-#=====
+
         # --- [ВРЕЗКА V34.0: ФИЛЬТР ПЛОТНОСТИ СТАКАHА АЛЬТА (ASK-BID SPREAD SHIELD)] ---
-        # Мгновенно проверяем текущий спред монеты из памяти WebSocket-потока
         bid_key = f"{symbol}_bid"
         ask_key = f"{symbol}_ask"
         if bid_key in memory.prices and ask_key in memory.prices:
             best_bid = memory.prices[bid_key]
             best_ask = memory.prices[ask_key]
-
             if best_bid > 0:
                 ticker_spread = (best_ask / best_bid - 1) * 100
-
-                # Если стакан пустой и спред расширен шире 0.05% — ЖЕСТКАЯ БЛОКИРОВКА (Идет каскад ликвидаций)
                 if ticker_spread > 0.05:
-                    # log(f"🛡️ Ask-Bid Shield V34.0: Сигнал {symbol} заблокирован. Спред: {round(ti cker_spread, 3)}% > 0.05%")
                     return None
-#=====
+
         #1. Данные рынка (limit=30 для точности MA20)
         ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
+
+#============
         df = pd.DataFrame(ohlcv, columns=['t', 'o', 'h', 'l', 'c', 'v'])
         cur_p = memory.prices.get(symbol, df['c'].iloc[-1])
 
@@ -565,7 +516,7 @@ async def signal_hunter(exchange):
                     await execute_entry(exchange, res)
 
             await asyncio.sleep(0.1) # Микро-пауза между пачками
-        await asyncio.sleep(2.5) # Пауза после полного круга
+        await asyncio.sleep(0.3) # Пауза после полного круга
 
 async def execute_entry(exchange, signal):
     """Асинхронная установка плеча и вход в позицию"""
