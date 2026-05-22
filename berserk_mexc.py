@@ -56,81 +56,63 @@ def log(msg):
     print(f"[{t}] 🏛️ {msg}", flush=True)
 
 async def init_exchange():
-    """Бронированная инициализация MEXC в режиме Односторонней ИЗОЛИРОВАННОЙ маржи V16.9"""
+    """Синхронная инициализация эталонного CCXT-движка MEXC V17.0"""
     exchange = ccxt.mexc({
         'apiKey': API_KEY,
         'secret': SECRET_KEY,
         'options': {'defaultType': 'swap', 'positionMode': False},
         'enableRateLimit': True
     })
-
-    # Жесткий прогрев баланса кошелька до старта
     try:
         bal = exchange.fetch_balance({'type': 'swap'})
         if isinstance(bal, dict) and 'USDT' in bal:
             memory.available = float(bal['USDT'].get('free', 0.0))
             memory.total_wallet = float(bal['USDT'].get('total', 0.0))
     except Exception as e:
-        log(f"⚠️ Ошибка прогрева стартового баланса MEXC: {e}")
+        log(f"⚠️ Ошибка считывания стартового баланса: {e}")
         memory.available = 0.0
 
-    # ПРИНУДИТЕЛЬНЫЙ ЖЕСТКИЙ ПЕРЕВОД ВСЕГО ФЛОТА В РЕЖИМ ISOLATED (СПЕЦИФИКАЦИЯ MEXC API V16.9.9)
-    log("🔒 Синхронизация маржинальных шлюзов: принудительная изоляция лотов...")
-    for symbol in PRIORITY_LIST:
-        try:
-            clean_sym = symbol.replace('/', '').replace(':USDT', '')
-            # Шлем прямой низкоуровневый REST-приказ: openType=1 (Изолированная маржа)
-            exchange.fapiPrivatePostPositionChangeLeverage({
-                'symbol': clean_sym,
-                'leverage': 25,
-                'openType': 1  # 1 = ISOLATED МАРЖА ЖЕСТКО!
-            })
-        except:
-            pass
-
-    log(f"ЛИМИТНЫЙ СНАЙПЕР BERSERK V16.9 ОНЛАЙН. Доступная маржа Swap: ${round(memory.available, 2)}")
+    log(f"ЛИМИТНЫЙ СНАЙПЕР BERSERK V17.0 ОНЛАЙН. Маржа: ${round(memory.available, 2)}")
     return exchange
 
-# --- [ЖЕСТКИЙ ФИКС V16.9.10: ПОЛНОСТЬЮ СИНХРОННЫЙ ИСПОЛНИТЕЛЬ МЕХС] ---
+# --- [ВОЗВРАЩЕНИЕ ИСТИННОГО МOНOЛИТА smart_order V17.0 БЕЗ AWAIT] ---
 def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_exit=False, is_stop=False):
-    """Исполнительный шлюз Liquidity Guard V16.9.10 БЕЗ СЛЕДОВ AWAIT"""
-    success = True
+    """Синхронный стриминг ордеров с принудительной изоляцией маржи openType=1"""
     try:
         amount_str = exchange.amount_to_precision(symbol, amount)
         qty = float(amount_str)
         if qty <= 0:
             return False
 
-        params = {}
+        # Каноническая упакoвка параметров по правилам старой рабочей версии
+        params = {
+            'openType': 1,      # 1: Strict Isolated Маржа!
+            'leverage': int(25) # Жесткое требование биржи для ISO-режима
+        }
         if is_exit or is_stop:
             params['reduceOnly'] = True
 
         # СЦЕНАРИЙ 1: Жесткий серверный СТОП-МАРКЕТ
         if is_stop:
-            if price is None:
-                return False
+            if price is None: return False
             params['stopPrice'] = float(exchange.price_to_precision(symbol, price))
-            # УБРАЛИ await
-            order = exchange.create_order(symbol, 'market', side, qty, price=None, params=params)
+            order = exchange.create_order(symbol, 'market', side, qty, None, params)
             return order
 
-        # СЦЕНАРИЙ 2: Пассивный Лимитный Капкан (Maker)
+        # СЦЕНАРИЙ 2: Пассивный Лимитный Капкан Maker
         elif is_limit:
-            if price is None:
-                return False
+            if price is None: return False
             exact_price = float(exchange.price_to_precision(symbol, price))
-            # УБРАЛИ await
-            order = exchange.create_order(symbol, 'limit', side, qty, price=exact_price, params=params)
+            order = exchange.create_order(symbol, 'limit', side, qty, exact_price, params)
             return order
 
-        # СЦЕНАРИЙ 3: Агрессивный Рыночный Тейк / Эвакуация (Taker)
+        # СЦЕНАРИЙ 3: Агрессивный Taker (Выход / Тейк)
         else:
-            # УБРАЛИ await
-            order = exchange.create_order(symbol, 'market', side, qty, price=None, params=params)
+            order = exchange.create_order(symbol, 'market', side, qty, None, params)
             return order
 
     except Exception as e:
-        log(f"⚠ Сбой шлюза ордеров {symbol} ({side.upper()}): {e}")
+        log(f"⚠️ Сбой шлюза ордеров {symbol} ({side.upper()}): {e}")
         return False
 
 async def price_stream(exchange_pro):
@@ -297,7 +279,61 @@ async def check_signal(exchange, symbol):
 
 async def monitor_logic(exchange):
     """Адаптивное управление выходами V16.9: Фикс лотов SOL, Квантовый Храповик 60с и Синдром Сползания"""
+    last_pos_sync = 0
     while memory.is_running:
+        # --- ЖЕСТКИЙ ФИКС ОБЪЯВЛЕНИЯ ПЕРЕМЕННОЙ V17.1.1 ---
+        now_time = time.time()
+
+        # --- [ВРЕЗКА V17.1: ЖИВОЙ ФОНОВЫЙ ТРЕКЕР УСЫНОВЛЕНИЯ ПОЗИЦИЙ MEXC] ---
+        if now_time - last_pos_sync >= 5: # Опрашиваем биржу раз в 5 секунд прямо во время торгов!
+            try:
+                raw_positions = exchange.fetch_positions(None, {'type': 'swap'})
+                current_mexc_active = []
+
+                for p in raw_positions:
+                    vol = abs(float(p.get('contracts', p.get('positionAmt', 0.0))))
+                    if vol > 0.00001:
+                        raw_sym = p.get('symbol', p.get('pair', ''))
+                        clean_sym = raw_sym.replace('_', '/').replace(':USDT', '')
+                        if '/' not in clean_sym and 'USDT' in clean_sym:
+                            clean_sym = clean_sym.replace('USDT', '/USDT')
+                        fleet_key = f"{clean_sym}:USDT"
+
+                        if fleet_key in PRIORITY_LIST or clean_sym in PRIORITY_LIST:
+                            target_key = fleet_key if fleet_key in PRIORITY_LIST else clean_sym
+                            current_mexc_active.append(target_key)
+
+                            # Если позиция открылась на бирже, а в памяти её нет — мгновенно усыновляем!
+                            if target_key not in memory.active_pos:
+                                side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
+                                side = 'buy' if 'long' in side_raw or 'buy' in side_raw else 'sell'
+                                entry_price = float(p.get('entryPrice', p.get('price', 0.0)))
+
+                                log(f"🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена открытая сделка по {target_key} ({vol} лотов). Берем под контроль выходов!")
+                                memory.active_pos[target_key] = {
+                                    'side': side, 'vol': vol, 'price': entry_price, 'entry_time': time.time(),
+                                    'dna': {'l_off': ENTRY_ORDER_OFFSET, 's_off': ENTRY_ORDER_OFFSET}
+                                }
+                                memory.slots_occupied = len(current_mexc_active)
+
+                # Очищаем системные флаги из памяти для закрытых на бирже позиций
+                for sym in list(memory.active_pos.keys()):
+                    if sym not in current_mexc_active:
+                        log(f"🧹 Позиция {sym} закрыта на MEXC. Вычищаем оперативную память.")
+                        if sym in memory.active_pos: del memory.active_pos[sym]
+                        if sym in memory.tp1_fixed: del memory.tp1_fixed[sym]
+                        if sym in memory.tp2_fixed: del memory.tp2_fixed[sym]
+                        if sym in memory.stop_placed: del memory.stop_placed[sym]
+                        if sym in memory.max_pnl_observed: del memory.max_pnl_observed[sym]
+
+                memory.slots_occupied = len(current_mexc_active)
+                last_pos_sync = now_time
+            except:
+                pass
+        # ---------------------------------------------------------------------
+
+
+
         for symbol, pos in list(memory.active_pos.items()):
             try:
                 cur_p = memory.prices.get(symbol, 0.0)
@@ -319,9 +355,9 @@ async def monitor_logic(exchange):
                         try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                         except: pass
 
-                        await smart_order(exchange, symbol, exit_side, float(exact_vol), price=sl_price_precision, is_stop=True)
+                        smart_order(exchange, symbol, exit_side, exact_vol, price=sl_price_precision, is_stop=True)
                         memory.stop_placed[symbol] = sl_price_precision
-                        log(f"🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: {symbol} @ {sl_price_precision}")
+                        log(f"🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: {symbol} @  {sl_price_precision}")
                     except Exception as e:
                         log(f"🆘 Ошибка автостопа MEXC для {symbol}: {e}")
                         memory.stop_placed[symbol] = pos['price']
@@ -405,11 +441,18 @@ async def monitor_logic(exchange):
                         pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
                         log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксировано 30% объема (+{round(TP1_PCT*100,2)}%)")
 
-                        try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
-                        except: pass
-                        bu_price = pos['price'] * (1 + 0.0015) if pos['side'] == 'buy' else pos['price'] * (1 - 0.0015)
+                        #try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                        #except: pass
+                        try:
+                            exchange.cancel_all_orders(symbol, {'params': {'type': 5}}) # Удаляет только триггерные стопы
+                        except:
+                            pass
+                        #bu_price = pos['price'] * (1 + 0.0015) if pos['side'] == 'buy' else pos['price'] * (1 - 0.0015)
+                        bu_price = pos['price'] * (1 - 0.0005) if pos['side'] == 'buy' else pos['price'] * (1 + 0.0005)
                         bu_price_precision = float(exchange.price_to_precision(symbol, bu_price))
-                        smart_order(exchange, symbol, exit_side, pos['vol'], price=bu_price_precision, is_stop=True)
+
+                        exact_remainder_vol = float(exchange.amount_to_precision(symbol, pos['vol']))
+                        smart_order(exchange, symbol, exit_side, exact_remainder_vol, price=bu_price_precision, is_stop=True)
                         memory.stop_placed[symbol] = bu_price_precision
                     except Exception as e:
                         log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
@@ -515,7 +558,7 @@ async def main_logic():
                     if btc_price > 0:
                         memory.btc_history.append(btc_price)
                         if len(memory.btc_history) > 30: memory.btc_history.pop(0)
-                        log(f"🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC @ ${btc_price} | История: {le n(memory.btc_history)}м")
+                        log(f"🛰️ ПОВОДЫРЬ СИНХРОНИЗ ИРОВАН (REST): BTC @ ${btc_price} | История: {len(memory.btc_history)}м")
                         memory.last_btc_push = now
                 except Exception as btc_err:
                     log(f"⚠️ Ошибка REST-запроса Поводыря: {btc_err}")
@@ -538,27 +581,9 @@ async def main_logic():
 
                     signal = await check_signal(exchange, symbol)
                     if signal and memory.slots_occupied < MAX_SLOTS:
-                        leverage = 25
-                        clean_sym = symbol.replace(':USDT', '')
-
-                        # БРОНИРОВАННЫЙ КЛУБ ИЗОЛЯЦИИ МЕХС V16.9.9 (БЕЗ AWAIT + openType=1)
-                        # --- ЖЕСТКИЙ ФИКС V16.9.11: ОКРУГЛЕНИЕ ЦЕНЫ ДО ИЗОЛЯЦИИ МАРЖИ ---
-                        try:
-                            # Округляем цену капкана строго по правилам биржи, убирая 16 знаков после запятой
-                            exact_trap_price = float(exchange.price_to_precision(symbol, signal['price']))
-                            signal['price'] = exact_trap_price # Перезаписываем чистую цену в сигнал
-
-                            mexc_id = symbol.replace('/', '').replace(':USDT', '')
-                            exchange.fapiPrivatePostPositionChangeLeverage({
-                                'symbol': mexc_id,
-                                'leverage': leverage,
-                                'openType': 1  # Железный ИЗОЛИРОВАННЫЙ режим
-                            })
-                        except:
-                            pass
 
                         # Расчет объема снайперского лота
-                        amount_usdt = memory.available * RISK_GEAR * leverage
+                        amount_usdt = memory.available * RISK_GEAR * 25
                         qty = amount_usdt / signal['price']
 
                         # Выставляем пассивный лимитный капкан Maker
