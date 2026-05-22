@@ -74,24 +74,28 @@ async def init_exchange():
         log(f"⚠️ Ошибка прогрева стартового баланса MEXC: {e}")
         memory.available = 0.0
 
-    # ПРИНУДИТЕЛЬНЫЙ ЖЕСТКИЙ ПЕРЕВОД ВСЕГО ФЛОТА В РЕЖИМ ISOLATED
-    log("🔒 Синхронизация маржинальных шлюзов: перевод флота в ISOLATED...")
+    # ПРИНУДИТЕЛЬНЫЙ ЖЕСТКИЙ ПЕРЕВОД ВСЕГО ФЛОТА В РЕЖИМ ISOLATED (СПЕЦИФИКАЦИЯ MEXC API V16.9.9)
+    log("🔒 Синхронизация маржинальных шлюзов: принудительная изоляция лотов...")
     for symbol in PRIORITY_LIST:
         try:
-            clean_sym = symbol.replace(':USDT', '')
-            # Жестко шлем приказ на изоляцию маржи на сервера MEXC
-            await exchange.set_margin_mode('isolated', clean_sym)
+            clean_sym = symbol.replace('/', '').replace(':USDT', '')
+            # Шлем прямой низкоуровневый REST-приказ: openType=1 (Изолированная маржа)
+            exchange.fapiPrivatePostPositionChangeLeverage({
+                'symbol': clean_sym,
+                'leverage': 25,
+                'openType': 1  # 1 = ISOLATED МАРЖА ЖЕСТКО!
+            })
         except:
-            pass # Если уже изолирован, биржа пропустит шаг
+            pass
 
     log(f"ЛИМИТНЫЙ СНАЙПЕР BERSERK V16.9 ОНЛАЙН. Доступная маржа Swap: ${round(memory.available, 2)}")
     return exchange
 
-async def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_exit=False, is_stop=False):
-    """Исполнительный шлюз Liquidity Guard V16.2 с поддержкой серверных стопов"""
+# --- [ЖЕСТКИЙ ФИКС V16.9.10: ПОЛНОСТЬЮ СИНХРОННЫЙ ИСПОЛНИТЕЛЬ МЕХС] ---
+def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_exit=False, is_stop=False):
+    """Исполнительный шлюз Liquidity Guard V16.9.10 БЕЗ СЛЕДОВ AWAIT"""
     success = True
     try:
-        # Округляем объемы под спецификацию лотов биржи MEXC
         amount_str = exchange.amount_to_precision(symbol, amount)
         qty = float(amount_str)
         if qty <= 0:
@@ -106,8 +110,8 @@ async def smart_order(exchange, symbol, side, amount, is_limit=False, price=None
             if price is None:
                 return False
             params['stopPrice'] = float(exchange.price_to_precision(symbol, price))
-            # Для MEXC тип стоп-ордера передается в params или как 'STOP_MARKET'
-            order = await exchange.create_order(symbol, 'STOP_MARKET', side, qty, price=None, params=params)
+            # УБРАЛИ await
+            order = exchange.create_order(symbol, 'market', side, qty, price=None, params=params)
             return order
 
         # СЦЕНАРИЙ 2: Пассивный Лимитный Капкан (Maker)
@@ -115,12 +119,14 @@ async def smart_order(exchange, symbol, side, amount, is_limit=False, price=None
             if price is None:
                 return False
             exact_price = float(exchange.price_to_precision(symbol, price))
-            order = await exchange.create_order(symbol, 'limit', side, qty, price=exact_price, params=params)
+            # УБРАЛИ await
+            order = exchange.create_order(symbol, 'limit', side, qty, price=exact_price, params=params)
             return order
 
         # СЦЕНАРИЙ 3: Агрессивный Рыночный Тейк / Эвакуация (Taker)
         else:
-            order = await exchange.create_order(symbol, 'market', side, qty, price=None, params=params)
+            # УБРАЛИ await
+            order = exchange.create_order(symbol, 'market', side, qty, price=None, params=params)
             return order
 
     except Exception as e:
@@ -329,9 +335,9 @@ async def monitor_logic(exchange):
                     log(f"🛡️ Decay Shield V16.9: {symbol} срезан на 60с (Лосс: {round(profit*100, 2 )}%)")
                     action_triggered_decay = False
                     try:
-                        try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                        try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                         except: pass
-                        await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                        smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
                         action_triggered_decay = True
                     except Exception as e: log(f"⚠️ Ошибка утилизации: {e}")
 
@@ -353,9 +359,9 @@ async def monitor_logic(exchange):
                         log(f"🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: {symbol} закрыт на МЕХС. ММ выдохся (Пик: +{round(memory.max_pnl_observed[symbol]*100,2)}%)")
                         action_triggered_momentum_dead = False
                         try:
-                            try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                            try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                             except: pass
-                            await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                            smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
                             action_triggered_momentum_dead = True
                         except Exception as e: log(f"⚠️ Ошибка Синдрома Сползания: {e}")
 
@@ -380,9 +386,9 @@ async def monitor_logic(exchange):
                         # ЗАЩИТА ОТ ОКРУГЛЕНИЯ В НOЛЬ (Для лотов SOL/LDO)
                         if close_qty <= 0 or close_qty >= pos['vol']:
                             log(f"⚠ ЛОТ {symbol} СЛИШКОМ МАЛ ДЛЯ ДРОБЛЕНИЯ ({pos['vol']}): Фиксируем 100% объема в Тейк 1 по рынку!")
-                            try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                            try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                             except: pass
-                            await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                            smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
 
                             for k in [symbol, symbol.replace(':USDT', '')]:
                                 if k in memory.active_pos: del memory.active_pos[k]
@@ -394,16 +400,16 @@ async def monitor_logic(exchange):
                             return
 
                         # Если лот позволяет дробить — фиксируем базовые 30%
-                        await smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
+                        smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
                         memory.tp1_fixed[symbol] = True
                         pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
                         log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксировано 30% объема (+{round(TP1_PCT*100,2)}%)")
 
-                        try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                        try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                         except: pass
                         bu_price = pos['price'] * (1 + 0.0015) if pos['side'] == 'buy' else pos['price'] * (1 - 0.0015)
                         bu_price_precision = float(exchange.price_to_precision(symbol, bu_price))
-                        await smart_order(exchange, symbol, exit_side, pos['vol'], price=bu_price_precision, is_stop=True)
+                        smart_order(exchange, symbol, exit_side, pos['vol'], price=bu_price_precision, is_stop=True)
                         memory.stop_placed[symbol] = bu_price_precision
                     except Exception as e:
                         log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
@@ -413,7 +419,7 @@ async def monitor_logic(exchange):
                     try:
                         close_qty = float(exchange.amount_to_precision(symbol, pos['vol'] * 0.57))
                         if close_qty > 0:
-                            await smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
+                            smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
                             memory.tp2_fixed[symbol] = True
                             pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
                             log(f"🏆 ТЕЙК-2 ВЫПОЛНЕН: {symbol} зафиксировано 40% объема (+{round(TP2_PCT*100,2)}%)")
@@ -424,9 +430,9 @@ async def monitor_logic(exchange):
                     log(f"👑 ТЕЙК-3 МЕГА-ФИНАЛ: {symbol} полностью закрыт (+{round(TP3_PCT*100,2)}%)")
                     action_triggered_tp3 = False
                     try:
-                        try: await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                        try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                         except: pass
-                        await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                        smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
                         action_triggered_tp3 = True
                     except Exception as e: log(f"⚠ Ошибка Тейка 3 для {symbol}: {e}")
 
@@ -454,6 +460,48 @@ async def main_logic():
 
     memory.last_btc_push = 0
     last_balance_update = 0
+
+
+    # --- [ВРЕЗКА V16.9.6: БРОНИРОВАННЫЙ ШЛЮЗ АВТО-УСЫНОВЛЕНИЯ ПОЗИЦИЙ MEXC] ---
+    try:
+        log("🔗 Сканирование аккаунта на наличие открытых позиций...")
+        # Запрашиваем все текущие фьючерсные удержания на аккаунте
+        raw_positions = exchange.fetch_positions(None, {'type': 'swap'})
+
+        for p in raw_positions:
+            # Извлекаем чистый объем (notional/contracts) по правилам CCXT MEXC
+            vol = abs(float(p.get('contracts', p.get('positionAmt', 0.0))))
+
+            if vol > 0.00001:
+                raw_sym = p.get('symbol', p.get('pair', ''))
+
+                # Приводим к единому формату пульта (из OP_USDT или OP/USDT делаем OP/USDT:USDT)
+                clean_sym = raw_sym.replace('_', '/').replace(':USDT', '')
+                if '/' not in clean_sym and 'USDT' in clean_sym:
+                    clean_sym = clean_sym.replace('USDT', '/USDT')
+                fleet_key = f"{clean_sym}:USDT"
+
+                if fleet_key in PRIORITY_LIST or clean_sym in PRIORITY_LIST:
+                    target_key = fleet_key if fleet_key in PRIORITY_LIST else clean_sym
+
+                    # Определяем сторону
+                    side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
+                    side = 'buy' if 'long' in side_raw or 'buy' in side_raw else 'sell'
+                    entry_price = float(p.get('entryPrice', p.get('price', 0.0)))
+
+                    if target_key not in memory.active_pos:
+                        log(f"🔗 RECOVERED MEXC: Позиция {target_key} ({vol} лотов) успешно усыновлена флотоводцем!")
+                        memory.active_pos[target_key] = {
+                            'side': side,
+                            'vol': vol,
+                            'price': entry_price,
+                            'entry_time': time.time(), # Стартуем таймер Храповика с текущей секунды
+                            'dna': {'l_off': ENTRY_ORDER_OFFSET, 's_off': ENTRY_ORDER_OFFSET} # Временный кэш оффсета
+                        }
+                        memory.slots_occupied += 1
+    except Exception as recover_err:
+        log(f"⚠️ Критическая ошибка авто-усыновления MEXC: {recover_err}")
+    # -------------------------------------------------------------------------
 
     while memory.is_running:
         try:
@@ -493,18 +541,28 @@ async def main_logic():
                         leverage = 25
                         clean_sym = symbol.replace(':USDT', '')
 
-                        # БРОНИРОВАННЫЙ КЛУБ ИЗОЛЯЦИИ: Сначала выставляем плечо БЕЗ сброса в Cross
+                        # БРОНИРОВАННЫЙ КЛУБ ИЗОЛЯЦИИ МЕХС V16.9.9 (БЕЗ AWAIT + openType=1)
+                        # --- ЖЕСТКИЙ ФИКС V16.9.11: ОКРУГЛЕНИЕ ЦЕНЫ ДО ИЗОЛЯЦИИ МАРЖИ ---
                         try:
-                            exchange.set_leverage(leverage, clean_sym)
-                            exchange.set_margin_mode('isolated', clean_sym)
-                        except: pass
+                            # Округляем цену капкана строго по правилам биржи, убирая 16 знаков после запятой
+                            exact_trap_price = float(exchange.price_to_precision(symbol, signal['price']))
+                            signal['price'] = exact_trap_price # Перезаписываем чистую цену в сигнал
+
+                            mexc_id = symbol.replace('/', '').replace(':USDT', '')
+                            exchange.fapiPrivatePostPositionChangeLeverage({
+                                'symbol': mexc_id,
+                                'leverage': leverage,
+                                'openType': 1  # Железный ИЗОЛИРОВАННЫЙ режим
+                            })
+                        except:
+                            pass
 
                         # Расчет объема снайперского лота
                         amount_usdt = memory.available * RISK_GEAR * leverage
                         qty = amount_usdt / signal['price']
 
                         # Выставляем пассивный лимитный капкан Maker
-                        order = await smart_order(exchange, symbol, signal['side'], qty, is_limit=True, price=signal['price'])
+                        order = smart_order(exchange, symbol, signal['side'], qty, is_limit=True, price=signal['price'])
                         if order and isinstance(order, dict):
                             order_id = order.get('id')
                             memory.limit_orders[symbol] = {
