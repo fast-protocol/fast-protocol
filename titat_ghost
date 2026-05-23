@@ -4,6 +4,19 @@ LOG_FILE = "ghost_log.txt"
 
 class TitanGhost:
     def __init__(self):
+        # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V28.1: ПРИВЯЗКА КВАНТОВОГО ДВИЖКА BINGX ---
+        self.exchange = ccxt.bingx({
+            'apiKey': API_KEY,
+            'secret': API_SECRET,
+            'options': {'defaultType': 'swap'},
+            'enableRateLimit': True
+        })
+
+        self.memory = {
+            'prices': {}, 'active_pos': {}, 'dna': {}, 'is_running': True,
+            'available': 0.0, 'tp_fixed': {}, 'trail_active': {},
+            'vol_history': {}, 'cooldown': {}, 'candles': {}
+        }
         self.memory = {
             'prices': {}, 'active_pos': {}, 'dna': {}, 'is_running': True,
             'available': 0.0, 'tp_fixed': {}, 'trail_active': {},
@@ -159,26 +172,32 @@ class TitanGhost:
                     await asyncio.sleep(1)
                     continue
 
+
                 for raw_symbol, data in tickers.items():
                     if not data.get('last'):
                         continue
 
-                    # Чистим тикер до стандартов ДНК таблицы (из SOL-USDT или SOL_USDT делаем SOL/USDT:USDT)
-                    clean_sym = raw_symbol.replace('_', '/').replace('-', '/')
-                    if '/' in clean_sym and not clean_sym.endswith(':USDT'):
-                        clean_sym = f"{clean_sym}:USDT"
+                    # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V27.6: ВСЕЯДНЫЙ АЛЬФА-МАППИНГ GHOST ---
+                    raw_alpha = raw_symbol.lower().replace('/', '').replace('_', '').replace('-', '').replace(':', '')
 
-                    if clean_sym in self.memory['dna']:
+                    target_key = None
+                    for dna_key in self.memory['dna'].keys():
+                        dna_alpha = dna_key.lower().replace('/', '').replace('_', '').replace('-', '').replace(':', '')
+                        if raw_alpha == dna_alpha or dna_alpha in raw_alpha:
+                            target_key = dna_key
+                            break
+
+                    if target_key:
                         last_price = float(data['last'])
                         q_vol = float(data['quoteVolume']) if data.get('quoteVolume') else 0.0
 
-                        # Записываем строго в оперативную память
-                        self.memory['prices'][clean_sym] = last_price
+                        # Записываем строго под каноническим ДНК-ключом монеты!
+                        self.memory['prices'][target_key] = last_price
 
-                        if clean_sym not in self.memory['vol_history']:
-                            self.memory['vol_history'][clean_sym] = []
-                        self.memory['vol_history'][clean_sym].append([last_price, q_vol])
-                        self.memory['vol_history'][clean_sym] = self.memory['vol_history'][clean_sym][-100:]
+                        if target_key not in self.memory['vol_history']:
+                            self.memory['vol_history'][target_key] = []
+                        self.memory['vol_history'][target_key].append([last_price, q_vol])
+                        self.memory['vol_history'][target_key] = self.memory['vol_history'][target_key][-100:]
 
                 # ЖЕСТКАЯ ИСТОРИЧЕСКАЯ РАЗГРУЗКА СЕТИ (Защита от DDoS банов BingX)
                 await asyncio.sleep(3)
@@ -267,23 +286,27 @@ class TitanGhost:
 
                 try:
 #===========
-                    # --- КАHОHИЧЕСКИЙ СHАЙПЕРСКИЙ БЛOК GHOST V27.5 ---
-                    # Живую секундную цену cur_p берем из памяти price_stream
                     cur_p = self.memory['prices'].get(sym)
                     if not cur_p or cur_p <= 0:
                         continue
 
-                    # Выводим дебаг пульса в консоль, чтобы видеть, что сканер ЖИВ!
-                    if int(time.time()) % 15 == 0:
-                        self.log(f"🔍 [ПУЛЬС GHOST]: Патрулирую сектор {sym} | Живая цена: {cur_p}")
-
-                    # Скачиваем историю свечей альта (limit=40)
-                    ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
-                    if not ohlcv or len(ohlcv) < 25:
+                    # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V27.7: ИЗOЛЯЦИЯ СЕТЕВOГO ШЛЮЗА BINGX ---
+                    try:
+                        ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
+                        if not ohlcv or len(ohlcv) < 25:
+                            continue
+                        df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+                    except Exception as net_err:
+                        # Если биржа банит по Rate Limit — мы СРАЗУ увидим это в консоли!
+                        self.log(f"⚠️ Сетевой сбой fetch_ohlcv для {sym}: {net_err}")
                         continue
 
-                    df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
-
+                    # Выводим лог пульса БЕЗ деления на секунды, используя простой счетчик итераций в памяти
+                    if not hasattr(memory, 'pulse_counter'): memory.pulse_counter = 0
+                    memory.pulse_counter += 1
+                    if memory.pulse_counter % 100 == 0:
+                        self.log(f"🔍 [ПУЛЬС GHOST V27.7]: Патрулирую сектор {sym} | Живая цена: {cur_p} | Свечей: {len(df)}")
+#==========
                     # Расчет полос Боллинджера по ПРЕДЫДУЩЕЙ ЗАКРЫТOЙ свече (индекс -2)
                     df['ma'] = df['c'].rolling(20).mean()
                     df['std'] = df['c'].rolling(20).std()
@@ -488,18 +511,62 @@ class TitanGhost:
                 await asyncio.sleep(1)
 
     async def main(self):
-        """Жесткая монолитная инициализация параллельных модулей BingX V25.9"""
-        await self.init_exchange()
-        self.log("🔗 Запуск параллельных квантовых модулей ядра...")
+        """Архитектурный шлюз запуска V28.2: Принудительная связка exchange и прогрев RAM"""
+        self.log("⚙️ Запуск предстартового прогрева ядра TITAN GHOST...")
+
+        # 1. Жестко вызываем инициализацию и ПРИНУДИТЕЛЬНО записываем объект в self.exchange
         try:
-            await asyncio.gather(
-                self.update_context(),
-                self.price_stream(),
-                self.monitor_logic(),
-                self.hunter_loop()
-            )
+            # Если метод асинхронный — вызываем через await, если обычный — Python сам обработает
+            if asyncio.iscoroutinefunction(self.init_exchange):
+                exch_obj = await self.init_exchange()
+            else:
+                exch_obj = self.init_exchange()
+
+            # Если метод вернул объект, привязываем его, иначе инициализируем напрямую в контекст класса
+            if exch_obj:
+                self.exchange = exch_obj
+            else:
+                self.exchange = ccxt.bingx({
+                    'apiKey': API_KEY,
+                    'secret': API_SECRET,
+                    'options': {'defaultType': 'swap'},
+                    'enableRateLimit': True
+                })
         except Exception as e:
-            self.log(f"❌ КРИТИЧЕСКИЙ СБОЙ ЯДРА GHOST: {e}")
+            self.log(f"⚠️ Ошибка инициализации биржевого контура: {e}")
+            return
+
+        # 2. Принудительно загружаем ДНК-матрицу в память до старта циклов
+        try:
+            with open('dna_ghost.json', 'r') as f:
+                self.memory['dna'] = json.load(f)
+            self.log(f"✅ ДНК-Матрица успешно вшита в RAM: {len(self.memory['dna'])} активов готовы.")
+        except Exception as e:
+            self.log(f"🛑 Критическая ошибка чтения dna_ghost.json: {e}")
+            return
+
+        # 3. Делаем первый, принудительный сбор цен, набивая memory['prices']
+        try:
+            tickers = await self.exchange.fetch_tickers()
+            for raw_symbol, data in tickers.items():
+                if data.get('last'):
+                    raw_alpha = raw_symbol.lower().replace('/', '').replace('_', '').replace('-', '').replace(':', '')
+                    for dna_key in self.memory['dna'].keys():
+                        dna_alpha = dna_key.lower().replace('/', '').replace('_', '').replace('-', '').replace(':', '')
+                        if raw_alpha == dna_alpha or dna_alpha in raw_alpha:
+                            self.memory['prices'][dna_key] = float(data['last'])
+                            break
+            self.log(f"✅ Базовый кэш цен успешно сформирован. Стартуем боевые эшелоны.")
+        except Exception as e:
+            self.log(f"⚠️ Предупреждение предстартового сбора цен: {e}")
+
+        # 4. И только теперь, когда память полностью прогрета и exchange привязан, запускаем параллельный флот!
+        await asyncio.gather(
+            self.update_context(),
+            self.price_stream(),
+            self.monitor_logic(),
+            self.hunter_loop()
+        )
 
 if __name__ == "__main__":
     asyncio.run(TitanGhost().main())
