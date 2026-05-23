@@ -1,3 +1,4 @@
+
 MAX_SLOTS = 2               # Максимум параллельных позиций
 RISK_GEAR = 0.50            # Множитель маржи слота (0.1 - 1.0)
 PRIMARY_SL_PCT = 0.012      # Жесткий серверный Стоп-Лосс (-1.2%)
@@ -304,22 +305,28 @@ async def monitor_logic(exchange):
     """Адаптивное управление выходами V16.9: Фикс лотов SOL, Квантовый Храповик 60с и Синдром Сползания"""
     last_pos_sync = 0
     while memory.is_running:
-        # --- ЖЕСТКИЙ ФИКС ОБЪЯВЛЕНИЯ ПЕРЕМЕННОЙ V17.1.1 ---
+      try:
         now_time = time.time()
 
+        # Мгновенный, чистый обсчет PNL из оперативной памяти сервера
         for symbol, pos in list(memory.active_pos.items()):
-            try:
-                cur_p = memory.prices.get(symbol, 0.0)
-                if cur_p <= 0: continue
+            age = now_time - pos['entry_time']
 
-                # Расчет чистого PNL и времени жизни позиции
-               # profit = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
+            # Запрашиваем живую цену из WebSocket-кэша
+            cur_p = memory.prices.get(symbol)
+            if not cur_p:
+                continue
 
-                # ШТУЧНЫЙ ФИКС V18.3: Принудительный нижний регистр для точного расчета PNL лонга/шорта
-                profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
+            # Расчет PNL строго по регистру букв
+            profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
+            # --- 1. АВАРИЙНЫЙ СHОС ПО ВРЕМЕHИ (Decay Shield 60с) ---
+            if age > 60 and profit < -0.0008:
+                log(f"🏛️ 🛡️ Decay Shield V16.9: {symbol} срезан на 60с (Лосс: {round(profit*100,2)  }%)")
+                exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
+                smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                continue
 
-                age = time.time() - pos['entry_time']
-                exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
+#                exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
                 mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
 
                 # --- 1. ВЫСТАВЛЕНИЕ ЖЕСТКОГО СЕРВЕРНОГО СТОП-ЛОССА НА МЕХС ---
@@ -467,11 +474,11 @@ async def monitor_logic(exchange):
                     if symbol in memory.max_pnl_observed: del memory.max_pnl_observed[symbol]
                     memory.slots_occupied = max(0, memory.slots_occupied - 1)
                     if action_triggered_tp3: return
-                # Разгрузка процессора
-                await asyncio.sleep(0.5)
-            except Exception as e:
-                await asyncio.sleep(1)
-        await asyncio.sleep(0.1)
+        # Разгрузка процессора
+        await asyncio.sleep(0.5)
+      except Exception as e:
+          await asyncio.sleep(1)
+        #await asyncio.sleep(0.1)
 
 async def main_logic():
     """Генеральный оркестратор Берсерка V16.9: Фикс балансов, CROSS-защита и REST-пушер"""
@@ -528,10 +535,60 @@ async def main_logic():
     except Exception as recover_err:
         log(f"⚠️ Критическая ошибка авто-усыновления MEXC: {recover_err}")
     # -------------------------------------------------------------------------
+#========
+#=====
+    log(f"🏛️ 🏹 Охота лимитными капканами Berserk V16.9 активирована. Патрулирую стаканы...")
+
+    # Инициализируем таймер фонового опроса позиций
+    last_pos_sync = 0
 
     while memory.is_running:
         try:
             now = time.time()
+
+            # --- [ВРЕЗКА V19.5: ЖИВОЙ ТРЕКЕР ПОЗИЦИЙ ВНУТРИ MAIN_LOGIC] ---
+            # Опрашиваем REST-шлюз МЕХС строго раз в 10 секунд, полностью разгружая monitor_logic
+            if now - last_pos_sync >= 10:
+                try:
+                    raw_positions = exchange.fetch_positions(None, {'type': 'swap'})
+                    current_mexc_active = []
+
+                    for p in raw_positions:
+                        vol = abs(float(p.get('contracts', p.get('positionAmt', 0.0))))
+                        if vol > 0.00001:
+                            raw_sym = p.get('symbol', p.get('pair', ''))
+                            clean_sym = raw_sym.replace('_', '/').replace(':USDT', '')
+                            fleet_key = f"{clean_sym}:USDT"
+
+                            target_key = fleet_key if fleet_key in PRIORITY_LIST else clean_sym
+                            if target_key in PRIORITY_LIST:
+                                current_mexc_active.append(target_key)
+
+                                # Усыновляем, если позиции нет в RAM
+                                if target_key not in memory.active_pos:
+                                    side_raw = str(p.get('side', p.get('positionSide', 'long'))).lower()
+                                    side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
+                                    entry_price = float(p.get('entryPrice', p.get('price', 0.0)))
+
+                                    log(f"🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена открытая сделка по {target_key}. Берем под контроль выходов!")
+                                    memory.active_pos[target_key] = {
+                                        'side': side, 'vol': vol, 'price': entry_price, 'entry_time': time.time(),
+                                        'dna': {'l_off': 0.002, 's_off': 0.002}
+                                    }
+
+                    # Зачищаем из памяти лоты, закрытые на бирже
+                    for sym in list(memory.active_pos.keys()):
+                        if sym not in current_mexc_active:
+                            log(f"🧹 Позиция {sym} закрыта на МЕХС. Очищаем RAM.")
+                            if sym in memory.active_pos: del memory.active_pos[sym]
+                            if sym in memory.tp1_fixed: del memory.tp1_fixed[sym]
+                            if sym in memory.tp2_fixed: del memory.tp2_fixed[sym]
+
+                    memory.slots_occupied = len(current_mexc_active)
+                    last_pos_sync = now
+                except Exception as pos_err:
+                    pass
+            # ------------------------------------------------------------------
 
             # 1. АВТОНОМНЫЙ REST-ПУШЕР БИТКОИНА ДЛЯ MEXC
             if now - memory.last_btc_push >= 60:
