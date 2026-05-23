@@ -1,0 +1,322 @@
+MAX_SLOTS = 1
+RISK_PER_SLOT = 0.9 # Агрессивный риск для разгона
+LOG_FILE = "ghost_v22_log.txt"
+
+class TitanGhost:
+    def __init__(self):
+        self.memory = {
+            'prices': {}, 'active_pos': {}, 'dna': {}, 'is_running': True,
+            'available': 0.0, 'tp_fixed': {}, 'trail_active': {}
+        }
+        self.memory['vol_history'] = {} # Хранилище для rolling-объема
+        self.memory['cooldown'] = {}
+        self.exchange = None
+
+    def log(self, msg):
+        t = time.strftime('%H:%M:%S')
+        out = f"[{t}] {msg}"
+        print(out)
+        with open(LOG_FILE, "a", encoding="utf-8") as f: f.write(out + "\n")
+
+    async def init_exchange(self):
+        if self.exchange:
+            try: await self.exchange.close()
+            except: pass
+        self.exchange = ccxt.bingx({
+            'apiKey': API_KEY, 'secret': API_SECRET,
+            'options': {'defaultType': 'swap'}, 'enableRateLimit': True
+        })
+        with open('dna_ghost.json', 'r') as f: self.memory['dna'] = json.load(f)
+        self.log(f"💎 TITAN GHOST V22.3 READY. Slots: {MAX_SLOTS} | Assets: {len(self.memory['dna'])}")
+
+    async def update_context(self):
+        while self.memory['is_running']:
+            try:
+                bal = await self.exchange.fetch_balance()
+                self.memory['available'] = float(bal['USDT']['free'])
+                # Синхронизация позиций
+                pos = await self.exchange.fetch_positions()
+                current_active = []
+                for p in pos:
+                    sym = p['symbol']
+                    vol = abs(float(p['contracts']))
+                    if vol > 0.00001 and sym in self.memory['dna']:
+                        current_active.append(sym)
+                        # Если позиция была лимиткой — подтверждаем её активацию!
+                        if sym in self.memory['active_pos']:
+                            if self.memory['active_pos'][sym].get('status') == 'pending':
+                                self.log(f"⚡ КАПКАН СРАБОТАЛ: {sym} налит в рынок!")
+                                self.memory['active_pos'][sym]['status'] = 'active'
+                                self.memory['active_pos'][sym]['entry_time'] = time.time() # Сброс таймера жизни на момент входа
+                        else:
+                            self.log(f"🔗 RECOVERED: {sym} ({vol} units)")
+                            self.memory['active_pos'][sym] = {
+                                'side': p['side'].lower(), 'vol': vol, 'price': float(p['entryPrice']),
+                                'entry_time': time.time(), 'dna': self.memory['dna'][sym], 'status': 'active'
+                            }
+                # Очистка памяти от закрытых руками сделок (БРОНИРОВАННАЯ ЗАЩИТА ЛИМИТОК)
+                for sym in list(self.memory['active_pos'].keys()):
+                    pos_data = self.memory['active_pos'][sym]
+
+                    # Удаляем ТОЛЬКО если позиции нет на бирже И это НЕ висящий капкан pending
+                    if sym not in current_active and pos_data.get('status') != 'pending':
+                        self.log(f"🧹 Позиция {sym} закрыта извне, удаляем из памяти.")
+                        del self.memory['active_pos'][sym]
+                        if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
+                        if sym in self.memory.get('trail_active', {}): del self.memory['trail_active'][sym]
+#эти строки нужны или  убрать?
+                await asyncio.sleep(20)
+            except: await asyncio.sleep(5)
+
+    async def price_stream(self):
+        self.log(f"📡 Запуск REST-мониторинга цен и rolling-объемов...")
+        while self.memory['is_running']:
+            try:
+                tickers = await self.exchange.fetch_tickers(list(self.memory['dna'].keys()))
+                t_now = time.time()
+                for symbol, data in tickers.items():
+                    self.memory['prices'][symbol] = float(data['last'])
+
+                    # Сохраняем quoteVolume (объем в USDT) с меткой времени
+                    q_vol = float(data['quoteVolume']) if data.get('quoteVolume') else 0.0
+                    if symbol not in self.memory['vol_history']: self.memory['vol_history'][symbol] = []
+                    self.memory['vol_history'][symbol].append((t_now, q_vol))
+
+                    # Очищаем историю, оставляя только последние 60 секунд
+                    self.memory['vol_history'][symbol] = [x for x in self.memory['vol_history'][symbol] if t_now - x[0] <= 60]
+                await asyncio.sleep(1)
+            except: await asyncio.sleep(5)
+
+    async def execute_limit_entry(self, sym, side, limit_price, dna):
+        try:
+            # 1. Жесткая установка плеча
+            await self.exchange.set_leverage(dna['lev'], sym, {'side': 'BOTH'})
+
+            # 2. Расчет объема от доступного баланса
+            avail = self.memory['available']
+            usdt_vol = avail * RISK_PER_SLOT * dna['lev']
+            qty = float(self.exchange.amount_to_precision(sym, usdt_vol / limit_price))
+            if qty <= 0: return
+
+            # 3. Полная зачистка старых «хвостов» перед новым капканом
+            await self.exchange.cancel_all_orders(sym, {'spot': False})
+
+            exact_price = float(self.exchange.price_to_precision(sym, limit_price))
+
+            # 4. Выставляем Лимитный Ордер
+            order = await self.exchange.create_order(sym, 'limit', side, qty, exact_price)
+            if order:
+                self.log(f"🕸️ ЛИМИТНЫЙ КАПКАН ВЫСТАВЛЕН: {sym} {side.upper()} по {exact_price}")
+                # Фиксируем как ОЖИДАЮЩИЙ ордер, а не активную позицию
+                self.memory['active_pos'][sym] = {
+                    'side': side, 'vol': qty, 'price': exact_price, 'entry_time': time.time(),
+                    'dna': dna, 'status': 'pending'} # <--- ТЕГ ОЖИДАНИЯ
+
+#уже не надо?                self.memory['available'] -= (usdt_vol / dna['lev'])
+        except Exception as e:
+            self.log(f"⚠️ Ошибка выставления капкана {sym}: {e}")
+
+    async def hunter_loop(self):
+        self.log("🚀 Охота Ghost Strike [V22.9 Лимитная Броня] активирована...")
+        await asyncio.sleep(5)
+        last_debug_t = 0
+
+        while self.memory['is_running']:
+            for sym, dna in self.memory['dna'].items():
+
+                # --- [ВОЗВРАТ АНТИ-ПОВТОР V22.8] ---
+                if sym in self.memory.get('cooldown', {}) and (time.time() - self.memory['cooldown'][sym] < 180):
+                    continue
+
+                if sym in self.memory['active_pos'] or len(self.memory['active_pos']) >= MAX_SLOTS:
+                    continue
+
+                try:
+                    ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
+                    df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+                    cur_p = self.memory['prices'].get(sym)
+                    if not cur_p: continue
+
+                    # Математика BB
+                    df['ma'] = df['c'].rolling(20).mean()
+                    df['std'] = df['c'].rolling(20).std()
+                    p_up = df['ma'].iloc[-2] + (2.1 * df['std'].iloc[-2])
+                    p_dn = df['ma'].iloc[-2] - (2.1 * df['std'].iloc[-2])
+                    p_w = p_up - p_dn
+
+                    # Линии Призрака
+                    strike_up = p_up - (p_w * dna['ghost_p'])
+                    strike_dn = p_dn + (p_w * dna['ghost_p'])
+
+                    # Расчет rolling-объема в монетах
+                    vol_history = self.memory['vol_history'].get(sym, [])
+                    if len(vol_history) > 2:
+                        diff_vol = vol_history[-1][1] - vol_history[0][1]
+                        vol_now_usdt = diff_vol if diff_vol > 0 else 0.0
+                        vol_now = vol_now_usdt / cur_p
+                    else:
+                        vol_now = 0.0
+
+                    vol_avg = float(df['v'].rolling(10).mean().iloc[-2]) if not df['v'].empty else 0.0
+                    vol_ratio = vol_now / vol_avg if vol_avg > 0 else 0
+
+                    # ЖЕСТКИЕ РАЗДЕЛЬНЫЕ ФИЛЬТРЫ (Защита от инверсии)
+                    open_now = df['o'].iloc[-1]
+                    vol_ok = vol_ratio >= dna['vol']
+
+                    is_long = (cur_p >= strike_up) and (cur_p > open_now) and vol_ok
+                    is_short = (cur_p <= strike_dn) and (cur_p < open_now) and vol_ok
+
+                    # ДЕБАГ (Раздельный и точный)
+                    if (cur_p >= strike_up or cur_p <= strike_dn) and not (is_long or is_short):
+                        if time.time() - last_debug_t > 30:
+                            reason = ""
+                            if cur_p >= strike_up and cur_p <= open_now: reason += "[Цвет не LONG ❌] "
+                            if cur_p <= strike_dn and cur_p >= open_now: reason += "[Цвет не SHORT ❌] "
+                            if not vol_ok: reason += f"[Объем {round(vol_ratio,1)}x < {dna['vol']}x ❌]"
+                            self.log(f"🔍 ПОЧТИ СИГНАЛ {sym}: {reason}")
+                            last_debug_t = time.time()
+
+                    # ВХОД ЛИМИТКОЙ (Экономим на проскальзывании)
+                    if is_long:
+                        await self.execute_limit_entry(sym, 'buy', strike_up, dna)
+                    elif is_short:
+                        await self.execute_limit_entry(sym, 'sell', strike_dn, dna)
+
+                except Exception as e:
+                    continue
+            await asyncio.sleep(0.4)
+
+    async def execute_entry(self, sym, side, price, dna):
+        try:
+            # Исправление 109400: для One-way mode всегда передаем BOTH
+            await self.exchange.set_leverage(dna['lev'], sym, {'side': 'BOTH'})
+
+            # Расчет объема
+            qty = float(self.exchange.amount_to_precision(sym, (self.memory['available'] * RISK_PER_SLOT * dna['lev']) / price))
+            if qty <= 0: return
+
+            order = await self.exchange.create_market_order(sym, side, qty)
+            if order:
+                self.log(f"🚀 GHOST STRIKE: {sym} {side.upper()} @ {price}")
+                self.memory['active_pos'][sym] = {'side': side, 'vol': qty, 'price': price, 'entry_time': time.time(), 'dna': dna}
+        except Exception as e: self.log(f"⚠️ ENTRY ERROR {sym}: {e}")
+
+    async def monitor_logic(self):
+        while self.memory['is_running']:
+            # 1. Делаем независимый список ключей (безопасно для удаления)
+            for sym in list(self.memory['active_pos'].keys()):
+                # 2. Извлекаем данные позиции по ключу
+                pos = self.memory['active_pos'].get(sym)
+                if not pos: continue # Защита, если позиция была удалена секунду назад
+
+                try:
+                    # Проверяем, налился ли наш капкан
+                    pos_status = pos.get('status', 'active')
+                    cur_p = self.memory['prices'].get(sym)
+                    if not cur_p: continue
+
+                    # Если это висящий капкан, считаем PNL относительно рынка для дебага,
+                    # но не пускаем его в логику Тейков
+                    entry_p = float(pos['price'])
+                    if pos['side'].lower() in ['buy', 'long']:
+                        pnl = (cur_p / entry_p) - 1
+                    else:
+                        pnl = (entry_p / cur_p) - 1
+
+                    age = time.time() - pos['entry_time']
+                    dna = pos['dna']
+#============
+                    # --- [УМНЫЙ СМАРТ-ФИЛЬТР V22.9.2] ---
+                    if age >= dna.get('cut_t', 300) and pnl < dna.get('cut_p', 0.0012):
+
+                        # СЦЕНАРИЙ 1: Это был НЕИСПОЛНЕННЫЙ лимитный капкан
+                        if pos_status == 'pending':
+                            self.log(f"🧹 Снятие неисполненного капкана {sym} по таймеру ({int(age)} с)")
+                            await self.exchange.cancel_all_orders(sym, {'spot': False})
+                            del self.memory['active_pos'][sym]
+                            self.memory['cooldown'][sym] = time.time()
+                            continue
+
+                        # СЦЕНАРИЙ 2: Это РЕАЛЬНАЯ НАЛИТАЯ позиция, которая зависла в болоте
+                        else:
+                            try:
+                                self.log(f"⏱️ SMART-FILTER: Утилизация зависшей позиции {sym} ({round(pnl*100,3)}%)")
+                                exit_side = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
+
+                                # Сначала чистим стопы, потом кроем марком
+                                await self.exchange.cancel_all_orders(sym, {'spot': False})
+                                await self.exchange.create_market_order(sym, exit_side, pos['vol'], {'reduceOnly': True})
+
+                                self.log(f"✅ {sym} успешно утилизирован.")
+                                self.memory['cooldown'][sym] = time.time()
+                                del self.memory['active_pos'][sym]
+                                if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
+                                continue
+                            except Exception as e:
+                                self.log(f"🆘 Ошибка утилизации активной позиции {sym}: {e}")
+                                await asyncio.sleep(5)
+                                continue
+
+                    # ЕЩЕ ОДНА СТРАХОВКА: Не пускаем неисполненные лимитки к логике Тейков и Стопов
+                    if pos_status == 'pending':
+                        continue
+#============
+
+                    # 1. TP1 + BE (С ОБРАБОТКОЙ ОШИБОК)
+                    if sym not in self.memory['tp_fixed'] and pnl >= dna['tp1']:
+                        try:
+                            self.log(f"🎯 Попытка фиксации TP1 для {sym} (PNL: {round(pnl*100,2)}%)")
+                            close_qty = float(self.exchange.amount_to_precision(sym, pos['vol'] * 0.5))
+                            side_exit = 'sell' if pos['side'].lower() in ['buy', 'long'] else 'buy'
+
+                            # Чистим старые ордера перед установкой новых, чтобы не было конфликтов
+                            await self.exchange.cancel_all_orders(sym, {'spot': False})
+
+                            # Закрываем 50%
+                            await self.exchange.create_market_order(sym, side_exit, close_qty, {'reduceOnly': True})
+
+                            # Safe Break-Even
+                            safe_bu = cur_p * 0.9995 if pos['side'].lower() in ['buy', 'long'] else cur_p * 1.0005
+                            await self.exchange.create_order(sym, 'stop', side_exit, pos['vol']-close_qty, safe_bu, {'stopPrice': safe_bu, 'reduceOnly': True})
+
+                            self.memory['tp_fixed'][sym] = True
+                            pos['vol'] -= close_qty
+                            self.log(f"✅ TP1 ВЫПОЛНЕН: {sym}. Остаток в БУ.")
+                        except Exception as e:
+                            self.log(f"🆘 Ошибка исполнения Тейка {sym}: {e}")
+                            # Если профит очень большой, пометим Тейк как "пройденный", чтобы не спамить
+                            if pnl > dna['tp1'] * 2: self.memory['tp_fixed'][sym] = True
+
+                    # 2. INFINITY TRAIL ACTIVATION
+                    if pnl >= (dna['tp1'] * 2): self.memory['trail_active'][sym] = True
+
+                    # 3. EXIT LOGIC
+                    sl_trigger = dna['sl']
+                    if sym in self.memory['trail_active']:
+                        sl_trigger = max(sl_trigger, pnl - dna['trail'])
+
+                    if pnl <= sl_trigger:
+                        side_exit = 'sell' if pos['side'] == 'buy' else 'buy'
+                        await self.exchange.create_market_order(sym, side_exit, pos['vol'], {'reduceOnly': True})
+                        self.log(f"🏁 EXIT: {sym} @ {round(pnl*100,2)}%")
+                        self.memory['cooldown'][sym] = time.time() # Ставим метку времени выхода
+                        del self.memory['active_pos'][sym]
+                        if sym in self.memory['tp_fixed']: del self.memory['tp_fixed'][sym]
+                        if sym in self.memory['trail_active']: del self.memory['trail_active'][sym]
+                except: continue
+            await asyncio.sleep(0.5)
+
+    async def main(self):
+        await self.init_exchange()
+#        await asyncio.gather(self.update_context(), self.price_stream(), self.hunter_loop(), self.monitor_logic())
+        # Запускаем фоновые задачи без блокировки hunter_loop
+        asyncio.create_task(self.update_context())
+        asyncio.create_task(self.price_stream())
+        asyncio.create_task(self.monitor_logic())
+
+        # Основной цикл оставляем в главном потоке
+        await self.hunter_loop()
+
+if __name__ == "__main__":
+    asyncio.run(TitanGhost().main())
