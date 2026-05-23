@@ -1,4 +1,3 @@
-
 MAX_SLOTS = 2               # Максимум параллельных позиций
 RISK_GEAR = 0.50            # Множитель маржи слота (0.1 - 1.0)
 PRIMARY_SL_PCT = 0.012      # Жесткий серверный Стоп-Лосс (-1.2%)
@@ -118,20 +117,20 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
             order = exchange.create_order(symbol, 'limit', side, qty, exact_price, params)
             return order
 
-        # СЦЕНАРИЙ 3: Тотальная Рыночная Капитуляция Позиции (ВСТРОЕННЫЙ МЕТОД CCXT V19.0)
+        # СЦЕНАРИЙ 3: Тотальная Двухсторонняя Капитуляция Позиции (ФИКС ШОРТOВ V19.3)
         else:
             if is_exit:
-                # Встроенный эталонный метод CCXT для MEXC — схлопывает 100% открытого объема
-                # Ему плевать на контракты и монеты, он бьет по рынку на стороне сервера биржи!
                 try:
-                    order = exchange.close_position(symbol)
+                    # Для MEXC метод close_position требует передачи параметров стороны закрытия в params!
+                    # side должен быть 'buy' для закрытия шорта, и 'sell' для закрытия лонга
+                    order = exchange.close_position(symbol, params={'side': side.lower()})
                     return order
                 except Exception as close_err:
-                    # Резервный контур: если close_position не поддерживается, бьем обычным маркетом
+                    # Резервный контур аварийного закрытия прямым маркетом, если close_position дал осечку
                     order = exchange.create_order(symbol, 'market', side, qty, None, params)
                     return order
             else:
-                # Обычный рыночный вход при налитии капкана
+                # Обычный маркет-вход при налитии капкана
                 order = exchange.create_order(symbol, 'market', side, qty, None, params)
                 return order
 
@@ -308,62 +307,6 @@ async def monitor_logic(exchange):
         # --- ЖЕСТКИЙ ФИКС ОБЪЯВЛЕНИЯ ПЕРЕМЕННОЙ V17.1.1 ---
         now_time = time.time()
 
-        # --- [ВРЕЗКА V17.1: ЖИВОЙ ФОНОВЫЙ ТРЕКЕР УСЫНОВЛЕНИЯ ПОЗИЦИЙ MEXC] ---
-        if now_time - last_pos_sync >= 5: # Опрашиваем биржу раз в 5 секунд прямо во время торгов!
-            try:
-                raw_positions = exchange.fetch_positions(None, {'type': 'swap'})
-                current_mexc_active = []
-
-                for p in raw_positions:
-                    vol = abs(float(p.get('contracts', p.get('positionAmt', 0.0))))
-                    if vol > 0.00001:
-                        raw_sym = p.get('symbol', p.get('pair', ''))
-                        clean_sym = raw_sym.replace('_', '/').replace(':USDT', '')
-                        if '/' not in clean_sym and 'USDT' in clean_sym:
-                            clean_sym = clean_sym.replace('USDT', '/USDT')
-                        fleet_key = f"{clean_sym}:USDT"
-
-                        if fleet_key in PRIORITY_LIST or clean_sym in PRIORITY_LIST:
-                            target_key = fleet_key if fleet_key in PRIORITY_LIST else clean_sym
-                            current_mexc_active.append(target_key)
-
-                            # Если позиция открылась на бирже, а в памяти её нет — мгновенно усыновляем!
-                            if target_key not in memory.active_pos:
-              #                  side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
-              #                  side = 'buy' if 'long' in side_raw or 'buy' in side_raw else 'sell'
-                                # Жестко переводим ответ биржи в нижний регистр перед любой проверкой!
-                                side_raw = str(p.get('side', p.get('positionSide', 'long'))).lower()
-                                side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
-
-                                entry_price = float(p.get('entryPrice', p.get('price', 0.0)))
-
-                                log(f"🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена открытая сделка по {target_key} ({vol} лотов). Берем под контроль выходов!")
-                                memory.active_pos[target_key] = {
-                                    'side': side, 'vol': vol, 'price': entry_price, 'entry_time': time.time(),
-                                    'dna': {'l_off': ENTRY_ORDER_OFFSET, 's_off': ENTRY_ORDER_OFFSET}
-                                }
-                                memory.slots_occupied = len(current_mexc_active)
-
-                #
-                # --- ШТУЧНЫЙ ФИКС V19.1: ПРЕДOХРАНИТЕЛЬ МИКРO-ЛOТОВ ОТ ЛOЖНOГO УДАЛЕНИЯ ---
-                for sym in list(memory.active_pos.keys()):
-                    # Удаляем только если монеты РЕАЛЬНО нет в ответе биржиcurrent_mexc_active
-                    if sym not in current_mexc_active and len(current_mexc_active) > 0:
-                        log(f"🧹 Позиция {sym} закрыта на MEXC. Вычищаем оперативную память.")
-                        if sym in memory.active_pos: del memory.active_pos[sym]
-                        if sym in memory.tp1_fixed: del memory.tp1_fixed[sym]
-                        if sym in memory.tp2_fixed: del memory.tp2_fixed[sym]
-                        if sym in memory.stop_placed: del memory.stop_placed[sym]
-                        if sym in memory.max_pnl_observed: del memory.max_pnl_observed[sym]
-
-                memory.slots_occupied = len(current_mexc_active)
-                last_pos_sync = now_time
-            except:
-                pass
-        # ---------------------------------------------------------------------
-
-
-
         for symbol, pos in list(memory.active_pos.items()):
             try:
                 cur_p = memory.prices.get(symbol, 0.0)
@@ -524,8 +467,10 @@ async def monitor_logic(exchange):
                     if symbol in memory.max_pnl_observed: del memory.max_pnl_observed[symbol]
                     memory.slots_occupied = max(0, memory.slots_occupied - 1)
                     if action_triggered_tp3: return
-
-            except Exception as loop_err: pass
+                # Разгрузка процессора
+                await asyncio.sleep(0.5)
+            except Exception as e:
+                await asyncio.sleep(1)
         await asyncio.sleep(0.1)
 
 async def main_logic():
@@ -596,7 +541,7 @@ async def main_logic():
                     if btc_price > 0:
                         memory.btc_history.append(btc_price)
                         if len(memory.btc_history) > 30: memory.btc_history.pop(0)
-                        log(f"🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC @ ${btc_price} | История: {le n(memory.btc_history)}м")
+#                        log(f"🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC @ ${btc_price} | История: {l en(memory.btc_history)}м")
                         memory.last_btc_push = now
                 except Exception as btc_err:
                     log(f"⚠️ Ошибка REST-запроса Поводыря: {btc_err}")
