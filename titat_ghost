@@ -174,10 +174,13 @@ class TitanGhost:
                         self.memory['prices'][target_key] = last_price
                         self.memory['prices'][clean_sym] = last_price
 
+                        # --- [ФИКС V26.4: ПРЕДОХРАНИТЕЛЬ ОТ ТИПОВОГО СДВИГА КОРТЕЖЕЙ] ---
                         if target_key not in self.memory['vol_history']:
                             self.memory['vol_history'][target_key] = []
-                        self.memory['vol_history'][target_key].append((last_price, q_vol))
-                        self.memory['vol_history'][target_key] = self.memory['vol_history'][target_key][-65:]
+
+                        # Жестко пишем список списков, чтобы при вычитании индексы не ломались
+                        self.memory['vol_history'][target_key].append([last_price, q_vol])
+                        self.memory['vol_history'][target_key] = self.memory['vol_history'][target_key][-100:]
 
                 # ТОЧНЫЙ ТАЙМИНГ РАЗГРУЗКИ: Даем 3 секунды тишины для update_context
                 await asyncio.sleep(0.5)
@@ -223,7 +226,7 @@ class TitanGhost:
             # 6. Отправка лимитного ордера-капкана на BingX
             order = await self.exchange.create_order(clean_sym, 'limit', side, qty, exact_price)
             if order:
-                self.log(f"🕸️ ЛИМИТНЫЙ КАПКАН В ЫСТАВЛЕН: {clean_sym} {side.upper()} по {exact_price}")
+                self.log(f"🕸️ ЛИМИТНЫЙ КАПКАН ВЫСТАВЛЕН: {clean_sym} {side.upper()} по {exact_price }")
                 self.memory['active_pos'][sym] = {
                     'side': side, 'vol': qty, 'price': exact_price, 'entry_time': time.time(),
                     'dna': dna, 'status': 'pending'
@@ -263,13 +266,20 @@ class TitanGhost:
                     #df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
                     # УБИРАЕМ СКРЫТЫЙ ЛАГ ПАМЯТИ: запрашиваем свечи первыми
 #======
+                    # --- [ФИКС V26.4: ЗАЩИТА СКАHЕРА ОТ INDEXERROR НА BINGX] ---
                     ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
-                    if not ohlcv or len(ohlcv) < 25: continue
+                    if not ohlcv or len(ohlcv) < 25:
+                        continue
 
                     df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
 
-                    # ИСТИННАЯ ЖИВАЯ ЦЕНА С ПЕРВОЙ ЛИНИИ СТAКАНА БИРЖИ (Close текущей минутки)
+                    # Жесткая проверка: если биржа отдала пустой DataFrame, безопасно уходим на следующий круг
+                    if df.empty or len(df) < 20:
+                        continue
+
+                    # Извлечение живой цены теперь на 100% защищено от падений
                     cur_p = float(df['c'].iloc[-1])
+#====
                     if cur_p <= 0: continue
 
                     # Записываем её в общую память для мониторинга выходов
