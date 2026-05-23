@@ -92,10 +92,22 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
         if is_exit or is_stop:
             params['reduceOnly'] = True
 
-        # СЦЕНАРИЙ 1: Жесткий серверный СТОП-МАРКЕТ
+        # СЦЕНАРИЙ 1: Жесткий серверный СТОП-МАРКЕТ (КАНОНИЧЕСКИЙ МЕТОД CCXT V19.0)
         if is_stop:
             if price is None: return False
-            params['stopPrice'] = float(exchange.price_to_precision(symbol, price))
+            exact_trigger_price = float(exchange.price_to_precision(symbol, price))
+
+            # Для фьючерсов MEXC в CCXT триггерные стопы отправляются как тип 'market'
+            # с передачей цены в params по правилам универсальной интеграции
+            params.update({
+                'stopPrice': exact_trigger_price,  # Канонический триггер CCXT
+                'triggerPrice': exact_trigger_price, # Дублируем для жесткой совместимости
+                'triggerType': 1,   # 1 = Активация по Last Price
+                'openType': 1,      # 1 = Изолированная маржа
+                'reduceOnly': True
+            })
+
+            # Базовый метод create_order гарантированно существует и не выдаст AttributeError!
             order = exchange.create_order(symbol, 'market', side, qty, None, params)
             return order
 
@@ -106,10 +118,22 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
             order = exchange.create_order(symbol, 'limit', side, qty, exact_price, params)
             return order
 
-        # СЦЕНАРИЙ 3: Агрессивный Taker (Выход / Тейк)
+        # СЦЕНАРИЙ 3: Тотальная Рыночная Капитуляция Позиции (ВСТРОЕННЫЙ МЕТОД CCXT V19.0)
         else:
-            order = exchange.create_order(symbol, 'market', side, qty, None, params)
-            return order
+            if is_exit:
+                # Встроенный эталонный метод CCXT для MEXC — схлопывает 100% открытого объема
+                # Ему плевать на контракты и монеты, он бьет по рынку на стороне сервера биржи!
+                try:
+                    order = exchange.close_position(symbol)
+                    return order
+                except Exception as close_err:
+                    # Резервный контур: если close_position не поддерживается, бьем обычным маркетом
+                    order = exchange.create_order(symbol, 'market', side, qty, None, params)
+                    return order
+            else:
+                # Обычный рыночный вход при налитии капкана
+                order = exchange.create_order(symbol, 'market', side, qty, None, params)
+                return order
 
     except Exception as e:
         log(f"⚠️ Сбой шлюза ордеров {symbol} ({side.upper()}): {e}")
@@ -305,8 +329,12 @@ async def monitor_logic(exchange):
 
                             # Если позиция открылась на бирже, а в памяти её нет — мгновенно усыновляем!
                             if target_key not in memory.active_pos:
-                                side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
-                                side = 'buy' if 'long' in side_raw or 'buy' in side_raw else 'sell'
+              #                  side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
+              #                  side = 'buy' if 'long' in side_raw or 'buy' in side_raw else 'sell'
+                                # Жестко переводим ответ биржи в нижний регистр перед любой проверкой!
+                                side_raw = str(p.get('side', p.get('positionSide', 'long'))).lower()
+                                side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
+
                                 entry_price = float(p.get('entryPrice', p.get('price', 0.0)))
 
                                 log(f"🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена открытая сделка по {target_key} ({vol} лотов). Берем под контроль выходов!")
@@ -316,9 +344,11 @@ async def monitor_logic(exchange):
                                 }
                                 memory.slots_occupied = len(current_mexc_active)
 
-                # Очищаем системные флаги из памяти для закрытых на бирже позиций
+                #
+                # --- ШТУЧНЫЙ ФИКС V19.1: ПРЕДOХРАНИТЕЛЬ МИКРO-ЛOТОВ ОТ ЛOЖНOГO УДАЛЕНИЯ ---
                 for sym in list(memory.active_pos.keys()):
-                    if sym not in current_mexc_active:
+                    # Удаляем только если монеты РЕАЛЬНО нет в ответе биржиcurrent_mexc_active
+                    if sym not in current_mexc_active and len(current_mexc_active) > 0:
                         log(f"🧹 Позиция {sym} закрыта на MEXC. Вычищаем оперативную память.")
                         if sym in memory.active_pos: del memory.active_pos[sym]
                         if sym in memory.tp1_fixed: del memory.tp1_fixed[sym]
@@ -340,7 +370,11 @@ async def monitor_logic(exchange):
                 if cur_p <= 0: continue
 
                 # Расчет чистого PNL и времени жизни позиции
-                profit = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
+               # profit = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
+
+                # ШТУЧНЫЙ ФИКС V18.3: Принудительный нижний регистр для точного расчета PNL лонга/шорта
+                profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
+
                 age = time.time() - pos['entry_time']
                 exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
                 mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
@@ -349,7 +383,11 @@ async def monitor_logic(exchange):
                 if not memory.stop_placed.get(symbol):
                     try:
                         sl_price = pos['price'] * (1 - PRIMARY_SL_PCT) if pos['side'] == 'buy' else pos['price'] * (1 + PRIMARY_SL_PCT)
+#                        sl_price_precision = float(exchange.price_to_precision(symbol, sl_price))
                         sl_price_precision = float(exchange.price_to_precision(symbol, sl_price))
+                        # Фикс шага цены под жесткие фьючерсные лоты MEXC
+                        if sl_price_precision <= 0: sl_price_precision = round(sl_price, 4)
+
                         exact_vol = exchange.amount_to_precision(symbol, pos['vol'])
 
                         try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
@@ -357,7 +395,7 @@ async def monitor_logic(exchange):
 
                         smart_order(exchange, symbol, exit_side, exact_vol, price=sl_price_precision, is_stop=True)
                         memory.stop_placed[symbol] = sl_price_precision
-                        log(f"🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: {symbol} @  {sl_price_precision}")
+                        log(f"🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: {symbol} @ {sl_price_precision}")
                     except Exception as e:
                         log(f"🆘 Ошибка автостопа MEXC для {symbol}: {e}")
                         memory.stop_placed[symbol] = pos['price']
@@ -558,7 +596,7 @@ async def main_logic():
                     if btc_price > 0:
                         memory.btc_history.append(btc_price)
                         if len(memory.btc_history) > 30: memory.btc_history.pop(0)
-                        log(f"🛰️ ПОВОДЫРЬ СИНХРОНИЗ ИРОВАН (REST): BTC @ ${btc_price} | История: {len(memory.btc_history)}м")
+                        log(f"🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC @ ${btc_price} | История: {le n(memory.btc_history)}м")
                         memory.last_btc_push = now
                 except Exception as btc_err:
                     log(f"⚠️ Ошибка REST-запроса Поводыря: {btc_err}")
@@ -613,15 +651,27 @@ async def main_logic():
                         del memory.limit_orders[symbol]
                         continue
                 except: pass
-
+#========
                 if now - order_data['time'] > LIMIT_ORDER_TTL:
                     log(f"🧹 ВЕНИК ЛИМИТОК: Капкан по {symbol} утилизирован по времени TTL ({LIMIT_O RDER_TTL}с).")
                     try:
-                        mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
-                        await exchange.fapiPrivateCancelOrder({'symbol': mexc_market_id, 'orderId': order_data['id']})
-                    except: pass
-                    if symbol in memory.limit_orders: del memory.limit_orders[symbol]
-
+                        exchange.cancel_order(order_data['id'], symbol)
+                        if symbol in memory.limit_orders: del memory.limit_orders[symbol]
+                    except Exception as cancel_err:
+                        # --- ЖЕСТКИЙ ФИКС V18.6: ПЕРЕХВАТ ОРДЕРOВ-ПРИЗРАКОВ ПРИ СКВИЗАХ ---
+                        err_msg = str(cancel_err).lower()
+                        if "cannot be cancelled" in err_msg or "filled" in err_msg:
+                            log(f"🔥 ПЕРЕХВАТ СКВИЗА: Ордер по {symbol} успел исполниться в долю секунды отмены! Усыновляем позицию.")
+                            if symbol not in memory.active_pos:
+                                memory.active_pos[symbol] = {
+                                    'side': order_data['side'],
+                                    'vol': order_data['qty'],
+                                    'price': order_data['price'],
+                                    'entry_time': time.time(),
+                                    'dna': order_data['dna']
+                                }
+                        if symbol in memory.limit_orders: del memory.limit_orders[symbol]
+#-----------
         except Exception as main_err:
             await asyncio.sleep(1)
         await asyncio.sleep(0.5)
