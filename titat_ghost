@@ -173,17 +173,17 @@ class TitanGhost:
 
                         self.memory['prices'][target_key] = last_price
                         self.memory['prices'][clean_sym] = last_price
-
-                        # --- [ФИКС V26.4: ПРЕДОХРАНИТЕЛЬ ОТ ТИПОВОГО СДВИГА КОРТЕЖЕЙ] ---
+#=====
+                        # --- [ФИКС V26.6: ВЫНОС ЗАДЕРЖКИ ИЗ ЦИКЛА FOR ДЛЯ СКОРОСТИ BINGX] ---
                         if target_key not in self.memory['vol_history']:
                             self.memory['vol_history'][target_key] = []
 
-                        # Жестко пишем список списков, чтобы при вычитании индексы не ломались
                         self.memory['vol_history'][target_key].append([last_price, q_vol])
                         self.memory['vol_history'][target_key] = self.memory['vol_history'][target_key][-100:]
 
-                # ТОЧНЫЙ ТАЙМИНГ РАЗГРУЗКИ: Даем 3 секунды тишины для update_context
+                # ПАУЗА ВЫНЕСЕНА СТРОГО СЮДА (В САМЫЙ КОНЕЦ ЦИКЛА WHILE, ПОСЛЕ ОБХОДА ВСЕХ 12 МОНЕТ):
                 await asyncio.sleep(0.5)
+
             except Exception as e:
                 await asyncio.sleep(3)
 
@@ -278,21 +278,50 @@ class TitanGhost:
                         continue
 
                     # Извлечение живой цены теперь на 100% защищено от падений
-                    cur_p = float(df['c'].iloc[-1])
+#                    cur_p = float(df['c'].iloc[-1])
 #====
-                    if cur_p <= 0: continue
+#                    if cur_p <= 0: continue
+
+                    # Записываем её в общую память для мониторинга выходов
+#                    self.memory['prices'][sym] = cur_p
+                    # Извлечение живой цены теперь на 100% защищено от падений
+                    cur_p = float(df['c'].iloc[-1])
+                    if cur_p <= 0:
+                        continue
 
                     # Записываем её в общую память для мониторинга выходов
                     self.memory['prices'][sym] = cur_p
+
+                    # --- [ВРЕЗКА V26.7: ТОТАЛЬНЫЙ ОНЛАЙН-ДЕБАГ НА ВХОДЕ В ЦИКЛ] ---
+                    # Лог выводится раз в 30 секунд для каждой монеты, чтобы видеть пульс сканера
+                    if now % 30 < 0.5:
+                        self.log(f"🔍 [ПУЛЬС GHOST]: Сканирую сектор {sym} | Живая цена: {cur_p}")
+
+                    # --- [ЖЕСТКИЙ ФИКС V26.7: БЕЗОПАСНЫЙ РАСЧЕТ ИНДИКАТOРОВ LAG-1] ---
+                    df['ma'] = df['c'].rolling(20).mean()
+                    df['std'] = df['c'].rolling(20).std()
+
+                    # Вместо shift(1) мы просто берем индекс [-2] — это ПРЕДЫДУЩАЯ ЗАКРЫТАЯ свеча!
+                    # Это на 100% исключает появление NaN и защищает код от скрытых continue
+                    ma_prev = df['ma'].iloc[-2]
+                    std_prev = df['std'].iloc[-2]
+
+                    # Проверка на NaN предохранитель
+                    if pd.isna(ma_prev) or pd.isna(std_prev) or std_prev <= 0:
+                        continue
+
+
+
+
 #=======
                     # --- [ЖЕСТКИЙ ФИКС V26.5: ИСТИННЫЙ LAG-1 СДВИГ БOЛЛИНДЖЕРА] ---
                     # Рассчитываем скользящие средние строго по закрытым минутам через .shift(1)
-                    df['ma'] = df['c'].rolling(20).mean().shift(1)
-                    df['std'] = df['c'].rolling(20).std().shift(1)
+#                    df['ma'] = df['c'].rolling(20).mean().shift(1)
+#                    df['std'] = df['c'].rolling(20).std().shift(1)
 
                     # Извлекаем значения по индексу [-1] (теперь там лежат данные закрытой свечи)
-                    ma_prev = df['ma'].iloc[-1]
-                    std_prev = df['std'].iloc[-1]
+#                    ma_prev = df['ma'].iloc[-1]
+#                    std_prev = df['std'].iloc[-1]
 
                     p_up = ma_prev + (2.1 * std_prev)
                     p_dn = ma_prev - (2.1 * std_prev)
