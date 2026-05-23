@@ -285,14 +285,18 @@ class TitanGhost:
                     # Записываем её в общую память для мониторинга выходов
                     self.memory['prices'][sym] = cur_p
 #=======
-                    # Расчет полос Боллинджера (Lag-1)
-                    df['ma'] = df['c'].rolling(20).mean()
-                    df['std'] = df['c'].rolling(20).std()
-                    ma_prev = df['ma'].iloc[-2]
-                    std_prev = df['std'].iloc[-2]
+                    # --- [ЖЕСТКИЙ ФИКС V26.5: ИСТИННЫЙ LAG-1 СДВИГ БOЛЛИНДЖЕРА] ---
+                    # Рассчитываем скользящие средние строго по закрытым минутам через .shift(1)
+                    df['ma'] = df['c'].rolling(20).mean().shift(1)
+                    df['std'] = df['c'].rolling(20).std().shift(1)
+
+                    # Извлекаем значения по индексу [-1] (теперь там лежат данные закрытой свечи)
+                    ma_prev = df['ma'].iloc[-1]
+                    std_prev = df['std'].iloc[-1]
 
                     p_up = ma_prev + (2.1 * std_prev)
                     p_dn = ma_prev - (2.1 * std_prev)
+
                     p_w = p_up - p_dn
 
                     strike_up = p_up - (p_w * dna['ghost_p'])
@@ -341,7 +345,7 @@ class TitanGhost:
 #===== БЛОК ЛОГОВ, если не надо удаляем и мнимаем  комменты для двух строк выше
                     is_long = False
                     is_short = False
-
+                    self.log(f"🔍 [Проверка хит ап {hit_up}]).")
                     # Сценарий А: Есть пробой или касание ВЕРХНЕЙ границы Боллинджера
                     if hit_up:
                         if not (cur_p > open_now):
