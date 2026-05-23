@@ -1,293 +1,61 @@
-May 23 12:01:46 vm-v2-mini python3[3045674]: [12:01:46] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): APT/USDT:USDT BUY @ 0.9066197417469685
-May 23 12:02:16 vm-v2-mini python3[3045674]: [12:02:16] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74731.2 | История: 30м
-May 23 12:02:27 vm-v2-mini python3[3045674]: [12:02:27] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): SOL/USDT:USDT BUY @ 82.03338013957723
-May 23 12:02:28 vm-v2-mini python3[3045674]: [12:02:28] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT BUY @ 0.3304260320295912
-May 23 12:02:59 vm-v2-mini python3[3045674]: [12:02:59] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT BUY @ 0.12155275631623158
-May 23 12:03:07 vm-v2-mini python3[3045674]: [12:03:07] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 12:03:19 vm-v2-mini python3[3045674]: [12:03:19] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74723.2 | История: 30м
-May 23 12:03:47 vm-v2-mini python3[3045674]: [12:03:47] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 12:03:49 vm-v2-mini python3[3045674]: [12:03:49] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (BUY ): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 12:03:53 vm-v2-mini python3[3045674]: [12:03:53] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 12:04:23 vm-v2-mini python3[3045674]: [12:04:23] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
-May 23 12:04:24 vm-v2-mini python3[3045674]: [12:04:24] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74730.7 | История: 30м
-May 23 12:05:25 vm-v2-mini python3[3045674]: [12:05:25] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74743.2 | История: 30м
-May 23 12:06:25 vm-v2-mini python3[3045674]: [12:06:25] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74731.0 | История: 30м
-May 23 12:07:26 vm-v2-mini python3[3045674]: [12:07:26] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74726.9 | История: 30м
-May 23 12:08:26 vm-v2-mini python3[3045674]: [12:08:26] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74729.7 | История: 30м
-May 23 12:09:26 vm-v2-mini python3[3045674]: [12:09:26] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74729.8 | История: 30м
-May 23 12:10:26 vm-v2-mini python3[3045674]: [12:10:26] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74726.9 | История: 30м
-May 23 12:11:27 vm-v2-mini python3[3045674]: [12:11:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74719.2 | История: 30м
-May 23 12:12:27 vm-v2-mini python3[3045674]: [12:12:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74699.3 | История: 30м
-May 23 12:13:27 vm-v2-mini python3[3045674]: [12:13:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74698.6 | История: 30м
-May 23 12:14:27 vm-v2-mini python3[3045674]: [12:14:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74670.3 | История: 30м
-May 23 12:15:27 vm-v2-mini python3[3045674]: [12:15:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74691.7 | История: 30м
-May 23 12:16:29 vm-v2-mini python3[3045674]: [12:16:29] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74707.8 | История: 30м
-May 23 12:17:30 vm-v2-mini python3[3045674]: [12:17:30] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74723.7 | История: 30м
-May 23 12:18:31 vm-v2-mini python3[3045674]: [12:18:31] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74714.5 | История: 30м
-May 23 12:19:31 vm-v2-mini python3[3045674]: [12:19:31] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74702.5 | История: 30м
-May 23 12:20:31 vm-v2-mini python3[3045674]: [12:20:31] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74670.9 | История: 30м
-May 23 12:21:33 vm-v2-mini python3[3045674]: [12:21:33] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74665.0 | История: 30м
-May 23 12:21:55 vm-v2-mini python3[3045674]: [12:21:55] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): SOL/USDT:USDT BUY @ 81.96322755137464
-May 23 12:22:34 vm-v2-mini python3[3045674]: [12:22:34] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74639.5 | История: 30м
-May 23 12:23:10 vm-v2-mini python3[3045674]: [12:23:10] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 12:23:35 vm-v2-mini python3[3045674]: [12:23:35] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74634.2 | История: 30м
-May 23 12:24:35 vm-v2-mini python3[3045674]: [12:24:35] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74647.9 | История: 30м
-May 23 12:25:36 vm-v2-mini python3[3045674]: [12:25:36] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74670.4 | История: 30м
-May 23 12:26:36 vm-v2-mini python3[3045674]: [12:26:36] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74693.0 | История: 30м
-May 23 12:27:42 vm-v2-mini python3[3045674]: [12:27:42] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74680.4 | История: 30м
-May 23 12:28:42 vm-v2-mini python3[3045674]: [12:28:42] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74707.2 | История: 30м
-May 23 12:29:50 vm-v2-mini python3[3045674]: [12:29:50] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74710.2 | История: 30м
-May 23 12:30:51 vm-v2-mini python3[3045674]: [12:30:51] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74719.5 | История: 30м
-May 23 12:31:51 vm-v2-mini python3[3045674]: [12:31:51] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74723.4 | История: 30м
-May 23 12:32:51 vm-v2-mini python3[3045674]: [12:32:51] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74724.1 | История: 30м
-May 23 12:33:51 vm-v2-mini python3[3045674]: [12:33:51] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74719.5 | История: 30м
-May 23 12:34:52 vm-v2-mini python3[3045674]: [12:34:52] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74710.4 | История: 30м
-May 23 12:35:52 vm-v2-mini python3[3045674]: [12:35:52] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74715.2 | История: 30м
-May 23 12:36:52 vm-v2-mini python3[3045674]: [12:36:52] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74724.6 | История: 30м
-May 23 12:37:52 vm-v2-mini python3[3045674]: [12:37:52] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74717.3 | История: 30м
-May 23 12:38:52 vm-v2-mini python3[3045674]: [12:38:52] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74726.4 | История: 30м
-May 23 12:39:53 vm-v2-mini python3[3045674]: [12:39:53] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74737.0 | История: 30м
-May 23 12:40:53 vm-v2-mini python3[3045674]: [12:40:53] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74730.6 | История: 30м
-May 23 12:41:54 vm-v2-mini python3[3045674]: [12:41:54] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74714.6 | История: 30м
-May 23 12:42:54 vm-v2-mini python3[3045674]: [12:42:54] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74703.6 | История: 30м
-May 23 12:43:54 vm-v2-mini python3[3045674]: [12:43:54] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74707.9 | История: 30м
-May 23 12:44:54 vm-v2-mini python3[3045674]: [12:44:54] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74701.5 | История: 30м
-May 23 12:45:55 vm-v2-mini python3[3045674]: [12:45:55] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74709.8 | История: 30м
-May 23 12:46:55 vm-v2-mini python3[3045674]: [12:46:55] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74700.0 | История: 30м
-May 23 12:47:56 vm-v2-mini python3[3045674]: [12:47:56] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74696.0 | История: 30м
-May 23 12:48:56 vm-v2-mini python3[3045674]: [12:48:56] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74695.8 | История: 30м
-May 23 12:49:56 vm-v2-mini python3[3045674]: [12:49:56] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74703.3 | История: 30м
-May 23 12:50:56 vm-v2-mini python3[3045674]: [12:50:56] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74693.5 | История: 30м
-May 23 12:51:57 vm-v2-mini python3[3045674]: [12:51:57] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74697.7 | История: 30м
-May 23 12:52:57 vm-v2-mini python3[3045674]: [12:52:57] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74695.4 | История: 30м
-May 23 12:53:58 vm-v2-mini python3[3045674]: [12:53:58] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74695.4 | История: 30м
-May 23 12:54:58 vm-v2-mini python3[3045674]: [12:54:58] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74702.3 | История: 30м
-May 23 12:55:59 vm-v2-mini python3[3045674]: [12:55:59] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74715.9 | История: 30м
-May 23 12:56:59 vm-v2-mini python3[3045674]: [12:56:59] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74716.7 | История: 30м
-May 23 12:57:59 vm-v2-mini python3[3045674]: [12:57:59] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74710.0 | История: 30м
-May 23 12:58:59 vm-v2-mini python3[3045674]: [12:58:59] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74688.1 | История: 30м
-May 23 13:00:00 vm-v2-mini python3[3045674]: [13:00:00] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74725.9 | История: 30м
-May 23 13:01:00 vm-v2-mini python3[3045674]: [13:01:00] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74845.0 | История: 30м
-May 23 13:01:10 vm-v2-mini python3[3045674]: [13:01:10] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT SELL @ 0.33465536790993905
-May 23 13:01:32 vm-v2-mini python3[3045674]: [13:01:32] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":26.749956270804,"available":5.1919458430900000000000000000000027697}}
-May 23 13:01:38 vm-v2-mini python3[3045674]: [13:01:38] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":26.749956270804,"available":5.1919458430900000000000000000000027697}}
-May 23 13:01:43 vm-v2-mini python3[3045674]: [13:01:43] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":26.749956270804,"available":5.1919458430900000000000000000000027697}}
-May 23 13:01:49 vm-v2-mini python3[3045674]: [13:01:49] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":26.752977840472,"available":5.1919458430900000000000000000000027697}}
-May 23 13:01:54 vm-v2-mini python3[3045674]: [13:01:54] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":26.749956270804,"available":5.1919458430900000000000000000000027697}}
-May 23 13:02:00 vm-v2-mini python3[3045674]: [13:02:00] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":26.749956270804,"available":5.1919458430900000000000000000000027697}}
-May 23 13:02:02 vm-v2-mini python3[3045674]: [13:02:02] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74863.2 | История: 30м
-May 23 13:02:35 vm-v2-mini python3[3045674]: [13:02:35] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 13:03:03 vm-v2-mini python3[3045674]: [13:03:03] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74849.4 | История: 30м
-May 23 13:04:03 vm-v2-mini python3[3045674]: [13:04:03] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74910.1 | История: 30м
-May 23 13:04:08 vm-v2-mini python3[3045674]: [13:04:08] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): MANA/USDT:USDT SELL @ 0.08412760598035565
-May 23 13:04:38 vm-v2-mini python3[3045674]: [13:04:38] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:04:43 vm-v2-mini python3[3045674]: [13:04:43] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:04:47 vm-v2-mini python3[3045674]: [13:04:47] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":27.145691209,"available":5.2689829443700000000000000000000027697}}
-May 23 13:04:49 vm-v2-mini python3[3045674]: [13:04:49] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:04:54 vm-v2-mini python3[3045674]: [13:04:54] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":27.145691209,"available":5.2689829443700000000000000000000027697}}
-May 23 13:04:56 vm-v2-mini python3[3045674]: [13:04:56] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:05:01 vm-v2-mini python3[3045674]: [13:05:01] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":27.145691209,"available":5.2689829443700000000000000000000027697}}
-May 23 13:05:09 vm-v2-mini python3[3045674]: [13:05:09] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74887.7 | История: 30м
-May 23 13:05:32 vm-v2-mini python3[3045674]: [13:05:32] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по MANA/USDT:US  DT утилизирован по времени TTL (75с).
-May 23 13:05:33 vm-v2-mini python3[3045674]: [13:05:33] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по MANA/USDT:U SDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 13:06:11 vm-v2-mini python3[3045674]: [13:06:11] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74888.1 | История: 30м
-May 23 13:07:12 vm-v2-mini python3[3045674]: [13:07:12] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74950.7 | История: 30м
-May 23 13:07:28 vm-v2-mini python3[3045674]: [13:07:28] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT SELL @ 0.1233324620024321
-May 23 13:08:14 vm-v2-mini python3[3045674]: [13:08:14] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74949.0 | История: 30м
-May 23 13:08:48 vm-v2-mini python3[3045674]: [13:08:48] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
-May 23 13:09:19 vm-v2-mini python3[3045674]: [13:09:19] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74937.3 | История: 30м
-May 23 13:10:19 vm-v2-mini python3[3045674]: [13:10:19] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74919.0 | История: 30м
-May 23 13:11:20 vm-v2-mini python3[3045674]: [13:11:20] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74901.9 | История: 30м
-May 23 13:12:20 vm-v2-mini python3[3045674]: [13:12:20] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74905.0 | История: 30м
-May 23 13:13:21 vm-v2-mini python3[3045674]: [13:13:21] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74901.8 | История: 30м
-May 23 13:14:21 vm-v2-mini python3[3045674]: [13:14:21] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74897.9 | История: 30м
-May 23 13:15:22 vm-v2-mini python3[3045674]: [13:15:22] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74964.6 | История: 30м
-May 23 13:15:41 vm-v2-mini python3[3045674]: [13:15:41] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:15:47 vm-v2-mini python3[3045674]: [13:15:47] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:15:54 vm-v2-mini python3[3045674]: [13:15:54] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:16:00 vm-v2-mini python3[3045674]: [13:16:00] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:16:03 vm-v2-mini python3[3045674]: [13:16:03] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): APT/USDT:USDT SELL @ 0.9279611056549817
-May 23 13:16:09 vm-v2-mini python3[3045674]: [13:16:09] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT SELL @ 0.33689211408935993
-May 23 13:16:23 vm-v2-mini python3[3045674]: [13:16:23] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74994.7 | История: 30м
-May 23 13:16:48 vm-v2-mini python3[3045674]: [13:16:48] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:17:24 vm-v2-mini python3[3045674]: [13:17:24] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 13:17:26 vm-v2-mini python3[3045674]: [13:17:26] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74965.0 | История: 30м
-May 23 13:17:32 vm-v2-mini python3[3045674]: [13:17:32] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 13:17:32 vm-v2-mini python3[3045674]: [13:17:32] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по LDO/USDT:US DT успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 13:18:27 vm-v2-mini python3[3045674]: [13:18:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74913.7 | История: 30м
-May 23 13:19:27 vm-v2-mini python3[3045674]: [13:19:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74923.4 | История: 30м
-May 23 13:20:29 vm-v2-mini python3[3045674]: [13:20:29] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74922.0 | История: 30м
-May 23 13:21:29 vm-v2-mini python3[3045674]: [13:21:29] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74982.2 | История: 30м
-May 23 13:22:30 vm-v2-mini python3[3045674]: [13:22:30] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74984.1 | История: 30м
-May 23 13:23:34 vm-v2-mini python3[3045674]: [13:23:34] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74970.0 | История: 30м
-May 23 13:24:34 vm-v2-mini python3[3045674]: [13:24:34] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74961.3 | История: 30м
-May 23 13:25:34 vm-v2-mini python3[3045674]: [13:25:34] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74960.3 | История: 30м
-May 23 13:26:34 vm-v2-mini python3[3045674]: [13:26:34] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74953.5 | История: 30м
-May 23 13:27:34 vm-v2-mini python3[3045674]: [13:27:34] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74960.9 | История: 30м
-May 23 13:28:34 vm-v2-mini python3[3045674]: [13:28:34] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74949.9 | История: 30м
-May 23 13:29:35 vm-v2-mini python3[3045674]: [13:29:35] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74960.9 | История: 30м
-May 23 13:30:35 vm-v2-mini python3[3045674]: [13:30:35] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75000.0 | История: 30м
-May 23 13:30:39 vm-v2-mini python3[3045674]: [13:30:39] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.086063128696,"available":2.7371807919700000000000000000000027697}}
-May 23 13:30:44 vm-v2-mini python3[3045674]: [13:30:44] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.086063128696,"available":2.7371807919700000000000000000000027697}}
-May 23 13:30:50 vm-v2-mini python3[3045674]: [13:30:50] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.086063128696,"available":2.7371807919700000000000000000000027697}}
-May 23 13:30:58 vm-v2-mini python3[3045674]: [13:30:58] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.086063128696,"available":2.7371807919700000000000000000000027697}}
-May 23 13:31:04 vm-v2-mini python3[3045674]: [13:31:04] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.086063128696,"available":2.7371807919700000000000000000000027697}}
-May 23 13:31:10 vm-v2-mini python3[3045674]: [13:31:10] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.086063128696,"available":2.7371807919700000000000000000000027697}}
-May 23 13:31:38 vm-v2-mini python3[3045674]: [13:31:38] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74956.7 | История: 30м
-May 23 13:32:41 vm-v2-mini python3[3045674]: [13:32:41] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74938.3 | История: 30м
-May 23 13:33:45 vm-v2-mini python3[3045674]: [13:33:45] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74925.8 | История: 30м
-May 23 13:34:45 vm-v2-mini python3[3045674]: [13:34:45] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74927.8 | История: 30м
-May 23 13:35:46 vm-v2-mini python3[3045674]: [13:35:46] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74878.4 | История: 30м
-May 23 13:35:50 vm-v2-mini python3[3045674]: [13:35:50] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (BUY ): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.09500616,"available":2.7371807919700000000000000000000027697}}
-May 23 13:35:56 vm-v2-mini python3[3045674]: [13:35:56] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (BUY ): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.09500616,"available":2.7371807919700000000000000000000027697}}
-May 23 13:35:58 vm-v2-mini python3[3045674]: [13:35:58] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (BUY ): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:36:01 vm-v2-mini python3[3045674]: [13:36:01] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (BUY ): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.09500616,"available":2.7371807919700000000000000000000027697}}
-May 23 13:36:08 vm-v2-mini python3[3045674]: [13:36:08] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (BUY ): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.09500616,"available":2.7371807919700000000000000000000027697}}
-May 23 13:36:14 vm-v2-mini python3[3045674]: [13:36:14] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (BUY ): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.09500616,"available":2.7371807919700000000000000000000027697}}
-May 23 13:36:50 vm-v2-mini python3[3045674]: [13:36:50] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74876.8 | История: 30м
-May 23 13:37:55 vm-v2-mini python3[3045674]: [13:37:55] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74900.0 | История: 30м
-May 23 13:38:55 vm-v2-mini python3[3045674]: [13:38:55] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74929.9 | История: 30м
-May 23 13:40:00 vm-v2-mini python3[3045674]: [13:40:00] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74900.4 | История: 30м
-May 23 13:41:00 vm-v2-mini python3[3045674]: [13:41:00] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74864.7 | История: 30м
-May 23 13:42:05 vm-v2-mini python3[3045674]: [13:42:05] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74881.4 | История: 30м
-May 23 13:43:10 vm-v2-mini python3[3045674]: [13:43:10] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74903.8 | История: 30м
-May 23 13:44:14 vm-v2-mini python3[3045674]: [13:44:14] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74908.6 | История: 30м
-May 23 13:45:15 vm-v2-mini python3[3045674]: [13:45:15] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74908.6 | История: 30м
-May 23 13:46:15 vm-v2-mini python3[3045674]: [13:46:15] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74948.0 | История: 30м
-May 23 13:47:19 vm-v2-mini python3[3045674]: [13:47:19] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74970.6 | История: 30м
-May 23 13:48:20 vm-v2-mini python3[3045674]: [13:48:20] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $74993.0 | История: 30м
-May 23 13:49:07 vm-v2-mini python3[3045674]: [13:49:07] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): 1INCH/USDT:USDT SELL @ 0.08945184450955376
-May 23 13:49:22 vm-v2-mini python3[3045674]: [13:49:22] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75084.0 | История: 30м
-May 23 13:49:36 vm-v2-mini python3[3045674]: [13:49:36] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:49:40 vm-v2-mini python3[3045674]: [13:49:40] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:49:44 vm-v2-mini python3[3045674]: [13:49:44] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:49:47 vm-v2-mini python3[3045674]: [13:49:47] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.81464953936,"available":1.3278432015300000000000000000000027697}}
-May 23 13:49:48 vm-v2-mini python3[3045674]: [13:49:48] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:49:51 vm-v2-mini python3[3045674]: [13:49:51] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 13:49:51 vm-v2-mini python3[3045674]: [13:49:51] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.81464953936,"available":1.3278432015300000000000000000000027697}}
-May 23 13:49:53 vm-v2-mini python3[3045674]: [13:49:53] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:49:55 vm-v2-mini python3[3045674]: [13:49:55] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 13:49:56 vm-v2-mini python3[3045674]: [13:49:56] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.81464953936,"available":1.3278432015300000000000000000000027697}}
-May 23 13:49:58 vm-v2-mini python3[3045674]: [13:49:58] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 13:50:00 vm-v2-mini python3[3045674]: [13:50:00] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 13:50:00 vm-v2-mini python3[3045674]: [13:50:00] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.81464953936,"available":1.3278432015300000000000000000000027697}}
-May 23 13:50:04 vm-v2-mini python3[3045674]: [13:50:04] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 13:50:05 vm-v2-mini python3[3045674]: [13:50:05] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.81464953936,"available":1.3278432015300000000000000000000027697}}
-May 23 13:50:09 vm-v2-mini python3[3045674]: [13:50:09] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 13:50:23 vm-v2-mini python3[3045674]: [13:50:23] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75088.4 | История: 30м
-May 23 13:50:27 vm-v2-mini python3[3045674]: [13:50:27] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по 1INCH/USDT:U  SDT утилизирован по времени TTL (75с).
-May 23 13:51:27 vm-v2-mini python3[3045674]: [13:51:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75079.2 | История: 30м
-May 23 13:52:27 vm-v2-mini python3[3045674]: [13:52:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75056.4 | История: 30м
-May 23 13:53:27 vm-v2-mini python3[3045674]: [13:53:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75051.4 | История: 30м
-May 23 13:54:27 vm-v2-mini python3[3045674]: [13:54:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75201.8 | История: 30м
-May 23 13:55:31 vm-v2-mini python3[3045674]: [13:55:31] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75156.9 | История: 30м
-May 23 13:56:32 vm-v2-mini python3[3045674]: [13:56:32] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75203.2 | История: 30м
-May 23 13:57:37 vm-v2-mini python3[3045674]: [13:57:37] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75185.1 | История: 30м
-May 23 13:58:38 vm-v2-mini python3[3045674]: [13:58:38] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75200.0 | История: 30м
-May 23 13:59:39 vm-v2-mini python3[3045674]: [13:59:39] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75182.8 | История: 30м
-May 23 14:00:39 vm-v2-mini python3[3045674]: [14:00:39] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75161.6 | История: 30м
-May 23 14:01:40 vm-v2-mini python3[3045674]: [14:01:40] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75126.4 | История: 30м
-May 23 14:02:41 vm-v2-mini python3[3045674]: [14:02:41] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75116.2 | История: 30м
-May 23 14:03:46 vm-v2-mini python3[3045674]: [14:03:46] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75100.1 | История: 30м
-May 23 14:04:47 vm-v2-mini python3[3045674]: [14:04:47] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75100.0 | История: 30м
-May 23 14:05:47 vm-v2-mini python3[3045674]: [14:05:47] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75087.1 | История: 30м
-May 23 14:06:47 vm-v2-mini python3[3045674]: [14:06:47] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75100.0 | История: 30м
-May 23 14:07:47 vm-v2-mini python3[3045674]: [14:07:47] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75203.0 | История: 30м
-May 23 14:07:51 vm-v2-mini python3[3045674]: [14:07:51] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.076054436808,"available":2.7371807919700000000000000000000027697}}
-May 23 14:07:56 vm-v2-mini python3[3045674]: [14:07:56] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.076054436808,"available":2.7371807919700000000000000000000027697}}
-May 23 14:08:02 vm-v2-mini python3[3045674]: [14:08:02] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.076054436808,"available":2.7371807919700000000000000000000027697}}
-May 23 14:08:50 vm-v2-mini python3[3045674]: [14:08:50] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75201.0 | История: 30м
-May 23 14:09:51 vm-v2-mini python3[3045674]: [14:09:51] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75176.9 | История: 30м
-May 23 14:10:51 vm-v2-mini python3[3045674]: [14:10:51] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75210.0 | История: 30м
-May 23 14:10:55 vm-v2-mini python3[3045674]: [14:10:55] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.083927831168,"available":2.7371807919700000000000000000000027697}}
-May 23 14:10:59 vm-v2-mini python3[3045674]: [14:10:59] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":14.083927831168,"available":2.7371807919700000000000000000000027697}}
-May 23 14:11:57 vm-v2-mini python3[3045674]: [14:11:57] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75204.9 | История: 30м
-May 23 14:12:58 vm-v2-mini python3[3045674]: [14:12:58] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75195.2 | История: 30м
-May 23 14:13:59 vm-v2-mini python3[3045674]: [14:13:59] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75201.4 | История: 30м
-May 23 14:14:59 vm-v2-mini python3[3045674]: [14:14:59] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75180.7 | История: 30м
-May 23 14:15:59 vm-v2-mini python3[3045674]: [14:15:59] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75164.8 | История: 30м
-May 23 14:17:00 vm-v2-mini python3[3045674]: [14:17:00] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75209.3 | История: 30м
-May 23 14:18:03 vm-v2-mini python3[3045674]: [14:18:03] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75192.4 | История: 30м
-May 23 14:19:06 vm-v2-mini python3[3045674]: [14:19:06] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75197.1 | История: 30м
-May 23 14:20:06 vm-v2-mini python3[3045674]: [14:20:06] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75202.4 | История: 30м
-May 23 14:21:06 vm-v2-mini python3[3045674]: [14:21:06] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75211.7 | История: 30м
-May 23 14:22:06 vm-v2-mini python3[3045674]: [14:22:06] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75257.1 | История: 30м
-May 23 14:23:08 vm-v2-mini python3[3045674]: [14:23:08] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75260.6 | История: 30м
-May 23 14:24:08 vm-v2-mini python3[3045674]: [14:24:08] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75297.5 | История: 30м
-May 23 14:25:09 vm-v2-mini python3[3045674]: [14:25:09] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75268.1 | История: 30м
-May 23 14:25:25 vm-v2-mini python3[3045674]: [14:25:25] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT SELL @ 0.12380133129655758
-May 23 14:26:14 vm-v2-mini python3[3045674]: [14:26:14] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75257.2 | История: 30м
-May 23 14:26:49 vm-v2-mini python3[3045674]: [14:26:49] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
-May 23 14:27:16 vm-v2-mini python3[3045674]: [14:27:16] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75250.1 | История: 30м
-May 23 14:28:16 vm-v2-mini python3[3045674]: [14:28:16] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75230.5 | История: 30м
-May 23 14:29:16 vm-v2-mini python3[3045674]: [14:29:16] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75259.6 | История: 30м
-May 23 14:30:17 vm-v2-mini python3[3045674]: [14:30:17] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75291.8 | История: 30м
-May 23 14:31:17 vm-v2-mini python3[3045674]: [14:31:17] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75309.9 | История: 30м
-May 23 14:31:40 vm-v2-mini python3[3045674]: [14:31:40] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:31:44 vm-v2-mini python3[3045674]: [14:31:44] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:31:48 vm-v2-mini python3[3045674]: [14:31:48] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:31:51 vm-v2-mini python3[3045674]: [14:31:51] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:31:55 vm-v2-mini python3[3045674]: [14:31:55] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:32:00 vm-v2-mini python3[3045674]: [14:32:00] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:32:19 vm-v2-mini python3[3045674]: [14:32:19] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75323.1 | История: 30м
-May 23 14:33:19 vm-v2-mini python3[3045674]: [14:33:19] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75349.8 | История: 30м
-May 23 14:34:21 vm-v2-mini python3[3045674]: [14:34:21] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75337.6 | История: 30м
-May 23 14:35:24 vm-v2-mini python3[3045674]: [14:35:24] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75350.1 | История: 30м
-May 23 14:36:24 vm-v2-mini python3[3045674]: [14:36:24] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75322.2 | История: 30м
-May 23 14:37:25 vm-v2-mini python3[3045674]: [14:37:25] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75404.7 | История: 30м
-May 23 14:38:25 vm-v2-mini python3[3045674]: [14:38:25] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75400.9 | История: 30м
-May 23 14:39:27 vm-v2-mini python3[3045674]: [14:39:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75393.1 | История: 30м
-May 23 14:40:27 vm-v2-mini python3[3045674]: [14:40:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75366.3 | История: 30м
-May 23 14:41:27 vm-v2-mini python3[3045674]: [14:41:27] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75403.2 | История: 30м
-May 23 14:41:54 vm-v2-mini python3[3045674]: [14:41:54] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT SELL @ 0.12425294364541328
-May 23 14:42:05 vm-v2-mini python3[3045674]: [14:42:05] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 14:42:11 vm-v2-mini python3[3045674]: [14:42:11] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 14:42:14 vm-v2-mini python3[3045674]: [14:42:14] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 14:42:19 vm-v2-mini python3[3045674]: [14:42:19] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 14:42:23 vm-v2-mini python3[3045674]: [14:42:23] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 14:42:26 vm-v2-mini python3[3045674]: [14:42:26] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 14:42:29 vm-v2-mini python3[3045674]: [14:42:29] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75426.8 | История: 30м
-May 23 14:42:31 vm-v2-mini python3[3045674]: [14:42:31] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:42:34 vm-v2-mini python3[3045674]: [14:42:34] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:42:38 vm-v2-mini python3[3045674]: [14:42:38] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:42:42 vm-v2-mini python3[3045674]: [14:42:42] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:42:45 vm-v2-mini python3[3045674]: [14:42:45] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.808911442528,"available":1.3281111442700000000000000000000027697}}
-May 23 14:42:47 vm-v2-mini python3[3045674]: [14:42:47] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:42:49 vm-v2-mini python3[3045674]: [14:42:49] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.808911442528,"available":1.3281111442700000000000000000000027697}}
-May 23 14:42:51 vm-v2-mini python3[3045674]: [14:42:51] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:42:53 vm-v2-mini python3[3045674]: [14:42:53] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.808911442528,"available":1.3281111442700000000000000000000027697}}
-May 23 14:42:55 vm-v2-mini python3[3045674]: [14:42:55] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:42:57 vm-v2-mini python3[3045674]: [14:42:57] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.808911442528,"available":1.3281111442700000000000000000000027697}}
-May 23 14:42:59 vm-v2-mini python3[3045674]: [14:42:59] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-May 23 14:43:16 vm-v2-mini python3[3045674]: [14:43:16] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.811945378784,"available":1.3281111442700000000000000000000027697}}
-May 23 14:43:16 vm-v2-mini python3[3045674]: [14:43:16] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
-May 23 14:43:25 vm-v2-mini python3[3045674]: [14:43:25] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.811945378784,"available":2.7371807919700000000000000000000027697}}
-May 23 14:43:29 vm-v2-mini python3[3045674]: [14:43:29] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":6.811945378784,"available":2.7371807919700000000000000000000027697}}
-May 23 14:43:31 vm-v2-mini python3[3045674]: [14:43:31] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75416.8 | История: 30м
-May 23 14:44:31 vm-v2-mini python3[3045674]: [14:44:31] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75431.9 | История: 30м
-May 23 14:45:31 vm-v2-mini python3[3045674]: [14:45:31] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75423.4 | История: 30м
-May 23 14:46:31 vm-v2-mini python3[3045674]: [14:46:31] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75450.0 | История: 30м
-May 23 14:47:31 vm-v2-mini python3[3045674]: [14:47:31] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75467.2 | История: 30м
-May 23 14:48:33 vm-v2-mini python3[3045674]: [14:48:33] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75440.0 | История: 30м
-May 23 14:49:37 vm-v2-mini python3[3045674]: [14:49:37] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75384.7 | История: 30м
-May 23 14:50:40 vm-v2-mini python3[3045674]: [14:50:40] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75391.2 | История: 30м
-May 23 14:51:42 vm-v2-mini python3[3045674]: [14:51:42] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75405.0 | История: 30м
-May 23 14:52:43 vm-v2-mini python3[3045674]: [14:52:43] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75418.5 | История: 30м
-May 23 14:53:43 vm-v2-mini python3[3045674]: [14:53:43] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75419.7 | История: 30м
-May 23 14:54:43 vm-v2-mini python3[3045674]: [14:54:43] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75400.8 | История: 30м
-May 23 14:55:43 vm-v2-mini python3[3045674]: [14:55:43] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75417.2 | История: 30м
-May 23 14:56:44 vm-v2-mini python3[3045674]: [14:56:44] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75587.8 | История: 30м
-May 23 14:57:01 vm-v2-mini python3[3045674]: [14:57:01] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): 1INCH/USDT:USDT SELL @ 0.09016495159522847
-May 23 14:57:47 vm-v2-mini python3[3045674]: [14:57:47] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75534.6 | История: 30м
-May 23 14:58:21 vm-v2-mini python3[3045674]: [14:58:21] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по 1INCH/USDT:U  SDT утилизирован по времени TTL (75с).
-May 23 14:58:49 vm-v2-mini python3[3045674]: [14:58:49] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75484.6 | История: 30м
-May 23 14:59:51 vm-v2-mini python3[3045674]: [14:59:51] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75500.5 | История: 30м
-May 23 15:00:32 vm-v2-mini python3[3045674]: [15:00:32] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 15:00:38 vm-v2-mini python3[3045674]: [15:00:38] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 15:00:43 vm-v2-mini python3[3045674]: [15:00:43] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-May 23 15:00:53 vm-v2-mini python3[3045674]: [15:00:53] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75474.2 | История: 30м
-May 23 15:01:58 vm-v2-mini python3[3045674]: [15:01:58] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75472.6 | История: 30м
-May 23 15:02:58 vm-v2-mini python3[3045674]: [15:02:58] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75472.4 | История: 30м
-May 23 15:03:58 vm-v2-mini python3[3045674]: [15:03:58] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75500.0 | История: 30м
-May 23 15:04:58 vm-v2-mini python3[3045674]: [15:04:58] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75467.9 | История: 30м
-May 23 15:05:59 vm-v2-mini python3[3045674]: [15:05:59] 🏛️ 🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC   @ $75501.0 | История: 30м
+May 23 15:19:34 vm-v2-mini systemd[1]: Stopping Berserk Bot MEXC...
+May 23 15:19:34 vm-v2-mini systemd[1]: berserk.service: Deactivated successfully.
+May 23 15:19:34 vm-v2-mini systemd[1]: Stopped Berserk Bot MEXC.
+May 23 15:19:34 vm-v2-mini systemd[1]: berserk.service: Consumed 5.159s CPU time.
+May 23 15:19:34 vm-v2-mini systemd[1]: Started Berserk Bot MEXC.
+May 23 15:19:41 vm-v2-mini python3[3205911]: [15:19:41] 🏛️ ЛИМИТНЫЙ СНАЙПЕР BERSERK V17.0 ОНЛАЙН. М аржа: $6.96
+May 23 15:19:41 vm-v2-mini python3[3205911]: [15:19:41] 🏛️ 🏹 Охота лимитными капканами Berserk V16 .9 активирована. Патрулирую стаканы...
+May 23 15:19:41 vm-v2-mini python3[3205911]: [15:19:41] 🏛️ 🔗 Сканирование аккаунта на наличие откр ытых позиций...
+May 23 15:19:41 vm-v2-mini python3[3205911]: [15:19:41] 🏛️ 📡 Запуск квантового WebSocket-потока це н для 8 активов...
+May 23 15:20:12 vm-v2-mini python3[3205911]: [15:20:12] 🏛️ ⚠️ Ошибка WebSocket потока цен: Connecti on to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
+May 23 15:20:46 vm-v2-mini python3[3205911]: [15:20:46] 🏛️ ⚠️ Ошибка WebSocket потока цен: Connecti on to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
+May 23 15:32:01 vm-v2-mini python3[3205911]: [15:32:01] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT BUY @ 0.12501042212646885
+May 23 15:33:22 vm-v2-mini python3[3205911]: [15:33:22] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
+May 23 15:35:26 vm-v2-mini python3[3205911]: [15:35:26] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT BUY @ 0.33975251349775376
+May 23 15:36:49 vm-v2-mini python3[3205911]: [15:36:49] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
+May 23 15:40:53 vm-v2-mini python3[3205911]: [15:40:53] 🏛️ ⚠️ Ошибка WebSocket потока цен: Connecti on to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
+May 23 16:00:59 vm-v2-mini python3[3205911]: [16:00:59] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): SOL/USDT:USDT SELL @ 84.27282928690674
+May 23 16:01:01 vm-v2-mini python3[3205911]: [16:01:01] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT SELL @ 0.3425096970621518
+May 23 16:01:04 vm-v2-mini python3[3205911]: [16:01:04] 🏛️ ⚠️ Сбой шлюза ордеров 1INCH/USDT:USDT (S ELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.581133041824,"available":3.0395785020700000000000000000000027697}}
+May 23 16:02:21 vm-v2-mini python3[3205911]: [16:02:21] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USD  T утилизирован по времени TTL (75с).
+May 23 16:02:22 vm-v2-mini python3[3205911]: [16:02:22] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
+May 23 16:03:59 vm-v2-mini python3[3205911]: [16:03:59] 🏛️ ⚠️ Ошибка WebSocket потока цен: Connecti on to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
+May 23 16:06:41 vm-v2-mini python3[3205911]: [16:06:41] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (BUY ): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":35.8364398,"available":6.9589418478900000000000000000000027697}}
+May 23 16:07:26 vm-v2-mini python3[3205911]: [16:07:26] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT BUY @ 0.34010960585895295
+May 23 16:07:53 vm-v2-mini python3[3205911]: [16:07:53] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT BUY @ 0.1255562143701767
+May 23 16:08:42 vm-v2-mini python3[3205911]: [16:08:42] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
+May 23 16:09:08 vm-v2-mini python3[3205911]: [16:09:08] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
+May 23 16:24:57 vm-v2-mini python3[3205911]: [16:24:57] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT BUY @ 0.33956045789087097
+May 23 16:25:53 vm-v2-mini python3[3205911]: [16:25:53] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (BUY ): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
+May 23 16:26:23 vm-v2-mini python3[3205911]: [16:26:23] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
+May 23 16:35:45 vm-v2-mini python3[3205911]: [16:35:45] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT SELL @ 0.12620263398536485
+May 23 16:36:00 vm-v2-mini python3[3205911]: [16:36:00] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
+May 23 16:36:08 vm-v2-mini python3[3205911]: [16:36:08] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
+May 23 16:36:31 vm-v2-mini python3[3205911]: [16:36:31] 🏛️ 🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена откры тая сделка по OP/USDT:USDT (6.0 лотов). Берем под контроль выходов!
+May 23 16:36:31 vm-v2-mini python3[3205911]: [16:36:31] 🏛️ ⚠️ Сбой шлюза ордеров OP/USDT:USDT (BUY) : mexc {"success":false,"code":2007,"message":"Order price error"}
+May 23 16:36:31 vm-v2-mini python3[3205911]: [16:36:31] 🏛️ 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: OP/USDT:US  DT @ 0.1277
+May 23 16:36:41 vm-v2-mini python3[3205911]: [16:36:41] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): 1INCH/USDT:USDT SELL @ 0.09036748564827883
+May 23 16:37:11 vm-v2-mini python3[3205911]: [16:37:11] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
+May 23 16:37:58 vm-v2-mini python3[3205911]: [16:37:58] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по 1INCH/USDT:U  SDT утилизирован по времени TTL (75с).
+May 23 16:38:44 vm-v2-mini python3[3205911]: [16:38:44] 🏛️ 🛡️ Decay Shield V16.9: OP/USDT:USDT сре  зан на 60с (Лосс: -0.16%)
+May 23 16:38:47 vm-v2-mini python3[3205911]: [16:38:47] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): SOL/USDT:USDT SELL @ 84.29199920241592
+May 23 16:38:49 vm-v2-mini python3[3205911]: [16:38:49] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT SELL @ 0.1263943871686241
+May 23 16:40:08 vm-v2-mini python3[3205911]: [16:40:08] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USD  T утилизирован по времени TTL (75с).
+May 23 16:40:09 vm-v2-mini python3[3205911]: [16:40:09] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
+May 23 16:40:09 vm-v2-mini python3[3205911]: [16:40:09] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по OP/USDT:USD T успел исполниться в долю секунды отмены! Усыновляем позицию.
+May 23 17:03:01 vm-v2-mini python3[3205911]: [17:03:01] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): MANA/USDT:USDT SELL @ 0.08664072070472538
+May 23 17:04:22 vm-v2-mini python3[3205911]: [17:04:22] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по MANA/USDT:US  DT утилизирован по времени TTL (75с).
+May 23 17:04:47 vm-v2-mini python3[3205911]: [17:04:47] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT BUY @ 0.340947777792658
+May 23 17:06:09 vm-v2-mini python3[3205911]: [17:06:09] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
+May 23 17:16:36 vm-v2-mini python3[3205911]: [17:16:36] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
+May 23 17:16:43 vm-v2-mini python3[3205911]: [17:16:43] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): 1INCH/USDT:USDT SELL @ 0.09070995503063581
+May 23 17:16:44 vm-v2-mini python3[3205911]: [17:16:44] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (SEL L): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
+May 23 17:16:46 vm-v2-mini python3[3205911]: [17:16:46] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
+May 23 17:16:51 vm-v2-mini python3[3205911]: [17:16:51] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
+May 23 17:16:56 vm-v2-mini python3[3205911]: [17:16:56] 🏛️ ⚠️ Сбой шлюза ордеров APT/USDT:USDT (SEL L): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
+May 23 17:17:59 vm-v2-mini python3[3205911]: [17:17:59] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по 1INCH/USDT:U  SDT утилизирован по времени TTL (75с).
+May 23 17:19:46 vm-v2-mini python3[3205911]: [17:19:46] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":17.712466126992,"available":3.4405612334900000000000000000000027697}}
+May 23 17:19:50 vm-v2-mini python3[3205911]: [17:19:50] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":17.712466126992,"available":3.4405612334900000000000000000000027697}}
+May 23 17:19:56 vm-v2-mini python3[3205911]: [17:19:56] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":17.712466126992,"available":3.4405612334900000000000000000000027697}}
+May 23 17:20:02 vm-v2-mini python3[3205911]: [17:20:02] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":17.712466126992,"available":3.4405612334900000000000000000000027697}}
+May 23 17:20:07 vm-v2-mini python3[3205911]: [17:20:07] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":17.712466126992,"available":3.4405612334900000000000000000000027697}}
