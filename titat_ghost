@@ -7,7 +7,8 @@ class TitanGhost:
         self.memory = {
             'prices': {}, 'active_pos': {}, 'dna': {}, 'is_running': True,
             'available': 0.0, 'tp_fixed': {}, 'trail_active': {},
-            'vol_history': {}, 'cooldown': {}
+            'vol_history': {}, 'cooldown': {},
+            'candles': {}
         }
         self.exchange = None
 
@@ -149,8 +150,8 @@ class TitanGhost:
                 await asyncio.sleep(5)
 
     async def price_stream(self):
-        """Высокочастотный тотальный сбор цен BingX со сквозной разгрузкой Event Loop [V25.9]"""
-        self.log(f"📡 Запуск REST-мониторинга цен и объемов для {len(self.memory['dna'])} активов...")
+        """Канонический REST-шлюз обновления цен BingX из рабочей версии V27.5"""
+        self.log(f"📡 Запуск REST-мониторинга цен для {len(self.memory['dna'])} активов...")
         while self.memory['is_running']:
             try:
                 tickers = await self.exchange.fetch_tickers()
@@ -159,33 +160,31 @@ class TitanGhost:
                     continue
 
                 for raw_symbol, data in tickers.items():
-                    if not data.get('last'): continue
-                    clean_sym = raw_symbol.replace(':USDT', '')
+                    if not data.get('last'):
+                        continue
 
-                    target_key = None
-                    if clean_sym in self.memory['dna']: target_key = clean_sym
-                    elif f"{clean_sym}:USDT" in self.memory['dna']: target_key = f"{clean_sym}:USDT"
-                    elif clean_sym.replace('/', '') in self.memory['dna']: target_key = clean_sym.replace('/', '')
+                    # Чистим тикер до стандартов ДНК таблицы (из SOL-USDT или SOL_USDT делаем SOL/USDT:USDT)
+                    clean_sym = raw_symbol.replace('_', '/').replace('-', '/')
+                    if '/' in clean_sym and not clean_sym.endswith(':USDT'):
+                        clean_sym = f"{clean_sym}:USDT"
 
-                    if target_key:
+                    if clean_sym in self.memory['dna']:
                         last_price = float(data['last'])
                         q_vol = float(data['quoteVolume']) if data.get('quoteVolume') else 0.0
 
-                        self.memory['prices'][target_key] = last_price
+                        # Записываем строго в оперативную память
                         self.memory['prices'][clean_sym] = last_price
-#=====
-                        # --- [ФИКС V26.6: ВЫНОС ЗАДЕРЖКИ ИЗ ЦИКЛА FOR ДЛЯ СКОРОСТИ BINGX] ---
-                        if target_key not in self.memory['vol_history']:
-                            self.memory['vol_history'][target_key] = []
 
-                        self.memory['vol_history'][target_key].append([last_price, q_vol])
-                        self.memory['vol_history'][target_key] = self.memory['vol_history'][target_key][-100:]
+                        if clean_sym not in self.memory['vol_history']:
+                            self.memory['vol_history'][clean_sym] = []
+                        self.memory['vol_history'][clean_sym].append([last_price, q_vol])
+                        self.memory['vol_history'][clean_sym] = self.memory['vol_history'][clean_sym][-100:]
 
-                # ПАУЗА ВЫНЕСЕНА СТРОГО СЮДА (В САМЫЙ КОНЕЦ ЦИКЛА WHILE, ПОСЛЕ ОБХОДА ВСЕХ 12 МОНЕТ):
-                await asyncio.sleep(0.5)
+                # ЖЕСТКАЯ ИСТОРИЧЕСКАЯ РАЗГРУЗКА СЕТИ (Защита от DDoS банов BingX)
+                await asyncio.sleep(3)
 
             except Exception as e:
-                await asyncio.sleep(3)
+                await asyncio.sleep(5)
 
     async def execute_limit_entry(self, sym, side, limit_price, dna):
         """Выставление лимитного капкана с фиксом 1000PEPE и защитой One-way [BINGX]"""
@@ -250,78 +249,50 @@ class TitanGhost:
                 self.log(f"📡 МАЯК GHOST СТАБИЛЕН: Мониторинг {len(self.memory['dna'])} секторов фьючерсов BingX.")
                 self.log(f"💰 Маржа: ${round(self.memory['available'], 2)} | Занято слотов: {len(active_symbols)}/{MAX_SLOTS} | Активные ордера: {active_symbols}")
                 last_hunter_beacon = now
+
             for sym, dna in self.memory['dna'].items():
+                #self.log(f"DEBUG [2]: Сканирую монету {sym}")
                 cd_time = dna.get('cooldown', 300)
                 if sym in self.memory.get('cooldown', {}) and (time.time() - self.memory['cooldown'][sym] < cd_time):
                     continue
 
-                if sym in self.memory['active_pos'] or len(self.memory['active_pos']) >= MAX_SLOTS:
+                #if sym in self.memory['active_pos'] or len(self.memory['active_pos']) >= MAX_SLOTS:
+                #    continue
+
+                # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V26.9.1: СHАТАЛА ОБЪЯВЛЯЕМ, ПОТОМ ПРОВЕРЯЕМ ---
+                actual_positions = [k for k, v in self.memory['active_pos'].items() if v.get('status') == 'active']
+
+                if sym in self.memory['active_pos'] or len(actual_positions) >= MAX_SLOTS:
                     continue
 
                 try:
-                    #cur_p = self.memory['prices'].get(sym)
-                    #if not cur_p: continue
+#===========
+                    # --- КАHОHИЧЕСКИЙ СHАЙПЕРСКИЙ БЛOК GHOST V27.5 ---
+                    # Живую секундную цену cur_p берем из памяти price_stream
+                    cur_p = self.memory['prices'].get(sym)
+                    if not cur_p or cur_p <= 0:
+                        continue
 
-                    #ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
-                    #df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
-                    # УБИРАЕМ СКРЫТЫЙ ЛАГ ПАМЯТИ: запрашиваем свечи первыми
-#======
-                    # --- [ФИКС V26.4: ЗАЩИТА СКАHЕРА ОТ INDEXERROR НА BINGX] ---
+                    # Выводим дебаг пульса в консоль, чтобы видеть, что сканер ЖИВ!
+                    if int(time.time()) % 15 == 0:
+                        self.log(f"🔍 [ПУЛЬС GHOST]: Патрулирую сектор {sym} | Живая цена: {cur_p}")
+
+                    # Скачиваем историю свечей альта (limit=40)
                     ohlcv = await self.exchange.fetch_ohlcv(sym, '1m', limit=40)
                     if not ohlcv or len(ohlcv) < 25:
                         continue
 
                     df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
 
-                    # Жесткая проверка: если биржа отдала пустой DataFrame, безопасно уходим на следующий круг
-                    if df.empty or len(df) < 20:
-                        continue
-
-                    # Извлечение живой цены теперь на 100% защищено от падений
-#                    cur_p = float(df['c'].iloc[-1])
-#====
-#                    if cur_p <= 0: continue
-
-                    # Записываем её в общую память для мониторинга выходов
-#                    self.memory['prices'][sym] = cur_p
-                    # Извлечение живой цены теперь на 100% защищено от падений
-                    cur_p = float(df['c'].iloc[-1])
-                    if cur_p <= 0:
-                        continue
-
-                    # Записываем её в общую память для мониторинга выходов
-                    self.memory['prices'][sym] = cur_p
-
-                    # --- [ВРЕЗКА V26.7: ТОТАЛЬНЫЙ ОНЛАЙН-ДЕБАГ НА ВХОДЕ В ЦИКЛ] ---
-                    # Лог выводится раз в 30 секунд для каждой монеты, чтобы видеть пульс сканера
-                    if now % 30 < 0.5:
-                        self.log(f"🔍 [ПУЛЬС GHOST]: Сканирую сектор {sym} | Живая цена: {cur_p}")
-
-                    # --- [ЖЕСТКИЙ ФИКС V26.7: БЕЗОПАСНЫЙ РАСЧЕТ ИНДИКАТOРОВ LAG-1] ---
+                    # Расчет полос Боллинджера по ПРЕДЫДУЩЕЙ ЗАКРЫТOЙ свече (индекс -2)
                     df['ma'] = df['c'].rolling(20).mean()
                     df['std'] = df['c'].rolling(20).std()
 
-                    # Вместо shift(1) мы просто берем индекс [-2] — это ПРЕДЫДУЩАЯ ЗАКРЫТАЯ свеча!
-                    # Это на 100% исключает появление NaN и защищает код от скрытых continue
                     ma_prev = df['ma'].iloc[-2]
                     std_prev = df['std'].iloc[-2]
 
-                    # Проверка на NaN предохранитель
                     if pd.isna(ma_prev) or pd.isna(std_prev) or std_prev <= 0:
                         continue
-
-
-
-
-#=======
-                    # --- [ЖЕСТКИЙ ФИКС V26.5: ИСТИННЫЙ LAG-1 СДВИГ БOЛЛИНДЖЕРА] ---
-                    # Рассчитываем скользящие средние строго по закрытым минутам через .shift(1)
-#                    df['ma'] = df['c'].rolling(20).mean().shift(1)
-#                    df['std'] = df['c'].rolling(20).std().shift(1)
-
-                    # Извлекаем значения по индексу [-1] (теперь там лежат данные закрытой свечи)
-#                    ma_prev = df['ma'].iloc[-1]
-#                    std_prev = df['std'].iloc[-1]
 
                     p_up = ma_prev + (2.1 * std_prev)
                     p_dn = ma_prev - (2.1 * std_prev)
@@ -411,8 +382,14 @@ class TitanGhost:
                     elif is_short:
                         await self.execute_limit_entry(sym, 'sell', strike_dn, dna)
 
-                except Exception:
+               # except Exception:
+               #     continue
+                except Exception as loop_err:
+                    # --- ТОТАЛЬНЫЙ ДЕБАГ-МАРКЕР №4: ПЕРЕХВАТ СКРЫТОГО КРАША ---
+                    # Если внутри try вылетает любая ошибка — мы МГНОВЕННО увидим её имя в логах!
+                    self.log(f"💥 КРИТИЧЕСКИЙ СБОЙ ЦИКЛА FOR для {sym}: {loop_err}")
                     continue
+
             await asyncio.sleep(0.4)
 
     async def monitor_logic(self):
