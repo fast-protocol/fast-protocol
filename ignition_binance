@@ -204,6 +204,32 @@ async def monitor_logic(exchange):
                 exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
                 binance_market_id = symbol.replace('/', '').replace(':USDT', '')
 
+                # --- [ВРЕЗКА V23.0: ИМПУЛЬСНЫЙ DECAY SHIELD ПО ВРЕМЕНИ] ---
+                now_time = time.time()
+               # for symbol, pos in list(memory.active_pos.items()):
+                age_seconds = now_time - pos['entry_time']
+
+                # Если позиция висит дольше 45 минут (2700 секунд)
+                # и мы еще НЕ успели взвести защитный Пре-Трейлинг:
+                if age_seconds > 2700 and not memory.trail_active.get(symbol, False):
+                    # Живой секундный PNL
+                    cur_p = memory.prices.get(symbol)
+                    if cur_p:
+                        profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
+
+                        # Если сделка закисла во флэте (убыток не дошел до стопа, но и профита нет)
+                        if profit < 0.005:
+                            log(f"⏱️ [ИМПУЛЬС СДОХ]: Позиция {symbol} закисла на {round(age_seconds/60)} мин. Включаю Decay Shield эвакуации (PNL: {round(profit*100, 2)}%)")
+
+                            # Каноническое рыночное закрытие 100% объема
+                            exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
+                            await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+
+                            # Чистим память
+                            if symbol in memory.active_pos: del memory.active_pos[symbol]
+                            continue
+                # -----------------------------------------------------------
+
                 # 1. СТАРТОВАЯ ИНИЦИАЛИЗАЦИЯ ЖЕСТКОГО СТОП-ЛОССА НА БИРЖЕ
                 if not memory.stop_placed.get(symbol):
                     try:
@@ -343,8 +369,12 @@ async def monitor_logic(exchange):
                     try:
                         positions = await exchange.fetch_positions()
                         live_symbols = [p['symbol'] for p in positions if abs(float(p.get('contracts', 0))) > 0.00001]
-                        if symbol not in live_symbols:
-                            log(f"🧹 ВЕНИК: Позиция {symbol} закрыта извне (Стоп/БУ). Очистка памяти .")
+                        #if symbol not in live_symbols:
+
+                        # Нормализуем ключ, убирая / и :USDT
+                        clean_live_key = symbol.replace('/', '').replace(':USDT', '')
+                        if clean_live_key not in live_symbols:
+                            log(f"🧹 ВЕНИК: Позиция {symbol} за крыта извне (Стоп/БУ). Очистка памяти.")
                             if symbol in memory.active_pos: del memory.active_pos[symbol]
                             if symbol in memory.be_fixed: del memory.be_fixed[symbol]
                             if symbol in memory.stop_placed: del memory.stop_placed[symbol]
