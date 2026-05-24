@@ -1,5 +1,4 @@
 
-
 class GlobalMemory:
     def __init__(self):
         self.prices = {}
@@ -223,7 +222,7 @@ async def monitor_logic(exchange):
 
                             # Каноническое рыночное закрытие 100% объема
                             exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
-                            await smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                            await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
 
                             # Чистим память
                             if symbol in memory.active_pos: del memory.active_pos[symbol]
@@ -374,7 +373,7 @@ async def monitor_logic(exchange):
                         # Нормализуем ключ, убирая / и :USDT
                         clean_live_key = symbol.replace('/', '').replace(':USDT', '')
                         if clean_live_key not in live_symbols:
-                            log(f"🧹 ВЕНИК: Позиция {symbol} за крыта извне (Стоп/БУ). Очистка памяти.")
+                            log(f"🧹 ВЕНИК: Позиция {symbol} закрыта извне (Стоп/БУ). Очистка памяти .")
                             if symbol in memory.active_pos: del memory.active_pos[symbol]
                             if symbol in memory.be_fixed: del memory.be_fixed[symbol]
                             if symbol in memory.stop_placed: del memory.stop_placed[symbol]
