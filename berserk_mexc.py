@@ -258,6 +258,9 @@ async def check_signal(exchange, symbol):
         p_c2 = df_candles[-3]  # 2 минуты назад
         p_c3 = df_candles[-4]  # 3 минуты назад
 
+       # is_3_green = (p_c1[4] > p_c1[1]) and (p_c2[4] > p_c2[1]) and (p_c3[4] > p_c3[1])
+       # is_3_red   = (p_c1[4] < p_c1[1]) and (p_c2[4] < p_c2[1]) and (p_c3[4] < p_c3[1])
+        # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V19.9: КАHОНИЧЕСКИЕ ЦИФРOВЫЕ ИHДЕКСЫ СПИСКА CCXT ---
         is_3_green = (p_c1[4] > p_c1[1]) and (p_c2[4] > p_c2[1]) and (p_c3[4] > p_c3[1])
         is_3_red   = (p_c1[4] < p_c1[1]) and (p_c2[4] < p_c2[1]) and (p_c3[4] < p_c3[1])
 
@@ -553,8 +556,14 @@ async def main_logic():
                     raw_positions = exchange.fetch_positions(None, {'type': 'swap'})
                     current_mexc_active = []
 
+                    # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V20.2: ВСЕЯДНЫЙ ВАЛИДАТOР ПOЗИЦИЙ MEXC ---
                     for p in raw_positions:
-                        vol = abs(float(p.get('contracts', p.get('positionAmt', 0.0))))
+                        # Извлекаем объем через безопасный сборщик ключей, полностью исключая KeyError
+                        vol_raw = p.get('contracts', p.get('positionAmt', p.get('size', p.get('marginSize', 0.0))))
+                        if vol_raw is None:
+                            vol_raw = 0.0
+                        vol = abs(float(vol_raw))
+
                         if vol > 0.00001:
                             raw_sym = p.get('symbol', p.get('pair', ''))
                             clean_sym = raw_sym.replace('_', '/').replace(':USDT', '')
@@ -564,15 +573,19 @@ async def main_logic():
                             if target_key in PRIORITY_LIST:
                                 current_mexc_active.append(target_key)
 
-                                # Усыновляем, если позиции нет в RAM
+                                # Усыновляем позицию, если её еще нет в оперативной памяти RAM
                                 if target_key not in memory.active_pos:
-                                    side_raw = str(p.get('side', p.get('positionSide', 'long'))).lower()
-                                    side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
-                                    entry_price = float(p.get('entryPrice', p.get('price', 0.0)))
+                                    side_raw = str(p.get('side', p.get('positionSide', p.get('direction', 'long')))).lower()
+                                    side = 'buy' if ('long' in side_raw or 'buy' in side_raw or 'open_long' in side_raw) else 'sell'
 
-                                    log(f"🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена открытая сделка по {target_key}. Берем под контроль выходов!")
+                                    entry_price = float(p.get('entryPrice', p.get('price', p.get('avgEntryPrice', 0.0))))
+
+                                    log(f"🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.2: Усыновляем контракт {target_key} ({vol} лотов).")
                                     memory.active_pos[target_key] = {
-                                        'side': side, 'vol': vol, 'price': entry_price, 'entry_time': time.time(),
+                                        'side': side,
+                                        'vol': vol,
+                                        'price': entry_price,
+                                        'entry_time': time.time(),
                                         'dna': {'l_off': 0.002, 's_off': 0.002}
                                     }
 
@@ -590,6 +603,41 @@ async def main_logic():
                     pass
             # ------------------------------------------------------------------
 
+            # --- [УЛЬТИМАТИВНЫЙ ФИКС V20.0: ЖЕСТКИЙ REST MOMENTUM SHIELD] ---
+            # Больше не зависим от WebSocket! Берем цену из REST-поводыря Биткоина
+            try:
+                # Скачиваем чистый, живой тикер Биткоина напрямую с биржи по HTTP REST
+                btc_ticker = exchange.fetch_ticker('BTC/USDT:USDT')
+                btc_price = float(btc_ticker.get('last', btc_ticker.get('close', 0.0)))
+
+                if btc_price > 0:
+                    if not hasattr(memory, 'btc_history'):
+                        memory.btc_history = []
+
+                    # Набиваем историю
+                    memory.btc_history.append(btc_price)
+                    memory.btc_history = memory.btc_history[-10:] # Храним последние 10 минут
+
+                # Обсчитываем скорость только если накопили реальный REST-трек за 3 минуты
+                if len(memory.btc_history) >= 3:
+                    btc_window = memory.btc_history[-3:]
+                    m1_diff = abs(btc_window[-1] - btc_window[-2])
+                    m2_diff = abs(btc_window[-2] - btc_window[-3])
+                    avg_btc_move_pct = ((m1_diff + m2_diff) / 2) / btc_window[-1] * 100
+
+                    # Если Биткоин летит быстрее 0.045% за минуту — блокируем взвод капканов
+                    if avg_btc_move_pct > 0.045:
+                        if not hasattr(memory, 'last_momentum_log'):
+                            memory.last_momentum_log = 0
+
+                        if now - memory.last_momentum_log >= 60:
+                            log(f"🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна ({round(a vg_btc_move_pct, 4)}%). Все капканы МЕХС заблокированы.")
+                            memory.last_momentum_log = now
+                        continue
+            except Exception as btc_rest_err:
+                # Если сеть мигнула — безопасно пропускаем шаг, не вешая сканер
+                pass
+            # ------------------------------------------------------------------
             # 1. АВТОНОМНЫЙ REST-ПУШЕР БИТКОИНА ДЛЯ MEXC
             if now - memory.last_btc_push >= 60:
                 try:
