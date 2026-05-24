@@ -1,108 +1,849 @@
-May 23 19:09:53 vm-v2-mini python3[3273400]: [19:09:53] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: OP/USDT:USDT    срезан на 60с (Лосс: -0.15%)
-May 23 19:09:53 vm-v2-mini python3[3273400]: [19:09:53] 🏛️ ⚠️ Сбой шлюза ордеров OP/USDT:USDT (SELL ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 19:09:53 vm-v2-mini python3[3273400]: [19:09:53] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: OP/USDT:USDT    срезан на 60с (Лосс: -0.15%)
-May 23 19:09:54 vm-v2-mini python3[3273400]: [19:09:54] 🏛️ ⚠️ Сбой шлюза ордеров OP/USDT:USDT (SELL ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 19:09:54 vm-v2-mini python3[3273400]: [19:09:54] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: OP/USDT:USDT    срезан на 60с (Лосс: -0.15%)
-May 23 19:09:54 vm-v2-mini python3[3273400]: [19:09:54] 🏛️ ⚠️ Сбой шлюза ордеров OP/USDT:USDT (SELL ): mexc {"success":false,"code":510,"message":"Requests are too frequent, please try again later"}
-May 23 19:09:55 vm-v2-mini python3[3273400]: [19:09:55] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: OP/USDT:USDT    срезан на 60с (Лосс: -0.15%)
-May 23 19:09:55 vm-v2-mini python3[3273400]: [19:09:55] 🏛️ ⚠️ Сбой шлюза ордеров OP/USDT:USDT (SELL ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 19:09:56 vm-v2-mini python3[3273400]: [19:09:56] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: OP/USDT:USDT    срезан на 60с (Лосс: -0.15%)
-May 23 19:09:56 vm-v2-mini python3[3273400]: [19:09:56] 🏛️ ⚠️ Сбой шлюза ордеров OP/USDT:USDT (SELL ): mexc {"success":false,"code":510,"message":"Requests are too frequent, please try again later"}
-May 23 19:09:56 vm-v2-mini python3[3273400]: [19:09:56] 🏛️ 🧹 Позиция OP/USDT:USDT закрыта на МЕХС.   Очищаем RAM.
-May 23 19:18:42 vm-v2-mini python3[3273400]: [19:18:42] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): SOL/USDT:USDT SELL @ 84.95030352799068
-May 23 19:18:46 vm-v2-mini python3[3273400]: [19:18:46] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":46.819197272484,"available":8.7421612976900000000000000000000027697}}
-May 23 19:18:51 vm-v2-mini python3[3273400]: [19:18:51] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":46.819197272484,"available":8.7421612976900000000000000000000027697}}
-May 23 19:20:01 vm-v2-mini python3[3273400]: [19:20:01] 🏛️ 🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена откры тая сделка по SOL/USDT:USDT. Берем под контроль выходов!
-May 23 19:20:06 vm-v2-mini python3[3273400]: [19:20:06] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 19:20:06 vm-v2-mini python3[3273400]: [19:20:06] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по SOL/USDT:US DT успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 19:29:38 vm-v2-mini python3[3273400]: [19:29:38] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USD   T срезан на 60с (Лосс: -0.08%)
-May 23 19:29:39 vm-v2-mini python3[3273400]: [19:29:39] 🏛️ 🧹 Позиция SOL/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
-May 23 19:31:03 vm-v2-mini python3[3273400]: [19:31:03] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): MANA/USDT:USDT SELL @ 0.08744232926546491
-May 23 19:32:28 vm-v2-mini python3[3273400]: [19:32:28] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по MANA/USDT:US  DT утилизирован по времени TTL (75с).
-May 23 20:04:10 vm-v2-mini python3[3273400]: [20:04:10] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT SELL @ 0.34565409072788383
-May 23 20:05:26 vm-v2-mini python3[3273400]: [20:05:26] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 20:10:49 vm-v2-mini python3[3273400]: [20:10:49] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): SOL/USDT:USDT SELL @ 85.10114463561239
-May 23 20:10:52 vm-v2-mini python3[3273400]: [20:10:52] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): APT/USDT:USDT SELL @ 0.9666078351419239
-May 23 20:10:53 vm-v2-mini python3[3273400]: [20:10:53] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":46.785535419948,"available":8.2693547538188000000000000000000027697}}
-May 23 20:11:00 vm-v2-mini python3[3273400]: [20:11:00] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":42.590195174124,"available":8.2693547538188000000000000000000027697}}
-May 23 20:11:01 vm-v2-mini python3[3273400]: [20:11:01] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): 1INCH/USDT:USDT SELL @ 0.09151004473587666
-May 23 20:12:12 vm-v2-mini python3[3273400]: [20:12:12] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 20:12:13 vm-v2-mini python3[3273400]: [20:12:13] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 20:12:27 vm-v2-mini python3[3273400]: [20:12:27] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по 1INCH/USDT:U  SDT утилизирован по времени TTL (75с).
-May 23 20:23:37 vm-v2-mini python3[3273400]: [20:23:37] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): APT/USDT:USDT BUY @ 0.9601476457296472
-May 23 20:24:59 vm-v2-mini python3[3273400]: [20:24:59] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 20:31:42 vm-v2-mini python3[3273400]: [20:31:42] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): SOL/USDT:USDT SELL @ 85.20749305619574
-May 23 20:31:47 vm-v2-mini python3[3273400]: [20:31:47] 🏛️ 🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена откры тая сделка по SOL/USDT:USDT. Берем под контроль выходов!
-May 23 20:31:50 vm-v2-mini python3[3273400]: [20:31:50] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT SELL @ 0.12964431135773533
-May 23 20:31:58 vm-v2-mini python3[3273400]: [20:31:58] 🏛️ ⚠️ Сбой шлюза ордеров POL/USDT:USDT (SEL L): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":45.017237001828,"available":4.3006055357300000000000000000000027697}}
-May 23 20:31:59 vm-v2-mini python3[3273400]: [20:31:59] 🏛️ 🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена откры тая сделка по OP/USDT:USDT. Берем под контроль выходов!
-May 23 20:32:49 vm-v2-mini python3[3273400]: [20:32:49] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USD   T срезан на 60с (Лосс: -0.08%)
-May 23 20:32:50 vm-v2-mini python3[3273400]: [20:32:50] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USD   T срезан на 60с (Лосс: -0.08%)
-May 23 20:32:50 vm-v2-mini python3[3273400]: [20:32:50] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (BUY ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 20:32:51 vm-v2-mini python3[3273400]: [20:32:51] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USD   T срезан на 60с (Лосс: -0.14%)
-May 23 20:32:51 vm-v2-mini python3[3273400]: [20:32:51] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (BUY ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 20:32:52 vm-v2-mini python3[3273400]: [20:32:52] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USD   T срезан на 60с (Лосс: -0.14%)
-May 23 20:32:52 vm-v2-mini python3[3273400]: [20:32:52] 🏛️ ⚠️ Сбой шлюза ордеров SOL/USDT:USDT (BUY ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 20:32:53 vm-v2-mini python3[3273400]: [20:32:53] 🏛️ 🧹 Позиция SOL/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
-May 23 20:33:05 vm-v2-mini python3[3273400]: [20:33:05] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 20:33:05 vm-v2-mini python3[3273400]: [20:33:05] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по SOL/USDT:US DT успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 20:33:05 vm-v2-mini python3[3273400]: [20:33:05] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: OP/USDT:USDT    срезан на 60с (Лосс: -0.15%)
-May 23 20:33:06 vm-v2-mini python3[3273400]: [20:33:06] 🏛️ 🧹 Позиция OP/USDT:USDT закрыта на МЕХС.   Очищаем RAM.
-May 23 20:33:06 vm-v2-mini python3[3273400]: [20:33:06] 🏛️ 🧹 Позиция SOL/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
-May 23 20:33:13 vm-v2-mini python3[3273400]: [20:33:13] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
-May 23 20:33:13 vm-v2-mini python3[3273400]: [20:33:13] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по OP/USDT:USD T успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 20:33:20 vm-v2-mini python3[3273400]: [20:33:20] 🏛️ 🧹 Позиция OP/USDT:USDT закрыта на МЕХС.   Очищаем RAM.
-May 23 20:36:56 vm-v2-mini python3[3273400]: [20:36:56] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT SELL @ 0.3476972501411146
-May 23 20:37:32 vm-v2-mini python3[3273400]: [20:37:32] 🏛️ 🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена откры тая сделка по LDO/USDT:USDT. Берем под контроль выходов!
-May 23 20:37:40 vm-v2-mini python3[3273400]: [20:37:40] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): APT/USDT:USDT SELL @ 0.9709886382654134
-May 23 20:37:44 vm-v2-mini python3[3273400]: [20:37:44] 🏛️ 🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена откры тая сделка по APT/USDT:USDT. Берем под контроль выходов!
-May 23 20:38:12 vm-v2-mini python3[3273400]: [20:38:12] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 20:38:12 vm-v2-mini python3[3273400]: [20:38:12] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по LDO/USDT:US DT успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 20:38:32 vm-v2-mini python3[3273400]: [20:38:32] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: LDO/USDT:USD   T срезан на 60с (Лосс: -0.94%)
-May 23 20:38:34 vm-v2-mini python3[3273400]: [20:38:34] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: LDO/USDT:USD   T срезан на 60с (Лосс: -0.94%)
-May 23 20:38:34 vm-v2-mini python3[3273400]: [20:38:34] 🏛️ ⚠️ Сбой шлюза ордеров LDO/USDT:USDT (BUY ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 20:38:34 vm-v2-mini python3[3273400]: [20:38:34] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: LDO/USDT:USD   T срезан на 60с (Лосс: -0.94%)
-May 23 20:38:35 vm-v2-mini python3[3273400]: [20:38:35] 🏛️ ⚠️ Сбой шлюза ордеров LDO/USDT:USDT (BUY ): mexc {"success":false,"code":510,"message":"Requests are too frequent, please try again later"}
-May 23 20:38:35 vm-v2-mini python3[3273400]: [20:38:35] 🏛️ 🧹 Позиция LDO/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
-May 23 20:38:37 vm-v2-mini python3[3273400]: [20:38:37] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): LDO/USDT:USDT SELL @ 0.34895113540300515
-May 23 20:38:39 vm-v2-mini python3[3273400]: [20:38:39] 🏛️ ⚠️ Сбой шлюза ордеров MANA/USDT:USDT (SE LL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.862555362744,"available":3.6660286633300000000000000000000027697}}
-May 23 20:38:44 vm-v2-mini python3[3273400]: [20:38:44] 🏛️ ⚠️ Сбой шлюза ордеров MANA/USDT:USDT (SE LL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.862555362744,"available":3.6660286633300000000000000000000027697}}
-May 23 20:38:46 vm-v2-mini python3[3273400]: [20:38:46] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USD   T срезан на 60с (Лосс: -0.76%)
-May 23 20:38:47 vm-v2-mini python3[3273400]: [20:38:47] 🏛️ 🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена откры тая сделка по LDO/USDT:USDT. Берем под контроль выходов!
-May 23 20:38:47 vm-v2-mini python3[3273400]: [20:38:47] 🏛️ 🧹 Позиция APT/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
-May 23 20:38:49 vm-v2-mini python3[3273400]: [20:38:49] 🏛️ ⚠️ Сбой шлюза ордеров OP/USDT:USDT (SELL ): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.87037104636,"available":3.8300651557300000000000000000000027697}}
-May 23 20:38:49 vm-v2-mini python3[3273400]: [20:38:49] 🏛️ ⚠️ Сбой шлюза ордеров MANA/USDT:USDT (SE LL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.862555362744,"available":3.8300651557300000000000000000000027697}}
-May 23 20:38:51 vm-v2-mini python3[3273400]: [20:38:51] 🏛️ ⚠️ Сбой шлюза ордеров 1INCH/USDT:USDT (S ELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.861475347392,"available":3.8300651557300000000000000000000027697}}
-May 23 20:38:55 vm-v2-mini python3[3273400]: [20:38:55] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): OP/USDT:USDT SELL @ 0.1309110563848147
-May 23 20:38:56 vm-v2-mini python3[3273400]: [20:38:56] 🏛️ ⚠️ Сбой шлюза ордеров MANA/USDT:USDT (SE LL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":1.97475860478,"available":1.8803299097300000000000000000000027697}}
-May 23 20:38:58 vm-v2-mini python3[3273400]: [20:38:58] 🏛️ ⚠️ Сбой шлюза ордеров 1INCH/USDT:USDT (S ELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":1.97634565024,"available":1.8803299097300000000000000000000027697}}
-May 23 20:39:00 vm-v2-mini python3[3273400]: [20:39:00] 🏛️ 🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена откры тая сделка по OP/USDT:USDT. Берем под контроль выходов!
-May 23 20:39:00 vm-v2-mini python3[3273400]: [20:39:00] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 20:39:01 vm-v2-mini python3[3273400]: [20:39:01] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по APT/USDT:US DT успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 20:39:11 vm-v2-mini python3[3273400]: [20:39:11] 🏛️ 🧹 Позиция APT/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
-May 23 20:39:48 vm-v2-mini python3[3273400]: [20:39:48] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: LDO/USDT:USD   T срезан на 60с (Лосс: -0.34%)
-May 23 20:39:49 vm-v2-mini python3[3273400]: [20:39:49] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: LDO/USDT:USD   T срезан на 60с (Лосс: -0.34%)
-May 23 20:39:49 vm-v2-mini python3[3273400]: [20:39:49] 🏛️ ⚠️ Сбой шлюза ордеров LDO/USDT:USDT (BUY ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 20:39:50 vm-v2-mini python3[3273400]: [20:39:50] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: LDO/USDT:USD   T срезан на 60с (Лосс: -0.34%)
-May 23 20:39:51 vm-v2-mini python3[3273400]: [20:39:51] 🏛️ ⚠️ Сбой шлюза ордеров LDO/USDT:USDT (BUY ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 20:39:51 vm-v2-mini python3[3273400]: [20:39:51] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: LDO/USDT:USD   T срезан на 60с (Лосс: -0.4%)
-May 23 20:39:52 vm-v2-mini python3[3273400]: [20:39:52] 🏛️ ⚠️ Сбой шлюза ордеров LDO/USDT:USDT (BUY ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 20:39:52 vm-v2-mini python3[3273400]: [20:39:52] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: LDO/USDT:USD   T срезан на 60с (Лосс: -0.4%)
-May 23 20:39:53 vm-v2-mini python3[3273400]: [20:39:53] 🏛️ ⚠️ Сбой шлюза ордеров LDO/USDT:USDT (BUY ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 20:39:53 vm-v2-mini python3[3273400]: [20:39:53] 🏛️ 🧹 Позиция LDO/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
-May 23 20:39:58 vm-v2-mini python3[3273400]: [20:39:58] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USD  T утилизирован по времени TTL (75с).
-May 23 20:39:58 vm-v2-mini python3[3273400]: [20:39:58] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по LDO/USDT:US DT успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 20:40:06 vm-v2-mini python3[3273400]: [20:40:06] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: OP/USDT:USDT    срезан на 60с (Лосс: -0.23%)
-May 23 20:40:07 vm-v2-mini python3[3273400]: [20:40:07] 🏛️ 🧹 Позиция OP/USDT:USDT закрыта на МЕХС.   Очищаем RAM.
-May 23 20:40:07 vm-v2-mini python3[3273400]: [20:40:07] 🏛️ 🧹 Позиция LDO/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
-May 23 20:40:20 vm-v2-mini python3[3273400]: [20:40:20] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT   утилизирован по времени TTL (75с).
-May 23 20:40:20 vm-v2-mini python3[3273400]: [20:40:20] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по OP/USDT:USD T успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 20:40:21 vm-v2-mini python3[3273400]: [20:40:21] 🏛️ 🧹 Позиция OP/USDT:USDT закрыта на МЕХС.   Очищаем RAM.
-May 23 20:41:15 vm-v2-mini python3[3273400]: [20:41:15] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLAT ED): 1INCH/USDT:USDT SELL @ 0.09261965343066184
-May 23 20:41:16 vm-v2-mini python3[3273400]: [20:41:16] 🏛️ 🔗 ЖИВОЙ ПЕРЕХВАТ MEXC: Обнаружена откры тая сделка по 1INCH/USDT:USDT. Берем под контроль выходов!
-May 23 20:42:40 vm-v2-mini python3[3273400]: [20:42:40] 🏛️ 🧹 ВЕНИК ЛИМИТОК: Капкан по 1INCH/USDT:U  SDT утилизирован по времени TTL (75с).
-May 23 20:42:41 vm-v2-mini python3[3273400]: [20:42:41] 🏛️ 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по 1INCH/USDT: USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-May 23 20:44:22 vm-v2-mini python3[3273400]: [20:44:22] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: 1INCH/USDT:U   SDT срезан на 60с (Лосс: -0.11%)
-May 23 20:44:28 vm-v2-mini python3[3273400]: [20:44:28] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: 1INCH/USDT:U   SDT срезан на 60с (Лосс: -0.11%)
-May 23 20:44:28 vm-v2-mini python3[3273400]: [20:44:28] 🏛️ ⚠️ Сбой шлюза ордеров 1INCH/USDT:USDT (B UY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-May 23 20:44:29 vm-v2-mini python3[3273400]: [20:44:29] 🏛️ 🧹 Позиция 1INCH/USDT:USDT закрыта на МЕ  ХС. Очищаем RAM.
+May 23 21:45:32 vm-v2-mini python3[3366042]: [21:45:32] 🏛️ 🏹 Охота лимитными капканами Berserk V16 .9 активирована. Патрулирую стаканы...
+May 23 21:45:32 vm-v2-mini python3[3366042]: [21:45:32] 🏛️ 🔗 Сканирование аккаунта на наличие откр ытых позиций...
+May 23 21:45:32 vm-v2-mini python3[3366042]: [21:45:32] 🏛️ 🏛️ 🏹 Охота лимитными капканами Berserk   V16.9 активирована. Патрулирую стаканы...
+May 23 21:45:33 vm-v2-mini python3[3366042]: [21:45:33] 🏛️ 📡 Запуск квантового WebSocket-потока це н для 8 активов...
+May 23 21:47:41 vm-v2-mini python3[3366042]: [21:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:48:41 vm-v2-mini python3[3366042]: [21:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:49:41 vm-v2-mini python3[3366042]: [21:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:50:41 vm-v2-mini python3[3366042]: [21:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:51:41 vm-v2-mini python3[3366042]: [21:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:52:41 vm-v2-mini python3[3366042]: [21:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:53:41 vm-v2-mini python3[3366042]: [21:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:54:41 vm-v2-mini python3[3366042]: [21:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:55:41 vm-v2-mini python3[3366042]: [21:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:56:41 vm-v2-mini python3[3366042]: [21:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:57:41 vm-v2-mini python3[3366042]: [21:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:58:41 vm-v2-mini python3[3366042]: [21:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 21:59:41 vm-v2-mini python3[3366042]: [21:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:00:41 vm-v2-mini python3[3366042]: [22:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:01:41 vm-v2-mini python3[3366042]: [22:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:02:41 vm-v2-mini python3[3366042]: [22:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:03:41 vm-v2-mini python3[3366042]: [22:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:04:41 vm-v2-mini python3[3366042]: [22:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:05:41 vm-v2-mini python3[3366042]: [22:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:06:41 vm-v2-mini python3[3366042]: [22:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:07:41 vm-v2-mini python3[3366042]: [22:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:08:41 vm-v2-mini python3[3366042]: [22:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:09:41 vm-v2-mini python3[3366042]: [22:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:10:41 vm-v2-mini python3[3366042]: [22:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:11:41 vm-v2-mini python3[3366042]: [22:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:12:41 vm-v2-mini python3[3366042]: [22:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:13:41 vm-v2-mini python3[3366042]: [22:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:14:41 vm-v2-mini python3[3366042]: [22:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:15:41 vm-v2-mini python3[3366042]: [22:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:16:41 vm-v2-mini python3[3366042]: [22:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:17:41 vm-v2-mini python3[3366042]: [22:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:18:41 vm-v2-mini python3[3366042]: [22:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:19:41 vm-v2-mini python3[3366042]: [22:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:20:41 vm-v2-mini python3[3366042]: [22:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:21:41 vm-v2-mini python3[3366042]: [22:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:22:41 vm-v2-mini python3[3366042]: [22:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:23:41 vm-v2-mini python3[3366042]: [22:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:24:41 vm-v2-mini python3[3366042]: [22:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:25:41 vm-v2-mini python3[3366042]: [22:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:26:41 vm-v2-mini python3[3366042]: [22:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:27:41 vm-v2-mini python3[3366042]: [22:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:28:41 vm-v2-mini python3[3366042]: [22:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:29:41 vm-v2-mini python3[3366042]: [22:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:30:41 vm-v2-mini python3[3366042]: [22:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:31:41 vm-v2-mini python3[3366042]: [22:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:32:41 vm-v2-mini python3[3366042]: [22:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:33:41 vm-v2-mini python3[3366042]: [22:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:34:41 vm-v2-mini python3[3366042]: [22:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:35:41 vm-v2-mini python3[3366042]: [22:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:36:41 vm-v2-mini python3[3366042]: [22:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:37:41 vm-v2-mini python3[3366042]: [22:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:38:41 vm-v2-mini python3[3366042]: [22:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:39:41 vm-v2-mini python3[3366042]: [22:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:40:41 vm-v2-mini python3[3366042]: [22:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:41:41 vm-v2-mini python3[3366042]: [22:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:42:41 vm-v2-mini python3[3366042]: [22:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:43:41 vm-v2-mini python3[3366042]: [22:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:44:41 vm-v2-mini python3[3366042]: [22:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:45:41 vm-v2-mini python3[3366042]: [22:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:46:41 vm-v2-mini python3[3366042]: [22:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:47:41 vm-v2-mini python3[3366042]: [22:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:48:41 vm-v2-mini python3[3366042]: [22:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:49:41 vm-v2-mini python3[3366042]: [22:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:50:41 vm-v2-mini python3[3366042]: [22:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:51:41 vm-v2-mini python3[3366042]: [22:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:52:41 vm-v2-mini python3[3366042]: [22:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:53:41 vm-v2-mini python3[3366042]: [22:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:54:41 vm-v2-mini python3[3366042]: [22:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:55:41 vm-v2-mini python3[3366042]: [22:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:56:41 vm-v2-mini python3[3366042]: [22:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:57:41 vm-v2-mini python3[3366042]: [22:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:58:41 vm-v2-mini python3[3366042]: [22:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 22:59:41 vm-v2-mini python3[3366042]: [22:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:00:41 vm-v2-mini python3[3366042]: [23:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:01:41 vm-v2-mini python3[3366042]: [23:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:02:41 vm-v2-mini python3[3366042]: [23:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:03:41 vm-v2-mini python3[3366042]: [23:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:04:41 vm-v2-mini python3[3366042]: [23:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:05:41 vm-v2-mini python3[3366042]: [23:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:06:41 vm-v2-mini python3[3366042]: [23:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:07:41 vm-v2-mini python3[3366042]: [23:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:08:41 vm-v2-mini python3[3366042]: [23:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:09:41 vm-v2-mini python3[3366042]: [23:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:10:41 vm-v2-mini python3[3366042]: [23:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:11:41 vm-v2-mini python3[3366042]: [23:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:12:41 vm-v2-mini python3[3366042]: [23:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:13:41 vm-v2-mini python3[3366042]: [23:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:14:41 vm-v2-mini python3[3366042]: [23:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:15:41 vm-v2-mini python3[3366042]: [23:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:16:41 vm-v2-mini python3[3366042]: [23:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:17:41 vm-v2-mini python3[3366042]: [23:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:18:41 vm-v2-mini python3[3366042]: [23:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:19:41 vm-v2-mini python3[3366042]: [23:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:20:41 vm-v2-mini python3[3366042]: [23:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:21:41 vm-v2-mini python3[3366042]: [23:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:22:41 vm-v2-mini python3[3366042]: [23:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:23:41 vm-v2-mini python3[3366042]: [23:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:24:41 vm-v2-mini python3[3366042]: [23:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:25:41 vm-v2-mini python3[3366042]: [23:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:26:41 vm-v2-mini python3[3366042]: [23:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:27:41 vm-v2-mini python3[3366042]: [23:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:28:41 vm-v2-mini python3[3366042]: [23:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:29:41 vm-v2-mini python3[3366042]: [23:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:30:41 vm-v2-mini python3[3366042]: [23:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:31:41 vm-v2-mini python3[3366042]: [23:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:32:41 vm-v2-mini python3[3366042]: [23:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:33:41 vm-v2-mini python3[3366042]: [23:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:34:41 vm-v2-mini python3[3366042]: [23:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:35:41 vm-v2-mini python3[3366042]: [23:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:36:41 vm-v2-mini python3[3366042]: [23:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:37:41 vm-v2-mini python3[3366042]: [23:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:38:41 vm-v2-mini python3[3366042]: [23:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:39:41 vm-v2-mini python3[3366042]: [23:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:40:41 vm-v2-mini python3[3366042]: [23:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:41:41 vm-v2-mini python3[3366042]: [23:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:42:41 vm-v2-mini python3[3366042]: [23:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:43:41 vm-v2-mini python3[3366042]: [23:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:44:41 vm-v2-mini python3[3366042]: [23:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:45:41 vm-v2-mini python3[3366042]: [23:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:46:41 vm-v2-mini python3[3366042]: [23:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:47:41 vm-v2-mini python3[3366042]: [23:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:48:41 vm-v2-mini python3[3366042]: [23:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:49:41 vm-v2-mini python3[3366042]: [23:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:50:41 vm-v2-mini python3[3366042]: [23:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:51:41 vm-v2-mini python3[3366042]: [23:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:52:41 vm-v2-mini python3[3366042]: [23:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:53:41 vm-v2-mini python3[3366042]: [23:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:54:41 vm-v2-mini python3[3366042]: [23:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:55:41 vm-v2-mini python3[3366042]: [23:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:56:41 vm-v2-mini python3[3366042]: [23:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:57:41 vm-v2-mini python3[3366042]: [23:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:58:41 vm-v2-mini python3[3366042]: [23:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 23 23:59:41 vm-v2-mini python3[3366042]: [23:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:00:41 vm-v2-mini python3[3366042]: [00:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:01:41 vm-v2-mini python3[3366042]: [00:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:02:41 vm-v2-mini python3[3366042]: [00:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:03:41 vm-v2-mini python3[3366042]: [00:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:04:41 vm-v2-mini python3[3366042]: [00:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:05:41 vm-v2-mini python3[3366042]: [00:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:06:41 vm-v2-mini python3[3366042]: [00:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:07:41 vm-v2-mini python3[3366042]: [00:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:08:41 vm-v2-mini python3[3366042]: [00:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:09:41 vm-v2-mini python3[3366042]: [00:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:10:41 vm-v2-mini python3[3366042]: [00:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:11:41 vm-v2-mini python3[3366042]: [00:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:12:41 vm-v2-mini python3[3366042]: [00:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:13:41 vm-v2-mini python3[3366042]: [00:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:14:41 vm-v2-mini python3[3366042]: [00:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:15:41 vm-v2-mini python3[3366042]: [00:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:16:41 vm-v2-mini python3[3366042]: [00:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:17:41 vm-v2-mini python3[3366042]: [00:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:18:41 vm-v2-mini python3[3366042]: [00:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:19:41 vm-v2-mini python3[3366042]: [00:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:20:41 vm-v2-mini python3[3366042]: [00:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:21:41 vm-v2-mini python3[3366042]: [00:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:22:41 vm-v2-mini python3[3366042]: [00:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:23:41 vm-v2-mini python3[3366042]: [00:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:24:41 vm-v2-mini python3[3366042]: [00:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:25:41 vm-v2-mini python3[3366042]: [00:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:26:41 vm-v2-mini python3[3366042]: [00:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:27:41 vm-v2-mini python3[3366042]: [00:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:28:41 vm-v2-mini python3[3366042]: [00:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:29:41 vm-v2-mini python3[3366042]: [00:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:30:41 vm-v2-mini python3[3366042]: [00:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:31:41 vm-v2-mini python3[3366042]: [00:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:32:41 vm-v2-mini python3[3366042]: [00:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:33:41 vm-v2-mini python3[3366042]: [00:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:34:41 vm-v2-mini python3[3366042]: [00:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:35:41 vm-v2-mini python3[3366042]: [00:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:36:41 vm-v2-mini python3[3366042]: [00:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:37:41 vm-v2-mini python3[3366042]: [00:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:38:41 vm-v2-mini python3[3366042]: [00:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:39:41 vm-v2-mini python3[3366042]: [00:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:40:41 vm-v2-mini python3[3366042]: [00:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:41:41 vm-v2-mini python3[3366042]: [00:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:42:41 vm-v2-mini python3[3366042]: [00:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:43:41 vm-v2-mini python3[3366042]: [00:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:44:41 vm-v2-mini python3[3366042]: [00:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:45:41 vm-v2-mini python3[3366042]: [00:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:46:41 vm-v2-mini python3[3366042]: [00:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:47:41 vm-v2-mini python3[3366042]: [00:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:48:41 vm-v2-mini python3[3366042]: [00:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:49:41 vm-v2-mini python3[3366042]: [00:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:50:41 vm-v2-mini python3[3366042]: [00:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:51:41 vm-v2-mini python3[3366042]: [00:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:52:41 vm-v2-mini python3[3366042]: [00:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:53:41 vm-v2-mini python3[3366042]: [00:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:54:41 vm-v2-mini python3[3366042]: [00:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:55:41 vm-v2-mini python3[3366042]: [00:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:56:41 vm-v2-mini python3[3366042]: [00:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:57:41 vm-v2-mini python3[3366042]: [00:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:58:41 vm-v2-mini python3[3366042]: [00:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 00:59:41 vm-v2-mini python3[3366042]: [00:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:00:41 vm-v2-mini python3[3366042]: [01:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:01:41 vm-v2-mini python3[3366042]: [01:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:02:41 vm-v2-mini python3[3366042]: [01:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:03:41 vm-v2-mini python3[3366042]: [01:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:04:41 vm-v2-mini python3[3366042]: [01:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:05:41 vm-v2-mini python3[3366042]: [01:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:06:41 vm-v2-mini python3[3366042]: [01:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:07:41 vm-v2-mini python3[3366042]: [01:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:08:41 vm-v2-mini python3[3366042]: [01:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:09:41 vm-v2-mini python3[3366042]: [01:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:10:41 vm-v2-mini python3[3366042]: [01:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:11:41 vm-v2-mini python3[3366042]: [01:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:12:41 vm-v2-mini python3[3366042]: [01:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:13:41 vm-v2-mini python3[3366042]: [01:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:14:41 vm-v2-mini python3[3366042]: [01:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:15:41 vm-v2-mini python3[3366042]: [01:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:16:41 vm-v2-mini python3[3366042]: [01:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:17:41 vm-v2-mini python3[3366042]: [01:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:18:41 vm-v2-mini python3[3366042]: [01:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:19:41 vm-v2-mini python3[3366042]: [01:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:20:41 vm-v2-mini python3[3366042]: [01:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:21:41 vm-v2-mini python3[3366042]: [01:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:22:41 vm-v2-mini python3[3366042]: [01:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:23:41 vm-v2-mini python3[3366042]: [01:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:24:41 vm-v2-mini python3[3366042]: [01:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:25:41 vm-v2-mini python3[3366042]: [01:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:26:41 vm-v2-mini python3[3366042]: [01:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:27:41 vm-v2-mini python3[3366042]: [01:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:28:41 vm-v2-mini python3[3366042]: [01:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:29:41 vm-v2-mini python3[3366042]: [01:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:30:41 vm-v2-mini python3[3366042]: [01:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:31:41 vm-v2-mini python3[3366042]: [01:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:32:41 vm-v2-mini python3[3366042]: [01:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:33:41 vm-v2-mini python3[3366042]: [01:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:34:41 vm-v2-mini python3[3366042]: [01:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:35:41 vm-v2-mini python3[3366042]: [01:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:36:41 vm-v2-mini python3[3366042]: [01:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:37:41 vm-v2-mini python3[3366042]: [01:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:38:41 vm-v2-mini python3[3366042]: [01:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:39:41 vm-v2-mini python3[3366042]: [01:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:40:41 vm-v2-mini python3[3366042]: [01:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:41:41 vm-v2-mini python3[3366042]: [01:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:42:41 vm-v2-mini python3[3366042]: [01:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:43:41 vm-v2-mini python3[3366042]: [01:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:44:41 vm-v2-mini python3[3366042]: [01:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:45:41 vm-v2-mini python3[3366042]: [01:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:46:41 vm-v2-mini python3[3366042]: [01:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:47:41 vm-v2-mini python3[3366042]: [01:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:48:41 vm-v2-mini python3[3366042]: [01:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:49:41 vm-v2-mini python3[3366042]: [01:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:50:41 vm-v2-mini python3[3366042]: [01:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:51:41 vm-v2-mini python3[3366042]: [01:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:52:41 vm-v2-mini python3[3366042]: [01:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:53:41 vm-v2-mini python3[3366042]: [01:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:54:41 vm-v2-mini python3[3366042]: [01:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:55:41 vm-v2-mini python3[3366042]: [01:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:56:41 vm-v2-mini python3[3366042]: [01:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:57:41 vm-v2-mini python3[3366042]: [01:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:58:41 vm-v2-mini python3[3366042]: [01:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 01:59:41 vm-v2-mini python3[3366042]: [01:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:00:41 vm-v2-mini python3[3366042]: [02:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:01:41 vm-v2-mini python3[3366042]: [02:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:02:41 vm-v2-mini python3[3366042]: [02:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:03:41 vm-v2-mini python3[3366042]: [02:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:04:41 vm-v2-mini python3[3366042]: [02:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:05:41 vm-v2-mini python3[3366042]: [02:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:06:41 vm-v2-mini python3[3366042]: [02:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:07:41 vm-v2-mini python3[3366042]: [02:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:08:41 vm-v2-mini python3[3366042]: [02:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:09:41 vm-v2-mini python3[3366042]: [02:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:10:41 vm-v2-mini python3[3366042]: [02:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:11:41 vm-v2-mini python3[3366042]: [02:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:12:41 vm-v2-mini python3[3366042]: [02:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:13:41 vm-v2-mini python3[3366042]: [02:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:14:41 vm-v2-mini python3[3366042]: [02:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:15:41 vm-v2-mini python3[3366042]: [02:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:16:41 vm-v2-mini python3[3366042]: [02:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:17:41 vm-v2-mini python3[3366042]: [02:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:18:41 vm-v2-mini python3[3366042]: [02:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:19:41 vm-v2-mini python3[3366042]: [02:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:20:41 vm-v2-mini python3[3366042]: [02:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:21:41 vm-v2-mini python3[3366042]: [02:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:22:41 vm-v2-mini python3[3366042]: [02:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:23:41 vm-v2-mini python3[3366042]: [02:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:24:41 vm-v2-mini python3[3366042]: [02:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:25:41 vm-v2-mini python3[3366042]: [02:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:26:41 vm-v2-mini python3[3366042]: [02:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:27:41 vm-v2-mini python3[3366042]: [02:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:28:41 vm-v2-mini python3[3366042]: [02:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:29:41 vm-v2-mini python3[3366042]: [02:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:30:41 vm-v2-mini python3[3366042]: [02:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:31:41 vm-v2-mini python3[3366042]: [02:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:32:41 vm-v2-mini python3[3366042]: [02:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:33:41 vm-v2-mini python3[3366042]: [02:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:34:41 vm-v2-mini python3[3366042]: [02:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:35:41 vm-v2-mini python3[3366042]: [02:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:36:41 vm-v2-mini python3[3366042]: [02:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:37:41 vm-v2-mini python3[3366042]: [02:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:38:41 vm-v2-mini python3[3366042]: [02:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:39:41 vm-v2-mini python3[3366042]: [02:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:40:41 vm-v2-mini python3[3366042]: [02:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:41:41 vm-v2-mini python3[3366042]: [02:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:42:41 vm-v2-mini python3[3366042]: [02:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:43:41 vm-v2-mini python3[3366042]: [02:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:44:41 vm-v2-mini python3[3366042]: [02:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:45:41 vm-v2-mini python3[3366042]: [02:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:46:41 vm-v2-mini python3[3366042]: [02:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:47:41 vm-v2-mini python3[3366042]: [02:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:48:41 vm-v2-mini python3[3366042]: [02:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:49:41 vm-v2-mini python3[3366042]: [02:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:50:41 vm-v2-mini python3[3366042]: [02:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:51:41 vm-v2-mini python3[3366042]: [02:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:52:41 vm-v2-mini python3[3366042]: [02:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:53:41 vm-v2-mini python3[3366042]: [02:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:54:41 vm-v2-mini python3[3366042]: [02:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:55:41 vm-v2-mini python3[3366042]: [02:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:56:41 vm-v2-mini python3[3366042]: [02:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:57:41 vm-v2-mini python3[3366042]: [02:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:58:41 vm-v2-mini python3[3366042]: [02:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 02:59:41 vm-v2-mini python3[3366042]: [02:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:00:41 vm-v2-mini python3[3366042]: [03:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:01:41 vm-v2-mini python3[3366042]: [03:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:02:41 vm-v2-mini python3[3366042]: [03:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:03:41 vm-v2-mini python3[3366042]: [03:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:04:41 vm-v2-mini python3[3366042]: [03:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:05:41 vm-v2-mini python3[3366042]: [03:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:06:41 vm-v2-mini python3[3366042]: [03:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:07:41 vm-v2-mini python3[3366042]: [03:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:08:41 vm-v2-mini python3[3366042]: [03:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:09:41 vm-v2-mini python3[3366042]: [03:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:10:41 vm-v2-mini python3[3366042]: [03:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:11:41 vm-v2-mini python3[3366042]: [03:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:12:41 vm-v2-mini python3[3366042]: [03:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:13:41 vm-v2-mini python3[3366042]: [03:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:14:41 vm-v2-mini python3[3366042]: [03:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:15:41 vm-v2-mini python3[3366042]: [03:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:16:41 vm-v2-mini python3[3366042]: [03:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:17:41 vm-v2-mini python3[3366042]: [03:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:18:41 vm-v2-mini python3[3366042]: [03:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:19:41 vm-v2-mini python3[3366042]: [03:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:20:41 vm-v2-mini python3[3366042]: [03:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:21:41 vm-v2-mini python3[3366042]: [03:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:22:41 vm-v2-mini python3[3366042]: [03:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:23:41 vm-v2-mini python3[3366042]: [03:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:24:41 vm-v2-mini python3[3366042]: [03:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:25:41 vm-v2-mini python3[3366042]: [03:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:26:41 vm-v2-mini python3[3366042]: [03:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:27:41 vm-v2-mini python3[3366042]: [03:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:28:41 vm-v2-mini python3[3366042]: [03:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:29:41 vm-v2-mini python3[3366042]: [03:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:30:41 vm-v2-mini python3[3366042]: [03:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:31:41 vm-v2-mini python3[3366042]: [03:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:32:41 vm-v2-mini python3[3366042]: [03:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:33:41 vm-v2-mini python3[3366042]: [03:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:34:41 vm-v2-mini python3[3366042]: [03:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:35:41 vm-v2-mini python3[3366042]: [03:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:36:41 vm-v2-mini python3[3366042]: [03:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:37:41 vm-v2-mini python3[3366042]: [03:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:38:41 vm-v2-mini python3[3366042]: [03:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:39:41 vm-v2-mini python3[3366042]: [03:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:40:41 vm-v2-mini python3[3366042]: [03:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:41:41 vm-v2-mini python3[3366042]: [03:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:42:41 vm-v2-mini python3[3366042]: [03:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:43:41 vm-v2-mini python3[3366042]: [03:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:44:41 vm-v2-mini python3[3366042]: [03:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:45:41 vm-v2-mini python3[3366042]: [03:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:46:41 vm-v2-mini python3[3366042]: [03:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:47:41 vm-v2-mini python3[3366042]: [03:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:48:41 vm-v2-mini python3[3366042]: [03:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:49:41 vm-v2-mini python3[3366042]: [03:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:50:41 vm-v2-mini python3[3366042]: [03:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:51:41 vm-v2-mini python3[3366042]: [03:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:52:41 vm-v2-mini python3[3366042]: [03:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:53:41 vm-v2-mini python3[3366042]: [03:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:54:41 vm-v2-mini python3[3366042]: [03:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:55:41 vm-v2-mini python3[3366042]: [03:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:56:41 vm-v2-mini python3[3366042]: [03:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:57:41 vm-v2-mini python3[3366042]: [03:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:58:41 vm-v2-mini python3[3366042]: [03:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 03:59:41 vm-v2-mini python3[3366042]: [03:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:00:41 vm-v2-mini python3[3366042]: [04:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:01:41 vm-v2-mini python3[3366042]: [04:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:02:41 vm-v2-mini python3[3366042]: [04:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:03:41 vm-v2-mini python3[3366042]: [04:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:04:41 vm-v2-mini python3[3366042]: [04:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:05:41 vm-v2-mini python3[3366042]: [04:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:06:41 vm-v2-mini python3[3366042]: [04:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:07:41 vm-v2-mini python3[3366042]: [04:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:08:41 vm-v2-mini python3[3366042]: [04:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:09:41 vm-v2-mini python3[3366042]: [04:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:10:41 vm-v2-mini python3[3366042]: [04:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:11:41 vm-v2-mini python3[3366042]: [04:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:12:41 vm-v2-mini python3[3366042]: [04:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:13:41 vm-v2-mini python3[3366042]: [04:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:14:41 vm-v2-mini python3[3366042]: [04:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:15:41 vm-v2-mini python3[3366042]: [04:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:16:41 vm-v2-mini python3[3366042]: [04:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:17:41 vm-v2-mini python3[3366042]: [04:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:18:41 vm-v2-mini python3[3366042]: [04:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:19:41 vm-v2-mini python3[3366042]: [04:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:20:41 vm-v2-mini python3[3366042]: [04:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:21:41 vm-v2-mini python3[3366042]: [04:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:22:41 vm-v2-mini python3[3366042]: [04:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:23:41 vm-v2-mini python3[3366042]: [04:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:24:41 vm-v2-mini python3[3366042]: [04:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:25:41 vm-v2-mini python3[3366042]: [04:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:26:41 vm-v2-mini python3[3366042]: [04:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:27:41 vm-v2-mini python3[3366042]: [04:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:28:41 vm-v2-mini python3[3366042]: [04:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:29:41 vm-v2-mini python3[3366042]: [04:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:30:41 vm-v2-mini python3[3366042]: [04:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:31:41 vm-v2-mini python3[3366042]: [04:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:32:41 vm-v2-mini python3[3366042]: [04:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:33:41 vm-v2-mini python3[3366042]: [04:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:34:41 vm-v2-mini python3[3366042]: [04:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:35:41 vm-v2-mini python3[3366042]: [04:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:36:41 vm-v2-mini python3[3366042]: [04:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:37:41 vm-v2-mini python3[3366042]: [04:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:38:41 vm-v2-mini python3[3366042]: [04:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:39:41 vm-v2-mini python3[3366042]: [04:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:40:41 vm-v2-mini python3[3366042]: [04:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:41:41 vm-v2-mini python3[3366042]: [04:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:42:41 vm-v2-mini python3[3366042]: [04:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:43:41 vm-v2-mini python3[3366042]: [04:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:44:41 vm-v2-mini python3[3366042]: [04:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:45:41 vm-v2-mini python3[3366042]: [04:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:46:41 vm-v2-mini python3[3366042]: [04:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:47:41 vm-v2-mini python3[3366042]: [04:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:48:41 vm-v2-mini python3[3366042]: [04:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:49:41 vm-v2-mini python3[3366042]: [04:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:50:41 vm-v2-mini python3[3366042]: [04:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:51:41 vm-v2-mini python3[3366042]: [04:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:52:41 vm-v2-mini python3[3366042]: [04:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:53:41 vm-v2-mini python3[3366042]: [04:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:54:41 vm-v2-mini python3[3366042]: [04:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:55:41 vm-v2-mini python3[3366042]: [04:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:56:41 vm-v2-mini python3[3366042]: [04:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:57:41 vm-v2-mini python3[3366042]: [04:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:58:41 vm-v2-mini python3[3366042]: [04:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 04:59:41 vm-v2-mini python3[3366042]: [04:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:00:41 vm-v2-mini python3[3366042]: [05:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:01:41 vm-v2-mini python3[3366042]: [05:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:02:41 vm-v2-mini python3[3366042]: [05:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:03:41 vm-v2-mini python3[3366042]: [05:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:04:41 vm-v2-mini python3[3366042]: [05:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:05:41 vm-v2-mini python3[3366042]: [05:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:06:41 vm-v2-mini python3[3366042]: [05:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:07:41 vm-v2-mini python3[3366042]: [05:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:08:41 vm-v2-mini python3[3366042]: [05:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:09:41 vm-v2-mini python3[3366042]: [05:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:10:41 vm-v2-mini python3[3366042]: [05:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:11:41 vm-v2-mini python3[3366042]: [05:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:12:41 vm-v2-mini python3[3366042]: [05:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:13:41 vm-v2-mini python3[3366042]: [05:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:14:41 vm-v2-mini python3[3366042]: [05:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:15:41 vm-v2-mini python3[3366042]: [05:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:16:41 vm-v2-mini python3[3366042]: [05:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:17:41 vm-v2-mini python3[3366042]: [05:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:18:41 vm-v2-mini python3[3366042]: [05:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:19:41 vm-v2-mini python3[3366042]: [05:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:20:41 vm-v2-mini python3[3366042]: [05:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:21:41 vm-v2-mini python3[3366042]: [05:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:22:41 vm-v2-mini python3[3366042]: [05:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:23:41 vm-v2-mini python3[3366042]: [05:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:24:41 vm-v2-mini python3[3366042]: [05:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:25:41 vm-v2-mini python3[3366042]: [05:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:26:41 vm-v2-mini python3[3366042]: [05:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:27:41 vm-v2-mini python3[3366042]: [05:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:28:41 vm-v2-mini python3[3366042]: [05:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:29:41 vm-v2-mini python3[3366042]: [05:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:30:41 vm-v2-mini python3[3366042]: [05:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:31:41 vm-v2-mini python3[3366042]: [05:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:32:41 vm-v2-mini python3[3366042]: [05:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:33:41 vm-v2-mini python3[3366042]: [05:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:34:41 vm-v2-mini python3[3366042]: [05:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:35:41 vm-v2-mini python3[3366042]: [05:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:36:41 vm-v2-mini python3[3366042]: [05:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:37:41 vm-v2-mini python3[3366042]: [05:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:38:41 vm-v2-mini python3[3366042]: [05:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:39:41 vm-v2-mini python3[3366042]: [05:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:40:41 vm-v2-mini python3[3366042]: [05:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:41:41 vm-v2-mini python3[3366042]: [05:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:42:41 vm-v2-mini python3[3366042]: [05:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:43:41 vm-v2-mini python3[3366042]: [05:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:44:41 vm-v2-mini python3[3366042]: [05:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:45:41 vm-v2-mini python3[3366042]: [05:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:46:41 vm-v2-mini python3[3366042]: [05:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:47:41 vm-v2-mini python3[3366042]: [05:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:48:41 vm-v2-mini python3[3366042]: [05:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:49:41 vm-v2-mini python3[3366042]: [05:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:50:41 vm-v2-mini python3[3366042]: [05:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:51:41 vm-v2-mini python3[3366042]: [05:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:52:41 vm-v2-mini python3[3366042]: [05:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:53:41 vm-v2-mini python3[3366042]: [05:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:54:41 vm-v2-mini python3[3366042]: [05:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:55:41 vm-v2-mini python3[3366042]: [05:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:56:41 vm-v2-mini python3[3366042]: [05:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:57:41 vm-v2-mini python3[3366042]: [05:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:58:41 vm-v2-mini python3[3366042]: [05:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 05:59:41 vm-v2-mini python3[3366042]: [05:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:00:41 vm-v2-mini python3[3366042]: [06:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:01:41 vm-v2-mini python3[3366042]: [06:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:02:41 vm-v2-mini python3[3366042]: [06:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:03:41 vm-v2-mini python3[3366042]: [06:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:04:41 vm-v2-mini python3[3366042]: [06:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:05:41 vm-v2-mini python3[3366042]: [06:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:06:41 vm-v2-mini python3[3366042]: [06:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:07:41 vm-v2-mini python3[3366042]: [06:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:08:41 vm-v2-mini python3[3366042]: [06:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:09:41 vm-v2-mini python3[3366042]: [06:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:10:41 vm-v2-mini python3[3366042]: [06:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:11:41 vm-v2-mini python3[3366042]: [06:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:12:41 vm-v2-mini python3[3366042]: [06:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:13:41 vm-v2-mini python3[3366042]: [06:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:14:41 vm-v2-mini python3[3366042]: [06:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:15:41 vm-v2-mini python3[3366042]: [06:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:16:41 vm-v2-mini python3[3366042]: [06:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:17:41 vm-v2-mini python3[3366042]: [06:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:18:41 vm-v2-mini python3[3366042]: [06:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:19:41 vm-v2-mini python3[3366042]: [06:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:20:41 vm-v2-mini python3[3366042]: [06:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:21:41 vm-v2-mini python3[3366042]: [06:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:22:41 vm-v2-mini python3[3366042]: [06:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:23:41 vm-v2-mini python3[3366042]: [06:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:24:41 vm-v2-mini python3[3366042]: [06:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:25:41 vm-v2-mini python3[3366042]: [06:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:26:41 vm-v2-mini python3[3366042]: [06:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:27:41 vm-v2-mini python3[3366042]: [06:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:28:41 vm-v2-mini python3[3366042]: [06:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:29:41 vm-v2-mini python3[3366042]: [06:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:30:41 vm-v2-mini python3[3366042]: [06:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:31:41 vm-v2-mini python3[3366042]: [06:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:32:41 vm-v2-mini python3[3366042]: [06:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:33:41 vm-v2-mini python3[3366042]: [06:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:34:41 vm-v2-mini python3[3366042]: [06:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:35:41 vm-v2-mini python3[3366042]: [06:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:36:41 vm-v2-mini python3[3366042]: [06:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:37:41 vm-v2-mini python3[3366042]: [06:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:38:41 vm-v2-mini python3[3366042]: [06:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:39:41 vm-v2-mini python3[3366042]: [06:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:40:41 vm-v2-mini python3[3366042]: [06:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:41:41 vm-v2-mini python3[3366042]: [06:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:42:41 vm-v2-mini python3[3366042]: [06:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:43:41 vm-v2-mini python3[3366042]: [06:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:44:41 vm-v2-mini python3[3366042]: [06:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:45:41 vm-v2-mini python3[3366042]: [06:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:46:41 vm-v2-mini python3[3366042]: [06:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:47:41 vm-v2-mini python3[3366042]: [06:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:48:41 vm-v2-mini python3[3366042]: [06:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:49:41 vm-v2-mini python3[3366042]: [06:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:50:41 vm-v2-mini python3[3366042]: [06:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:51:41 vm-v2-mini python3[3366042]: [06:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:52:41 vm-v2-mini python3[3366042]: [06:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:53:41 vm-v2-mini python3[3366042]: [06:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:54:41 vm-v2-mini python3[3366042]: [06:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:55:41 vm-v2-mini python3[3366042]: [06:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:56:41 vm-v2-mini python3[3366042]: [06:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:57:41 vm-v2-mini python3[3366042]: [06:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:58:41 vm-v2-mini python3[3366042]: [06:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 06:59:41 vm-v2-mini python3[3366042]: [06:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:00:41 vm-v2-mini python3[3366042]: [07:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:01:41 vm-v2-mini python3[3366042]: [07:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:02:41 vm-v2-mini python3[3366042]: [07:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:03:41 vm-v2-mini python3[3366042]: [07:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:04:41 vm-v2-mini python3[3366042]: [07:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:05:41 vm-v2-mini python3[3366042]: [07:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:06:41 vm-v2-mini python3[3366042]: [07:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:07:41 vm-v2-mini python3[3366042]: [07:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:08:41 vm-v2-mini python3[3366042]: [07:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:09:41 vm-v2-mini python3[3366042]: [07:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:10:41 vm-v2-mini python3[3366042]: [07:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:11:41 vm-v2-mini python3[3366042]: [07:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:12:41 vm-v2-mini python3[3366042]: [07:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:13:41 vm-v2-mini python3[3366042]: [07:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:14:41 vm-v2-mini python3[3366042]: [07:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:15:41 vm-v2-mini python3[3366042]: [07:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:16:41 vm-v2-mini python3[3366042]: [07:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:17:41 vm-v2-mini python3[3366042]: [07:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:18:41 vm-v2-mini python3[3366042]: [07:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:19:41 vm-v2-mini python3[3366042]: [07:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:20:41 vm-v2-mini python3[3366042]: [07:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:21:41 vm-v2-mini python3[3366042]: [07:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:22:41 vm-v2-mini python3[3366042]: [07:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:23:41 vm-v2-mini python3[3366042]: [07:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:24:41 vm-v2-mini python3[3366042]: [07:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:25:41 vm-v2-mini python3[3366042]: [07:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:26:41 vm-v2-mini python3[3366042]: [07:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:27:41 vm-v2-mini python3[3366042]: [07:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:28:41 vm-v2-mini python3[3366042]: [07:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:29:41 vm-v2-mini python3[3366042]: [07:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:30:41 vm-v2-mini python3[3366042]: [07:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:31:41 vm-v2-mini python3[3366042]: [07:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:32:41 vm-v2-mini python3[3366042]: [07:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:33:41 vm-v2-mini python3[3366042]: [07:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:34:41 vm-v2-mini python3[3366042]: [07:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:35:41 vm-v2-mini python3[3366042]: [07:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:36:41 vm-v2-mini python3[3366042]: [07:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:37:41 vm-v2-mini python3[3366042]: [07:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:38:41 vm-v2-mini python3[3366042]: [07:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:39:41 vm-v2-mini python3[3366042]: [07:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:40:41 vm-v2-mini python3[3366042]: [07:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:41:41 vm-v2-mini python3[3366042]: [07:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:42:41 vm-v2-mini python3[3366042]: [07:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:43:41 vm-v2-mini python3[3366042]: [07:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:44:41 vm-v2-mini python3[3366042]: [07:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:45:41 vm-v2-mini python3[3366042]: [07:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:46:41 vm-v2-mini python3[3366042]: [07:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:47:41 vm-v2-mini python3[3366042]: [07:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:48:41 vm-v2-mini python3[3366042]: [07:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:49:41 vm-v2-mini python3[3366042]: [07:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:50:41 vm-v2-mini python3[3366042]: [07:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:51:41 vm-v2-mini python3[3366042]: [07:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:52:41 vm-v2-mini python3[3366042]: [07:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:53:41 vm-v2-mini python3[3366042]: [07:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:54:41 vm-v2-mini python3[3366042]: [07:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:55:41 vm-v2-mini python3[3366042]: [07:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:56:41 vm-v2-mini python3[3366042]: [07:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:57:41 vm-v2-mini python3[3366042]: [07:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:58:41 vm-v2-mini python3[3366042]: [07:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 07:59:41 vm-v2-mini python3[3366042]: [07:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:00:41 vm-v2-mini python3[3366042]: [08:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:01:41 vm-v2-mini python3[3366042]: [08:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:02:41 vm-v2-mini python3[3366042]: [08:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:03:41 vm-v2-mini python3[3366042]: [08:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:04:41 vm-v2-mini python3[3366042]: [08:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:05:41 vm-v2-mini python3[3366042]: [08:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:06:41 vm-v2-mini python3[3366042]: [08:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:07:41 vm-v2-mini python3[3366042]: [08:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:08:41 vm-v2-mini python3[3366042]: [08:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:09:41 vm-v2-mini python3[3366042]: [08:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:10:41 vm-v2-mini python3[3366042]: [08:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:11:41 vm-v2-mini python3[3366042]: [08:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:12:41 vm-v2-mini python3[3366042]: [08:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:13:41 vm-v2-mini python3[3366042]: [08:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:14:41 vm-v2-mini python3[3366042]: [08:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:15:41 vm-v2-mini python3[3366042]: [08:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:16:41 vm-v2-mini python3[3366042]: [08:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:17:41 vm-v2-mini python3[3366042]: [08:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:18:41 vm-v2-mini python3[3366042]: [08:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:19:41 vm-v2-mini python3[3366042]: [08:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:20:41 vm-v2-mini python3[3366042]: [08:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:21:41 vm-v2-mini python3[3366042]: [08:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:22:41 vm-v2-mini python3[3366042]: [08:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:23:41 vm-v2-mini python3[3366042]: [08:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:24:41 vm-v2-mini python3[3366042]: [08:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:25:41 vm-v2-mini python3[3366042]: [08:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:26:41 vm-v2-mini python3[3366042]: [08:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:27:41 vm-v2-mini python3[3366042]: [08:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:28:41 vm-v2-mini python3[3366042]: [08:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:29:41 vm-v2-mini python3[3366042]: [08:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:30:41 vm-v2-mini python3[3366042]: [08:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:31:41 vm-v2-mini python3[3366042]: [08:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:32:41 vm-v2-mini python3[3366042]: [08:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:33:41 vm-v2-mini python3[3366042]: [08:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:34:41 vm-v2-mini python3[3366042]: [08:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:35:41 vm-v2-mini python3[3366042]: [08:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:36:41 vm-v2-mini python3[3366042]: [08:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:37:41 vm-v2-mini python3[3366042]: [08:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:38:41 vm-v2-mini python3[3366042]: [08:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:39:41 vm-v2-mini python3[3366042]: [08:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:40:41 vm-v2-mini python3[3366042]: [08:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:41:41 vm-v2-mini python3[3366042]: [08:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:42:41 vm-v2-mini python3[3366042]: [08:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:43:41 vm-v2-mini python3[3366042]: [08:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:44:41 vm-v2-mini python3[3366042]: [08:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:45:41 vm-v2-mini python3[3366042]: [08:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:46:41 vm-v2-mini python3[3366042]: [08:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:47:41 vm-v2-mini python3[3366042]: [08:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:48:41 vm-v2-mini python3[3366042]: [08:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:49:41 vm-v2-mini python3[3366042]: [08:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:50:41 vm-v2-mini python3[3366042]: [08:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:51:41 vm-v2-mini python3[3366042]: [08:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:52:41 vm-v2-mini python3[3366042]: [08:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:53:41 vm-v2-mini python3[3366042]: [08:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:54:41 vm-v2-mini python3[3366042]: [08:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:55:41 vm-v2-mini python3[3366042]: [08:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:56:41 vm-v2-mini python3[3366042]: [08:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:57:41 vm-v2-mini python3[3366042]: [08:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:58:41 vm-v2-mini python3[3366042]: [08:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 08:59:41 vm-v2-mini python3[3366042]: [08:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:00:41 vm-v2-mini python3[3366042]: [09:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:01:41 vm-v2-mini python3[3366042]: [09:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:02:41 vm-v2-mini python3[3366042]: [09:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:03:41 vm-v2-mini python3[3366042]: [09:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:04:41 vm-v2-mini python3[3366042]: [09:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:05:41 vm-v2-mini python3[3366042]: [09:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:06:41 vm-v2-mini python3[3366042]: [09:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:07:41 vm-v2-mini python3[3366042]: [09:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:08:41 vm-v2-mini python3[3366042]: [09:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:09:41 vm-v2-mini python3[3366042]: [09:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:10:41 vm-v2-mini python3[3366042]: [09:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:11:41 vm-v2-mini python3[3366042]: [09:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:12:41 vm-v2-mini python3[3366042]: [09:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:13:41 vm-v2-mini python3[3366042]: [09:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:14:41 vm-v2-mini python3[3366042]: [09:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:15:41 vm-v2-mini python3[3366042]: [09:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:16:41 vm-v2-mini python3[3366042]: [09:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:17:41 vm-v2-mini python3[3366042]: [09:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:18:41 vm-v2-mini python3[3366042]: [09:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:19:41 vm-v2-mini python3[3366042]: [09:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:20:41 vm-v2-mini python3[3366042]: [09:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:21:41 vm-v2-mini python3[3366042]: [09:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:22:41 vm-v2-mini python3[3366042]: [09:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:23:41 vm-v2-mini python3[3366042]: [09:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:24:41 vm-v2-mini python3[3366042]: [09:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:25:41 vm-v2-mini python3[3366042]: [09:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:26:41 vm-v2-mini python3[3366042]: [09:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:27:41 vm-v2-mini python3[3366042]: [09:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:28:41 vm-v2-mini python3[3366042]: [09:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:29:41 vm-v2-mini python3[3366042]: [09:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:30:41 vm-v2-mini python3[3366042]: [09:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:31:41 vm-v2-mini python3[3366042]: [09:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:32:41 vm-v2-mini python3[3366042]: [09:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:33:41 vm-v2-mini python3[3366042]: [09:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:34:41 vm-v2-mini python3[3366042]: [09:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:35:41 vm-v2-mini python3[3366042]: [09:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:36:41 vm-v2-mini python3[3366042]: [09:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:37:41 vm-v2-mini python3[3366042]: [09:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:38:41 vm-v2-mini python3[3366042]: [09:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:39:41 vm-v2-mini python3[3366042]: [09:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:40:41 vm-v2-mini python3[3366042]: [09:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:41:41 vm-v2-mini python3[3366042]: [09:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:42:41 vm-v2-mini python3[3366042]: [09:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:43:41 vm-v2-mini python3[3366042]: [09:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:44:41 vm-v2-mini python3[3366042]: [09:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:45:41 vm-v2-mini python3[3366042]: [09:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:46:41 vm-v2-mini python3[3366042]: [09:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:47:41 vm-v2-mini python3[3366042]: [09:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:48:41 vm-v2-mini python3[3366042]: [09:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:49:41 vm-v2-mini python3[3366042]: [09:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:50:41 vm-v2-mini python3[3366042]: [09:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:51:41 vm-v2-mini python3[3366042]: [09:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:52:41 vm-v2-mini python3[3366042]: [09:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:53:41 vm-v2-mini python3[3366042]: [09:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:54:41 vm-v2-mini python3[3366042]: [09:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:55:41 vm-v2-mini python3[3366042]: [09:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:56:41 vm-v2-mini python3[3366042]: [09:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:57:41 vm-v2-mini python3[3366042]: [09:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:58:41 vm-v2-mini python3[3366042]: [09:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 09:59:41 vm-v2-mini python3[3366042]: [09:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:00:41 vm-v2-mini python3[3366042]: [10:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:01:41 vm-v2-mini python3[3366042]: [10:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:02:41 vm-v2-mini python3[3366042]: [10:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:03:41 vm-v2-mini python3[3366042]: [10:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:04:41 vm-v2-mini python3[3366042]: [10:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:05:41 vm-v2-mini python3[3366042]: [10:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:06:41 vm-v2-mini python3[3366042]: [10:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:07:41 vm-v2-mini python3[3366042]: [10:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:08:41 vm-v2-mini python3[3366042]: [10:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:09:41 vm-v2-mini python3[3366042]: [10:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:10:41 vm-v2-mini python3[3366042]: [10:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:11:41 vm-v2-mini python3[3366042]: [10:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:12:41 vm-v2-mini python3[3366042]: [10:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:13:41 vm-v2-mini python3[3366042]: [10:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:14:41 vm-v2-mini python3[3366042]: [10:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:15:41 vm-v2-mini python3[3366042]: [10:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:16:41 vm-v2-mini python3[3366042]: [10:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:17:41 vm-v2-mini python3[3366042]: [10:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:18:41 vm-v2-mini python3[3366042]: [10:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:19:41 vm-v2-mini python3[3366042]: [10:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:20:41 vm-v2-mini python3[3366042]: [10:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:21:41 vm-v2-mini python3[3366042]: [10:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:22:41 vm-v2-mini python3[3366042]: [10:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:23:41 vm-v2-mini python3[3366042]: [10:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:24:41 vm-v2-mini python3[3366042]: [10:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:25:41 vm-v2-mini python3[3366042]: [10:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:26:41 vm-v2-mini python3[3366042]: [10:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:27:41 vm-v2-mini python3[3366042]: [10:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:28:41 vm-v2-mini python3[3366042]: [10:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:29:41 vm-v2-mini python3[3366042]: [10:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:30:41 vm-v2-mini python3[3366042]: [10:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:31:41 vm-v2-mini python3[3366042]: [10:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:32:41 vm-v2-mini python3[3366042]: [10:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:33:41 vm-v2-mini python3[3366042]: [10:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:34:41 vm-v2-mini python3[3366042]: [10:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:35:41 vm-v2-mini python3[3366042]: [10:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:36:41 vm-v2-mini python3[3366042]: [10:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:37:41 vm-v2-mini python3[3366042]: [10:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:38:41 vm-v2-mini python3[3366042]: [10:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:39:41 vm-v2-mini python3[3366042]: [10:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:40:41 vm-v2-mini python3[3366042]: [10:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:41:41 vm-v2-mini python3[3366042]: [10:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:42:41 vm-v2-mini python3[3366042]: [10:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:43:41 vm-v2-mini python3[3366042]: [10:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:44:41 vm-v2-mini python3[3366042]: [10:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:45:41 vm-v2-mini python3[3366042]: [10:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:46:41 vm-v2-mini python3[3366042]: [10:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:47:41 vm-v2-mini python3[3366042]: [10:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:48:41 vm-v2-mini python3[3366042]: [10:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:49:41 vm-v2-mini python3[3366042]: [10:49:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:50:41 vm-v2-mini python3[3366042]: [10:50:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:51:41 vm-v2-mini python3[3366042]: [10:51:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:52:41 vm-v2-mini python3[3366042]: [10:52:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:53:41 vm-v2-mini python3[3366042]: [10:53:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:54:41 vm-v2-mini python3[3366042]: [10:54:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:55:41 vm-v2-mini python3[3366042]: [10:55:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:56:41 vm-v2-mini python3[3366042]: [10:56:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:57:41 vm-v2-mini python3[3366042]: [10:57:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:58:41 vm-v2-mini python3[3366042]: [10:58:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 10:59:41 vm-v2-mini python3[3366042]: [10:59:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:00:41 vm-v2-mini python3[3366042]: [11:00:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:01:41 vm-v2-mini python3[3366042]: [11:01:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:02:41 vm-v2-mini python3[3366042]: [11:02:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:03:41 vm-v2-mini python3[3366042]: [11:03:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:04:41 vm-v2-mini python3[3366042]: [11:04:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:05:41 vm-v2-mini python3[3366042]: [11:05:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:06:41 vm-v2-mini python3[3366042]: [11:06:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:07:41 vm-v2-mini python3[3366042]: [11:07:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:08:41 vm-v2-mini python3[3366042]: [11:08:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:09:41 vm-v2-mini python3[3366042]: [11:09:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:10:41 vm-v2-mini python3[3366042]: [11:10:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:11:41 vm-v2-mini python3[3366042]: [11:11:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:12:41 vm-v2-mini python3[3366042]: [11:12:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:13:41 vm-v2-mini python3[3366042]: [11:13:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:14:41 vm-v2-mini python3[3366042]: [11:14:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:15:41 vm-v2-mini python3[3366042]: [11:15:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:16:41 vm-v2-mini python3[3366042]: [11:16:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:17:41 vm-v2-mini python3[3366042]: [11:17:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:18:41 vm-v2-mini python3[3366042]: [11:18:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:19:41 vm-v2-mini python3[3366042]: [11:19:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:20:41 vm-v2-mini python3[3366042]: [11:20:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:21:41 vm-v2-mini python3[3366042]: [11:21:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:22:41 vm-v2-mini python3[3366042]: [11:22:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:23:41 vm-v2-mini python3[3366042]: [11:23:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:24:41 vm-v2-mini python3[3366042]: [11:24:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:25:41 vm-v2-mini python3[3366042]: [11:25:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:26:41 vm-v2-mini python3[3366042]: [11:26:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:27:41 vm-v2-mini python3[3366042]: [11:27:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:28:41 vm-v2-mini python3[3366042]: [11:28:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:29:41 vm-v2-mini python3[3366042]: [11:29:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:30:41 vm-v2-mini python3[3366042]: [11:30:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:31:41 vm-v2-mini python3[3366042]: [11:31:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:32:41 vm-v2-mini python3[3366042]: [11:32:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:33:41 vm-v2-mini python3[3366042]: [11:33:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:34:41 vm-v2-mini python3[3366042]: [11:34:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:35:41 vm-v2-mini python3[3366042]: [11:35:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:36:41 vm-v2-mini python3[3366042]: [11:36:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:37:41 vm-v2-mini python3[3366042]: [11:37:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:38:41 vm-v2-mini python3[3366042]: [11:38:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:39:41 vm-v2-mini python3[3366042]: [11:39:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:40:41 vm-v2-mini python3[3366042]: [11:40:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:41:41 vm-v2-mini python3[3366042]: [11:41:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:42:41 vm-v2-mini python3[3366042]: [11:42:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:43:41 vm-v2-mini python3[3366042]: [11:43:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:44:41 vm-v2-mini python3[3366042]: [11:44:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:45:41 vm-v2-mini python3[3366042]: [11:45:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:46:41 vm-v2-mini python3[3366042]: [11:46:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+May 24 11:47:41 vm-v2-mini python3[3366042]: [11:47:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
+
+
+
+May 24 11:48:41 vm-v2-mini python3[3366042]: [11:48:41] 🏛️ 🛡️ [MOMENTUM SHIELD ACTIVATE]: BTC лети  т слишком быстро (0.0593%). Все капканы МЕХС заблокированы.
