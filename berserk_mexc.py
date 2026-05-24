@@ -543,53 +543,43 @@ async def main_logic():
     log(f"🏛️ 🏹 Охота лимитными капканами Berserk V16.9 активирована. Патрулирую стаканы...")
 
     # Инициализируем таймер фонового опроса позиций
+    # --- [ВРЕЗКА V20.3: ОЧИЩЕННЫЙ ГЕНЕРАЛЬНЫЙ ЦИКЛ СНАЙПЕРА] ---
     last_pos_sync = 0
 
     while memory.is_running:
         try:
             now = time.time()
 
-            # --- [ВРЕЗКА V19.5: ЖИВОЙ ТРЕКЕР ПОЗИЦИЙ ВНУТРИ MAIN_LOGIC] ---
-            # Опрашиваем REST-шлюз МЕХС строго раз в 10 секунд, полностью разгружая monitor_logic
+            # А. ТРЕКЕР УСЫНОВЛЕНИЯ ПОЗИЦИЙ СТРОГО РАЗ В 10 СЕКУНД
             if now - last_pos_sync >= 10:
                 try:
                     raw_positions = exchange.fetch_positions(None, {'type': 'swap'})
                     current_mexc_active = []
 
-                    # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V20.2: ВСЕЯДНЫЙ ВАЛИДАТOР ПOЗИЦИЙ MEXC ---
                     for p in raw_positions:
-                        # Извлекаем объем через безопасный сборщик ключей, полностью исключая KeyError
                         vol_raw = p.get('contracts', p.get('positionAmt', p.get('size', p.get('marginSize', 0.0))))
-                        if vol_raw is None:
-                            vol_raw = 0.0
-                        vol = abs(float(vol_raw))
+                        vol = abs(float(vol_raw)) if vol_raw is not None else 0.0
 
                         if vol > 0.00001:
                             raw_sym = p.get('symbol', p.get('pair', ''))
                             clean_sym = raw_sym.replace('_', '/').replace(':USDT', '')
                             fleet_key = f"{clean_sym}:USDT"
-
                             target_key = fleet_key if fleet_key in PRIORITY_LIST else clean_sym
+
                             if target_key in PRIORITY_LIST:
                                 current_mexc_active.append(target_key)
 
-                                # Усыновляем позицию, если её еще нет в оперативной памяти RAM
                                 if target_key not in memory.active_pos:
                                     side_raw = str(p.get('side', p.get('positionSide', p.get('direction', 'long')))).lower()
                                     side = 'buy' if ('long' in side_raw or 'buy' in side_raw or 'open_long' in side_raw) else 'sell'
-
                                     entry_price = float(p.get('entryPrice', p.get('price', p.get('avgEntryPrice', 0.0))))
 
-                                    log(f"🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.2: Усыновляем контракт {target_key} ({vol} лотов).")
+                                    log(f"🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт {target_key} ({vol} лотов).")
                                     memory.active_pos[target_key] = {
-                                        'side': side,
-                                        'vol': vol,
-                                        'price': entry_price,
-                                        'entry_time': time.time(),
+                                        'side': side, 'vol': vol, 'price': entry_price, 'entry_time': time.time(),
                                         'dna': {'l_off': 0.002, 's_off': 0.002}
                                     }
 
-                    # Зачищаем из памяти лоты, закрытые на бирже
                     for sym in list(memory.active_pos.keys()):
                         if sym not in current_mexc_active:
                             log(f"🧹 Позиция {sym} закрыта на МЕХС. Очищаем RAM.")
@@ -599,57 +589,41 @@ async def main_logic():
 
                     memory.slots_occupied = len(current_mexc_active)
                     last_pos_sync = now
-                except Exception as pos_err:
+                except:
                     pass
-            # ------------------------------------------------------------------
 
-            # --- [УЛЬТИМАТИВНЫЙ ФИКС V20.0: ЖЕСТКИЙ REST MOMENTUM SHIELD] ---
-            # Больше не зависим от WebSocket! Берем цену из REST-поводыря Биткоина
-            try:
-                # Скачиваем чистый, живой тикер Биткоина напрямую с биржи по HTTP REST
-                btc_ticker = exchange.fetch_ticker('BTC/USDT:USDT')
-                btc_price = float(btc_ticker.get('last', btc_ticker.get('close', 0.0)))
-
-                if btc_price > 0:
-                    if not hasattr(memory, 'btc_history'):
-                        memory.btc_history = []
-
-                    # Набиваем историю
-                    memory.btc_history.append(btc_price)
-                    memory.btc_history = memory.btc_history[-10:] # Храним последние 10 минут
-
-                # Обсчитываем скорость только если накопили реальный REST-трек за 3 минуты
-                if len(memory.btc_history) >= 3:
-                    btc_window = memory.btc_history[-3:]
-                    m1_diff = abs(btc_window[-1] - btc_window[-2])
-                    m2_diff = abs(btc_window[-2] - btc_window[-3])
-                    avg_btc_move_pct = ((m1_diff + m2_diff) / 2) / btc_window[-1] * 100
-
-                    # Если Биткоин летит быстрее 0.045% за минуту — блокируем взвод капканов
-                    if avg_btc_move_pct > 0.045:
-                        if not hasattr(memory, 'last_momentum_log'):
-                            memory.last_momentum_log = 0
-
-                        if now - memory.last_momentum_log >= 60:
-                            log(f"🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна ({round(a vg_btc_move_pct, 4)}%). Все капканы МЕХС заблокированы.")
-                            memory.last_momentum_log = now
-                        continue
-            except Exception as btc_rest_err:
-                # Если сеть мигнула — безопасно пропускаем шаг, не вешая сканер
-                pass
-            # ------------------------------------------------------------------
-            # 1. АВТОНОМНЫЙ REST-ПУШЕР БИТКОИНА ДЛЯ MEXC
+            # Б. REST-ПОЛУЧЕНИЕ ЦЕНЫ BTC ДЛЯ ИСТОРИИ СТРОГО РАЗ В 60 СЕКУНД (Защита от дублей)
             if now - memory.last_btc_push >= 60:
                 try:
                     btc_ticker = exchange.fetch_ticker('BTC/USDT:USDT')
                     btc_price = float(btc_ticker.get('last', btc_ticker.get('close', 0.0)))
                     if btc_price > 0:
+                        if not hasattr(memory, 'btc_history'):
+                            memory.btc_history = []
                         memory.btc_history.append(btc_price)
-                        if len(memory.btc_history) > 30: memory.btc_history.pop(0)
-#                        log(f"🛰️ ПОВОДЫРЬ СИНХРОНИЗИРОВАН (REST): BTC @ ${btc_price} | История: {l en(memory.btc_history)}м")
+                        memory.btc_history = memory.btc_history[-15:] # Храним 15 минут
                         memory.last_btc_push = now
                 except Exception as btc_err:
-                    log(f"⚠️ Ошибка REST-запроса Поводыря: {btc_err}")
+                    log(f"⚠ Ошибка REST-запроса Поводыря: {btc_err}")
+                    memory.last_btc_push = now
+
+            # В. КВАНТОВЫЙ REST MOMENTUM SHIELD (Обсчет реальной трендовой скорости)
+            if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 3:
+                btc_window = memory.btc_history[-3:]
+                m1_diff = abs(btc_window[-1] - btc_window[-2])
+                m2_diff = abs(btc_window[-2] - btc_window[-3])
+                avg_btc_move_pct = ((m1_diff + m2_diff) / 2) / btc_window[-1] * 100
+
+                if avg_btc_move_pct > 0.045:
+                    if not hasattr(memory, 'last_momentum_log'):
+                        memory.last_momentum_log = 0
+                    if now - memory.last_momentum_log >= 60:
+                        log(f"🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна ({round(avg_b tc_move_pct, 4)}% > 0.045%). Блокирую капканы.")
+                        memory.last_momentum_log = now
+                    # Важно: Сплющиваем процессор на паузу перед уходом в начало цикла
+                    await asyncio.sleep(0.5)
+                    continue
+# ------------------------------------------------------------------
 
             # 2. ФОНОВОЕ ОБНОВЛЕНИЕ БАЛАНСА (ЗАЩИТА ОТ ОБНУЛЕНИЯ И CODE 2005)
             if now - last_balance_update >= 15:
