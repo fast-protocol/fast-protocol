@@ -315,8 +315,8 @@ async def monitor_logic(exchange):
         now_time = time.time()
 
         # ДЕБАГ №1: Проверяем, видит ли вообще функция активные позиции в RAM
-        if int(now_time) % 10 == 0 and memory.active_pos:
-            log(f"🔍 [DEBUG 1]: В памяти RAM active_pos числятся ключи: {list(memory.active_pos.keys())}")
+#        if int(now_time) % 10 == 0 and memory.active_pos:
+#            log(f"🔍 [DEBUG 1]: В памяти RAM active_pos числятся ключи: {list(memory.active_pos.keys())}")
 
         for symbol, pos in list(memory.active_pos.items()):
             age = now_time - pos['entry_time']
@@ -326,8 +326,8 @@ async def monitor_logic(exchange):
 #+++++++++++
 
             # ДЕБАГ №2: Проверяем, какие ключи цен сейчас лежат в WebSocket-таблице memory.prices
-            if int(now_time) % 10 == 0:
-               log(f"🔍 [DEBUG 2]: Сканирую {symbol} | В memory.prices сейчас есть ключи: {list(memory.prices.keys())[:5]}")
+#            if int(now_time) % 10 == 0:
+#               log(f"🔍 [DEBUG 2]: Сканирую {symbol} | В memory.prices сейчас есть ключи: {list(memory.prices.keys())[:5]}")
 
             # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V21.1: НЕУЯЗВИМЫЙ REST/WS ГИБРИД ЦЕН ---
             # Проверяем наличие монеты в WebSocket кэше
@@ -342,10 +342,10 @@ async def monitor_logic(exchange):
                 except:
                     cur_p = 0.0
 
-            if cur_p <= 0:
-                if int(now_time) % 10 == 0:
-                    log(f"⚠️ [DEBUG 3 ОТКЛОНЕНИЕ]: Для {symbol} цена не пробита ни по WS, ни по REST! Пропуск.")
-                continue
+#            if cur_p <= 0:
+#                if int(now_time) % 10 == 0:
+#                    log(f"⚠️ [DEBUG 3 ОТКЛОНЕНИЕ]: Для {symbol} цена не пробита ни по WS, ни по REST! Пропуск.")
+#                continue
 
             cur_p = float(cur_p)
 #==========
@@ -354,10 +354,10 @@ async def monitor_logic(exchange):
 
             # Вычисляем PNL
             profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
-            log(f"⚙️ [ДЕБАГ ЦЕНЫ {symbol}]: profit={round(profit*100,3)}% | cur_p={cur_p} | Вход={pos['price']} | Флаг_ТР1={memory.tp1_fixed.get(symbol)}")
+#            log(f"⚙️ [ДЕБАГ ЦЕНЫ {symbol}]: profit={round(profit*100,3)}% | cur_p={cur_p} | Вход={pos['price']} | Флаг_ТР1={memory.tp1_fixed.get(symbol)}")
             # ДЕБАГ №4: Выводим PNL в реальном времени, если цена успешно найдена
-            if int(now_time) % 10 == 0:
-                log(f"🔥 [DEBUG 4 УСПЕХ]: Монета {symbol} | Цена: {cur_p} | Вход: {pos['price']} | Живой PNL: {round(profit * 100, 2)}%")
+#            if int(now_time) % 10 == 0:
+#                log(f"🔥 [DEBUG 4 УСПЕХ]: Монета {symbol} | Цена: {cur_p} | Вход: {pos['price']} | Живой PNL: {round(profit * 100, 2)}%")
 
             # --- 1. АВАРИЙНЫЙ СHОС ПО ВРЕМЕHИ (Decay Shield 60с) ---
             if age > 60 and profit < -0.0008:
@@ -397,15 +397,21 @@ async def monitor_logic(exchange):
                     memory.max_pnl_observed[symbol] = max(profit, memory.max_pnl_observed.get(symbol, profit))
 
                 # ТРИГГЕР А: Раннее отсечение сползания альта с учетом проскальзывания на MEXC (60с / -0.08%)
+                # --- [ВРЕЗКА V21.4: УЛЬТИМАТИВНЫЙ СИНДРОМ СПОЛЗАНИЯ МЕХС] ---
+                # ТРИГГЕР А: Раннее отсечение сползания альта (Decay Shield)
                 if age > 60 and profit < -0.0008:
-                    log(f"🛡️ Decay Shield V16.9: {symbol} срезан на 60с (Лосс: {round(profit*100, 2 )}%)")
+                    log(f"🛡 Decay Shield V16.9: {symbol} утилизирован по времени (Лосс: {round(prof it*100, 2)}%)")
                     action_triggered_decay = False
                     try:
                         try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                         except: pass
-                        smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+
+                        # Выход прямым маркетом с изолированными параметрами
+                        params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
+                        exchange.create_order(symbol, 'market', exit_side, pos['vol'], None, params)
                         action_triggered_decay = True
-                    except Exception as e: log(f"⚠️ Ошибка утилизации: {e}")
+                    except Exception as e:
+                        log(f"⚠ Ошибка утилизации типа А: {e}")
 
                     if action_triggered_decay:
                         for k in [symbol, symbol.replace(':USDT', '')]:
@@ -416,20 +422,24 @@ async def monitor_logic(exchange):
                             if k in memory.step_be: del memory.step_be[k]
                             if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
                         memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                        continue #return
+                        continue
 
-                # ТРИГГЕР Б: Синдром Сползания Импульса (Выдох крупного игрока на МЕХС)
+                # ТРИГГЕР Б: Синдром Сползания Импульса (Выдох ММ на хаях)
                 if symbol in memory.max_pnl_observed and memory.max_pnl_observed[symbol] >= 0.0025:
                     current_decay_pct = (1 - (profit / memory.max_pnl_observed[symbol])) * 100
                     if current_decay_pct > 70.0:
-                        log(f"🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: {symbol} закрыт на МЕХС. ММ выдохся (Пик: +{round(memory.max_pnl_observed[symbol]*100,2)}%)")
+                        log(f"🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: {symbol} закрыт на МЕХС. ММ выдохся (Пик: +{round(memory.max_pnl_observed[symbol]*100, 2)}%)")
                         action_triggered_momentum_dead = False
                         try:
                             try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                             except: pass
-                            smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+
+                            # Выход прямым маркетом с изолированными параметрами
+                            params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
+                            exchange.create_order(symbol, 'market', exit_side, pos['vol'], None, params)
                             action_triggered_momentum_dead = True
-                        except Exception as e: log(f"⚠️ Ошибка Синдрома Сползания: {e}")
+                        except Exception as e:
+                            log(f"⚠ Ошибка Синдрома Сползания типа Б: {e}")
 
                         if action_triggered_momentum_dead:
                             for k in [symbol, symbol.replace(':USDT', '')]:
@@ -440,14 +450,15 @@ async def monitor_logic(exchange):
                                 if k in memory.step_be: del memory.step_be[k]
                                 if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
                             memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                            continue #return
+                            continue
 
+#=============
 
                 # --- 3. ШТАТНАЯ ФИКСАЦИЯ ТЕЙКА 1 (С ЖЕСТКИМ ФИКСОМ ОКРУГЛЕНИЯ МАЛЫХ ЛОТОВ SOL) ---
-                log(f"🎯 [ДЕБАГ симбол  {symbol}]: Перед условием! мемори= {memory.tp1_fixed.get(symbol)} профит={profit} >= TP1 {TP1_PCT}  ")
+#                log(f"🎯 [ДЕБАГ симбол  {symbol}]: Перед условием! мемори= {memory.tp1_fixed.get(symbol)} профит={profit} >= TP1 {TP1_PCT}  ")
 
                 if not memory.tp1_fixed.get(symbol) and profit >= TP1_PCT:
-                    log(f"🎯 [ДЕБАГ ТЕЙК-1 {symbol}]: Зашел внутрь условия! Пытаюсь закрыть объем...")
+#                    log(f"🎯 [ДЕБАГ ТЕЙК-1 {symbol}]: Зашел внутрь условия! Пытаюсь закрыть объем...")
                     try:
                         raw_close_qty = pos['vol'] * 0.30
                         close_qty_str = exchange.amount_to_precision(symbol, raw_close_qty)
@@ -487,13 +498,22 @@ async def monitor_logic(exchange):
 
                         # 2. Рассчитываем и выставляем безубыточный стоп-лосс на остаток позиции
                         try:
+#                        try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+#                        except: pass
                             # Добавили .lower() для защиты регистра букв усыновленных позиций
                             is_buy = pos['side'].lower() == 'buy' or 'long' in pos['side'].lower()
                             bu_price = pos['price'] * (1 - 0.0005) if is_buy else pos['price'] * (1 + 0.0005)
                             bu_price_precision = float(exchange.price_to_precision(symbol, bu_price))
 
+#                            exact_remainder_vol = float(exchange.amount_to_precision(symbol, pos['vol']))
+#                            smart_order(exchange, symbol, exit_side, exact_remainder_vol, price=bu_price_precision, is_stop=True)
+                            # --- ШТУЧНЫЙ ФИКС V21.6: СИНХРOНИЗАЦИЯ ОБЪЕМА БЕЗУБЫТКА ПОД REDUCE_ONLY ---
+                            # Берем точный уменьшенный остаток в RAM после списания Тейка-1
                             exact_remainder_vol = float(exchange.amount_to_precision(symbol, pos['vol']))
-                            smart_order(exchange, symbol, exit_side, exact_remainder_vol, price=bu_price_precision, is_stop=True)
+
+                            if exact_remainder_vol > 0:
+                                smart_order(exchange, symbol, exit_side, exact_remainder_vol, price=bu_price_precision, is_stop=True)
+                                memory.stop_placed[symbol] = bu_price_precision
                             memory.stop_placed[symbol] = bu_price_precision
                         except Exception as e_m2:
                             log(f"🆘 Ошибка выставления безубытка на МЕХС: {e_m2}")
@@ -501,18 +521,24 @@ async def monitor_logic(exchange):
                     except Exception as e:
                         log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
 
-                # --- 4. ЛОГИКА ТЕЙК-ПРОФИТА 2 ---
+                # --- 4. ЛОГИКА ТЕЙК-ПРОФИТА 2 (ФИКС V21.3) ---
                 if memory.tp1_fixed.get(symbol) and not memory.tp2_fixed.get(symbol) and profit >= TP2_PCT:
                     try:
+                        # 0.57 — это правильный канонический коэффициент от остатка, чтобы сбросить ровно 40% от начального объема
                         close_qty = float(exchange.amount_to_precision(symbol, pos['vol'] * 0.57))
                         if close_qty > 0:
-                            smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
-                       #     smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
-                            memory.tp2_fixed[symbol] = True
+                            # Изменяем объем в памяти RAM перед следующим шагом к Тейку-3
                             pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
-                            log(f"🏆 ТЕЙК-2 ВЫПОЛНЕН: {symbol} зафиксировано 40% объема (+{round(TP2_PCT*100,2)}%)")
-                    except Exception as e: log(f"🆘 Ошибка Тейка 2 {symbol}: {e}")
-#===========
+
+                            # Отправляем ордер с жесткими флагами Isolated и leverage
+                            params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
+                            exchange.create_order(symbol, 'market', exit_side, close_qty, None, params)
+
+                            memory.tp2_fixed[symbol] = True
+                            log(f"🏆 ТЕЙК-2 ВЫПОЛНЕН: {symbol} зафиксировано 40% объема (+{round(TP2_PCT*100, 2)}%)")
+                    except Exception as e:
+                        log(f"🆘 Ошибка Тейка 2 {symbol}: {e}")
+#=====
                 # --- 5. ЛОГИКА ТЕЙК-ПРОФИТА 3 ---
 
                 # --- 5. ЛОГИКА ТЕЙК-ПРОФИТА 3 (МЕГА-ФИНАЛ 100% ВЫХОД) ---
