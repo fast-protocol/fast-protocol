@@ -1,6 +1,6 @@
 
 MAX_SLOTS = 2               # Максимум параллельных позиций
-RISK_GEAR = 0.50            # Множитель маржи слота (0.1 - 1.0)
+RISK_GEAR = 0.95            # Множитель маржи слота (0.1 - 1.0)
 PRIMARY_SL_PCT = 0.012      # Жесткий серверный Стоп-Лосс (-1.2%)
 
 # --- ЦЕЛИ TRIPLE-GEAR V16.2 ---
@@ -621,8 +621,9 @@ async def main_logic():
                         log(f"🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна ({round(avg_b tc_move_pct, 4)}% > 0.045%). Блокирую капканы.")
                         memory.last_momentum_log = now
                     # Важно: Сплющиваем процессор на паузу перед уходом в начало цикла
-                    await asyncio.sleep(0.5)
-                    continue
+#                    await asyncio.sleep(0.5)
+#                    continue
+                    pass
 # ------------------------------------------------------------------
 
             # 2. ФОНОВОЕ ОБНОВЛЕНИЕ БАЛАНСА (ЗАЩИТА ОТ ОБНУЛЕНИЯ И CODE 2005)
@@ -646,7 +647,19 @@ async def main_logic():
 
                         # Расчет объема снайперского лота
                         amount_usdt = memory.available * RISK_GEAR * 25
-                        qty = amount_usdt / signal['price']
+                       # qty = amount_usdt / signal['price']
+                        # --- ШТУЧНЫЙ ФИКС V20.5: ПЕРЕВОД USDT В КАНOНИЧЕСКИЕ КОНТРАКТЫ MEXC ---
+                        try:
+                            market_data = exchange.market(symbol)
+                            contract_size = float(market_data.get('contractSize', 1.0))
+                        except:
+                            contract_size = 1.0
+
+                        # Стоимость одного контракта в USDT = цена монеты * размер контракта
+                        contract_value_usdt = signal['price'] * contract_size
+                        qty = amount_usdt / contract_value_usdt
+
+
 
                         # Выставляем пассивный лимитный капкан Maker
                         order = smart_order(exchange, symbol, signal['side'], qty, is_limit=True, price=signal['price'])
