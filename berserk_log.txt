@@ -1,90 +1,237 @@
-May 25 18:52:18 vm-v2-mini python3[331040]: [18:52:18] 🏛️ 🏹 Охота лимитными капканами Berserk V16. 9 активирована. Патрулирую стаканы...
-May 25 18:52:18 vm-v2-mini python3[331040]: [18:52:18] 🏛️ 🔗 Сканирование аккаунта на наличие откры тых позиций...
-May 25 18:52:18 vm-v2-mini python3[331040]: [18:52:18] 🏛️ 🔗 RECOVERED MEXC: Позиция 1INCH/USDT:USD T (549.0 лотов) успешно усыновлена флотоводцем!
-May 25 18:52:18 vm-v2-mini python3[331040]: [18:52:18] 🏛️ 🔗 RECOVERED MEXC: Позиция LDO/USDT:USDT  (99.0 лотов) успешно усыновлена флотоводцем!
-May 25 18:52:18 vm-v2-mini python3[331040]: [18:52:18] 🏛️ 🏛️ 🏹 Охота лимитными капканами Berserk   V16.9 активирована. Патрулирую стаканы...
-May 25 18:52:19 vm-v2-mini python3[331040]: [18:52:19] 🏛️ 📡 Запуск квантового WebSocket-потока цен  для 8 активов...
-May 25 18:52:19 vm-v2-mini python3[331040]: [18:52:19] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:19 vm-v2-mini python3[331040]: [18:52:19] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 4% | cur_p=0.3508 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:20 vm-v2-mini python3[331040]: [18:52:20] 🏛️ 🔍 [DEBUG 1]: В памяти RAM active_pos чис лятся ключи: ['1INCH/USDT:USDT', 'LDO/USDT:USDT']
-May 25 18:52:20 vm-v2-mini python3[331040]: [18:52:20] 🏛️ 🔍 [DEBUG 2]: Сканирую 1INCH/USDT:USDT |  В memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
-May 25 18:52:20 vm-v2-mini python3[331040]: [18:52:20] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:20 vm-v2-mini python3[331040]: [18:52:20] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета 1INCH/USDT:USD T | Цена: 0.0913 | Вход: 0.0907 | Живой PNL: 0.66%
-May 25 18:52:20 vm-v2-mini python3[331040]: [18:52:20] 🏛️ 🔍 [DEBUG 2]: Сканирую LDO/USDT:USDT | В  memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
-May 25 18:52:20 vm-v2-mini python3[331040]: [18:52:20] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:20 vm-v2-mini python3[331040]: [18:52:20] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета LDO/USDT:USDT  | Цена: 0.3506 | Вход: 0.3448 | Живой PNL: 1.68%
-May 25 18:52:21 vm-v2-mini python3[331040]: [18:52:21] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:21 vm-v2-mini python3[331040]: [18:52:21] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:22 vm-v2-mini python3[331040]: [18:52:22] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:22 vm-v2-mini python3[331040]: [18:52:22] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:23 vm-v2-mini python3[331040]: [18:52:23] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:23 vm-v2-mini python3[331040]: [18:52:23] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:24 vm-v2-mini python3[331040]: [18:52:24] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:24 vm-v2-mini python3[331040]: [18:52:24] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:25 vm-v2-mini python3[331040]: [18:52:25] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:25 vm-v2-mini python3[331040]: [18:52:25] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:26 vm-v2-mini python3[331040]: [18:52:26] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:26 vm-v2-mini python3[331040]: [18:52:26] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:27 vm-v2-mini python3[331040]: [18:52:27] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:27 vm-v2-mini python3[331040]: [18:52:27] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:28 vm-v2-mini python3[331040]: [18:52:28] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:28 vm-v2-mini python3[331040]: [18:52:28] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:29 vm-v2-mini python3[331040]: [18:52:29] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:29 vm-v2-mini python3[331040]: [18:52:29] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:30 vm-v2-mini python3[331040]: [18:52:30] 🏛️ 🔍 [DEBUG 1]: В памяти RAM active_pos чис лятся ключи: ['1INCH/USDT:USDT', 'LDO/USDT:USDT']
-May 25 18:52:30 vm-v2-mini python3[331040]: [18:52:30] 🏛️ 🔍 [DEBUG 2]: Сканирую 1INCH/USDT:USDT |  В memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
-May 25 18:52:30 vm-v2-mini python3[331040]: [18:52:30] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:30 vm-v2-mini python3[331040]: [18:52:30] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета 1INCH/USDT:USD T | Цена: 0.0914 | Вход: 0.0907 | Живой PNL: 0.77%
-May 25 18:52:30 vm-v2-mini python3[331040]: [18:52:30] 🏛️ 🔍 [DEBUG 2]: Сканирую LDO/USDT:USDT | В  memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
-May 25 18:52:30 vm-v2-mini python3[331040]: [18:52:30] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:30 vm-v2-mini python3[331040]: [18:52:30] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета LDO/USDT:USDT  | Цена: 0.3507 | Вход: 0.3448 | Живой PNL: 1.71%
-May 25 18:52:31 vm-v2-mini python3[331040]: [18:52:31] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:31 vm-v2-mini python3[331040]: [18:52:31] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:32 vm-v2-mini python3[331040]: [18:52:32] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:32 vm-v2-mini python3[331040]: [18:52:32] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:33 vm-v2-mini python3[331040]: [18:52:33] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:33 vm-v2-mini python3[331040]: [18:52:33] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:34 vm-v2-mini python3[331040]: [18:52:34] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:34 vm-v2-mini python3[331040]: [18:52:34] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:35 vm-v2-mini python3[331040]: [18:52:35] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:35 vm-v2-mini python3[331040]: [18:52:35] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:35 vm-v2-mini python3[331040]: [18:52:35] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:35 vm-v2-mini python3[331040]: [18:52:35] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:36 vm-v2-mini python3[331040]: [18:52:36] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:36 vm-v2-mini python3[331040]: [18:52:36] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:36 vm-v2-mini python3[331040]: [18:52:36] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:36 vm-v2-mini python3[331040]: [18:52:36] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:37 vm-v2-mini python3[331040]: [18:52:37] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:37 vm-v2-mini python3[331040]: [18:52:37] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:37 vm-v2-mini python3[331040]: [18:52:37] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:37 vm-v2-mini python3[331040]: [18:52:37] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:38 vm-v2-mini python3[331040]: [18:52:38] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:38 vm-v2-mini python3[331040]: [18:52:38] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:38 vm-v2-mini python3[331040]: [18:52:38] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:38 vm-v2-mini python3[331040]: [18:52:38] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:39 vm-v2-mini python3[331040]: [18:52:39] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:39 vm-v2-mini python3[331040]: [18:52:39] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:39 vm-v2-mini python3[331040]: [18:52:39] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:39 vm-v2-mini python3[331040]: [18:52:39] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔍 [DEBUG 1]: В памяти RAM active_pos чис лятся ключи: ['1INCH/USDT:USDT', 'LDO/USDT:USDT']
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔍 [DEBUG 2]: Сканирую 1INCH/USDT:USDT |  В memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .662% | cur_p=0.0913 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета 1INCH/USDT:USD T | Цена: 0.0913 | Вход: 0.0907 | Живой PNL: 0.66%
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔍 [DEBUG 2]: Сканирую LDO/USDT:USDT | В  memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.7 11% | cur_p=0.3507 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета LDO/USDT:USDT  | Цена: 0.3507 | Вход: 0.3448 | Живой PNL: 1.71%
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔍 [DEBUG 1]: В памяти RAM active_pos чис лятся ключи: ['1INCH/USDT:USDT', 'LDO/USDT:USDT']
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔍 [DEBUG 2]: Сканирую 1INCH/USDT:USDT |  В memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета 1INCH/USDT:USD T | Цена: 0.0914 | Вход: 0.0907 | Живой PNL: 0.77%
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔍 [DEBUG 2]: Сканирую LDO/USDT:USDT | В  memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:40 vm-v2-mini python3[331040]: [18:52:40] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета LDO/USDT:USDT  | Цена: 0.3506 | Вход: 0.3448 | Живой PNL: 1.68%
-May 25 18:52:41 vm-v2-mini python3[331040]: [18:52:41] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:41 vm-v2-mini python3[331040]: [18:52:41] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:41 vm-v2-mini python3[331040]: [18:52:41] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:41 vm-v2-mini python3[331040]: [18:52:41] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:42 vm-v2-mini python3[331040]: [18:52:42] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:42 vm-v2-mini python3[331040]: [18:52:42] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
-May 25 18:52:42 vm-v2-mini python3[331040]: [18:52:42] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .772% | cur_p=0.0914 | Вход=0.0907 | Флаг_ТР1=None
-May 25 18:52:42 vm-v2-mini python3[331040]: [18:52:42] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.6 82% | cur_p=0.3506 | Вход=0.3448 | Флаг_ТР1=None
+May 25 19:15:35 vm-v2-mini python3[341115]: [19:15:35] 🏛️ ЛИМИТНЫЙ СНАЙПЕР BERSERK V17.0 ОНЛАЙН. Ма ржа: $2.94
+May 25 19:15:36 vm-v2-mini python3[341115]: [19:15:36] 🏛️ 🏹 Охота лимитными капканами Berserk V16. 9 активирована. Патрулирую стаканы...
+May 25 19:15:36 vm-v2-mini python3[341115]: [19:15:36] 🏛️ 🔗 Сканирование аккаунта на наличие откры тых позиций...
+May 25 19:15:36 vm-v2-mini python3[341115]: [19:15:36] 🏛️ 🔗 RECOVERED MEXC: Позиция 1INCH/USDT:USD T (549.0 лотов) успешно усыновлена флотоводцем!
+May 25 19:15:36 vm-v2-mini python3[341115]: [19:15:36] 🏛️ 🔗 RECOVERED MEXC: Позиция LDO/USDT:USDT  (99.0 лотов) успешно усыновлена флотоводцем!
+May 25 19:15:36 vm-v2-mini python3[341115]: [19:15:36] 🏛️ 🏛️ 🏹 Охота лимитными капканами Berserk   V16.9 активирована. Патрулирую стаканы...
+May 25 19:15:37 vm-v2-mini python3[341115]: [19:15:37] 🏛️ 📡 Запуск квантового WebSocket-потока цен  для 8 активов...
+May 25 19:15:37 vm-v2-mini python3[341115]: [19:15:37] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:37 vm-v2-mini python3[341115]: [19:15:37] 🏛️ ⚠️ Сбой шлюза ордеров 1INCH/USDT:USDT (SE LL): mexc {"success":false,"code":2007,"message":"Order price error"}
+May 25 19:15:37 vm-v2-mini python3[341115]: [19:15:37] 🏛️ 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: 1INCH/USDT:  USDT @ 0.0896
+May 25 19:15:37 vm-v2-mini python3[341115]: [19:15:37] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:37 vm-v2-mini python3[341115]: [19:15:37] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=None
+May 25 19:15:38 vm-v2-mini python3[341115]: [19:15:38] 🏛️ ⚠️ Сбой шлюза ордеров LDO/USDT:USDT (SELL ): mexc {"success":false,"code":2007,"message":"Order price error"}
+May 25 19:15:38 vm-v2-mini python3[341115]: [19:15:38] 🏛️ 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: LDO/USDT:US  DT @ 0.3407
+May 25 19:15:38 vm-v2-mini python3[341115]: [19:15:38] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= None профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:15:38 vm-v2-mini python3[341115]: [19:15:38] 🏛️ 🎯 [ДЕБАГ ТЕЙК-1 LDO/USDT:USDT]: Зашел вн утрь условия! Пытаюсь закрыть объем...
+May 25 19:15:38 vm-v2-mini python3[341115]: [19:15:38] 🏛️ ⚠️ Сбой шлюза ордеров LDO/USDT:USDT (SELL ): mexc {"success":false,"code":600,"message":"Parameter error"}
+May 25 19:15:38 vm-v2-mini python3[341115]: [19:15:38] 🏛️ 📡 [ДЕБАГ БИРЖИ LDO/USDT:USDT]: smart_ord er вызван для qty=29.0. Иду дальше...
+May 25 19:15:38 vm-v2-mini python3[341115]: [19:15:38] 🏛️ 🎯 ТЕЙК-1 ВЫПОЛНЕН: LDO/USDT:USDT зафикси ровано 30% объема (+0.65%)
+May 25 19:15:38 vm-v2-mini python3[341115]: [19:15:38] 🏛️ ⚠️ Сбой шлюза ордеров LDO/USDT:USDT (SELL ): mexc {"success":false,"code":2007,"message":"Order price error"}
+May 25 19:15:39 vm-v2-mini python3[341115]: [19:15:39] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:39 vm-v2-mini python3[341115]: [19:15:39] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:39 vm-v2-mini python3[341115]: [19:15:39] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:39 vm-v2-mini python3[341115]: [19:15:39] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:15:40 vm-v2-mini python3[341115]: [19:15:40] 🏛️ 🔍 [DEBUG 1]: В памяти RAM active_pos чис лятся ключи: ['1INCH/USDT:USDT', 'LDO/USDT:USDT']
+May 25 19:15:40 vm-v2-mini python3[341115]: [19:15:40] 🏛️ 🔍 [DEBUG 2]: Сканирую 1INCH/USDT:USDT |  В memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:15:40 vm-v2-mini python3[341115]: [19:15:40] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:40 vm-v2-mini python3[341115]: [19:15:40] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета 1INCH/USDT:USD T | Цена: 0.0911 | Вход: 0.0907 | Живой PNL: 0.44%
+May 25 19:15:40 vm-v2-mini python3[341115]: [19:15:40] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:40 vm-v2-mini python3[341115]: [19:15:40] 🏛️ 🔍 [DEBUG 2]: Сканирую LDO/USDT:USDT | В  memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:15:40 vm-v2-mini python3[341115]: [19:15:40] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:40 vm-v2-mini python3[341115]: [19:15:40] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета LDO/USDT:USDT  | Цена: 0.3501 | Вход: 0.3448 | Живой PNL: 1.54%
+May 25 19:15:40 vm-v2-mini python3[341115]: [19:15:40] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:15:41 vm-v2-mini python3[341115]: [19:15:41] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:41 vm-v2-mini python3[341115]: [19:15:41] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:41 vm-v2-mini python3[341115]: [19:15:41] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:41 vm-v2-mini python3[341115]: [19:15:41] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:15:42 vm-v2-mini python3[341115]: [19:15:42] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:42 vm-v2-mini python3[341115]: [19:15:42] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:42 vm-v2-mini python3[341115]: [19:15:42] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:42 vm-v2-mini python3[341115]: [19:15:42] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:15:43 vm-v2-mini python3[341115]: [19:15:43] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:43 vm-v2-mini python3[341115]: [19:15:43] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:43 vm-v2-mini python3[341115]: [19:15:43] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:43 vm-v2-mini python3[341115]: [19:15:43] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:15:44 vm-v2-mini python3[341115]: [19:15:44] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:44 vm-v2-mini python3[341115]: [19:15:44] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:44 vm-v2-mini python3[341115]: [19:15:44] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:44 vm-v2-mini python3[341115]: [19:15:44] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:15:45 vm-v2-mini python3[341115]: [19:15:45] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:45 vm-v2-mini python3[341115]: [19:15:45] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:45 vm-v2-mini python3[341115]: [19:15:45] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:45 vm-v2-mini python3[341115]: [19:15:45] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:46 vm-v2-mini python3[341115]: [19:15:46] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:46 vm-v2-mini python3[341115]: [19:15:46] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:46 vm-v2-mini python3[341115]: [19:15:46] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:46 vm-v2-mini python3[341115]: [19:15:46] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:47 vm-v2-mini python3[341115]: [19:15:47] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:47 vm-v2-mini python3[341115]: [19:15:47] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:47 vm-v2-mini python3[341115]: [19:15:47] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:47 vm-v2-mini python3[341115]: [19:15:47] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:47 vm-v2-mini python3[341115]: [19:15:47] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:47 vm-v2-mini python3[341115]: [19:15:47] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:47 vm-v2-mini python3[341115]: [19:15:47] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:47 vm-v2-mini python3[341115]: [19:15:47] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:48 vm-v2-mini python3[341115]: [19:15:48] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:48 vm-v2-mini python3[341115]: [19:15:48] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:48 vm-v2-mini python3[341115]: [19:15:48] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:48 vm-v2-mini python3[341115]: [19:15:48] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:48 vm-v2-mini python3[341115]: [19:15:48] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:48 vm-v2-mini python3[341115]: [19:15:48] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:48 vm-v2-mini python3[341115]: [19:15:48] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:48 vm-v2-mini python3[341115]: [19:15:48] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:49 vm-v2-mini python3[341115]: [19:15:49] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:49 vm-v2-mini python3[341115]: [19:15:49] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:49 vm-v2-mini python3[341115]: [19:15:49] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:49 vm-v2-mini python3[341115]: [19:15:49] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:49 vm-v2-mini python3[341115]: [19:15:49] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:49 vm-v2-mini python3[341115]: [19:15:49] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:49 vm-v2-mini python3[341115]: [19:15:49] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:49 vm-v2-mini python3[341115]: [19:15:49] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔍 [DEBUG 1]: В памяти RAM active_pos чис лятся ключи: ['1INCH/USDT:USDT', 'LDO/USDT:USDT']
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔍 [DEBUG 2]: Сканирую 1INCH/USDT:USDT |  В memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета 1INCH/USDT:USD T | Цена: 0.0912 | Вход: 0.0907 | Живой PNL: 0.55%
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔍 [DEBUG 2]: Сканирую LDO/USDT:USDT | В  memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета LDO/USDT:USDT  | Цена: 0.35 | Вход: 0.3448 | Живой PNL: 1.51%
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔍 [DEBUG 1]: В памяти RAM active_pos чис лятся ключи: ['1INCH/USDT:USDT', 'LDO/USDT:USDT']
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔍 [DEBUG 2]: Сканирую 1INCH/USDT:USDT |  В memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета 1INCH/USDT:USD T | Цена: 0.0912 | Вход: 0.0907 | Живой PNL: 0.55%
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔍 [DEBUG 2]: Сканирую LDO/USDT:USDT | В  memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета LDO/USDT:USDT  | Цена: 0.35 | Вход: 0.3448 | Живой PNL: 1.51%
+May 25 19:15:50 vm-v2-mini python3[341115]: [19:15:50] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:51 vm-v2-mini python3[341115]: [19:15:51] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:51 vm-v2-mini python3[341115]: [19:15:51] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:51 vm-v2-mini python3[341115]: [19:15:51] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:51 vm-v2-mini python3[341115]: [19:15:51] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:51 vm-v2-mini python3[341115]: [19:15:51] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:51 vm-v2-mini python3[341115]: [19:15:51] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:51 vm-v2-mini python3[341115]: [19:15:51] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:51 vm-v2-mini python3[341115]: [19:15:51] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:52 vm-v2-mini python3[341115]: [19:15:52] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .551% | cur_p=0.0912 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:52 vm-v2-mini python3[341115]: [19:15:52] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.005512679162072764 >= TP1 0.0065
+May 25 19:15:52 vm-v2-mini python3[341115]: [19:15:52] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:52 vm-v2-mini python3[341115]: [19:15:52] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:52 vm-v2-mini python3[341115]: [19:15:52] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:52 vm-v2-mini python3[341115]: [19:15:52] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:52 vm-v2-mini python3[341115]: [19:15:52] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:52 vm-v2-mini python3[341115]: [19:15:52] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:53 vm-v2-mini python3[341115]: [19:15:53] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:53 vm-v2-mini python3[341115]: [19:15:53] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:53 vm-v2-mini python3[341115]: [19:15:53] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:53 vm-v2-mini python3[341115]: [19:15:53] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:53 vm-v2-mini python3[341115]: [19:15:53] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:53 vm-v2-mini python3[341115]: [19:15:53] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:53 vm-v2-mini python3[341115]: [19:15:53] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:53 vm-v2-mini python3[341115]: [19:15:53] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:54 vm-v2-mini python3[341115]: [19:15:54] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:54 vm-v2-mini python3[341115]: [19:15:54] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:54 vm-v2-mini python3[341115]: [19:15:54] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:54 vm-v2-mini python3[341115]: [19:15:54] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:54 vm-v2-mini python3[341115]: [19:15:54] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:54 vm-v2-mini python3[341115]: [19:15:54] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:54 vm-v2-mini python3[341115]: [19:15:54] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:54 vm-v2-mini python3[341115]: [19:15:54] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:55 vm-v2-mini python3[341115]: [19:15:55] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:55 vm-v2-mini python3[341115]: [19:15:55] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:55 vm-v2-mini python3[341115]: [19:15:55] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:55 vm-v2-mini python3[341115]: [19:15:55] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:55 vm-v2-mini python3[341115]: [19:15:55] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:55 vm-v2-mini python3[341115]: [19:15:55] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:55 vm-v2-mini python3[341115]: [19:15:55] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:55 vm-v2-mini python3[341115]: [19:15:55] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:56 vm-v2-mini python3[341115]: [19:15:56] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:56 vm-v2-mini python3[341115]: [19:15:56] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:56 vm-v2-mini python3[341115]: [19:15:56] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:56 vm-v2-mini python3[341115]: [19:15:56] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:57 vm-v2-mini python3[341115]: [19:15:57] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:57 vm-v2-mini python3[341115]: [19:15:57] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:57 vm-v2-mini python3[341115]: [19:15:57] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:57 vm-v2-mini python3[341115]: [19:15:57] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:57 vm-v2-mini python3[341115]: [19:15:57] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:57 vm-v2-mini python3[341115]: [19:15:57] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:57 vm-v2-mini python3[341115]: [19:15:57] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:57 vm-v2-mini python3[341115]: [19:15:57] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:58 vm-v2-mini python3[341115]: [19:15:58] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:58 vm-v2-mini python3[341115]: [19:15:58] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:58 vm-v2-mini python3[341115]: [19:15:58] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:58 vm-v2-mini python3[341115]: [19:15:58] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:58 vm-v2-mini python3[341115]: [19:15:58] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:58 vm-v2-mini python3[341115]: [19:15:58] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:58 vm-v2-mini python3[341115]: [19:15:58] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:58 vm-v2-mini python3[341115]: [19:15:58] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:59 vm-v2-mini python3[341115]: [19:15:59] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:59 vm-v2-mini python3[341115]: [19:15:59] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:59 vm-v2-mini python3[341115]: [19:15:59] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 08% | cur_p=0.35 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:59 vm-v2-mini python3[341115]: [19:15:59] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015081206496519561 >= TP1 0.0065
+May 25 19:15:59 vm-v2-mini python3[341115]: [19:15:59] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:15:59 vm-v2-mini python3[341115]: [19:15:59] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:15:59 vm-v2-mini python3[341115]: [19:15:59] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:15:59 vm-v2-mini python3[341115]: [19:15:59] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔍 [DEBUG 1]: В памяти RAM active_pos чис лятся ключи: ['1INCH/USDT:USDT', 'LDO/USDT:USDT']
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔍 [DEBUG 2]: Сканирую 1INCH/USDT:USDT |  В memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета 1INCH/USDT:USD T | Цена: 0.0911 | Вход: 0.0907 | Живой PNL: 0.44%
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔍 [DEBUG 2]: Сканирую LDO/USDT:USDT | В  memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета LDO/USDT:USDT  | Цена: 0.3502 | Вход: 0.3448 | Живой PNL: 1.57%
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔍 [DEBUG 1]: В памяти RAM active_pos чис лятся ключи: ['1INCH/USDT:USDT', 'LDO/USDT:USDT']
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔍 [DEBUG 2]: Сканирую 1INCH/USDT:USDT |  В memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета 1INCH/USDT:USD T | Цена: 0.0911 | Вход: 0.0907 | Живой PNL: 0.44%
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔍 [DEBUG 2]: Сканирую LDO/USDT:USDT | В  memory.prices сейчас есть ключи: ['SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT', 'APT/USDT:USDT']
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🔥 [DEBUG 4 УСПЕХ]: Монета LDO/USDT:USDT  | Цена: 0.3502 | Вход: 0.3448 | Живой PNL: 1.57%
+May 25 19:16:00 vm-v2-mini python3[341115]: [19:16:00] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:01 vm-v2-mini python3[341115]: [19:16:01] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:01 vm-v2-mini python3[341115]: [19:16:01] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:01 vm-v2-mini python3[341115]: [19:16:01] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:01 vm-v2-mini python3[341115]: [19:16:01] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:01 vm-v2-mini python3[341115]: [19:16:01] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:01 vm-v2-mini python3[341115]: [19:16:01] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:01 vm-v2-mini python3[341115]: [19:16:01] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:01 vm-v2-mini python3[341115]: [19:16:01] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:02 vm-v2-mini python3[341115]: [19:16:02] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:02 vm-v2-mini python3[341115]: [19:16:02] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:02 vm-v2-mini python3[341115]: [19:16:02] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:02 vm-v2-mini python3[341115]: [19:16:02] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:02 vm-v2-mini python3[341115]: [19:16:02] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:02 vm-v2-mini python3[341115]: [19:16:02] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:02 vm-v2-mini python3[341115]: [19:16:02] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:02 vm-v2-mini python3[341115]: [19:16:02] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:03 vm-v2-mini python3[341115]: [19:16:03] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:03 vm-v2-mini python3[341115]: [19:16:03] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:03 vm-v2-mini python3[341115]: [19:16:03] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:03 vm-v2-mini python3[341115]: [19:16:03] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:03 vm-v2-mini python3[341115]: [19:16:03] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:03 vm-v2-mini python3[341115]: [19:16:03] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:03 vm-v2-mini python3[341115]: [19:16:03] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:03 vm-v2-mini python3[341115]: [19:16:03] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:04 vm-v2-mini python3[341115]: [19:16:04] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:04 vm-v2-mini python3[341115]: [19:16:04] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:04 vm-v2-mini python3[341115]: [19:16:04] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 66% | cur_p=0.3502 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:04 vm-v2-mini python3[341115]: [19:16:04] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015661252900232014 >= TP1 0.0065
+May 25 19:16:04 vm-v2-mini python3[341115]: [19:16:04] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:04 vm-v2-mini python3[341115]: [19:16:04] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:04 vm-v2-mini python3[341115]: [19:16:04] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:04 vm-v2-mini python3[341115]: [19:16:04] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:16:05 vm-v2-mini python3[341115]: [19:16:05] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:05 vm-v2-mini python3[341115]: [19:16:05] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:05 vm-v2-mini python3[341115]: [19:16:05] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:05 vm-v2-mini python3[341115]: [19:16:05] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:16:05 vm-v2-mini python3[341115]: [19:16:05] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:05 vm-v2-mini python3[341115]: [19:16:05] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:05 vm-v2-mini python3[341115]: [19:16:05] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:05 vm-v2-mini python3[341115]: [19:16:05] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:16:06 vm-v2-mini python3[341115]: [19:16:06] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:06 vm-v2-mini python3[341115]: [19:16:06] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:06 vm-v2-mini python3[341115]: [19:16:06] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:06 vm-v2-mini python3[341115]: [19:16:06] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:16:07 vm-v2-mini python3[341115]: [19:16:07] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:07 vm-v2-mini python3[341115]: [19:16:07] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:07 vm-v2-mini python3[341115]: [19:16:07] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:07 vm-v2-mini python3[341115]: [19:16:07] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
+May 25 19:16:07 vm-v2-mini python3[341115]: [19:16:07] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ 1INCH/USDT:USDT]: profit=0 .441% | cur_p=0.0911 | Вход=0.0907 | Флаг_ТР1=None
+May 25 19:16:07 vm-v2-mini python3[341115]: [19:16:07] 🏛️ 🎯 [ДЕБАГ симбол  1INCH/USDT:USDT]: Перед  условием! мемори= None профит=0.004410143329658167 >= TP1 0.0065
+May 25 19:16:07 vm-v2-mini python3[341115]: [19:16:07] 🏛️ ⚙️ [ДЕБАГ ЦЕНЫ LDO/USDT:USDT]: profit=1.5 37% | cur_p=0.3501 | Вход=0.3448 | Флаг_ТР1=True
+May 25 19:16:07 vm-v2-mini python3[341115]: [19:16:07] 🏛️ 🎯 [ДЕБАГ симбол  LDO/USDT:USDT]: Перед у словием! мемори= True профит=0.015371229698375899 >= TP1 0.0065
