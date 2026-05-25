@@ -321,24 +321,36 @@ async def monitor_logic(exchange):
         for symbol, pos in list(memory.active_pos.items()):
             age = now_time - pos['entry_time']
 
+#===========
+            exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
+#+++++++++++
+
             # ДЕБАГ №2: Проверяем, какие ключи цен сейчас лежат в WebSocket-таблице memory.prices
             if int(now_time) % 10 == 0:
                log(f"🔍 [DEBUG 2]: Сканирую {symbol} | В memory.prices сейчас есть ключи: {list(memory.prices.keys())[:5]}")
 
-            # Наш всеядный кэш цен
-            cur_p = memory.prices.get(symbol)
-            if not cur_p:
-               clean_key = symbol.split(':')[0]
-               cur_p = memory.prices.get(clean_key)
+            # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V21.1: НЕУЯЗВИМЫЙ REST/WS ГИБРИД ЦЕН ---
+            # Проверяем наличие монеты в WebSocket кэше
+            cur_p = memory.prices.get(symbol, 0.0)
 
-            # ДЕБАГ №3: Проверяем, удалось ли извлечь живую цену для монеты
-            if not cur_p:
+            # Если WebSocket еще не успел прогреться или монета в хвосте списка (как 1INCH)
+            if cur_p <= 0:
+                try:
+                    # Разгружаем контур: берем точечный секундный тикер напрямую по REST
+                    ticker_data = exchange.fetch_ticker(symbol)
+                    cur_p = float(ticker_data.get('last', ticker_data.get('close', 0.0)))
+                except:
+                    cur_p = 0.0
+
+            if cur_p <= 0:
                 if int(now_time) % 10 == 0:
-                    log(f"⚠️ [DEBUG 3 ОТКЛОНЕНИЕ]: Для {symbol} ЦЕНА НЕ НАЙДЕНА в памяти! Бот пропускает шаг.")
+                    log(f"⚠️ [DEBUG 3 ОТКЛОНЕНИЕ]: Для {symbol} цена не пробита ни по WS, ни по REST! Пропуск.")
                 continue
 
-            # Превращаем цену в чистый float
             cur_p = float(cur_p)
+#==========
+#===========
+
 
             # Вычисляем PNL
             profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
@@ -403,7 +415,7 @@ async def monitor_logic(exchange):
                             if k in memory.step_be: del memory.step_be[k]
                             if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
                         memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                        return
+                        continue #return
 
                 # ТРИГГЕР Б: Синдром Сползания Импульса (Выдох крупного игрока на МЕХС)
                 if symbol in memory.max_pnl_observed and memory.max_pnl_observed[symbol] >= 0.0025:
@@ -427,7 +439,8 @@ async def monitor_logic(exchange):
                                 if k in memory.step_be: del memory.step_be[k]
                                 if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
                             memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                            return
+                            continue #return
+
 
                 # --- 3. ШТАТНАЯ ФИКСАЦИЯ ТЕЙКА 1 (С ЖЕСТКИМ ФИКСОМ ОКРУГЛЕНИЯ МАЛЫХ ЛОТОВ SOL) ---
                 if not memory.tp1_fixed.get(symbol) and profit >= TP1_PCT:
@@ -442,6 +455,7 @@ async def monitor_logic(exchange):
                             try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                             except: pass
                             smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
+                            #smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
 
                             for k in [symbol, symbol.replace(':USDT', '')]:
                                 if k in memory.active_pos: del memory.active_pos[k]
@@ -453,7 +467,8 @@ async def monitor_logic(exchange):
                             return
 
                         # Если лот позволяет дробить — фиксируем базовые 30%
-                        smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
+                    #    smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
+                        smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
                         memory.tp1_fixed[symbol] = True
                         pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
                         log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксировано 30% объема (+{round(TP1_PCT*100,2)}%)")
@@ -470,6 +485,7 @@ async def monitor_logic(exchange):
 
                         exact_remainder_vol = float(exchange.amount_to_precision(symbol, pos['vol']))
                         smart_order(exchange, symbol, exit_side, exact_remainder_vol, price=bu_price_precision, is_stop=True)
+                   #     smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
                         memory.stop_placed[symbol] = bu_price_precision
                     except Exception as e:
                         log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
@@ -479,12 +495,13 @@ async def monitor_logic(exchange):
                     try:
                         close_qty = float(exchange.amount_to_precision(symbol, pos['vol'] * 0.57))
                         if close_qty > 0:
-                            smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
+                       #     smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
+                            smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
                             memory.tp2_fixed[symbol] = True
                             pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
                             log(f"🏆 ТЕЙК-2 ВЫПОЛНЕН: {symbol} зафиксировано 40% объема (+{round(TP2_PCT*100,2)}%)")
                     except Exception as e: log(f"🆘 Ошибка Тейка 2 {symbol}: {e}")
-
+#===========
                 # --- 5. ЛОГИКА ТЕЙК-ПРОФИТА 3 ---
                 if memory.tp2_fixed.get(symbol) and profit >= TP3_PCT:
                     log(f"👑 ТЕЙК-3 МЕГА-ФИНАЛ: {symbol} полностью закрыт (+{round(TP3_PCT*100,2)}%)")
@@ -560,6 +577,22 @@ async def main_logic():
                             'entry_time': time.time(), # Стартуем таймер Храповика с текущей секунды
                             'dna': {'l_off': ENTRY_ORDER_OFFSET, 's_off': ENTRY_ORDER_OFFSET} # Временный кэш оффсета
                         }
+#====
+                        # --- ШТУЧНЫЙ ФИКС V21.4: АВТО-ПРОГРЕВ ФЛАГОВ ПРИ ПОДХВАТЕ ---
+                        # Запрашиваем цену из WebSocket, чтобы понять где мы находимся
+                        rec_p = memory.prices.get(target_key, 0.0)
+                        if rec_p > 0:
+                            rec_profit = (rec_p / entry_price - 1) if side == 'buy' else (entry_price / rec_p - 1)
+
+                            # Если позиция уже пролетела Тейк-1 (+0.65%)
+                            if rec_profit >= TP1_PCT:
+                                memory.tp1_fixed[target_key] = True
+                                log(f"🛡️ [ПРОГРЕВ RAM]: Сектор {target_key} уже выше Тейка-1 (PNL:  {round(rec_profit*100,2)}%). Блокирую повторный спам Тейка-1.")
+
+                            # If позиция пролетела даже Тейк-2 (+1.85%)
+                            if rec_profit >= TP2_PCT:
+                                memory.tp2_fixed[target_key] = True
+#====
                         memory.slots_occupied += 1
     except Exception as recover_err:
         log(f"⚠️ Критическая ошибка авто-усыновления MEXC: {recover_err}")
