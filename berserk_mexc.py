@@ -102,7 +102,7 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
             params.update({
                 'stopPrice': exact_trigger_price,  # Канонический триггер CCXT
                 'triggerPrice': exact_trigger_price, # Дублируем для жесткой совместимости
-                'triggerType': 1,   # 1 = Активация по Last Price
+                'triggerType': 2,   # 1 = Активация по Last Price
                 'openType': 1,      # 1 = Изолированная маржа
                 'reduceOnly': True
             })
@@ -471,27 +471,33 @@ async def monitor_logic(exchange):
                             return
 
                         # Если лот позволяет дробить — фиксируем базовые 30%
-                    #    smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
-                        smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
-                        log(f"📡 [ДЕБАГ БИРЖИ {symbol}]: smart_order вызван для qty={close_qty}. Иду дальше...")
-                        memory.tp1_fixed[symbol] = True
+#===============
+                        # --- ЖЕСТКИЙ ШТУЧНЫЙ ФИКС V21.6: УДАРНЫЙ КOHТУР ЧАСТИЧHОГО ЗАКРЫТИЯ ---
+                        # 1. Сбрасываем 30% объема чистым фьючерсным маркет-ордером закрытия
                         pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
-                        log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксировано 30% объема (+{round(TP1_PCT*100,2)}%)")
 
-                        #try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
-                        #except: pass
                         try:
-                            exchange.cancel_all_orders(symbol, {'params': {'type': 5}}) # Удаляет только триггерные стопы
-                        except:
-                            pass
-                        #bu_price = pos['price'] * (1 + 0.0015) if pos['side'] == 'buy' else pos['price'] * (1 - 0.0015)
-                        bu_price = pos['price'] * (1 - 0.0005) if pos['side'] == 'buy' else pos['price'] * (1 + 0.0005)
-                        bu_price_precision = float(exchange.price_to_precision(symbol, bu_price))
+                            params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
+                            exchange.create_order(symbol, 'market', exit_side, close_qty, None, params)
+                            memory.tp1_fixed[symbol] = True
+                            log(f"🎯 ТЕЙК-1 УСПЕШHО ВЫПОЛHЕH: {symbol} частично зафиксирован (+{round(TP1_PCT*100, 2)}%)")
+                        except Exception as e_m1:
+                            log(f"🆘 Ошибка отправки Тейка-1 на МЕХС: {e_m1}")
+                            memory.tp1_fixed[symbol] = True
 
-                        exact_remainder_vol = float(exchange.amount_to_precision(symbol, pos['vol']))
-                        smart_order(exchange, symbol, exit_side, exact_remainder_vol, price=bu_price_precision, is_stop=True)
-                   #     smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
-                        memory.stop_placed[symbol] = bu_price_precision
+                        # 2. Рассчитываем и выставляем безубыточный стоп-лосс на остаток позиции
+                        try:
+                            # Добавили .lower() для защиты регистра букв усыновленных позиций
+                            is_buy = pos['side'].lower() == 'buy' or 'long' in pos['side'].lower()
+                            bu_price = pos['price'] * (1 - 0.0005) if is_buy else pos['price'] * (1 + 0.0005)
+                            bu_price_precision = float(exchange.price_to_precision(symbol, bu_price))
+
+                            exact_remainder_vol = float(exchange.amount_to_precision(symbol, pos['vol']))
+                            smart_order(exchange, symbol, exit_side, exact_remainder_vol, price=bu_price_precision, is_stop=True)
+                            memory.stop_placed[symbol] = bu_price_precision
+                        except Exception as e_m2:
+                            log(f"🆘 Ошибка выставления безубытка на МЕХС: {e_m2}")
+#============
                     except Exception as e:
                         log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
 
@@ -500,30 +506,46 @@ async def monitor_logic(exchange):
                     try:
                         close_qty = float(exchange.amount_to_precision(symbol, pos['vol'] * 0.57))
                         if close_qty > 0:
-                       #     smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
-                            smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
+                            smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
+                       #     smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
                             memory.tp2_fixed[symbol] = True
                             pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
                             log(f"🏆 ТЕЙК-2 ВЫПОЛНЕН: {symbol} зафиксировано 40% объема (+{round(TP2_PCT*100,2)}%)")
                     except Exception as e: log(f"🆘 Ошибка Тейка 2 {symbol}: {e}")
 #===========
                 # --- 5. ЛОГИКА ТЕЙК-ПРОФИТА 3 ---
-                if memory.tp2_fixed.get(symbol) and profit >= TP3_PCT:
-                    log(f"👑 ТЕЙК-3 МЕГА-ФИНАЛ: {symbol} полностью закрыт (+{round(TP3_PCT*100,2)}%)")
-                    action_triggered_tp3 = False
-                    try:
-                        try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
-                        except: pass
-                        smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
-                        action_triggered_tp3 = True
-                    except Exception as e: log(f"⚠ Ошибка Тейка 3 для {symbol}: {e}")
 
-                    if symbol in memory.active_pos: del memory.active_pos[symbol]
-                    if symbol in memory.tp1_fixed: del memory.tp1_fixed[symbol]
-                    if symbol in memory.tp2_fixed: del memory.tp2_fixed[symbol]
-                    if symbol in memory.stop_placed: del memory.stop_placed[symbol]
-                    if symbol in memory.max_pnl_observed: del memory.max_pnl_observed[symbol]
+                # --- 5. ЛОГИКА ТЕЙК-ПРОФИТА 3 (МЕГА-ФИНАЛ 100% ВЫХОД) ---
+                if memory.tp2_fixed.get(symbol) and profit >= TP3_PCT:
+                    log(f"👑 ТЕЙК-3 МЕГА-ФИНАЛ: {symbol} достиг финальной цели (+{round(TP3_PCT*100, 2)}%)")
+                    action_triggered_tp3 = False
+                    exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
+                    close_qty = pos['vol']
+
+                    if close_qty > 0:
+                        try:
+                            # Удаляем системные сетки
+                            try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
+                            except: pass
+
+                            # Финишируем прямым маркет-ордером с жестким плечом 25
+                            params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
+                            exchange.create_order(symbol, 'market', exit_side, close_qty, None, params)
+                        except Exception as e_m4:
+                            log(f"⚠ Ошибка Тейка-3 на МЕХС: {e_m4}")
+
+                    # Полная зачистка RAM-памяти лота
+                    for k in [symbol, symbol.replace(':USDT', '')]:
+                        if k in memory.active_pos: del memory.active_pos[k]
+                        if k in memory.tp1_fixed: del memory.tp1_fixed[k]
+                        if k in memory.tp2_fixed: del memory.tp2_fixed[k]
+                        if k in memory.stop_placed: del memory.stop_placed[k]
+                        if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
+
                     memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                    continue
+#==========
+#==========
                     if action_triggered_tp3: return
         # Разгрузка процессора
         await asyncio.sleep(0.5)
@@ -780,4 +802,3 @@ async def main_logic():
 if __name__ == "__main__":
     try: asyncio.run(main_logic())
     except KeyboardInterrupt: log("🛑 Снайпер Берсерк принудительно остановлен.")
-root@vm-v2-mini:~#
