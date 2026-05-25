@@ -354,7 +354,7 @@ async def monitor_logic(exchange):
 
             # Вычисляем PNL
             profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
-
+            log(f"⚙️ [ДЕБАГ ЦЕНЫ {symbol}]: profit={round(profit*100,3)}% | cur_p={cur_p} | Вход={pos['price']} | Флаг_ТР1={memory.tp1_fixed.get(symbol)}")
             # ДЕБАГ №4: Выводим PNL в реальном времени, если цена успешно найдена
             if int(now_time) % 10 == 0:
                 log(f"🔥 [DEBUG 4 УСПЕХ]: Монета {symbol} | Цена: {cur_p} | Вход: {pos['price']} | Живой PNL: {round(profit * 100, 2)}%")
@@ -366,6 +366,7 @@ async def monitor_logic(exchange):
                 smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
                 continue
 #===========
+            if age > 0:
 #=============
 #                exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
                 mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
@@ -443,7 +444,10 @@ async def monitor_logic(exchange):
 
 
                 # --- 3. ШТАТНАЯ ФИКСАЦИЯ ТЕЙКА 1 (С ЖЕСТКИМ ФИКСОМ ОКРУГЛЕНИЯ МАЛЫХ ЛОТОВ SOL) ---
+                log(f"🎯 [ДЕБАГ симбол  {symbol}]: Перед условием! мемори= {memory.tp1_fixed.get(symbol)} профит={profit} >= TP1 {TP1_PCT}  ")
+
                 if not memory.tp1_fixed.get(symbol) and profit >= TP1_PCT:
+                    log(f"🎯 [ДЕБАГ ТЕЙК-1 {symbol}]: Зашел внутрь условия! Пытаюсь закрыть объем...")
                     try:
                         raw_close_qty = pos['vol'] * 0.30
                         close_qty_str = exchange.amount_to_precision(symbol, raw_close_qty)
@@ -469,6 +473,7 @@ async def monitor_logic(exchange):
                         # Если лот позволяет дробить — фиксируем базовые 30%
                     #    smart_order(exchange, symbol, exit_side, close_qty, is_exit=True)
                         smart_order(exchange, symbol, exit_side, close_qty, is_exit=True, price=None)
+                        log(f"📡 [ДЕБАГ БИРЖИ {symbol}]: smart_order вызван для qty={close_qty}. Иду дальше...")
                         memory.tp1_fixed[symbol] = True
                         pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
                         log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксировано 30% объема (+{round(TP1_PCT*100,2)}%)")
@@ -775,3 +780,4 @@ async def main_logic():
 if __name__ == "__main__":
     try: asyncio.run(main_logic())
     except KeyboardInterrupt: log("🛑 Снайпер Берсерк принудительно остановлен.")
+root@vm-v2-mini:~#
