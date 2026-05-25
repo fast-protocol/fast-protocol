@@ -118,23 +118,26 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
             order = exchange.create_order(symbol, 'limit', side, qty, exact_price, params)
             return order
 
-        # СЦЕНАРИЙ 3: Тотальная Двухсторонняя Капитуляция Позиции (ФИКС ШОРТOВ V19.3)
+        # СЦЕНАРИЙ 3: Тотальная Двухсторонняя Капитуляция Позиции (ИСПРАВЛЕНИЕ ТЕЙКОВ V20.9)
         else:
             if is_exit:
                 try:
-                    # Для MEXC метод close_position требует передачи параметров стороны закрытия в params!
-                    # side должен быть 'buy' для закрытия шорта, и 'sell' для закрытия лонга
-                    order = exchange.close_position(symbol, params={'side': side.lower()})
+                    # Жестко упаковываем все флаги закрытия изолированной маржи для MEXC
+                    params.update({
+                        'side': side.lower(),
+                        'reduceOnly': True,
+                        'openType': 1
+                    })
+                    order = exchange.close_position(symbol, params=params)
                     return order
                 except Exception as close_err:
-                    # Резервный контур аварийного закрытия прямым маркетом, если close_position дал осечку
+                    # Резервный контур: если close_position дал осечку, бьем прямым маркет-ордером
                     order = exchange.create_order(symbol, 'market', side, qty, None, params)
                     return order
             else:
                 # Обычный маркет-вход при налитии капкана
                 order = exchange.create_order(symbol, 'market', side, qty, None, params)
                 return order
-
     except Exception as e:
         log(f"⚠️ Сбой шлюза ордеров {symbol} ({side.upper()}): {e}")
         return False
@@ -311,24 +314,47 @@ async def monitor_logic(exchange):
       try:
         now_time = time.time()
 
-        # Мгновенный, чистый обсчет PNL из оперативной памяти сервера
+        # ДЕБАГ №1: Проверяем, видит ли вообще функция активные позиции в RAM
+        if int(now_time) % 10 == 0 and memory.active_pos:
+            log(f"🔍 [DEBUG 1]: В памяти RAM active_pos числятся ключи: {list(memory.active_pos.keys())}")
+
         for symbol, pos in list(memory.active_pos.items()):
             age = now_time - pos['entry_time']
 
-            # Запрашиваем живую цену из WebSocket-кэша
+            # ДЕБАГ №2: Проверяем, какие ключи цен сейчас лежат в WebSocket-таблице memory.prices
+            if int(now_time) % 10 == 0:
+               log(f"🔍 [DEBUG 2]: Сканирую {symbol} | В memory.prices сейчас есть ключи: {list(memory.prices.keys())[:5]}")
+
+            # Наш всеядный кэш цен
             cur_p = memory.prices.get(symbol)
             if not cur_p:
+               clean_key = symbol.split(':')[0]
+               cur_p = memory.prices.get(clean_key)
+
+            # ДЕБАГ №3: Проверяем, удалось ли извлечь живую цену для монеты
+            if not cur_p:
+                if int(now_time) % 10 == 0:
+                    log(f"⚠️ [DEBUG 3 ОТКЛОНЕНИЕ]: Для {symbol} ЦЕНА НЕ НАЙДЕНА в памяти! Бот пропускает шаг.")
                 continue
 
-            # Расчет PNL строго по регистру букв
+            # Превращаем цену в чистый float
+            cur_p = float(cur_p)
+
+            # Вычисляем PNL
             profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
+
+            # ДЕБАГ №4: Выводим PNL в реальном времени, если цена успешно найдена
+            if int(now_time) % 10 == 0:
+                log(f"🔥 [DEBUG 4 УСПЕХ]: Монета {symbol} | Цена: {cur_p} | Вход: {pos['price']} | Живой PNL: {round(profit * 100, 2)}%")
+
             # --- 1. АВАРИЙНЫЙ СHОС ПО ВРЕМЕHИ (Decay Shield 60с) ---
             if age > 60 and profit < -0.0008:
                 log(f"🏛️ 🛡️ Decay Shield V16.9: {symbol} срезан на 60с (Лосс: {round(profit*100,2)  }%)")
                 exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
                 smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
                 continue
-
+#===========
+#=============
 #                exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
                 mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
 
