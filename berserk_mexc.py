@@ -389,6 +389,41 @@ async def monitor_logic(exchange):
 
             # Вычисляем PNL
             profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
+#===========
+            # --- [ВРЕЗКА V23.0: EMERGENCY TREND EVACUATION ПРОТИВ BTC] ---
+            # Если Биткоин штормит прямо сейчас (включен MOMENTUM SHIELD)
+            if hasattr(memory, 'btc_storm_time') and (now_time - memory.btc_storm_time < 2):
+                # Определяем направление шторма: сверяем последнюю дельту истории BTC
+                if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 2:
+                    btc_dir_up = memory.btc_history[-1] > memory.btc_history[-2]
+                    pos_long = pos['side'].lower() == 'buy' or 'long' in pos['side'].lower()
+
+                    # Коллизия 1: Биткоин летит вверх, а мы стоим в Шорте
+                    # Коллизия 2: Биткоин летит вниз, а мы стоим в Лонге
+                    if (btc_dir_up and not pos_long) or (not btc_dir_up and pos_long):
+                        log(f"🚨 [ЭВАКУАЦИЯ ТРЕНДА]: BTC летит против нашей позиции {symbol}! Экстренный маркет-снос.")
+
+                        # --- ВРЕЗКА V23.1: ТОТАЛЬНЫЙ СHОС ВСЕХ ЛИМИТНЫХ КАПКАНОВ ИЗ СТАКАНОВ ---
+                        try:
+                            for lim_sym, lim_info in list(memory.limit_orders.items()):
+                                exchange.cancel_order(lim_info['id'], lim_sym)
+                            memory.limit_orders.clear()
+                            log("🧹 [ЭВАКУАТОР]: Все выставленные лимитные капканы успешно удалены и з стаканов.")
+                        except:
+                            pass
+
+
+
+                        # Немедленный рыночный снос 100% объема черезcreate_order
+                        params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
+                        exchange.create_order(symbol, 'market', exit_side, pos['vol'], None, params)
+
+                        # Выметаем RAM
+                        for k in [symbol, symbol.replace(':USDT', '')]:
+                            if k in memory.active_pos: del memory.active_pos[k]
+                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                        continue
+#===========
 #            log(f"⚙️ [ДЕБАГ ЦЕНЫ {symbol}]: profit={round(profit*100,3)}% | cur_p={cur_p} | Вход={pos['price']} | Флаг_ТР1={memory.tp1_fixed.get(symbol)}")
             # ДЕБАГ №4: Выводим PNL в реальном времени, если цена успешно найдена
 #            if int(now_time) % 10 == 0:
@@ -765,17 +800,20 @@ async def main_logic():
                 m1_diff = abs(btc_window[-1] - btc_window[-2])
                 m2_diff = abs(btc_window[-2] - btc_window[-3])
                 avg_btc_move_pct = ((m1_diff + m2_diff) / 2) / btc_window[-1] * 100
-
+#+++++++++++++++
+                # --- [ФИКС V23.1: БЛОКИРОВКА ЦИКЛА ПРИ ШТОРМЕ] ---
                 if avg_btc_move_pct > 0.045:
-                    if not hasattr(memory, 'last_momentum_log'):
-                        memory.last_momentum_log = 0
+                    memory.btc_storm_time = now
+                    if not hasattr(memory, 'last_momentum_log'): memory.last_momentum_log = 0
                     if now - memory.last_momentum_log >= 60:
-                        log(f"🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна ({round(avg_b tc_move_pct, 4)}% > 0.045%). Блокирую капканы.")
+                        log(f"🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна ({round(avg_bt c_move_pct, 4)}% > 0.045%). Включаю 90с таймер остывания.")
                         memory.last_momentum_log = now
-                    # Важно: Сплющиваем процессор на паузу перед уходом в начало цикла
-#                    await asyncio.sleep(0.5)
-#                    continue
-                    pass
+
+                # Жестко обрываем итерацию и уходим на новый круг, если 90 секунд еще не прошло
+                if hasattr(memory, 'btc_storm_time') and (now - memory.btc_storm_time < 90):
+                    await asyncio.sleep(0.5)
+                    continue  # Входы заблокированы наглухо!
+
 # ------------------------------------------------------------------
 
             # 2. ФОНОВОЕ ОБНОВЛЕНИЕ БАЛАНСА (ЗАЩИТА ОТ ОБНУЛЕНИЯ И CODE 2005)
@@ -818,9 +856,10 @@ async def main_logic():
                         if order and isinstance(order, dict):
                             order_id = order.get('id')
                             memory.limit_orders[symbol] = {
-                                'id': order_id, 'time': time.time(), 'price': signal['price'],
+                                'id': order_id, 'timestamp': time.time(), 'price': signal['price'],
                                 'side': signal['side'], 'qty': qty, 'dna': signal
                             }
+
                             log(f"🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): {symbol} {signal['side'].upper()} @ {signal['price']}")
 
             # --- [ВЕНИК АВТОСНОСА НЕИСПОЛНЕННЫХ ЛИМИТОК ПО TTL = 75с] ---
@@ -836,20 +875,88 @@ async def main_logic():
                             'side': order_data['side'], 'vol': order_data['qty'], 'price': order_data['price'],
                             'entry_time': time.time(), 'dna': order_data['dna']
                         }
+
                         memory.slots_occupied += 1
                         del memory.limit_orders[symbol]
                         continue
                 except: pass
 #========
-                if now - order_data['time'] > LIMIT_ORDER_TTL:
-                    log(f"🧹 ВЕНИК ЛИМИТОК: Капкан по {symbol} утилизирован по времени TTL ({LIMIT_O RDER_TTL}с).")
+                # --- [УЗЕЛ V23.0: ИНТЕЛЛЕКТУАЛЬНЫЙ ВЕНИК & МАРКЕТ-ВХOД ВДOГOHКУ МЕХС] ---
+                order_age = now - order_data['time']
+                coin_dna = get_coin_dna(symbol)
+                optimal_ttl = coin_dna.get('ttl', 40)
+#===============
+                # --- ШТУЧНЫЙ ФИКС V23.2: АВТОНОМНЫЙ НЕУЯЗВИМЫЙ ВЕНИК КЛИНЕР ---
+                if order_age >= optimal_ttl:
                     try:
-                        exchange.cancel_order(order_data['id'], symbol)
-                        if symbol in memory.limit_orders: del memory.limit_orders[symbol]
+                        # Резервный расчет тренда объемов свечей: изолируем от падений API
+                        try:
+                            ohlcv_check = exchange.fetch_ohlcv(symbol, '1m', limit=3)
+                            volume_growing = float(ohlcv_check[-1][5]) > float(ohlcv_check[-2][5]) if len(ohlcv_check) >= 2 else True
+                        except:
+                            volume_growing = True # Если API лежит, считаем объем растущим для безопасности
+
+                        # Прямой, слепой удар отмены ордера, не дожидаясь проверок статуса
+                        try:
+                            exchange.cancel_order(order_data['id'], symbol)
+                        except Exception as direct_cancel_err:
+                            # Если биржа говорит, что ордер уже заполнен или не найден
+                            err_msg = str(direct_cancel_err).lower()
+                            if "not found" in err_msg or "filled" in err_msg:
+                                volume_growing = True # Даем контуру усыновления сработать в блоке ниже
+
+                        # Принудительно вычищаем лимитку из локальной памяти RAM, спасая от вечного зависания
+                        if symbol in memory.limit_orders:
+                            del memory.limit_orders[symbol]
+
+                        # 3. ИСПОЛНИТЕЛЬНЫЙ МАРКЕТ-КОНТУР: Входим по рынку вдогонку!
+                        if volume_growing:
+#===============
+                            # 2. Математический фильтр: проверяем, растет ли минутный объем на пробое
+                            try:
+                                ohlcv_check = exchange.fetch_ohlcv(symbol, '1m', limit=3)
+                                if len(ohlcv_check) >= 2:
+                                    v_now = float(ohlcv_check[-1][5])
+                                    v_prev = float(ohlcv_check[-2][5])
+                                    volume_growing = v_now > v_prev
+                                else:
+                                    volume_growing = True
+                            except:
+                                volume_growing = True
+
+                            # Отменяем пассивную Maker-лимитку в стакане
+                            exchange.cancel_order(order_data['id'], symbol)
+                            if symbol in memory.limit_orders:
+                                del memory.limit_orders[symbol]
+
+                            # 3. ИСПОЛНИТЕЛЕЬНЫЙ МАРКЕТ-КОHТУР: Входим по рынку вдогонку!
+                            if volume_growing:
+                                log(f"🚀 [МАРКЕТ-ВХOД ВДOГOHКУ]: Капкан по {symbol} не налился за {optimal_ttl}с, но объемы растут! Вхожу по рынку.")
+
+                                # Отправляем фьючерсный маркет-ордер входа с жестким указанием плеча 25
+                                params = {'openType': int(1), 'leverage': int(25)}
+                                market_order = exchange.create_order(symbol, 'market', order_data['side'], order_data['qty'], None, params)
+
+                                if market_order:
+                                    memory.active_pos[symbol] = {
+                                        'side': order_data['side'],
+                                        'vol': order_data['qty'],
+                                        'price': float(market_order.get('price', order_data['price'])),
+                                        'entry_time': time.time(),
+                                        'dna': order_data['dna']
+                                    }
+                                    memory.slots_occupied = len(memory.active_pos)
+                            else:
+                                log(f"🧹 [ВЕHИК]: Капкан по {symbol} утилизирован. Прорыв без объемо в, маркет-вход заблокирован.")
+                        else:
+                            # Если ордер закрылся сам на бирже, пока мы шли к нему
+                            if symbol in memory.limit_orders:
+                                del memory.limit_orders[symbol]
+
                     except Exception as cancel_err:
-                        # --- ЖЕСТКИЙ ФИКС V18.6: ПЕРЕХВАТ ОРДЕРOВ-ПРИЗРАКОВ ПРИ СКВИЗАХ ---
+                        # --- СОХРАНЕНИЕ ТВОЕЙ ОРИГИНАЛЬНОЙ ДНК ПЕРЕХВАТА СКВИЗОВ-ПРИЗРАКОВ ---
                         err_msg = str(cancel_err).lower()
-                        if "cannot be cancelled" in err_msg or "filled" in err_msg:
+                        if "cannot be cancelled" in err_msg or "filled" in err_msg or "not found" in err_msg:
                             log(f"🔥 ПЕРЕХВАТ СКВИЗА: Ордер по {symbol} успел исполниться в долю секунды отмены! Усыновляем позицию.")
                             if symbol not in memory.active_pos:
                                 memory.active_pos[symbol] = {
@@ -859,7 +966,9 @@ async def main_logic():
                                     'entry_time': time.time(),
                                     'dna': order_data['dna']
                                 }
-                        if symbol in memory.limit_orders: del memory.limit_orders[symbol]
+                                memory.slots_occupied = len(memory.active_pos)
+                            if symbol in memory.limit_orders:
+                                del memory.limit_orders[symbol]
 #-----------
         except Exception as main_err:
             await asyncio.sleep(1)
