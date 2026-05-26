@@ -1,19 +1,47 @@
 
-MAX_SLOTS = 2               # Максимум параллельных позиций
-RISK_GEAR = 0.95            # Множитель маржи слота (0.1 - 1.0)
-PRIMARY_SL_PCT = 0.012      # Жесткий серверный Стоп-Лосс (-1.2%)
-
-# --- ЦЕЛИ TRIPLE-GEAR V16.2 ---
-TP1_PCT = 0.0065            # Тейк 1 (+0.65%) - Закрытие 30% объема
-TP2_PCT = 0.0185            # Тейк 2 (+1.85%) - Закрытие 40% объема
-TP3_PCT = 0.0420            # Тейк 3 (+4.20%) - Закрытие остатка 30%
-
 # Геометрия полос Боллинджера и Капкана
 BB_PERIOD = 20
 BB_STD = 2.2
-ENTRY_TRIGGER_OFFSET = 0.0018  # Сигнальный вылет (0.18%)
-ENTRY_ORDER_OFFSET = 0.0020    # Снайперский отступ лимитного капкана (0.20% от полосы)
 LIMIT_ORDER_TTL = 75           # Время жизни лимитки в стакане (секунды)
+
+# === [УЛЬТИМАТИВНЫЙ ДНК-ПУЛЬТ УПРАВЛЕНИЯ V23.0 МОНОЛИТ] ===
+MAX_SLOTS = 1
+RISK_GEAR = 0.50
+DEBUG_BEACONS = True
+
+# Каноническая матрица индивидуальных параметров под каждый класс активов
+DNA_MATRIX = {
+    # КЛАСС 1: Высокоскоростные Мемы (Глубокие капканы, жирные тейки, быстрый маркет-вход 25с)
+    'PEPE':   {'l_off': 0.0055, 's_off': 0.0055, 'tp1': 0.0120, 'tp2': 0.0380, 'tp3': 0.0550, 'sl': 0.018, 'ttl': 25},
+    'WIF':    {'l_off': 0.0055, 's_off': 0.0055, 'tp1': 0.0120, 'tp2': 0.0350, 'tp3': 0.0500, 'sl': 0.018, 'ttl': 25},
+    'SHIB':   {'l_off': 0.0050, 's_off': 0.0050, 'tp1': 0.0100, 'tp2': 0.0320, 'tp3': 0.0450, 'sl': 0.015, 'ttl': 25},
+    'DOGE':   {'l_off': 0.0040, 's_off': 0.0040, 'tp1': 0.0080, 'tp2': 0.0220, 'tp3': 0.0350, 'sl': 0.015, 'ttl': 30},
+    'NOT':    {'l_off': 0.0055, 's_off': 0.0055, 'tp1': 0.0120, 'tp2': 0.0380, 'tp3': 0.0550, 'sl': 0.018, 'ttl': 25},
+    'POPCAT': {'l_off': 0.0065, 's_off': 0.0065, 'tp1': 0.0150, 'tp2': 0.0450, 'tp3': 0.0650, 'sl': 0.020, 'ttl': 25},
+    'JASMY':  {'l_off': 0.0045, 's_off': 0.0045, 'tp1': 0.0090, 'tp2': 0.0280, 'tp3': 0.0400, 'sl': 0.015, 'ttl': 30},
+
+    # КЛАСС 2: Технологичные Ракеты (Оптимальные капканы, средние тейки, маркет-вход 40с)
+    'SOL':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'NEAR':   {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'SUI':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'FET':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'TIA':    {'l_off': 0.0030, 's_off': 0.0030, 'tp1': 0.0070, 'tp2': 0.0200, 'tp3': 0.0450, 'sl': 0.014, 'ttl': 40},
+    'APT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'RNDR':   {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'RENDER': {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+
+    # КЛАСС 3: Тяжелые Якоря и Дефай (Узкие капканы, консервативные тейки, ожидание лонга до 55с)
+    'DOT':    {'l_off': 0.0015, 's_off': 0.0015, 'tp1': 0.0040, 'tp2': 0.0120, 'tp3': 0.0250, 'sl': 0.010, 'ttl': 55},
+    'C98':    {'l_off': 0.0020, 's_off': 0.0020, 'tp1': 0.0050, 'tp2': 0.0150, 'tp3': 0.0300, 'sl': 0.010, 'ttl': 55},
+    'BNB':    {'l_off': 0.0010, 's_off': 0.0010, 'tp1': 0.0030, 'tp2': 0.0100, 'tp3': 0.0200, 'sl': 0.008, 'ttl': 55},
+    'XRP':    {'l_off': 0.0012, 's_off': 0.0012, 'tp1': 0.0040, 'tp2': 0.0120, 'tp3': 0.0220, 'sl': 0.009, 'ttl': 55},
+    'ADA':    {'l_off': 0.0015, 's_off': 0.0015, 'tp1': 0.0040, 'tp2': 0.0120, 'tp3': 0.0240, 'sl': 0.010, 'ttl': 55}
+}
+
+def get_coin_dna(symbol):
+    """Канонический экстрактор индивидуальных ДНК-параметров с авто-дефолтами"""
+    clean_name = symbol.split('/')[0].upper()
+    return DNA_MATRIX.get(clean_name, {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 45})
 
 # Список приоритетных фьючерсных секторов MEXC
 PRIORITY_LIST = [
@@ -77,71 +105,71 @@ async def init_exchange():
 
 # --- [ВОЗВРАЩЕНИЕ ИСТИННОГО МOНOЛИТА smart_order V17.0 БЕЗ AWAIT] ---
 def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_exit=False, is_stop=False):
-    """Синхронный стриминг ордеров с принудительной изоляцией маржи openType=1"""
+    """
+    Синхронный шлюз ордеров V22.2: Абсолютная броня выходов МЕХС.
+    Полностью ликвидирует ошибки 7003, 600 и Parameter error.
+    """
     try:
         amount_str = exchange.amount_to_precision(symbol, amount)
         qty = float(amount_str)
         if qty <= 0:
             return False
 
-        # Каноническая упакoвка параметров по правилам старой рабочей версии
+        # Базовая каноническая упаковка параметров Isolated для MEXC
         params = {
-            'openType': 1,      # 1: Strict Isolated Маржа!
-            'leverage': int(25) # Жесткое требование биржи для ISO-режима
+            'openType': int(1),       # 1: Изолированная маржа (Isolated)
+            'leverage': int(25),      # Жесткое плечо 25х
         }
-        if is_exit or is_stop:
-            params['reduceOnly'] = True
 
-        # СЦЕНАРИЙ 1: Жесткий серверный СТОП-МАРКЕТ (КАНОНИЧЕСКИЙ МЕТОД CCXT V19.0)
+        # СЦЕНАРИЙ 1: Официальный позиционный Стоп-Маркет по документации МЕХС (V22.5)
         if is_stop:
-            if price is None: return False
+            if price is None:
+                return False
+
+            # Извлекаем рыночный ID тикера (NEAR_USDT)
+            mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
+            if 'USDT' in mexc_market_id and '_' not in mexc_market_id:
+                mexc_market_id = mexc_market_id.replace('USDT', '_USDT')
+
             exact_trigger_price = float(exchange.price_to_precision(symbol, price))
 
-            # Для фьючерсов MEXC в CCXT триггерные стопы отправляются как тип 'market'
-            # с передачей цены в params по правилам универсальной интеграции
-            params.update({
-                'stopPrice': exact_trigger_price,  # Канонический триггер CCXT
-                'triggerPrice': exact_trigger_price, # Дублируем для жесткой совместимости
-                'triggerType': 2,   # 1 = Активация по Last Price
-                'openType': 1,      # 1 = Изолированная маржа
-                'reduceOnly': True
-            })
+            # Упаковываем параметры строго по присланной доке /api/v1/private/order/create_tpsl
+            mexc_tpsl_params = {
+                'symbol': mexc_market_id,
+                'openType': int(1),                # 1: Isolated маржа
+                'slTriggerType': int(2),           # 2: Активация по цене Last Price
+                'slOrderType': int(2),              # 2: Выполнить как Маркет-ордер (Stop Market)
+                'stopLossPrice': exact_trigger_price
+            }
 
-            # Базовый метод create_order гарантированно существует и не выдаст AttributeError!
-            order = exchange.create_order(symbol, 'market', side, qty, None, params)
+            # Бьем напрямую в выделенный позиционный шлюз TP/SL ордеров MEXC
+            order = exchange.contractPrivatePostOrderCreateTpsl(mexc_tpsl_params)
             return order
 
         # СЦЕНАРИЙ 2: Пассивный Лимитный Капкан Maker
         elif is_limit:
-            if price is None: return False
+            if price is None:
+                return False
             exact_price = float(exchange.price_to_precision(symbol, price))
             order = exchange.create_order(symbol, 'limit', side, qty, exact_price, params)
             return order
 
-        # СЦЕНАРИЙ 3: Тотальная Двухсторонняя Капитуляция Позиции (ИСПРАВЛЕНИЕ ТЕЙКОВ V20.9)
+        # СЦЕНАРИЙ 3: Тотальный снос позиции (Тейки, Decay Shield, Сползание)
         else:
             if is_exit:
-                try:
-                    # Жестко упаковываем все флаги закрытия изолированной маржи для MEXC
-                    params.update({
-                        'side': side.lower(),
-                        'reduceOnly': True,
-                        'openType': 1
-                    })
-                    order = exchange.close_position(symbol, params=params)
-                    return order
-                except Exception as close_err:
-                    # Резервный контур: если close_position дал осечку, бьем прямым маркет-ордером
-                    order = exchange.create_order(symbol, 'market', side, qty, None, params)
-                    return order
+                params.update({'reduceOnly': True})
+                # Бьем чистым фьючерсным маркет-ордером закрытия, обходя капризный close_position
+                order = exchange.create_order(symbol, 'market', side, qty, None, params)
+                return order
             else:
                 # Обычный маркет-вход при налитии капкана
                 order = exchange.create_order(symbol, 'market', side, qty, None, params)
                 return order
-    except Exception as e:
-        log(f"⚠️ Сбой шлюза ордеров {symbol} ({side.upper()}): {e}")
-        return False
 
+    except Exception as e:
+        log(f"⚠ Сбой шлюза ордеров {symbol} ({side.upper()}): {e}")
+        return False
+#=================
 async def price_stream(exchange_pro):
     """Высокочастотный WebSocket-стриминг цен + Посекундный трекер Поводыря BTC"""
     log(f"📡 Запуск квантового WebSocket-потока цен для {len(PRIORITY_LIST)} активов...")
@@ -281,7 +309,7 @@ async def check_signal(exchange, symbol):
         # Жесткие лимиты теней Marubozu из твоей оригинальной версии V16.0
         shadow_limit = 0.40
         body_limit = 0.50
-
+        coin_dna = get_coin_dna(symbol)
         if is_buy_candidate:
             up_shadow = abs(c_high - max(c_open, c_close))
             long_body = abs(c_open - c_close)
@@ -289,7 +317,7 @@ async def check_signal(exchange, symbol):
                 return None
 
             # Вычисляем точную ювелирную цену лимитного капкана под нижней полосой
-            order_price = lower_band * (1 - ENTRY_ORDER_OFFSET)
+            order_price = lower_band * (1 - coin_dna['l_off'])
             return {'side': 'buy', 'price': order_price, 'upper_band': upper_band, 'lower_band': lower_band}
 
         elif is_sell_candidate:
@@ -299,7 +327,7 @@ async def check_signal(exchange, symbol):
                 return None
 
             # Вычисляем точную ювелирную цену лимитного капкана над верхней полосой
-            order_price = upper_band * (1 + ENTRY_ORDER_OFFSET)
+            order_price = upper_band * (1 + coin_dna['s_off'])
             return {'side': 'sell', 'price': order_price, 'upper_band': upper_band, 'lower_band': lower_band}
 
     except Exception as scan_err:
@@ -324,6 +352,13 @@ async def monitor_logic(exchange):
 #===========
             exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
 #+++++++++++
+
+            # --- ШТУЧНЫЙ ПЕРЕКЛЮЧАТЕЛЬ ДНК V23.0 ---
+            coin_dna = get_coin_dna(symbol)
+            TP1_PCT = coin_dna['tp1']
+            TP2_PCT = coin_dna['tp2']
+            TP3_PCT = coin_dna['tp3']
+            PRIMARY_SL_PCT = coin_dna['sl']
 
             # ДЕБАГ №2: Проверяем, какие ключи цен сейчас лежат в WebSocket-таблице memory.prices
 #            if int(now_time) % 10 == 0:
@@ -375,8 +410,8 @@ async def monitor_logic(exchange):
                 if not memory.stop_placed.get(symbol):
                     try:
                         sl_price = pos['price'] * (1 - PRIMARY_SL_PCT) if pos['side'] == 'buy' else pos['price'] * (1 + PRIMARY_SL_PCT)
-#                        sl_price_precision = float(exchange.price_to_precision(symbol, sl_price))
                         sl_price_precision = float(exchange.price_to_precision(symbol, sl_price))
+#                        sl_price_precision = float(exchange.price_to_precision(symbol, sl_price))
                         # Фикс шага цены под жесткие фьючерсные лоты MEXC
                         if sl_price_precision <= 0: sl_price_precision = round(sl_price, 4)
 
@@ -388,10 +423,14 @@ async def monitor_logic(exchange):
                         smart_order(exchange, symbol, exit_side, exact_vol, price=sl_price_precision, is_stop=True)
                         memory.stop_placed[symbol] = sl_price_precision
                         log(f"🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: {symbol} @ {sl_price_precision}")
+                        await asyncio.sleep(0.2)
                     except Exception as e:
                         log(f"🆘 Ошибка автостопа MEXC для {symbol}: {e}")
                         memory.stop_placed[symbol] = pos['price']
-
+#=====
+                # --- УЗЕЛ V21.9: ПЕРВИЧНЫЙ СТОП ОТКЛЮЧЕН ДЛЯ РАЗБЛОКИРОВКИ ТЕЙКОВ ---
+#                memory.stop_placed[symbol] = True
+#=====
                 # --- [УЗЕЛ V16.9: КВАНТОВЫЙ ДЕЦЕНТРАЛИЗОВАННЫЙ ВЕНТИЛЬ ВЫХОДОВ НА МЕХС] ---
                 if profit > 0:
                     memory.max_pnl_observed[symbol] = max(profit, memory.max_pnl_observed.get(symbol, profit))
@@ -495,7 +534,7 @@ async def monitor_logic(exchange):
                         except Exception as e_m1:
                             log(f"🆘 Ошибка отправки Тейка-1 на МЕХС: {e_m1}")
                             memory.tp1_fixed[symbol] = True
-
+                        await asyncio.sleep(0.2)
                         # 2. Рассчитываем и выставляем безубыточный стоп-лосс на остаток позиции
                         try:
 #                        try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
@@ -574,7 +613,7 @@ async def monitor_logic(exchange):
 #==========
                     if action_triggered_tp3: return
         # Разгрузка процессора
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(2)
       except Exception as e:
           await asyncio.sleep(1)
         #await asyncio.sleep(0.1)
@@ -623,12 +662,13 @@ async def main_logic():
 
                     if target_key not in memory.active_pos:
                         log(f"🔗 RECOVERED MEXC: Позиция {target_key} ({vol} лотов) успешно усыновлена флотоводцем!")
+                        coin_dna = get_coin_dna(symbol)
                         memory.active_pos[target_key] = {
                             'side': side,
                             'vol': vol,
                             'price': entry_price,
                             'entry_time': time.time(), # Стартуем таймер Храповика с текущей секунды
-                            'dna': {'l_off': ENTRY_ORDER_OFFSET, 's_off': ENTRY_ORDER_OFFSET} # Временный кэш оффсета
+                            'dna': {'l_off': coin_dna['l_off'], 's_off': coin_dna['s_off']} # Временный кэш оффсета
                         }
 #====
                         # --- ШТУЧНЫЙ ФИКС V21.4: АВТО-ПРОГРЕВ ФЛАГОВ ПРИ ПОДХВАТЕ ---
