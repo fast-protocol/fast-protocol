@@ -157,13 +157,25 @@ async def price_stream():
         try:
             tickers = await client.watch_tickers()
             if not tickers: continue
+
             for symbol, price_data in tickers.items():
-                if 'USDT' in symbol and (last := price_data.get('last')):
-                    val = float(last)
+
+                if 'USDT' in symbol:
+                    # Достаем сырые данные из пакета тикера биржи
+                    raw_last = price_data.get('last')
+                    raw_bid  = price_data.get('bid')
+                    raw_ask  = price_data.get('ask')
+
+                    # Если биржа прислала None вместо живой цены — жестко скипаем этот тик
+                    if raw_last is None:
+                        continue
+
+                    val = float(raw_last)
                     memory.prices[symbol] = val
-                    # Сбор стакана для мгновенных оффсетов
-                    memory.prices[f"{symbol}_bid"] = float(price_data.get('bid', val))
-                    memory.prices[f"{symbol}_ask"] = float(price_data.get('ask', val))
+
+                    # Безопасно сохраняем стакан: если bid/ask пусты — страхуемся ценой val
+                    memory.prices[f"{symbol}_bid"] = float(raw_bid) if raw_bid is not None else val
+                    memory.prices[f"{symbol}_ask"] = float(raw_ask) if raw_ask is not None else val
         except Exception as e:
             log(f"⚠️ Ошибка WS-Stream: {e}"); await asyncio.sleep(1)
     await client.close()
@@ -329,8 +341,10 @@ async def check_signal(exchange, symbol):
         # 2. Боллинджер и Ширина
         ma_period = dna.get('m_per', 20)
         ma_mult = dna.get('m_mult', 2.1)
-        ma = df['c'].rolling(ma_period).mean().iloc[-1]
-        std = df['c'].rolling(ma_period).std().iloc[-1]
+        #ma = df['c'].rolling(ma_period).mean().iloc[-1]
+        #std = df['c'].rolling(ma_period).std().iloc[-1]
+        ma = df['c'].rolling(ma_period).mean().shift(1).iloc[-1]
+        std = df['c'].rolling(ma_period).std().shift(1).iloc[-1]
         upper = ma + (std * ma_mult)
         lower = ma - (std * ma_mult)
         width = (upper - lower) / ma * 100
@@ -387,10 +401,74 @@ async def check_signal(exchange, symbol):
         #is_sell = (cur_p <= short_trigger) and (cur_p < prev_open) and (wick_ratio_short > 0.35)
         # --- [ЖЕСТКИЙ ПЕРЕВОД V35.0 НА МГНОВЕННЫЙ ПЕРЕХВАТ ТИКА] ---
         # Сравниваем живую секундную цену cur_p с оффсетами, не дожидаясь закрытия минуты!
-        is_buy = (cur_p <= long_trigger) and (wick_ratio_long > 0.35)
-        is_sell = (cur_p >= short_trigger) and (wick_ratio_short > 0.35)
 
-        if not (is_buy or is_sell): return None
+#=== С Логом
+        # --- [УЗЕЛ V35.1: ИHТЕЛЛЕКТУАЛЬНЫЙ ДЕБАГ ФИЛЬТРOВ ВХОДА БИНАНСА] ---
+        # Базовый триггер: живая цена тика пересекла ДНК-оффсет
+        hit_long_offset = (cur_p <= long_trigger) and (wick_ratio_long > 0.35)
+        hit_short_offset = (cur_p >= short_trigger) and (wick_ratio_short > 0.35)
+
+        if hit_long_offset or hit_short_offset:
+            # 1. Проверяем BTC Spread Shield
+            if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 15:
+                btc_window = memory.btc_history[-15:]
+                btc_spread = (max(btc_window) / min(btc_window) - 1) * 100
+                if btc_spread < 0.06:
+                    log(f"🔍 [ОТКАЗ {symbol}]: Цена пробила оффсет, но BTC Spread Shield заблокировал вход (Спред BTC: {round(btc_spread, 3)}% < 0.06%)")
+                    return None
+
+            # 2. Проверяем BTC Momentum Shield
+            if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 3:
+                btc_momentum_window = memory.btc_history[-3:]
+                m1_diff = abs(btc_momentum_window[-1] - btc_momentum_window[-2])
+                m2_diff = abs(btc_momentum_window[-2] - btc_momentum_window[-3])
+                avg_min_move_pct = ((m1_diff + m2_diff) / 2) / btc_momentum_window[-1] * 100
+                if avg_min_move_pct < 0.025:
+                    log(f"🔍 [ОТКАЗ {symbol}]: Пробой оффсета, но BTC Momentum Shield заблокировал вход (Скорость BTC: {round(avg_min_move_pct, 4)}% < 0.025%)")
+                    return None
+
+            # 3. Проверяем Ask-Bid Spread Shield альта
+            if bid_key in memory.prices and ask_key in memory.prices:
+                if best_bid > 0:
+                    ticker_spread = (best_ask / best_bid - 1) * 100
+                    if ticker_spread > 0.05:
+                        log(f"🔍 [ОТКАЗ {symbol}]: Пробой оффсета, но стакан пустой! Ask-Bid Shield спас от проскальзывания (Спред альта: {round(ticker_spread, 3)}% > 0.05%)")
+                        return None
+
+            # 4. Проверяем 4H Rolling Range Shield
+            if len(ohlcv_4h) >= 30:
+                if rolling_range_4h > 4.5:
+                    log(f"🔍 [ОТКАЗ {symbol}]: Пробой оффсета, но монета забанена 4H Range Shield (Ход за 4 часа: {round(rolling_range_4h, 2)}% > 4.5%)")
+                    return None
+
+            # 5. Проверяем Каскадный нож предыстории (Pre-Candle Shield)
+            if len(df) >= 5:
+                p_c1 = df.iloc[-2]; p_c2 = df.iloc[-3]; p_c3 = df.iloc[-4]
+                is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
+                is_3_red = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+                if hit_long_offset and is_3_red:
+                    log(f"🔍 [ОТКАЗ {symbol}]: Пробой оффсета, но Каскадный Нож запретил ловить летящий топор (3 красных свечи подряд)")
+                    return None
+                if hit_short_offset and is_3_green:
+                    log(f"🔍 [ОТКАЗ {symbol}]: Пробой оффсета, но Каскадный Нож запретил шортить вертикальную ракету (3 зеленых свечи подряд)")
+                    return None
+
+            # Если все фильтры-судьи дали добро — взводим истинные триггеры входа
+            is_buy = hit_long_offset
+            is_sell = hit_short_offset
+        else:
+            is_buy = False
+            is_sell = False
+
+        if not (is_buy or is_sell):
+            return None
+#====
+#        is_buy = (cur_p <= long_trigger) and (wick_ratio_long > 0.35)
+#        is_sell = (cur_p >= short_trigger) and (wick_ratio_short > 0.35)
+
+#        if not (is_buy or is_sell): return None
+
+
 
         # --- [ТРАНСПЛАНТАЦИЯ ГЕОМЕТРИИ СВЕЧИ V26.0] ---
         # Расчет полноты живой свечи, чтобы отсечь флэт-шум
