@@ -1,380 +1,232 @@
-[23:08:43] ЛИМИТНЫЙ СНАЙПЕР BERSERK V17.0 ОНЛАЙН. Маржа: $6.67
-[23:08:43] 🏹 Охота лимитными капканами Berserk V16.9 активирована. Патрулирую стаканы...
-[23:08:43] 🔗 Сканирование аккаунта на наличие открытых позиций...
-[23:08:43] 🏛️ 🏹 Охота лимитными капканами Berserk V16.9 активирована. Патрулирую стаканы...
-[23:08:44] 📡 Запуск квантового WebSocket-потока цен для 8 активов...
-[23:15:55] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): NEAR/USDT:USDT SELL @ 2.7923205668134057
-[23:16:05] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт NEAR/USDT:USDT (56.0 лотов).
-[23:16:09] ⚠ Сбой шлюза ордеров NEAR/USDT:USDT (BUY): mexc {"success":false,"code":2007,"message":"Order price error"}
-[23:16:09] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: NEAR/USDT:USDT @ 2.836
-[23:16:49] 🎯 ТЕЙК-1 УСПЕШHО ВЫПОЛHЕH: NEAR/USDT:USDT частично зафиксирован (+0.65%)
-[23:16:54] ⚠ Сбой шлюза ордеров NEAR/USDT:USDT (BUY): mexc {"success":false,"code":2007,"message":"Order price error"}
-[23:17:11] 🧹 ВЕНИК ЛИМИТОК: Капкан по NEAR/USDT:USDT утилизирован по времени TTL (75с).
-[23:17:11] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по NEAR/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[23:45:18] 🏆 ТЕЙК-2 ВЫПОЛНЕН: NEAR/USDT:USDT зафиксировано 40% объема (+1.85%)
-[23:54:05] 🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: NEAR/USDT:USDT закрыт на МЕХС. ММ выдохся (Пик: +1.93%)
-[00:01:27] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT SELL @ 0.9708682268235492
-[00:01:40] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[00:01:46] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[00:01:51] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[00:01:55] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[00:02:00] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[00:02:21] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0679% > 0.045%). Блокирую кап каны.
-[00:02:50] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[00:03:27] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0548% > 0.045%). Блокирую кап каны.
-[00:22:49] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT BUY @ 0.9630582632684875
-[00:23:57] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:24:04] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:24:06] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:24:10] ⚠ Сбой шлюза ордеров NEAR/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:24:14] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[00:25:40] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): LDO/USDT:USDT BUY @ 0.34366355842076995
-[00:25:42] ⚠ Сбой шлюза ордеров APT/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.193282084,"available":0.1910749588900000000000000000000029077}}
-[00:25:49] ⚠ Сбой шлюза ордеров APT/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:25:52] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.049% > 0.045%). Блокирую капк аны.
-[00:25:55] ⚠ Сбой шлюза ордеров APT/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:25:59] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт LDO/USDT:USDT (578.0 лотов).
-[00:26:02] ⚠ Сбой шлюза ордеров APT/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:26:03] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:26:04] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[00:26:04] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: LDO/USDT:USDT @ 0.3396
-[00:27:03] 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USDT утилизирован по времени TTL (75с).
-[00:27:03] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по LDO/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[00:27:08] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): MANA/USDT:USDT BUY @ 0.08638038914462448
-[00:28:29] 🧹 ВЕНИК ЛИМИТОК: Капкан по MANA/USDT:USDT утилизирован по времени TTL (75с).
-[00:31:06] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0526% > 0.045%). Блокирую кап каны.
-[00:32:58] 🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: LDO/USDT:USDT закрыт на МЕХС. ММ выдохся (Пик: +0.29%)
-[00:33:01] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): LDO/USDT:USDT BUY @ 0.34318053376763014
-[00:34:27] 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USDT утилизирован по времени TTL (75с).
-[00:34:49] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): NEAR/USDT:USDT SELL @ 2.766654561754398
-[00:34:54] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт NEAR/USDT:USDT (72.0 лотов).
-[00:34:59] ⚠ Сбой шлюза ордеров NEAR/USDT:USDT (BUY): mexc {"success":false,"code":2007,"message":"Order price error"}
-[00:34:59] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: NEAR/USDT:USDT @ 2.801
-[00:36:05] 🧹 ВЕНИК ЛИМИТОК: Капкан по NEAR/USDT:USDT утилизирован по времени TTL (75с).
-[00:36:05] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по NEAR/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[00:36:20] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT BUY @ 0.9601741869061784
-[00:37:14] 🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: NEAR/USDT:USDT закрыт на МЕХС. ММ выдохся (Пик: +0.29%)
-[00:37:33] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт APT/USDT:USDT (97.0 лотов).
-[00:37:38] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[00:37:38] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: APT/USDT:USDT @ 0.9487
-[00:37:44] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[00:37:44] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по APT/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[00:38:21] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT BUY @ 0.09203893851598015
-[00:38:23] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт POL/USDT:USDT (213.0 лотов).
-[00:38:23] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0644% > 0.045%). Блокирую кап каны.
-[00:38:24] ⚠ Сбой шлюза ордеров POL/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[00:38:24] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: POL/USDT:USDT @ 0.09094
-[00:38:46] 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT срезан на 60с (Лосс: -0.15%)
-[00:38:48] 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT срезан на 60с (Лосс: -0.12%)
-[00:38:48] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[00:38:50] 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT срезан на 60с (Лосс: -0.19%)
-[00:38:50] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[00:38:52] 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT срезан на 60с (Лосс: -0.19%)
-[00:38:53] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[00:38:54] 🧹 Позиция APT/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[00:38:57] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): LDO/USDT:USDT BUY @ 0.3426836533480359
-[00:38:58] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.64009968,"available":0.0231483588900000000000000000000029077}}
-[00:39:02] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.64009968,"available":0.0231483588900000000000000000000029077}}
-[00:39:08] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.64009968,"available":0.0231483588900000000000000000000029077}}
-[00:39:27] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0487% > 0.045%). Блокирую кап каны.
-[00:39:43] 🧹 ВЕНИК ЛИМИТОК: Капкан по POL/USDT:USDT утилизирован по времени TTL (75с).
-[00:39:44] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по POL/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[00:40:21] 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USDT утилизирован по времени TTL (75с).
-[00:40:39] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 84.27297193866809
-[00:40:58] 🏛️ 🛡️ Decay Shield V16.9: POL/USDT:USDT срезан на 60с (Лосс: -0.1%)
-[00:40:59] 🧹 Позиция POL/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[00:41:18] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): OP/USDT:USDT BUY @ 0.1281515292852075
-[00:41:59] 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USDT утилизирован по времени TTL (75с).
-[00:42:20] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT BUY @ 0.9554765047514998
-[00:42:36] ⚠ Сбой шлюза ордеров NEAR/USDT:USDT (BUY): mexc amount of NEAR/USDT:USDT must be greater than minimum amount precision of 1
-[00:42:39] 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT утилизирован по времени TTL (75с).
-[00:42:53] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): NEAR/USDT:USDT BUY @ 2.7277043934314755
-[00:43:17] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:43:23] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:43:26] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт APT/USDT:USDT (129.0 лотов).
-[00:43:40] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[00:43:40] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по APT/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[00:43:58] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:44:03] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:44:15] 🧹 ВЕНИК ЛИМИТОК: Капкан по NEAR/USDT:USDT утилизирован по времени TTL (75с).
-[00:45:27] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): NEAR/USDT:USDT BUY @ 2.7203907677289156
-[00:45:37] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0679% > 0.045%). Блокирую кап каны.
-[00:46:50] 🧹 ВЕНИК ЛИМИТОК: Капкан по NEAR/USDT:USDT утилизирован по времени TTL (75с).
-[00:48:46] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0508% > 0.045%). Блокирую кап каны.
-[00:49:49] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0558% > 0.045%). Блокирую кап каны.
-[00:50:45] 🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: APT/USDT:USDT закрыт на МЕХС. ММ выдохся (Пик: +0.37%)
-[00:50:52] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0707% > 0.045%). Блокирую кап каны.
-[00:51:54] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0683% > 0.045%). Блокирую кап каны.
-[00:52:26] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 83.89920161387806
-[00:52:32] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.28225884,"available":0.5249352788900000000000000000000029077}}
-[00:52:37] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.28225884,"available":0.5249352788900000000000000000000029077}}
-[00:52:38] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.29573536,"available":0.5249352788900000000000000000000029077}}
-[00:52:43] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): LDO/USDT:USDT BUY @ 0.34128288557714787
-[00:52:44] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.50994064,"available":0.0260911988900000000000000000000029077}}
-[00:52:49] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт LDO/USDT:USDT (36.0 лотов).
-[00:52:50] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.50994064,"available":0.0260911988900000000000000000000029077}}
-[00:52:54] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[00:52:54] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: LDO/USDT:USDT @ 0.3372
-[00:52:55] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.1382% > 0.045%). Блокирую кап каны.
-[00:53:11] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт SOL/USDT:USDT (23.0 лотов).
-[00:53:12] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[00:53:12] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: SOL/USDT:USDT @ 82.89
-[00:53:41] 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USDT утилизирован по времени TTL (75с).
-[00:53:41] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по SOL/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[00:53:50] 🏛️ 🛡️ Decay Shield V16.9: LDO/USDT:USDT срезан на 60с (Лосс: -0.09%)
-[00:53:53] 🧹 Позиция LDO/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[00:53:55] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:53:57] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.1275% > 0.045%). Блокирую кап каны.
-[00:54:00] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:54:02] ⚠ Сбой шлюза ордеров 1INCH/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[00:54:07] 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USDT утилизирован по времени TTL (75с).
-[00:54:07] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по LDO/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[00:54:17] 🧹 Позиция LDO/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[00:55:02] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.1182% > 0.045%). Блокирую кап каны.
-[00:56:08] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.1449% > 0.045%). Блокирую кап каны.
-[00:57:10] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0533% > 0.045%). Блокирую кап каны.
-[01:00:18] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.1235% > 0.045%). Блокирую кап каны.
-[01:01:20] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.1008% > 0.045%). Блокирую кап каны.
-[01:03:22] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0565% > 0.045%). Блокирую кап каны.
-[01:04:27] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0678% > 0.045%). Блокирую кап каны.
-[01:04:53] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): NEAR/USDT:USDT BUY @ 2.702433550632124
-[01:05:03] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт NEAR/USDT:USDT (5.0 лотов).
-[01:05:05] ⚠ Сбой шлюза ордеров NEAR/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[01:05:05] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: NEAR/USDT:USDT @ 2.667
-[01:06:04] 🏛️ 🛡️ Decay Shield V16.9: NEAR/USDT:USDT срезан на 60с (Лосс: -0.52%)
-[01:06:05] 🧹 Позиция NEAR/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[01:06:14] 🧹 ВЕНИК ЛИМИТОК: Капкан по NEAR/USDT:USDT утилизирован по времени TTL (75с).
-[01:06:14] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по NEAR/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[01:06:19] 🧹 Позиция NEAR/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[01:07:29] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0455% > 0.045%). Блокирую кап каны.
-[01:09:36] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0492% > 0.045%). Блокирую кап каны.
-[01:12:44] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0502% > 0.045%). Блокирую кап каны.
-[01:13:48] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0739% > 0.045%). Блокирую кап каны.
-[01:14:17] 🎯 ТЕЙК-1 УСПЕШHО ВЫПОЛHЕH: SOL/USDT:USDT частично зафиксирован (+0.65%)
-[01:14:22] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[01:14:52] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0616% > 0.045%). Блокирую кап каны.
-[01:27:02] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): LDO/USDT:USDT BUY @ 0.3408503151457989
-[01:27:06] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0597% > 0.045%). Блокирую кап каны.
-[01:28:09] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0745% > 0.045%). Блокирую кап каны.
-[01:28:22] 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USDT утилизирован по времени TTL (75с).
-[01:29:13] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0472% > 0.045%). Блокирую кап каны.
-[01:30:28] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): 1INCH/USDT:USDT BUY @ 0.08915090511721643
-[01:31:49] 🧹 ВЕНИК ЛИМИТОК: Капкан по 1INCH/USDT:USDT утилизирован по времени TTL (75с).
-[01:32:17] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT BUY @ 0.9515706625060238
-[01:32:57] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[01:33:02] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[01:33:03] ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[01:33:07] ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[01:33:14] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт APT/USDT:USDT (731.0 лотов).
-[01:33:16] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[01:33:16] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: APT/USDT:USDT @ 0.9402
-[01:33:20] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0541% > 0.045%). Блокирую кап каны.
-[01:33:20] 🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: SOL/USDT:USDT закрыт на МЕХС. ММ выдохся (Пик: +0.7%)
-[01:33:39] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[01:33:40] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по APT/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[01:33:48] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): LDO/USDT:USDT BUY @ 0.34011219346132354
-[01:34:06] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт LDO/USDT:USDT (428.0 лотов).
-[01:34:15] 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT срезан на 60с (Лосс: -0.16%)
-[01:34:17] 🧹 Позиция APT/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[01:34:19] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): OP/USDT:USDT BUY @ 0.1272608199450773
-[01:34:23] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0623% > 0.045%). Блокирую кап каны.
-[01:34:29] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт OP/USDT:USDT (42.0 лотов).
-[01:34:30] ⚠ Сбой шлюза ордеров OP/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[01:34:30] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: OP/USDT:USDT @ 0.1257
-[01:35:03] 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USDT утилизирован по времени TTL (75с).
-[01:35:04] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по LDO/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[01:35:34] 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT утилизирован по времени TTL (75с).
-[01:35:34] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по OP/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[01:36:24] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0622% > 0.045%). Блокирую кап каны.
-[01:37:24] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0727% > 0.045%). Блокирую кап каны.
-[01:40:25] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0505% > 0.045%). Блокирую кап каны.
-[01:40:45] 🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: OP/USDT:USDT закрыт на МЕХС. ММ выдохся (Пик: +0.31%)
-[01:41:27] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0456% > 0.045%). Блокирую кап каны.
-[01:45:41] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.055% > 0.045%). Блокирую капк аны.
-[01:46:42] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0523% > 0.045%). Блокирую кап каны.
-[01:47:45] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0731% > 0.045%). Блокирую кап каны.
-[01:48:46] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0867% > 0.045%). Блокирую кап каны.
-[01:49:47] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.047% > 0.045%). Блокирую капк аны.
-[02:00:57] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0596% > 0.045%). Блокирую кап каны.
-[02:02:00] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0619% > 0.045%). Блокирую кап каны.
-[02:02:13] 🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: LDO/USDT:USDT закрыт на МЕХС. ММ выдохся (Пик: +0.5%)
-[02:06:05] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0621% > 0.045%). Блокирую кап каны.
-[02:06:13] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[02:07:09] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0841% > 0.045%). Блокирую кап каны.
-[02:16:42] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0539% > 0.045%). Блокирую кап каны.
-[02:27:53] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[02:31:07] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): OP/USDT:USDT BUY @ 0.1272941689447164
-[02:32:22] 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT утилизирован по времени TTL (75с).
-[02:38:18] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[02:38:18] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0712% > 0.045%). Блокирую кап каны.
-[02:39:25] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[02:42:26] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0488% > 0.045%). Блокирую кап каны.
-[02:46:35] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0514% > 0.045%). Блокирую кап каны.
-[02:46:42] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT BUY @ 0.09161123451885306
-[02:47:42] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.1068% > 0.045%). Блокирую кап каны.
-[02:47:48] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT SELL @ 0.958260532875143
-[02:48:03] 🧹 ВЕНИК ЛИМИТОК: Капкан по POL/USDT:USDT утилизирован по времени TTL (75с).
-[02:48:47] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0747% > 0.045%). Блокирую кап каны.
-[02:49:11] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[02:49:20] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[02:52:43] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT SELL @ 0.9598459766478508
-[02:53:58] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[02:55:23] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[02:55:49] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[03:02:39] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[03:13:38] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[03:14:42] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): OP/USDT:USDT BUY @ 0.1269583331305885
-[03:16:11] 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT утилизирован по времени TTL (75с).
-[03:29:20] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0606% > 0.045%). Блокирую кап каны.
-[03:30:09] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): 1INCH/USDT:USDT SELL @ 0.08937700157513032
-[03:30:26] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0642% > 0.045%). Блокирую кап каны.
-[03:31:30] 🧹 ВЕНИК ЛИМИТОК: Капкан по 1INCH/USDT:USDT утилизирован по времени TTL (75с).
-[03:31:32] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0483% > 0.045%). Блокирую кап каны.
-[03:32:31] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT SELL @ 0.09219986439770331
-[03:32:35] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.674130933,"available":0.1988804999300000000000000000000029077}}
-[03:32:42] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (SELL): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[03:32:51] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (SELL): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[03:32:56] ⚠ Сбой шлюза ордеров 1INCH/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[03:33:56] 🧹 ВЕНИК ЛИМИТОК: Капкан по POL/USDT:USDT утилизирован по времени TTL (75с).
-[04:03:10] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[04:24:26] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT SELL @ 84.30381961019485
-[04:24:27] ⚠ Сбой шлюза ордеров NEAR/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.7922318484,"available":0.3669012088900000000000000000000029077}}
-[04:24:28] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (SELL): mexc {"success":false,"code":510,"message":"Requests are too frequent, please try again later"}
-[04:24:35] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): NEAR/USDT:USDT SELL @ 2.761308401856177
-[04:24:36] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.3528599776,"available":0.0292138480900000000000000000000029077}}
-[04:24:45] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.3529630325,"available":0.0292138480900000000000000000000029077}}
-[04:24:48] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.356454532512,"available":0.0292138480900000000000000000000029077}}
-[04:24:49] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.3561577344,"available":0.0292138480900000000000000000000029077}}
-[04:24:52] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт NEAR/USDT:USDT (3.0 лотов).
-[04:24:54] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:24:57] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:24:59] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:25:04] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:25:07] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:25:23] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:25:27] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0451% > 0.045%). Блокирую кап каны.
-[04:25:31] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:25:50] 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USDT утилизирован по времени TTL (75с).
-[04:26:00] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): 1INCH/USDT:USDT SELL @ 0.08963819132024467
-[04:26:01] 🧹 ВЕНИК ЛИМИТОК: Капкан по NEAR/USDT:USDT утилизирован по времени TTL (75с).
-[04:26:01] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по NEAR/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[04:26:01] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[04:26:14] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:26:22] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:26:25] 🏛️ 🛡️ Decay Shield V16.9: NEAR/USDT:USDT срезан на 60с (Лосс: -0.22%)
-[04:26:30] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT SELL @ 0.9622202197974943
-[04:26:33] 🏛️ 🛡️ Decay Shield V16.9: NEAR/USDT:USDT срезан на 60с (Лосс: -0.22%)
-[04:26:33] ⚠ Сбой шлюза ордеров NEAR/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[04:26:34] 🧹 Позиция NEAR/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[04:27:16] 🧹 ВЕНИК ЛИМИТОК: Капкан по 1INCH/USDT:USDT утилизирован по времени TTL (75с).
-[04:27:46] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[04:29:35] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT SELL @ 84.43229826661384
-[04:29:45] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт SOL/USDT:USDT (25.0 лотов).
-[04:29:48] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): OP/USDT:USDT SELL @ 0.12887380734508072
-[04:29:54] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc {"success":false,"code":2007,"message":"Order price error"}
-[04:29:54] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: SOL/USDT:USDT @ 85.44
-[04:29:58] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.439079829136,"available":0.0098901647940000000000000000000029077}}
-[04:30:40] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0498% > 0.045%). Блокирую кап каны.
-[04:30:53] ⚠ Сбой шлюза ордеров 1INCH/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[04:31:02] 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USDT утилизирован по времени TTL (75с).
-[04:31:02] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по SOL/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[04:31:17] 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT утилизирован по времени TTL (75с).
-[05:06:04] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0473% > 0.045%). Блокирую кап каны.
-[05:13:26] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT SELL @ 0.969271054424448
-[05:14:50] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[05:19:52] 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USDT срезан на 60с (Лосс: -0.08%)
-[05:19:55] 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USDT срезан на 60с (Лосс: -0.08%)
-[05:19:55] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[05:19:57] 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USDT срезан на 60с (Лосс: -0.08%)
-[05:19:57] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[05:20:00] 🧹 Позиция SOL/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[05:23:17] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[05:23:53] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): OP/USDT:USDT SELL @ 0.1297872309303467
-[05:23:54] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.6675090373456,"available":0.1874404179300000000000000000000029077}}
-[05:24:03] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[05:25:09] 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT утилизирован по времени TTL (75с).
-[05:35:48] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0618% > 0.045%). Блокирую кап каны.
-[05:35:50] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT SELL @ 84.88953169464382
-[05:35:52] ⚠ Сбой шлюза ордеров OP/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.66757664136,"available":0.4570320363300000000000000000000029077}}
-[05:35:55] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.666076162016,"available":0.4978525812900000000000000000000029077}}
-[05:35:56] ⚠ Сбой шлюза ордеров POL/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.6640315528,"available":0.4978525812900000000000000000000029077}}
-[05:35:57] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт SOL/USDT:USDT (24.0 лотов).
-[05:36:03] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): MANA/USDT:USDT SELL @ 0.08682613563801657
-[05:36:55] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0591% > 0.045%). Блокирую кап каны.
-[05:37:18] 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USDT утилизирован по времени TTL (75с).
-[05:37:18] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по SOL/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[05:37:25] 🧹 ВЕНИК ЛИМИТОК: Капкан по MANA/USDT:USDT утилизирован по времени TTL (75с).
-[06:02:17] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0497% > 0.045%). Блокирую кап каны.
-[06:03:24] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0459% > 0.045%). Блокирую кап каны.
-[06:08:03] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT SELL @ 0.9805492083751972
-[06:09:18] 🧹 ВЕНИК ЛИМИТОК: Капкан по APT/USDT:USDT утилизирован по времени TTL (75с).
-[06:25:42] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.048% > 0.045%). Блокирую капк аны.
-[06:26:46] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0491% > 0.045%). Блокирую кап каны.
-[06:28:56] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0701% > 0.045%). Блокирую кап каны.
-[06:29:07] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): LDO/USDT:USDT BUY @ 0.34172877586968775
-[06:29:10] ⚠ Сбой шлюза ордеров APT/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.484661144,"available":0.0191992212900000000000000000000029077}}
-[06:29:18] ⚠ Сбой шлюза ордеров APT/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.484262328,"available":0.0191992212900000000000000000000029077}}
-[06:29:24] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[06:29:31] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[06:29:40] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[06:29:48] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[06:29:56] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[06:30:04] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.1193% > 0.045%). Блокирую кап каны.
-[06:30:35] 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USDT утилизирован по времени TTL (75с).
-[06:31:08] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0609% > 0.045%). Блокирую кап каны.
-[06:31:43] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[06:38:54] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[06:39:01] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): MANA/USDT:USDT SELL @ 0.08695877819668596
-[06:40:16] 🧹 ВЕНИК ЛИМИТОК: Капкан по MANA/USDT:USDT утилизирован по времени TTL (75с).
-[06:40:27] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0573% > 0.045%). Блокирую кап каны.
-[06:40:33] 🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: SOL/USDT:USDT закрыт на МЕХС. ММ выдохся (Пик: +0.62%)
-[06:41:24] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): OP/USDT:USDT SELL @ 0.13049044272388116
-[06:41:30] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0787% > 0.045%). Блокирую кап каны.
-[06:42:36] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0458% > 0.045%). Блокирую кап каны.
-[06:42:54] 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT утилизирован по времени TTL (75с).
-[06:42:58] ⚠ Сбой шлюза ордеров OP/USDT:USDT (SELL): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[06:58:01] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 84.42230481120619
-[06:59:17] 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USDT утилизирован по времени TTL (75с).
-[07:05:00] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): MANA/USDT:USDT BUY @ 0.08666188027915442
-[07:05:22] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[07:05:29] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[07:05:41] ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[07:05:43] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[07:05:46] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[07:05:53] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[07:05:55] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[07:05:58] ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[07:06:01] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (BUY): mexc amount of SOL/USDT:USDT must be greater than minimum amount precision of 1
-[07:06:03] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[07:06:12] ⚠ Сбой шлюза ордеров LDO/USDT:USDT (BUY): mexc {"success":false,"code":7008,"message":"Cannot be less than the minimum order amount 5 USDT","_extend":{"value":5}}
-[07:06:16] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0485% > 0.045%). Блокирую кап каны.
-[07:06:24] 🧹 ВЕНИК ЛИМИТОК: Капкан по MANA/USDT:USDT утилизирован по времени TTL (75с).
-[07:07:18] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0452% > 0.045%). Блокирую кап каны.
-[07:09:59] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 84.17233378987518
-[07:10:33] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0507% > 0.045%). Блокирую кап каны.
-[07:10:36] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): LDO/USDT:USDT BUY @ 0.3422562369267579
-[07:10:41] ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.45662784,"available":0.0210945988900000000000000000000029077}}
-[07:11:27] 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USDT утилизирован по времени TTL (75с).
-[07:11:30] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 84.08572121012367
-[07:11:39] 🛡️ [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна (0.0464% > 0.045%). Блокирую кап каны.
-[07:11:42] ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.50173124,"available":0.3757853988900000000000000000000029077}}
-[07:11:45] ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":8.48291108,"available":0.3757853988900000000000000000000029077}}
-[07:11:51] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): OP/USDT:USDT BUY @ 0.12968264249694916
-[07:11:53] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.36664704,"available":0.0182617988900000000000000000000029077}}
-[07:11:54] ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.34235964,"available":0.0182617988900000000000000000000029077}}
-[07:11:56] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт OP/USDT:USDT (68.0 лотов).
-[07:11:59] ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.36664704,"available":0.0182617988900000000000000000000029077}}
-[07:12:01] ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.34235964,"available":0.0182617988900000000000000000000029077}}
-[07:12:02] ⚠ Сбой шлюза ордеров 1INCH/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.367504,"available":0.0182617988900000000000000000000029077}}
-[07:12:02] 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USDT утилизирован по времени TTL (75с).
-[07:12:03] ⚠ Сбой шлюза ордеров OP/USDT:USDT (SELL): mexc {"success":false,"code":2007,"message":"Order price error"}
-[07:12:03] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: OP/USDT:USDT @ 0.1279
-[07:12:06] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): LDO/USDT:USDT BUY @ 0.34209548493461517
-[07:12:11] ⚠ Сбой шлюза ордеров 1INCH/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":0.47040512,"available":0.0185337188900000000000000000000029077}}
-[07:12:12] ⚠️ Ошибка WebSocket потока цен: Connection to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
-[07:12:51] 🧹 ВЕНИК ЛИМИТОК: Капкан по SOL/USDT:USDT утилизирован по времени TTL (75с).
-[07:13:13] 🧹 ВЕНИК ЛИМИТОК: Капкан по OP/USDT:USDT утилизирован по времени TTL (75с).
-[07:13:13] 🔥 ПЕРЕХВАТ СКВИЗА: Ордер по OP/USDT:USDT успел исполниться в долю секунды отмены! Усыновляем позицию.
-[07:13:20] 🏛️ 🛡️ Decay Shield V16.9: OP/USDT:USDT срезан на 60с (Лосс: -0.15%)
-[07:13:21] 🧹 Позиция OP/USDT:USDT закрыта на МЕХС. Очищаем RAM.
-[07:13:28] 🧹 ВЕНИК ЛИМИТОК: Капкан по LDO/USDT:USDT утилизирован по времени TTL (75с).
+May 26 14:58:04 vm-v2-mini python3[842625]: [14:58:04] 🏛️ ЛИМИТНЫЙ СНАЙПЕР BERSERK V17.0 ОНЛАЙН. Ма ржа: $7.38
+May 26 14:58:04 vm-v2-mini python3[842625]: [14:58:04] 🏛️ 🏹 Охота лимитными капканами Berserk V16. 9 активирована. Патрулирую стаканы...
+May 26 14:58:04 vm-v2-mini python3[842625]: [14:58:04] 🏛️ 🔗 Сканирование аккаунта на наличие откры тых позиций...
+May 26 14:58:04 vm-v2-mini python3[842625]: [14:58:04] 🏛️ 🏛️ 🏹 Охота лимитными капканами Berserk   V16.9 активирована. Патрулирую стаканы...
+May 26 14:58:05 vm-v2-mini python3[842625]: [14:58:05] 🏛️ 📡 Запуск квантового WebSocket-потока цен  для 8 активов...
+May 26 15:01:13 vm-v2-mini python3[842625]: [15:01:13] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.047% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:02:14 vm-v2-mini python3[842625]: [15:02:14] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1099% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:03:14 vm-v2-mini python3[842625]: [15:03:14] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.15% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:04:14 vm-v2-mini python3[842625]: [15:04:14] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0933% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:08:22 vm-v2-mini python3[842625]: [15:08:22] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0461% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:09:22 vm-v2-mini python3[842625]: [15:09:22] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0465% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:15:31 vm-v2-mini python3[842625]: [15:15:31] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0465% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:16:31 vm-v2-mini python3[842625]: [15:16:31] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0654% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:17:32 vm-v2-mini python3[842625]: [15:17:32] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0538% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:20:37 vm-v2-mini python3[842625]: [15:20:37] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0605% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:21:37 vm-v2-mini python3[842625]: [15:21:37] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1115% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:22:37 vm-v2-mini python3[842625]: [15:22:37] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0799% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:25:43 vm-v2-mini python3[842625]: [15:25:43] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0476% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:29:46 vm-v2-mini python3[842625]: [15:29:46] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0873% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:30:46 vm-v2-mini python3[842625]: [15:30:46] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1094% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:31:46 vm-v2-mini python3[842625]: [15:31:46] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1428% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:32:47 vm-v2-mini python3[842625]: [15:32:47] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1535% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:33:47 vm-v2-mini python3[842625]: [15:33:47] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0734% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:34:47 vm-v2-mini python3[842625]: [15:34:47] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0452% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:35:48 vm-v2-mini python3[842625]: [15:35:48] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0477% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:40:50 vm-v2-mini python3[842625]: [15:40:50] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0457% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:41:50 vm-v2-mini python3[842625]: [15:41:50] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1147% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:42:50 vm-v2-mini python3[842625]: [15:42:50] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0929% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:44:51 vm-v2-mini python3[842625]: [15:44:51] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.047% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:45:52 vm-v2-mini python3[842625]: [15:45:52] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.052% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:48:58 vm-v2-mini python3[842625]: [15:48:58] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0522% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:53:00 vm-v2-mini python3[842625]: [15:53:00] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0632% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:54:00 vm-v2-mini python3[842625]: [15:54:00] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0791% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:57:01 vm-v2-mini python3[842625]: [15:57:01] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0608% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:58:01 vm-v2-mini python3[842625]: [15:58:01] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.089% > 0.045%). Включаю 90с таймер остывания.
+May 26 15:59:01 vm-v2-mini python3[842625]: [15:59:01] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0736% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:03:07 vm-v2-mini python3[842625]: [16:03:07] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.049% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:04:07 vm-v2-mini python3[842625]: [16:04:07] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0707% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:05:08 vm-v2-mini python3[842625]: [16:05:08] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0633% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:06:08 vm-v2-mini python3[842625]: [16:06:08] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0735% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:07:09 vm-v2-mini python3[842625]: [16:07:09] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0635% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:09:09 vm-v2-mini python3[842625]: [16:09:09] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0472% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:11:42 vm-v2-mini python3[842625]: [16:11:42] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): LDO/USDT:USDT BUY @ 0.34384236132172186
+May 26 16:12:37 vm-v2-mini python3[842625]: [16:12:37] 🏛️ 🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V23.6]: Капкан п о LDO/USDT:USDT не налился за 45с. Маржа снята, бью по рынку!
+May 26 16:12:38 vm-v2-mini python3[842625]: [16:12:38] 🏛️ 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляе м контракт LDO/USDT:USDT (268.0 лотов).
+May 26 16:12:39 vm-v2-mini python3[842625]: [16:12:39] 🏛️ ⚠ Сбой шлюза ордеров LDO/USDT:USDT (SELL) : 'mexc' object has no attribute 'contractPrivatePostOrderCreateTpsl'
+May 26 16:12:39 vm-v2-mini python3[842625]: [16:12:39] 🏛️ 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: LDO/USDT:US  DT @ 0.3399
+May 26 16:14:14 vm-v2-mini python3[842625]: [16:14:14] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0647% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:15:14 vm-v2-mini python3[842625]: [16:15:14] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0582% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:15:16 vm-v2-mini python3[842625]: [16:15:16] 🏛️ 🚨 [ЭВАКУАЦИЯ ТРЕНДА]: BTC летит против н ашей позиции LDO/USDT:USDT! Экстренный маркет-снос.
+May 26 16:15:16 vm-v2-mini python3[842625]: [16:15:16] 🏛️ 🧹 [ЭВАКУАТОР]: Все выставленные лимитные   капканы успешно удалены из стаканов.
+May 26 16:16:14 vm-v2-mini python3[842625]: [16:16:14] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0898% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:17:15 vm-v2-mini python3[842625]: [16:17:15] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1007% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:18:15 vm-v2-mini python3[842625]: [16:18:15] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0592% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:21:16 vm-v2-mini python3[842625]: [16:21:16] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0514% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:23:16 vm-v2-mini python3[842625]: [16:23:16] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0714% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:24:16 vm-v2-mini python3[842625]: [16:24:16] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.076% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:27:18 vm-v2-mini python3[842625]: [16:27:18] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0456% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:35:25 vm-v2-mini python3[842625]: [16:35:25] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0642% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:36:25 vm-v2-mini python3[842625]: [16:36:25] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0538% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:40:26 vm-v2-mini python3[842625]: [16:40:26] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0577% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:41:27 vm-v2-mini python3[842625]: [16:41:27] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0462% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:43:27 vm-v2-mini python3[842625]: [16:43:27] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0619% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:44:28 vm-v2-mini python3[842625]: [16:44:28] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0562% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:49:30 vm-v2-mini python3[842625]: [16:49:30] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0666% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:50:30 vm-v2-mini python3[842625]: [16:50:30] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0547% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:53:37 vm-v2-mini python3[842625]: [16:53:37] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): POL/USDT:USDT BUY @ 0.09187503972196207
+May 26 16:54:35 vm-v2-mini python3[842625]: [16:54:35] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по POL/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 16:54:36 vm-v2-mini python3[842625]: [16:54:36] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0675% > 0.045%). Включаю 90с таймер остывания.
+May 26 16:55:36 vm-v2-mini python3[842625]: [16:55:36] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0577% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:03:41 vm-v2-mini python3[842625]: [17:03:41] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): OP/USDT:USDT SELL @ 0.13131669671436833
+May 26 17:04:31 vm-v2-mini python3[842625]: [17:04:31] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по OP/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 17:05:44 vm-v2-mini python3[842625]: [17:05:44] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0555% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:06:44 vm-v2-mini python3[842625]: [17:06:44] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0905% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:14:59 vm-v2-mini python3[842625]: [17:14:59] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): OP/USDT:USDT BUY @ 0.12995024589861087
+May 26 17:15:03 vm-v2-mini python3[842625]: [17:15:03] 🏛️ ⚠️ Ошибка WebSocket потока цен: Connectio n to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
+May 26 17:15:45 vm-v2-mini python3[842625]: [17:15:45] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по OP/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 17:19:14 vm-v2-mini python3[842625]: [17:19:14] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0607% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:20:14 vm-v2-mini python3[842625]: [17:20:14] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.085% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:21:15 vm-v2-mini python3[842625]: [17:21:15] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0628% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:24:16 vm-v2-mini python3[842625]: [17:24:16] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0482% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:25:16 vm-v2-mini python3[842625]: [17:25:16] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0608% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:26:17 vm-v2-mini python3[842625]: [17:26:17] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0499% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:27:17 vm-v2-mini python3[842625]: [17:27:17] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0454% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:30:11 vm-v2-mini python3[842625]: [17:30:11] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): MANA/USDT:USDT BUY @ 0.0853611622582452
+May 26 17:30:18 vm-v2-mini python3[842625]: [17:30:18] 🏛️ ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY):  mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.754556,"available":3.5640405588900000000000000000000029077}}
+May 26 17:30:20 vm-v2-mini python3[842625]: [17:30:20] 🏛️ 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляе м контракт MANA/USDT:USDT (1075.0 лотов).
+May 26 17:30:20 vm-v2-mini python3[842625]: [17:30:20] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1583% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:30:21 vm-v2-mini python3[842625]: [17:30:21] 🏛️ 🚨 [ЭВАКУАЦИЯ ТРЕНДА]: BTC летит против н ашей позиции MANA/USDT:USDT! Экстренный маркет-снос.
+May 26 17:31:20 vm-v2-mini python3[842625]: [17:31:20] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.21% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:32:20 vm-v2-mini python3[842625]: [17:32:20] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1021% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:33:21 vm-v2-mini python3[842625]: [17:33:21] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0674% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:34:21 vm-v2-mini python3[842625]: [17:34:21] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0551% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:36:22 vm-v2-mini python3[842625]: [17:36:22] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0986% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:37:22 vm-v2-mini python3[842625]: [17:37:22] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0911% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:39:53 vm-v2-mini python3[842625]: [17:39:53] 🏛️ 🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V23.6]: Капкан п о MANA/USDT:USDT не налился за 45с. Маржа снята, бью по рынку!
+May 26 17:39:54 vm-v2-mini python3[842625]: [17:39:54] 🏛️ 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляе м контракт MANA/USDT:USDT (1075.0 лотов).
+May 26 17:39:56 vm-v2-mini python3[842625]: [17:39:56] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (SELL ): 'mexc' object has no attribute 'contractPrivatePostOrderCreateTpsl'
+May 26 17:39:56 vm-v2-mini python3[842625]: [17:39:56] 🏛️ 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: MANA/USDT:U  SDT @ 0.0847
+May 26 17:40:56 vm-v2-mini python3[842625]: [17:40:56] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.12%)
+May 26 17:40:59 vm-v2-mini python3[842625]: [17:40:59] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.12%)
+May 26 17:40:59 vm-v2-mini python3[842625]: [17:40:59] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (SELL ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
+May 26 17:41:01 vm-v2-mini python3[842625]: [17:41:01] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.23%)
+May 26 17:41:01 vm-v2-mini python3[842625]: [17:41:01] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (SELL ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
+May 26 17:41:03 vm-v2-mini python3[842625]: [17:41:03] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.12%)
+May 26 17:41:03 vm-v2-mini python3[842625]: [17:41:03] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (SELL ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
+May 26 17:41:05 vm-v2-mini python3[842625]: [17:41:05] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.12%)
+May 26 17:41:06 vm-v2-mini python3[842625]: [17:41:06] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (SELL ): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
+May 26 17:41:06 vm-v2-mini python3[842625]: [17:41:06] 🏛️ 🧹 Позиция MANA/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
+May 26 17:41:25 vm-v2-mini python3[842625]: [17:41:25] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.067% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:42:25 vm-v2-mini python3[842625]: [17:42:25] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1126% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:43:25 vm-v2-mini python3[842625]: [17:43:25] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0806% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:44:25 vm-v2-mini python3[842625]: [17:44:25] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0451% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:47:26 vm-v2-mini python3[842625]: [17:47:26] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0511% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:48:27 vm-v2-mini python3[842625]: [17:48:27] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0582% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:49:27 vm-v2-mini python3[842625]: [17:49:27] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0794% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:50:27 vm-v2-mini python3[842625]: [17:50:27] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0742% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:56:29 vm-v2-mini python3[842625]: [17:56:29] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0462% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:57:30 vm-v2-mini python3[842625]: [17:57:30] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0657% > 0.045%). Включаю 90с таймер остывания.
+May 26 17:59:31 vm-v2-mini python3[842625]: [17:59:31] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0729% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:00:31 vm-v2-mini python3[842625]: [18:00:31] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1027% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:01:31 vm-v2-mini python3[842625]: [18:01:31] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.119% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:02:31 vm-v2-mini python3[842625]: [18:02:31] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1286% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:03:32 vm-v2-mini python3[842625]: [18:03:32] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0462% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:05:33 vm-v2-mini python3[842625]: [18:05:33] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0528% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:10:34 vm-v2-mini python3[842625]: [18:10:34] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0506% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:11:34 vm-v2-mini python3[842625]: [18:11:34] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0496% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:12:35 vm-v2-mini python3[842625]: [18:12:35] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0484% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:18:19 vm-v2-mini python3[842625]: [18:18:19] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): SOL/USDT:USDT SELL @ 84.01747344686788
+May 26 18:18:55 vm-v2-mini python3[842625]: [18:18:55] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): POL/USDT:USDT SELL @ 0.09195136302340517
+May 26 18:19:06 vm-v2-mini python3[842625]: [18:19:06] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по SOL/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 18:19:10 vm-v2-mini python3[842625]: [18:19:10] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): MANA/USDT:USDT SELL @ 0.08593184145386747
+May 26 18:19:47 vm-v2-mini python3[842625]: [18:19:47] 🏛️ 🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V23.6]: Капкан п о POL/USDT:USDT не налился за 45с. Маржа снята, бью по рынку!
+May 26 18:19:48 vm-v2-mini python3[842625]: [18:19:48] 🏛️ 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляе м контракт POL/USDT:USDT (46.0 лотов).
+May 26 18:19:49 vm-v2-mini python3[842625]: [18:19:49] 🏛️ ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY):  'mexc' object has no attribute 'contractPrivatePostOrderCreateTpsl'
+May 26 18:19:49 vm-v2-mini python3[842625]: [18:19:49] 🏛️ 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: POL/USDT:US  DT @ 0.09286
+May 26 18:19:57 vm-v2-mini python3[842625]: [18:19:57] 🏛️ 🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V23.6]: Капкан п о MANA/USDT:USDT не налился за 45с. Маржа снята, бью по рынку!
+May 26 18:19:58 vm-v2-mini python3[842625]: [18:19:58] 🏛️ 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляе м контракт MANA/USDT:USDT (247.0 лотов).
+May 26 18:21:00 vm-v2-mini python3[842625]: [18:21:00] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.23%)
+May 26 18:21:02 vm-v2-mini python3[842625]: [18:21:02] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.23%)
+May 26 18:21:02 vm-v2-mini python3[842625]: [18:21:02] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY) : mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
+May 26 18:21:04 vm-v2-mini python3[842625]: [18:21:04] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.23%)
+May 26 18:21:05 vm-v2-mini python3[842625]: [18:21:05] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY) : mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
+May 26 18:21:07 vm-v2-mini python3[842625]: [18:21:07] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.23%)
+May 26 18:21:07 vm-v2-mini python3[842625]: [18:21:07] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY) : mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
+May 26 18:21:09 vm-v2-mini python3[842625]: [18:21:09] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: MANA/USDT:USD   T срезан на 60с (Лосс: -0.23%)
+May 26 18:21:09 vm-v2-mini python3[842625]: [18:21:09] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY) : mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
+May 26 18:21:09 vm-v2-mini python3[842625]: [18:21:09] 🏛️ 🧹 Позиция MANA/USDT:USDT закрыта на МЕХС  . Очищаем RAM.
+May 26 18:21:48 vm-v2-mini python3[842625]: [18:21:48] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0546% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:21:49 vm-v2-mini python3[842625]: [18:21:49] 🏛️ 🚨 [ЭВАКУАЦИЯ ТРЕНДА]: BTC летит против н ашей позиции POL/USDT:USDT! Экстренный маркет-снос.
+May 26 18:21:49 vm-v2-mini python3[842625]: [18:21:49] 🏛️ 🧹 [ЭВАКУАТОР]: Все выставленные лимитные   капканы успешно удалены из стаканов.
+May 26 18:22:49 vm-v2-mini python3[842625]: [18:22:49] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0544% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:26:50 vm-v2-mini python3[842625]: [18:26:50] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0645% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:27:50 vm-v2-mini python3[842625]: [18:27:50] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0787% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:28:50 vm-v2-mini python3[842625]: [18:28:50] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0578% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:31:55 vm-v2-mini python3[842625]: [18:31:55] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.058% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:32:55 vm-v2-mini python3[842625]: [18:32:55] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0502% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:38:03 vm-v2-mini python3[842625]: [18:38:03] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): POL/USDT:USDT BUY @ 0.09135221617785041
+May 26 18:38:59 vm-v2-mini python3[842625]: [18:38:59] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по POL/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 18:40:57 vm-v2-mini python3[842625]: [18:40:57] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): APT/USDT:USDT BUY @ 0.9673727898975542
+May 26 18:41:10 vm-v2-mini python3[842625]: [18:41:10] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.064% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:42:10 vm-v2-mini python3[842625]: [18:42:10] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0598% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:43:12 vm-v2-mini python3[842625]: [18:43:12] 🏛️ 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляе м контракт APT/USDT:USDT (872.0 лотов).
+May 26 18:43:13 vm-v2-mini python3[842625]: [18:43:13] 🏛️ ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL) : 'mexc' object has no attribute 'contractPrivatePostOrderCreateTpsl'
+May 26 18:43:13 vm-v2-mini python3[842625]: [18:43:13] 🏛️ 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: APT/USDT:US  DT @ 0.9558
+May 26 18:44:13 vm-v2-mini python3[842625]: [18:44:13] 🏛️ 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT    срезан на 60с (Лосс: -0.2%)
+May 26 18:44:14 vm-v2-mini python3[842625]: [18:44:14] 🏛️ 🧹 Позиция APT/USDT:USDT закрыта на МЕХС.   Очищаем RAM.
+May 26 18:44:43 vm-v2-mini python3[842625]: [18:44:43] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): LDO/USDT:USDT BUY @ 0.3389217909377624
+May 26 18:44:45 vm-v2-mini python3[842625]: [18:44:45] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY) : mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.29295532,"available":3.1138569628900000000000000000000029077}}
+May 26 18:44:48 vm-v2-mini python3[842625]: [18:44:48] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по APT/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 18:44:53 vm-v2-mini python3[842625]: [18:44:53] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY) : mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.29295532,"available":3.1138569628900000000000000000000029077}}
+May 26 18:45:37 vm-v2-mini python3[842625]: [18:45:37] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по LDO/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 18:46:02 vm-v2-mini python3[842625]: [18:46:02] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): 1INCH/USDT:USDT BUY @ 0.08843003765252296
+May 26 18:46:48 vm-v2-mini python3[842625]: [18:46:48] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по 1INCH/USDT:US  DT удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 18:48:20 vm-v2-mini python3[842625]: [18:48:20] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0489% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:49:20 vm-v2-mini python3[842625]: [18:49:20] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0665% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:50:21 vm-v2-mini python3[842625]: [18:50:21] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0454% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:58:23 vm-v2-mini python3[842625]: [18:58:23] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1% > 0.045%). Включаю 90с таймер остывания.
+May 26 18:59:24 vm-v2-mini python3[842625]: [18:59:24] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.1161% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:08:38 vm-v2-mini python3[842625]: [19:08:38] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0607% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:09:39 vm-v2-mini python3[842625]: [19:09:39] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0691% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:10:39 vm-v2-mini python3[842625]: [19:10:39] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0491% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:11:39 vm-v2-mini python3[842625]: [19:11:39] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0705% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:12:40 vm-v2-mini python3[842625]: [19:12:40] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0484% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:14:40 vm-v2-mini python3[842625]: [19:14:40] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0746% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:15:40 vm-v2-mini python3[842625]: [19:15:40] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.056% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:17:41 vm-v2-mini python3[842625]: [19:17:41] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0462% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:21:52 vm-v2-mini python3[842625]: [19:21:52] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0515% > 0.045%). Включаю 90с таймер остывания.
+May 26 19:32:29 vm-v2-mini python3[842625]: [19:32:29] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): APT/USDT:USDT SELL @ 0.9694459828804217
+May 26 19:32:38 vm-v2-mini python3[842625]: [19:32:38] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): SOL/USDT:USDT SELL @ 83.822400474195
+May 26 19:33:09 vm-v2-mini python3[842625]: [19:33:09] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по APT/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 19:33:19 vm-v2-mini python3[842625]: [19:33:19] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по SOL/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 19:54:29 vm-v2-mini python3[842625]: [19:54:29] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): OP/USDT:USDT SELL @ 0.1295864459362438
+May 26 19:55:24 vm-v2-mini python3[842625]: [19:55:24] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по OP/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 19:59:56 vm-v2-mini python3[842625]: [19:59:56] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): SOL/USDT:USDT BUY @ 83.52122301345516
+May 26 20:00:48 vm-v2-mini python3[842625]: [20:00:48] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по SOL/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 20:00:59 vm-v2-mini python3[842625]: [20:00:59] 🏛️ ⚠️ Ошибка WebSocket потока цен: Connectio n to wss://contract.mexc.com/edge timed out due to a ping-pong keepalive missing on time
+May 26 20:19:44 vm-v2-mini python3[842625]: [20:19:44] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0677% > 0.045%). Включаю 90с таймер остывания.
+May 26 20:20:44 vm-v2-mini python3[842625]: [20:20:44] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0564% > 0.045%). Включаю 90с таймер остывания.
+May 26 20:23:49 vm-v2-mini python3[842625]: [20:23:49] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0455% > 0.045%). Включаю 90с таймер остывания.
+May 26 20:27:54 vm-v2-mini python3[842625]: [20:27:54] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0564% > 0.045%). Включаю 90с таймер остывания.
+May 26 20:33:56 vm-v2-mini python3[842625]: [20:33:56] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0451% > 0.045%). Включаю 90с таймер остывания.
+May 26 20:34:56 vm-v2-mini python3[842625]: [20:34:56] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0633% > 0.045%). Включаю 90с таймер остывания.
+May 26 20:38:58 vm-v2-mini python3[842625]: [20:38:58] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0583% > 0.045%). Включаю 90с таймер остывания.
+May 26 20:39:58 vm-v2-mini python3[842625]: [20:39:58] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0474% > 0.045%). Включаю 90с таймер остывания.
+May 26 21:03:59 vm-v2-mini python3[842625]: [21:03:59] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): SOL/USDT:USDT BUY @ 83.56707955394488
+May 26 21:04:07 vm-v2-mini python3[842625]: [21:04:07] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): 1INCH/USDT:USDT BUY @ 0.08841396250346346
+May 26 21:04:39 vm-v2-mini python3[842625]: [21:04:39] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0605% > 0.045%). Включаю 90с таймер остывания.
+May 26 21:07:09 vm-v2-mini python3[842625]: [21:07:09] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по SOL/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 21:07:10 vm-v2-mini python3[842625]: [21:07:10] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по 1INCH/USDT:US  DT удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 21:08:43 vm-v2-mini python3[842625]: [21:08:43] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0537% > 0.045%). Включаю 90с таймер остывания.
+May 26 21:12:38 vm-v2-mini python3[842625]: [21:12:38] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): LDO/USDT:USDT BUY @ 0.33873632619839017
+May 26 21:12:43 vm-v2-mini python3[842625]: [21:12:43] 🏛️ ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY):  mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.29058632,"available":3.1157933628900000000000000000000029077}}
+May 26 21:12:48 vm-v2-mini python3[842625]: [21:12:48] 🏛️ ⚠ Сбой шлюза ордеров OP/USDT:USDT (BUY):  mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.29058632,"available":3.1157933628900000000000000000000029077}}
+May 26 21:12:54 vm-v2-mini python3[842625]: [21:12:54] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): OP/USDT:USDT BUY @ 0.12822694347973274
+May 26 21:12:59 vm-v2-mini python3[842625]: [21:12:59] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY) : mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":1.60417968,"available":1.5153958428900000000000000000000029077}}
+May 26 21:13:00 vm-v2-mini python3[842625]: [21:13:00] 🏛️ ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY):  mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":1.58262384,"available":1.5153958428900000000000000000000029077}}
+May 26 21:13:04 vm-v2-mini python3[842625]: [21:13:04] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY) : mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":1.60417968,"available":1.5153958428900000000000000000000029077}}
+May 26 21:13:08 vm-v2-mini python3[842625]: [21:13:08] 🏛️ ⚠ Сбой шлюза ордеров MANA/USDT:USDT (BUY) : mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":1.60417968,"available":1.5153958428900000000000000000000029077}}
+May 26 21:13:11 vm-v2-mini python3[842625]: [21:13:11] 🏛️ 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATE D): SOL/USDT:USDT BUY @ 83.39060341106193
+May 26 21:13:21 vm-v2-mini python3[842625]: [21:13:21] 🏛️ 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляе м контракт OP/USDT:USDT (303.0 лотов).
+May 26 21:13:22 vm-v2-mini python3[842625]: [21:13:22] 🏛️ ⚠ Сбой шлюза ордеров OP/USDT:USDT (SELL):  'mexc' object has no attribute 'contractPrivatePostOrderCreateTpsl'
+May 26 21:13:22 vm-v2-mini python3[842625]: [21:13:22] 🏛️ 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: OP/USDT:USD  T @ 0.1267
+May 26 21:13:23 vm-v2-mini python3[842625]: [21:13:23] 🏛️ 🧹 [ВЕНИК V23.6]: Капкан по LDO/USDT:USDT   удален из стакана. Прорыв пустой, маркет-вход заблокирован.
+May 26 21:13:40 vm-v2-mini python3[842625]: [21:13:40] 🏛️ 🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V23.6]: Капкан п о OP/USDT:USDT не налился за 45с. Маржа снята, бью по рынку!
+May 26 21:13:46 vm-v2-mini python3[842625]: [21:13:46] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0614% > 0.045%). Включаю 90с таймер остывания.
+May 26 21:13:46 vm-v2-mini python3[842625]: [21:13:46] 🏛️ 🚨 [ЭВАКУАЦИЯ ТРЕНДА]: BTC летит против н ашей позиции OP/USDT:USDT! Экстренный маркет-снос.
+May 26 21:13:47 vm-v2-mini python3[842625]: [21:13:47] 🏛️ 🧹 [ЭВАКУАТОР]: Все выставленные лимитные   капканы успешно удалены из стаканов.
+May 26 21:13:52 vm-v2-mini python3[842625]: [21:13:52] 🏛️ 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляе м контракт OP/USDT:USDT (303.0 лотов).
+May 26 21:13:53 vm-v2-mini python3[842625]: [21:13:53] 🏛️ 🚨 [ЭВАКУАЦИЯ ТРЕНДА]: BTC летит против н ашей позиции OP/USDT:USDT! Экстренный маркет-снос.
+May 26 21:13:53 vm-v2-mini python3[842625]: [21:13:53] 🏛️ 🧹 [ЭВАКУАТОР]: Все выставленные лимитные   капканы успешно удалены из стаканов.
+May 26 21:14:46 vm-v2-mini python3[842625]: [21:14:46] 🏛️ 🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скоро  сть BTC опасна (0.0568% > 0.045%). Включаю 90с таймер остывания.
