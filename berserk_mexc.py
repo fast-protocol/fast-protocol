@@ -12,36 +12,42 @@ DEBUG_BEACONS = True
 # Каноническая матрица индивидуальных параметров под каждый класс активов
 DNA_MATRIX = {
     # КЛАСС 1: Высокоскоростные Мемы (Глубокие капканы, жирные тейки, быстрый маркет-вход 25с)
-    'PEPE':   {'l_off': 0.0055, 's_off': 0.0055, 'tp1': 0.0120, 'tp2': 0.0380, 'tp3': 0.0550, 'sl': 0.018, 'ttl': 25},
-    'WIF':    {'l_off': 0.0055, 's_off': 0.0055, 'tp1': 0.0120, 'tp2': 0.0350, 'tp3': 0.0500, 'sl': 0.018, 'ttl': 25},
-    'SHIB':   {'l_off': 0.0050, 's_off': 0.0050, 'tp1': 0.0100, 'tp2': 0.0320, 'tp3': 0.0450, 'sl': 0.015, 'ttl': 25},
-    'DOGE':   {'l_off': 0.0040, 's_off': 0.0040, 'tp1': 0.0080, 'tp2': 0.0220, 'tp3': 0.0350, 'sl': 0.015, 'ttl': 30},
-    'NOT':    {'l_off': 0.0055, 's_off': 0.0055, 'tp1': 0.0120, 'tp2': 0.0380, 'tp3': 0.0550, 'sl': 0.018, 'ttl': 25},
-    'POPCAT': {'l_off': 0.0065, 's_off': 0.0065, 'tp1': 0.0150, 'tp2': 0.0450, 'tp3': 0.0650, 'sl': 0.020, 'ttl': 25},
-    'JASMY':  {'l_off': 0.0045, 's_off': 0.0045, 'tp1': 0.0090, 'tp2': 0.0280, 'tp3': 0.0400, 'sl': 0.015, 'ttl': 30},
+    'PEPE/USDT:USDT':   {'l_off': 0.0055, 's_off': 0.0055, 'tp1': 0.0120, 'tp2': 0.0380, 'tp3': 0.0550, 'sl': 0.018, 'ttl': 25},
+    'WIF/USDT:USDT':    {'l_off': 0.0055, 's_off': 0.0055, 'tp1': 0.0120, 'tp2': 0.0350, 'tp3': 0.0500, 'sl': 0.018, 'ttl': 25},
+    'SHIB/USDT:USDT':   {'l_off': 0.0050, 's_off': 0.0050, 'tp1': 0.0100, 'tp2': 0.0320, 'tp3': 0.0450, 'sl': 0.015, 'ttl': 25},
+    'DOGE/USDT:USDT':   {'l_off': 0.0040, 's_off': 0.0040, 'tp1': 0.0080, 'tp2': 0.0220, 'tp3': 0.0350, 'sl': 0.015, 'ttl': 30},
+    'NOT/USDT:USDT':    {'l_off': 0.0055, 's_off': 0.0055, 'tp1': 0.0120, 'tp2': 0.0380, 'tp3': 0.0550, 'sl': 0.018, 'ttl': 25},
+    'POPCAT/USDT:USDT': {'l_off': 0.0065, 's_off': 0.0065, 'tp1': 0.0150, 'tp2': 0.0450, 'tp3': 0.0650, 'sl': 0.020, 'ttl': 25},
+    'JASMY/USDT:USDT':  {'l_off': 0.0045, 's_off': 0.0045, 'tp1': 0.0090, 'tp2': 0.0280, 'tp3': 0.0400, 'sl': 0.015, 'ttl': 30},
 
     # КЛАСС 2: Технологичные Ракеты (Оптимальные капканы, средние тейки, маркет-вход 40с)
-    'SOL':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
-    'NEAR':   {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
-    'SUI':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
-    'FET':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
-    'TIA':    {'l_off': 0.0030, 's_off': 0.0030, 'tp1': 0.0070, 'tp2': 0.0200, 'tp3': 0.0450, 'sl': 0.014, 'ttl': 40},
-    'APT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
-    'RNDR':   {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
-    'RENDER': {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'SOL/USDT:USDT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'NEAR/USDT:USDT':   {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'SUI/USDT:USDT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'FET/USDT:USDT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'TIA/USDT:USDT':    {'l_off': 0.0030, 's_off': 0.0030, 'tp1': 0.0070, 'tp2': 0.0200, 'tp3': 0.0450, 'sl': 0.014, 'ttl': 40},
+    'APT/USDT:USDT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'RNDR/USDT:USDT':   {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'RENDER/USDT:USDT': {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
 
     # КЛАСС 3: Тяжелые Якоря и Дефай (Узкие капканы, консервативные тейки, ожидание лонга до 55с)
-    'DOT':    {'l_off': 0.0015, 's_off': 0.0015, 'tp1': 0.0040, 'tp2': 0.0120, 'tp3': 0.0250, 'sl': 0.010, 'ttl': 55},
-    'C98':    {'l_off': 0.0020, 's_off': 0.0020, 'tp1': 0.0050, 'tp2': 0.0150, 'tp3': 0.0300, 'sl': 0.010, 'ttl': 55},
-    'BNB':    {'l_off': 0.0010, 's_off': 0.0010, 'tp1': 0.0030, 'tp2': 0.0100, 'tp3': 0.0200, 'sl': 0.008, 'ttl': 55},
-    'XRP':    {'l_off': 0.0012, 's_off': 0.0012, 'tp1': 0.0040, 'tp2': 0.0120, 'tp3': 0.0220, 'sl': 0.009, 'ttl': 55},
-    'ADA':    {'l_off': 0.0015, 's_off': 0.0015, 'tp1': 0.0040, 'tp2': 0.0120, 'tp3': 0.0240, 'sl': 0.010, 'ttl': 55}
+    'DOT/USDT:USDT':    {'l_off': 0.0015, 's_off': 0.0015, 'tp1': 0.0040, 'tp2': 0.0120, 'tp3': 0.0250, 'sl': 0.010, 'ttl': 55},
+    'C98/USDT:USDT':    {'l_off': 0.0020, 's_off': 0.0020, 'tp1': 0.0050, 'tp2': 0.0150, 'tp3': 0.0300, 'sl': 0.010, 'ttl': 55},
+    'BNB/USDT:USDT':    {'l_off': 0.0010, 's_off': 0.0010, 'tp1': 0.0030, 'tp2': 0.0100, 'tp3': 0.0200, 'sl': 0.008, 'ttl': 55},
+    'XRP/USDT:USDT':    {'l_off': 0.0012, 's_off': 0.0012, 'tp1': 0.0040, 'tp2': 0.0120, 'tp3': 0.0220, 'sl': 0.009, 'ttl': 55},
+    'ADA/USDT:USDT':    {'l_off': 0.0015, 's_off': 0.0015, 'tp1': 0.0040, 'tp2': 0.0120, 'tp3': 0.0240, 'sl': 0.010, 'ttl': 55}
 }
 
 def get_coin_dna(symbol):
-    """Канонический экстрактор индивидуальных ДНК-параметров с авто-дефолтами"""
-    clean_name = symbol.split('/')[0].upper()
-    return DNA_MATRIX.get(clean_name, {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 45})
+    """Экстрактор ДНК по полному флотскому ключу"""
+    # Если прилетел чистый ключ 'SOL/USDT', принудительно дописываем суффикс
+    full_key = symbol if ':USDT' in symbol else f"{symbol}:USDT"
+    return DNA_MATRIX.get(full_key, {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 45})
+
+#def get_coin_dna(symbol):
+#    """Канонический экстрактор индивидуальных ДНК-параметров с авто-дефолтами"""
+#    clean_name = symbol.split('/')[0].upper()
+#    return DNA_MATRIX.get(clean_name, {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 45})
 
 # Список приоритетных фьючерсных секторов MEXC
 PRIORITY_LIST = [
@@ -121,29 +127,35 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
             'leverage': int(25),      # Жесткое плечо 25х
         }
 
-        # СЦЕНАРИЙ 1: Официальный позиционный Стоп-Маркет по документации МЕХС (V22.5)
+        # СЦЕНАРИЙ 1: Абсолютно верный, низкоуровневый стоп-маркет MEXC API
         if is_stop:
             if price is None:
                 return False
 
-            # Извлекаем рыночный ID тикера (NEAR_USDT)
             mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
             if 'USDT' in mexc_market_id and '_' not in mexc_market_id:
                 mexc_market_id = mexc_market_id.replace('USDT', '_USDT')
 
             exact_trigger_price = float(exchange.price_to_precision(symbol, price))
 
-            # Упаковываем параметры строго по присланной доке /api/v1/private/order/create_tpsl
-            mexc_tpsl_params = {
+            # 3: Закрытие Лонга (Sell), 4: Закрытие Шорта (Buy)
+            mexc_side = int(3) if side.lower() == 'sell' else int(4)
+            # 1: Срабатывает при падении ниже триггера, 2: При росте выше
+            mexc_trend = int(1) if side.lower() == 'sell' else int(2)
+
+            mexc_algo_params = {
                 'symbol': mexc_market_id,
-                'openType': int(1),                # 1: Isolated маржа
-                'slTriggerType': int(2),           # 2: Активация по цене Last Price
-                'slOrderType': int(2),              # 2: Выполнить как Маркет-ордер (Stop Market)
-                'stopLossPrice': exact_trigger_price
+                'side': mexc_side,
+                'vol': float(qty),
+                'openType': int(1),           # 1: Isolated маржа
+                'triggerType': int(2),        # 2: Активация по Last Price
+                'triggerPrice': exact_trigger_price,
+                'trend': mexc_trend,
+                'orderType': int(5)           # 5: Условный Стоп-Маркет
             }
 
-            # Бьем напрямую в выделенный позиционный шлюз TP/SL ордеров MEXC
-            order = exchange.contractPrivatePostOrderCreateTpsl(mexc_tpsl_params)
+            # Базовый контрактный POST-шлюз ордеров MEXC
+            order = exchange.contractPrivatePostOrderCreate(mexc_algo_params)
             return order
 
         # СЦЕНАРИЙ 2: Пассивный Лимитный Капкан Maker
@@ -404,25 +416,32 @@ async def monitor_logic(exchange):
                         log(f"🚨 [ЭВАКУАЦИЯ ТРЕНДА]: BTC летит против нашей позиции {symbol}! Экстренный маркет-снос.")
 
                         # --- ВРЕЗКА V23.1: ТОТАЛЬНЫЙ СHОС ВСЕХ ЛИМИТНЫХ КАПКАНОВ ИЗ СТАКАНОВ ---
+                        # --- ЖЕСТКИЙ ФИКС V23.9: ТОТАЛЬНОЕ ВЫЖИГАНИЕ RAM ПРИ ЭВАКУАЦИИ ---
                         try:
                             for lim_sym, lim_info in list(memory.limit_orders.items()):
                                 exchange.cancel_order(lim_info['id'], lim_sym)
                             memory.limit_orders.clear()
-                            log("🧹 [ЭВАКУАТОР]: Все выставленные лимитные капканы успешно удалены и з стаканов.")
+                            log(f"🧹 [ЭВАКУАТОР]: Все лимитки {symbol} удалены из стаканов. Чистый у быток: {round(profit*100, 2)}%")
                         except:
                             pass
 
-
-
-                        # Немедленный рыночный снос 100% объема черезcreate_order
+                        # Немедленный рыночный снос позиции на бирже
                         params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
                         exchange.create_order(symbol, 'market', exit_side, pos['vol'], None, params)
 
-                        # Выметаем RAM
-                        for k in [symbol, symbol.replace(':USDT', '')]:
+                        # Всеядный принудительный клининг RAM-памяти, уничтожающий баг 2009!
+                        for k in [symbol, f"{symbol}:USDT", symbol.replace(':USDT', '')]:
                             if k in memory.active_pos: del memory.active_pos[k]
+                            if k in memory.tp1_fixed: del memory.tp1_fixed[k]
+                            if k in memory.tp2_fixed: del memory.tp2_fixed[k]
+                            if k in memory.stop_placed: del memory.stop_placed[k]
+                            if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
+
                         memory.slots_occupied = max(0, memory.slots_occupied - 1)
                         continue
+
+#                        log(f"🧹 [ЭВАКУАТОР]: Оперативная память RAM для {symbol} полностью очищена . Слот свободен.")
+#                        continue
 #===========
 #            log(f"⚙️ [ДЕБАГ ЦЕНЫ {symbol}]: profit={round(profit*100,3)}% | cur_p={cur_p} | Вход={pos['price']} | Флаг_ТР1={memory.tp1_fixed.get(symbol)}")
             # ДЕБАГ №4: Выводим PNL в реальном времени, если цена успешно найдена
@@ -431,7 +450,7 @@ async def monitor_logic(exchange):
 
             # --- 1. АВАРИЙНЫЙ СHОС ПО ВРЕМЕHИ (Decay Shield 60с) ---
             if age > 60 and profit < -0.0008:
-                log(f"🏛️ 🛡️ Decay Shield V16.9: {symbol} срезан на 60с (Лосс: {round(profit*100,2)  }%)")
+                log(f"🏛️ 🛡️ Decay Shield V16.9: {symbol} срезан на 60c (Лосс: {round(profit*100,2)  }%)")
                 exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
                 smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
                 continue
@@ -474,35 +493,46 @@ async def monitor_logic(exchange):
                 # --- [ВРЕЗКА V21.4: УЛЬТИМАТИВНЫЙ СИНДРОМ СПОЛЗАНИЯ МЕХС] ---
                 # ТРИГГЕР А: Раннее отсечение сползания альта (Decay Shield)
                 if age > 60 and profit < -0.0008:
-                    log(f"🛡 Decay Shield V16.9: {symbol} утилизирован по времени (Лосс: {round(prof it*100, 2)}%)")
+                    #log(f"🛡 Decay Shield V16.9: {symbol} утилизирован по времени (Лосс: {round(pro fit*100,2)}%)")
+                    # Вычисляем грязную прибыль/убыток в USDT с учетом 25х плеча
+                    pnl_usdt = pos['vol'] * pos['price'] * profit
+                    log(f"🛡️ [DECAY SHIELD EXIT]: {symbol} утилизирован по времени. Итог: {round(pr ofit*100, 2)}% | Прибыль: {round(pnl_usdt, 4)} USDT | Equity: ${round(total_equity, 2)}")
                     action_triggered_decay = False
+#===================
+                    # --- ЖЕСТКИЙ МОНОЛИТ V24.2: ДВУХКОНТУРНАЯ ИЗОЛЯЦИЯ DECAY SHIELD ---
                     try:
                         try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
                         except: pass
 
-                        # Выход прямым маркетом с изолированными параметрами
+                        # Шлем приказ сноса на биржу
                         params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
                         exchange.create_order(symbol, 'market', exit_side, pos['vol'], None, params)
-                        action_triggered_decay = True
                     except Exception as e:
-                        log(f"⚠ Ошибка утилизации типа А: {e}")
-
-                    if action_triggered_decay:
-                        for k in [symbol, symbol.replace(':USDT', '')]:
+                        # Логируем только реальные сбои, игнорируя повторный спам закрытых ордеров
+                        if "2009" not in str(e):
+                            log(f"⚠ Ошибка утилизации типа А для {symbol}: {e}")
+                    finally:
+                        # === КОНТУР АБСОЛЮТНОЙ ГАРАНТИИ: ВЫПОЛНЯЕТСЯ ВСЕГДА ===
+                        # Выжигаем монету из памяти RAM в любом случае, ликвидируя петлю зацикливания!
+                        for k in [symbol, f"{symbol}:USDT", symbol.replace(':USDT', '')]:
                             if k in memory.active_pos: del memory.active_pos[k]
                             if k in memory.tp1_fixed: del memory.tp1_fixed[k]
                             if k in memory.tp2_fixed: del memory.tp2_fixed[k]
                             if k in memory.stop_placed: del memory.stop_placed[k]
-                            if k in memory.step_be: del memory.step_be[k]
                             if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
-                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                        continue
 
+                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                        log(f"🧹 [DECAY FINALLY CLEAN]: {symbol} гарантированно удален из RAM. Слот  свободен.")
+                    continue
+#===================
                 # ТРИГГЕР Б: Синдром Сползания Импульса (Выдох ММ на хаях)
                 if symbol in memory.max_pnl_observed and memory.max_pnl_observed[symbol] >= 0.0025:
                     current_decay_pct = (1 - (profit / memory.max_pnl_observed[symbol])) * 100
                     if current_decay_pct > 70.0:
-                        log(f"🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: {symbol} закрыт на МЕХС. ММ выдохся (Пик: +{round(memory.max_pnl_observed[symbol]*100, 2)}%)")
+                        pnl_usdt = pos['vol'] * pos['price'] * profit
+                        log(f"🏁 [СПОЛЗАНИЕ ФИКСАЦИЯ]: {symbol} закрыт по маркету! Пик тренда: +{round(memory.max_pnl_observed[symbol]*100, 2)}% | Фиксация на выходе: +{round(profit*100, 2)}% | Заработано: {round(pnl_usdt, 4)} USDT | Equity: ${round(total_equity, 2)}")
+
+                        #log(f"🏁 СИНДРОМ СПОЛЗАНИЯ ИМПУЛЬСА: {symbol} закрыт на МЕХС. ММ выдохся (Пик: +{round(memory.max_pnl_observed[symbol]*100, 2)}%)")
                         action_triggered_momentum_dead = False
                         try:
                             try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
@@ -769,7 +799,9 @@ async def main_logic():
 
                     for sym in list(memory.active_pos.keys()):
                         if sym not in current_mexc_active:
-                            log(f"🧹 Позиция {sym} закрыта на МЕХС. Очищаем RAM.")
+
+                            pnl_usdt = pos['vol'] * pos['price'] * profit
+                            log(f"🧹 Позиция {sym} закрыта на МЕХС. Очищаем RA.| Заработано: {round( pnl_usdt, 4)} USDT | Equity: ${rund(total_equity, 2)}")
                             if sym in memory.active_pos: del memory.active_pos[sym]
                             if sym in memory.tp1_fixed: del memory.tp1_fixed[sym]
                             if sym in memory.tp2_fixed: del memory.tp2_fixed[sym]
@@ -806,7 +838,7 @@ async def main_logic():
                     memory.btc_storm_time = now
                     if not hasattr(memory, 'last_momentum_log'): memory.last_momentum_log = 0
                     if now - memory.last_momentum_log >= 60:
-                        log(f"🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна ({round(avg_bt c_move_pct, 4)}% > 0.045%). Включаю 90с таймер остывания.")
+                        #log(f"🛡 [MOMENTUM SHIELD ACTIVATE]: REST-скорость BTC опасна ({round(avg_b tc_move_pct, 4)}% > 0.045%). Включаю 90с таймер остывания.")
                         memory.last_momentum_log = now
 
                 # Жестко обрываем итерацию и уходим на новый круг, если 90 секунд еще не прошло
@@ -861,105 +893,70 @@ async def main_logic():
                             }
 
                             log(f"🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): {symbol} {signal['side'].upper()} @ {signal['price']}")
-
-            # --- [ВЕНИК АВТОСНОСА НЕИСПОЛНЕННЫХ ЛИМИТОК ПО TTL = 75с] ---
-            for symbol in list(memory.limit_orders.keys()):
-                order_data = memory.limit_orders[symbol]
-                try:
-                    open_orders = await exchange.fetch_open_orders(symbol)
-                    is_still_open = any(o['id'] == order_data['id'] for o in open_orders)
-
-                    if not is_still_open:
-                        log(f"🔥 КАПКАН СРАБОТАЛ! {symbol} налит шпилькой по цене {order_data['price']}.")
-                        memory.active_pos[symbol] = {
-                            'side': order_data['side'], 'vol': order_data['qty'], 'price': order_data['price'],
-                            'entry_time': time.time(), 'dna': order_data['dna']
-                        }
-
-                        memory.slots_occupied += 1
-                        del memory.limit_orders[symbol]
-                        continue
-                except: pass
 #========
-                # --- [УЗЕЛ V23.0: ИНТЕЛЛЕКТУАЛЬНЫЙ ВЕНИК & МАРКЕТ-ВХOД ВДOГOHКУ МЕХС] ---
-                order_age = now - order_data['time']
-                coin_dna = get_coin_dna(symbol)
+            # === [УЗЕЛ V23.6: КВАНТОВЫЙ ВЕНИК КЛИНЕР & МАРКЕТ-УСКОРИТЕЛЬ МЕХС] ===
+            for sym_key in list(memory.limit_orders.keys()):
+                order_data = memory.limit_orders[sym_key]
+                order_age = now - order_data['timestamp']
+
+                coin_dna = get_coin_dna(sym_key)
                 optimal_ttl = coin_dna.get('ttl', 40)
-#===============
-                # --- ШТУЧНЫЙ ФИКС V23.2: АВТОНОМНЫЙ НЕУЯЗВИМЫЙ ВЕНИК КЛИНЕР ---
+
                 if order_age >= optimal_ttl:
                     try:
-                        # Резервный расчет тренда объемов свечей: изолируем от падений API
+                        # А. Математический фильтр: проверяем, растет ли минутный объем на пробое торгов
                         try:
-                            ohlcv_check = exchange.fetch_ohlcv(symbol, '1m', limit=3)
-                            volume_growing = float(ohlcv_check[-1][5]) > float(ohlcv_check[-2][5]) if len(ohlcv_check) >= 2 else True
+                            ohlcv_check = exchange.fetch_ohlcv(sym_key, '1m', limit=3)
+                            if len(ohlcv_check) >= 2:
+                                # Индекс 5 в массиве CCXT — это чистый объем минутной свечи
+                                v_now = float(ohlcv_check[-1][5])
+                                v_prev = float(ohlcv_check[-2][5])
+                                volume_growing = v_now > v_prev
+                            else:
+                                volume_growing = True
                         except:
-                            volume_growing = True # Если API лежит, считаем объем растущим для безопасности
+                            volume_growing = True # Резервный эшелон: если API лежит, считаем тренд живым
 
-                        # Прямой, слепой удар отмены ордера, не дожидаясь проверок статуса
+                        # Б. Прямой Maker-демонтаж ордера для мгновенного освобождения маржи
                         try:
-                            exchange.cancel_order(order_data['id'], symbol)
+                            exchange.cancel_order(order_data['id'], sym_key)
                         except Exception as direct_cancel_err:
-                            # Если биржа говорит, что ордер уже заполнен или не найден
                             err_msg = str(direct_cancel_err).lower()
                             if "not found" in err_msg or "filled" in err_msg:
-                                volume_growing = True # Даем контуру усыновления сработать в блоке ниже
+                                volume_growing = True # Даем контуру усыновления сработать при сквизе
 
-                        # Принудительно вычищаем лимитку из локальной памяти RAM, спасая от вечного зависания
-                        if symbol in memory.limit_orders:
-                            del memory.limit_orders[symbol]
+                        # В. Принудительно очищаем таблицу лимиток в RAM, предотвращая зависания
+                        if sym_key in memory.limit_orders:
+                            del memory.limit_orders[sym_key]
 
-                        # 3. ИСПОЛНИТЕЛЬНЫЙ МАРКЕТ-КОНТУР: Входим по рынку вдогонку!
+                        # Г. ИСПОЛНИТЕЛЬНЫЙ МАРКЕТ-КОНТУР: Входим по рынку вдогонку на освобожденную маржу!
                         if volume_growing:
-#===============
-                            # 2. Математический фильтр: проверяем, растет ли минутный объем на пробое
-                            try:
-                                ohlcv_check = exchange.fetch_ohlcv(symbol, '1m', limit=3)
-                                if len(ohlcv_check) >= 2:
-                                    v_now = float(ohlcv_check[-1][5])
-                                    v_prev = float(ohlcv_check[-2][5])
-                                    volume_growing = v_now > v_prev
-                                else:
-                                    volume_growing = True
-                            except:
-                                volume_growing = True
+                            log(f"🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V23.6]: Капкан по {sym_key} не налился за {optimal_ttl}с. Маржа снята, бью по рынку!")
 
-                            # Отменяем пассивную Maker-лимитку в стакане
-                            exchange.cancel_order(order_data['id'], symbol)
-                            if symbol in memory.limit_orders:
-                                del memory.limit_orders[symbol]
+                            # Отправляем чистый рыночный ордер с жестким вшиванием Isolated и плеча 25
+                            exit_side_chase = order_data['side']
+                            params_chase = {'openType': int(1), 'leverage': int(25)}
+                            market_order = exchange.create_order(sym_key, 'market', exit_side_chase, order_data['qty'], None, params_chase)
 
-                            # 3. ИСПОЛНИТЕЛЕЬНЫЙ МАРКЕТ-КОHТУР: Входим по рынку вдогонку!
-                            if volume_growing:
-                                log(f"🚀 [МАРКЕТ-ВХOД ВДOГOHКУ]: Капкан по {symbol} не налился за {optimal_ttl}с, но объемы растут! Вхожу по рынку.")
-
-                                # Отправляем фьючерсный маркет-ордер входа с жестким указанием плеча 25
-                                params = {'openType': int(1), 'leverage': int(25)}
-                                market_order = exchange.create_order(symbol, 'market', order_data['side'], order_data['qty'], None, params)
-
-                                if market_order:
-                                    memory.active_pos[symbol] = {
-                                        'side': order_data['side'],
-                                        'vol': order_data['qty'],
-                                        'price': float(market_order.get('price', order_data['price'])),
-                                        'entry_time': time.time(),
-                                        'dna': order_data['dna']
-                                    }
-                                    memory.slots_occupied = len(memory.active_pos)
-                            else:
-                                log(f"🧹 [ВЕHИК]: Капкан по {symbol} утилизирован. Прорыв без объемо в, маркет-вход заблокирован.")
+                            if market_order:
+                                memory.active_pos[sym_key] = {
+                                    'side': order_data['side'],
+                                    'vol': order_data['qty'],
+                                    'price': float(market_order.get('price', order_data['price'])),
+                                    'entry_time': time.time(),
+                                    'dna': order_data['dna']
+                                }
+                                memory.slots_occupied = len(memory.active_pos)
                         else:
-                            # Если ордер закрылся сам на бирже, пока мы шли к нему
-                            if symbol in memory.limit_orders:
-                                del memory.limit_orders[symbol]
+                            log(f"🧹 [ВЕНИК V23.6]: Капкан по {sym_key} удален из стакана. Прорыв пу стой, маркет-вход заблокирован.")
 
                     except Exception as cancel_err:
                         # --- СОХРАНЕНИЕ ТВОЕЙ ОРИГИНАЛЬНОЙ ДНК ПЕРЕХВАТА СКВИЗОВ-ПРИЗРАКОВ ---
                         err_msg = str(cancel_err).lower()
                         if "cannot be cancelled" in err_msg or "filled" in err_msg or "not found" in err_msg:
-                            log(f"🔥 ПЕРЕХВАТ СКВИЗА: Ордер по {symbol} успел исполниться в долю секунды отмены! Усыновляем позицию.")
-                            if symbol not in memory.active_pos:
-                                memory.active_pos[symbol] = {
+                            log(f"🔥 ПЕРЕХВАТ СКВИЗА V23.6: Ордер по {sym_key} успел исполниться в долю секунды отмены! Усыновляем позицию.")
+                            if sym_key not in memory.active_pos:
+                                memory.active_pos[sym_key] = {
                                     'side': order_data['side'],
                                     'vol': order_data['qty'],
                                     'price': order_data['price'],
@@ -967,9 +964,9 @@ async def main_logic():
                                     'dna': order_data['dna']
                                 }
                                 memory.slots_occupied = len(memory.active_pos)
-                            if symbol in memory.limit_orders:
-                                del memory.limit_orders[symbol]
-#-----------
+                            if sym_key in memory.limit_orders:
+                                del memory.limit_orders[sym_key]
+#========
         except Exception as main_err:
             await asyncio.sleep(1)
         await asyncio.sleep(0.5)
