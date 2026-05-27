@@ -86,67 +86,137 @@ async def update_balance(exchange):
             await asyncio.sleep(20)
 
 async def check_signal(exchange, symbol, last_beacon_t):
-    """Сканирование волатильности и структуры свечи на чистом NumPy с Маяком Дебага"""
+    """
+    Сканирование импульсов V24.0: Сплав скоростей G1/G2, Trend Altitude и 3M Volume.
+    Полностью очищен от слепых зон и ложных стопов на хаях.
+    """
     try:
         dna = memory.all_dna.get(symbol)
         cur_p = memory.prices.get(symbol)
-        if not dna or not cur_p: return None, last_beacon_t
+        if not dna or not cur_p:
+            return None, last_beacon_t
 
+        # 1. ЗАГРУЗКА И ВЕРИФИКАЦИЯ СВЕЧНОГО МАССИВА
         ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
-        if len(ohlcv) < 21: return None, last_beacon_t
+        if len(ohlcv) < 21:
+            return None, last_beacon_t
 
         df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
 
-        ma = df['c'].rolling(20).mean().to_numpy()
-        std = df['c'].rolling(20).std().to_numpy()
+        # 2. РАСЧЕТ ИНДИКАТОРОВ БОЛЛИНДЖЕРА НА NUMPY
+        ma_series = df['c'].rolling(20).mean()
+        std_series = df['c'].rolling(20).std()
 
-        p_up = ma[-2] + (2.1 * std[-2])
-        p_dn = ma[-2] - (2.1 * std[-2])
+        ma = ma_series.to_numpy()
+        std = std_series.to_numpy()
+
         ma_prev = ma[-2]
+        std_prev = std[-2]
 
-        if std[-2] == 0 or ma_prev == 0: return None, last_beacon_t
+        if std_prev == 0 or ma_prev == 0 or pd.isna(ma_prev) or pd.isna(std_prev):
+            return None, last_beacon_t
 
+        p_up = ma_prev + (2.1 * std_prev)
+        p_dn = ma_prev - (2.1 * std_prev)
         curr_w = (p_up - p_dn) / ma_prev * 100
+
         p_up_prev = ma[-3] + (2.1 * std[-3])
         p_dn_prev = ma[-3] - (2.1 * std[-3])
-        prev_w = (p_up_prev - p_dn_prev) / ma[-3] * 100
+        if ma[-3] == 0:
+            return None, last_beacon_t
 
+        prev_w = (p_up_prev - p_dn_prev) / ma[-3] * 100
         w_growth = curr_w / prev_w
+
+        # 3. ФИЛЬТР 1: TREND ALTITUDE SHIELD (Запрет перегретых хаев)
+        # Динамически вычисляем класс риска монеты по её тикеру
+        sym_upper = symbol.upper()
+        if any(mem in sym_upper for mem in ['PEPE', 'WIF', 'SHIB', 'DOGE', 'NOT', 'POPCAT', 'JASMY']):
+            max_alt_pct = 2.5   # Класс 1: Мемы (Предел отрыва от MA20 2.5%)
+        elif any(tech in sym_upper for tech in ['SOL', 'NEAR', 'SUI', 'FET', 'TIA', 'APT', 'RNDR', 'RENDER']):
+            max_alt_pct = 1.4   # Класс 2: Технологичная альта (Предел 1.4%)
+        else:
+            max_alt_pct = 0.8   # Класс 3: Тяжелые якоря (Предел 0.8%)
+
+        # Измеряем текущую высоту (отрыв) живой цены от средней линии MA20
+        current_altitude = abs(cur_p / ma_prev - 1) * 100
+
+        # Если монета улетела в космос выше лимита класса — глухая блокировка ордера
+        if current_altitude > max_alt_pct:
+            if int(time.time()) % 30 == 0:
+                log(f"🔍 [TREND SHIELD {symbol}]: Отмена! Монета перегрета ({round(current_altitude, 2)}% > {max_alt_pct}%). Пропускаем хаи.")
+            return None, last_beacon_t
+
+        # 4. ТВОЙ ОРИГИНАЛЬНЫЙ ТУМБЛЕР ДВУХ СКОРОСТЕЙ G1 / G2
         open_p = df['o'].iloc[-1]
         change = abs(cur_p / open_p - 1)
-
         gear = None
+
         if 'g2' in dna and change >= dna['g2']['speed']:
             gear = 'g2'
         elif 'g1' in dna and change >= dna['g1']['speed']:
             gear = 'g1'
 
-        # --- [ТУМБЛЕРНЫЙ МАЯК ОХОТНИКА: РАБОТАЕТ СТРОГО ПРИ TRUE] ---
+        # --- [ТУМБЛЕРНЫЙ МАЯК ОХОТНИКА: ДЕБАГ-ТРАНСЛЯЦИЯ] ---
         if DEBUG_BEACONS and (time.time() - last_beacon_t > 60):
             vol_last = df['v'].iloc[-1]
             vol_avg = df['v'].mean()
             clean_name = symbol.split(':')[0]
-            beacon_msg = f"🔍 МАЯК СКАНЕРА [{clean_name}]: Цена: {cur_p} | Взрыв BB: {round(w_growth,3)}x (Нужно: {dna['w_grow']}x) | Скорость: {round(change*100,3)}% "
+            beacon_msg = f"🔍 МАЯК СКАНЕРА [{clean_name}]: Цена: {cur_p} | Взрыв BB: {round(w_growth,3)}x | Высота: {round(current_altitude,2)}% | Скорость: {round(change*100,3)}% "
             if gear:
                 beacon_msg += f"| Передача: {gear.upper()} ✅ | Объем тика: {round(vol_last,1)} (Нужно: {round(vol_avg*dna[gear]['vol'],1)})"
             else:
                 beacon_msg += f"| Скорость мала ❌"
-            #log(beacon_msg)
+            # log(beacon_msg)
             last_beacon_t = time.time()
 
-        if w_growth < dna['w_grow'] or not gear: return None, last_beacon_t
+        # Базовая проверка на наличие взрыва волатильности и взвода передачи
+        if w_growth < dna['w_grow'] or not gear:
+            return None, last_beacon_t
 
-        if df['v'].iloc[-1] < df['v'].mean() * dna[gear]['vol']: return None, last_beacon_t
+        # 5. ФИЛЬТР 2: НАКОПИТЕЛЬНЫЙ 3-МИНУТНЫЙ ОБЪЕМ (Уничтожение висяков)
+        v_now = float(df['v'].iloc[-1])
+        v_p1 = float(df['v'].iloc[-2])
+        v_p2 = float(df['v'].iloc[-3])
 
+        if v_now < v_p1 and v_p1 < v_p2:
+            if int(time.time()) % 45 == 0:
+                log(f"🔍 [VOLUME SHIELD {symbol}]: Отмена! Прорыв на затухающем объеме (Вялый закисающий импульс).")
+            return None, last_beacon_t
+
+        # Твоя оригинальная проверка плотности тикового объема под конкретную передачу
+        if df['v'].iloc[-1] < df['v'].mean() * dna[gear]['vol']:
+            return None, last_beacon_t
+
+        # 6. ВЫЧИСЛЕНИЕ НАПРАВЛЕНИЯ КАНOНИЧЕСКОГО ИМПУЛЬСА
+        is_buy_candidate = (cur_p > open_p)
+        is_sell_candidate = (cur_p < open_p)
+
+        # 7. ТВОЙ ОРИГИНАЛЬНЫЙ КАСКАДНЫЙ НOЖ (PRE-CANDLE SHIELD)
+        p_c1 = df.iloc[-2]
+        p_c2 = df.iloc[-3]
+        p_c3 = df.iloc[-4]
+
+        is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
+        is_3_red   = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+
+        if is_buy_candidate and is_3_red:
+            return None, last_beacon_t  # Падающий каскадный нож — ловить лонг запрещено
+        if is_sell_candidate and is_3_green:
+            return None, last_beacon_t # Растущая ракета — шортить запрещено
+
+        # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
         return {
             'symbol': symbol,
-            'side': 'buy' if cur_p > open_p else 'sell',
+            'side': 'buy' if is_buy_candidate else 'sell',
             'gear': gear,
             'price': cur_p,
             'dna': dna,
             'gear_data': dna[gear]
         }, last_beacon_t
-    except:
+
+    except Exception as err:
+        # Полная изоляция критических сбоев расчета
         return None, last_beacon_t
 
 async def execute_entry(exchange, sig):
