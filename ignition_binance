@@ -16,7 +16,7 @@ DEBUG_BEACONS = False   # Сделай False, чтобы полностью вы
 
 # Поля API Binance
 API_KEY = 
-API_SECRET = 
+API_SECRET =
 
 
 class GlobalMemory:
@@ -52,11 +52,24 @@ async def update_balance(exchange):
     while memory.is_running:
         try:
             # 1. Запрашиваем баланс кошелька фьючерсов
+
+            # --- ШТУЧНЫЙ ФИКС V24.9: КВАНТОВЫЙ СЪЕМ ДОСТУПНОЙ МАРЖИ BINANCE ---
             bal = await exchange.fetch_balance()
-            total = float(bal.get('total', {}).get('USDT', 0))
-            free = float(bal.get('free', {}).get('USDT', 0))
-            memory.available = free
-            memory.total_wallet = total
+
+            # Извлекаем аппаратный availableBalance фьючерсного шлюза Binance
+            m_info = bal.get('info', {})
+            assets = m_info.get('assets', [])
+
+            # Ищем чистую доступную маржу Isolated-активов среди JSON-массива биржи
+            usdt_asset = next((a for a in assets if a.get('asset') == 'USDT'), {})
+            avail_margin = float(usdt_asset.get('availableBalance', bal.get('free', {}).get('USDT', 0)))
+
+            # Возвращаем переменную free для предотвращения NameError ниже по коду
+            free = avail_margin
+
+            # Резервируем скрытый 3% буфер на Slippage проскальзывание рыночного ордера Taker
+            memory.available = avail_margin * 0.97
+            memory.total_wallet = float(bal.get('total', {}).get('USDT', 0))
 
             if memory.start_balance == 0:
                 memory.start_balance = free
@@ -498,6 +511,8 @@ async def main():
         'apiKey': API_KEY, 'secret': API_SECRET,
         'options': {'defaultType': 'future'}, 'enableRateLimit': True
     })
+    # --- ШТУЧНЫЙ ФИКС V24.9: АСИНХРОННЫЙ ПРОГРЕВ МАКРО-СПЕЦИФИКАЦИЙ БИНАНСА ---
+    await exchange.load_markets()
 
     with open('dna_ignition.json', 'r') as f:
         memory.all_dna = json.load(f)
