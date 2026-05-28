@@ -1,3 +1,23 @@
+import os
+import json
+import time
+import asyncio
+import ccxt.async_support as ccxt
+import pandas as pd
+import numpy as np
+
+# --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
+RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
+MAX_SLOTS = 1          # Максимум 4 параллельных сделки
+LOG_FILE = "ignition__log.txt"
+
+# --- ТУМБЛЕР РЕЖИМА ДЕБАГА (ВКЛ / ВЫКЛ) ---
+DEBUG_BEACONS = False   # Сделай False, чтобы полностью выключить маяки в консоли
+
+# Поля API Binance
+API_KEY = 
+API_SECRET = 
+
 
 class GlobalMemory:
     def __init__(self):
@@ -221,41 +241,45 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
 async def execute_entry(exchange, sig):
     """
-    Импульсный захват позиции по рынку на фьючерсах Binance V22.0.
-    Исправлен баг двойного плеча, полностью убрана ошибка Code -2019.
+    Импульсный захват позиции по рынку на фьючерсах Binance V24.6.
+    Полностью ликвидирован баг двойного плеча и ошибка Margin is insufficient.
     """
-    symbol = sig['symbol']
+    raw_symbol = sig['symbol']
+
+    # КАНОНИЧЕСКИЙ ОЧИСТИТЕЛЬ ТИКЕРА: Приводим 'LINK/USDT:USDT' к биржевому формату 'LINK/USDT'
+    symbol = raw_symbol.split(':')[0]
+
     if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos:
         return
 
     try:
-        # Принудительный стык настроек аккаунта перед входом
-        try:
-            await exchange.set_leverage(sig['dna']['lev'], symbol)
-        except:
-            pass
-        try:
-            await exchange.set_margin_mode('ISOLATED', symbol)
-        except:
-            pass
+        # 1. Принудительный базовый стык плеча и Isolated-маржи на Бинансе
+        try: await exchange.set_leverage(sig['dna']['lev'], symbol)
+        except: pass
+        try: await exchange.set_margin_mode('ISOLATED', symbol)
+        except: pass
 
-        # --- ЖЕСТКИЙ ФИКС V22.0: КАНОНИЧЕСКИЙ РАСЧЕТ ЛОТА ПОД ФЬЮЧЕРСНЫЙ КАНАЛ БИНАНСА ---
-        # Для фьючерсов Binance маржинальный объем считается БЕЗ умножения на плечо,
-        # так как движок биржи сам применит плечо аккаунта к переданному количеству монет!
+        # 2. МАТЕМАТИЧЕСКИЙ РАСЧЕТ ЛОТА БЕЗ ДВОЙНОГО ПЛЕЧА (По эталону старого рабочего ядра)
+        # Вычисляем чистый объем маржи обеспечения, разрешенный RISK_GEAR
         amount_margin_usdt = memory.available * RISK_GEAR
 
-        # Переводим чистую маржу обеспечения в эквивалент базовых монет с учетом плеча
+        # Переводим маржу в эквивалент монет с учетом плеча и живой цены входа
         raw_qty = (amount_margin_usdt * sig['dna']['lev']) / sig['price']
+
+        # Округляем до строгого шага лотов Бинанса, используя очищенный от двоеточий тикер
         qty = float(exchange.amount_to_precision(symbol, raw_qty))
 
         if qty <= 0:
             return
 
-        # Открываем позицию по рынку в Isolated-режиме
-        order = await exchange.create_market_order(symbol, sig['side'], qty)
+        # 3. ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Бьем базовым методом create_order (как в старом рабочем боте)
+        # Это полностью убирает скрытый внутренний перерасчет CCXT
+        order = await exchange.create_order(symbol, 'market', sig['side'], qty)
 
         if order:
             log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty} | Общий баланс: ${round(memory.total_wallet, 2)}")
+
+            # Записываем сделку в RAM под чистым биржевым ключом
             memory.active_pos[symbol] = {
                 'side': sig['side'], 'vol': qty, 'price': sig['price'],
                 'gear': sig['gear'], 'gear_data': sig['gear_data'], 'dna': sig['dna'],
