@@ -442,10 +442,17 @@ async def check_signal(exchange, symbol):
                     return None
 
             # 5. Проверяем Каскадный нож предыстории (Pre-Candle Shield)
-            if len(df) >= 5:
-                p_c1 = df.iloc[-2]; p_c2 = df.iloc[-3]; p_c3 = df.iloc[-4]
-                is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
-                is_3_red = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+            #if len(df) >= 5:
+            #    p_c1 = df.iloc[-2]; p_c2 = df.iloc[-3]; p_c3 = df.iloc[-4]
+            #    is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
+            #    is_3_red = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+
+                    # --- ИСПРАВЛЕНИЕ V23.9: 4-МИНУТНЫЙ КАСКАД ДЛЯ СВОБОДЫ ВХОДОВ ---
+            if len(df) >= 6:
+                p_c1 = df.iloc[-2]; p_c2 = df.iloc[-3]; p_c3 = df.iloc[-4]; p_c4 = df.iloc[-5]
+                is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o']) and (p_c4['c'] > p_c4['o'])
+                is_3_red = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o']) and (p_c4['c'] < p_c4['o'])
+
                 if hit_long_offset and is_3_red:
                     log(f"🔍 [ОТКАЗ {symbol}]: Пробой оффсета, но Каскадный Нож запретил ловить летящий топор (3 красных свечи подряд)")
                     return None
@@ -472,35 +479,42 @@ async def check_signal(exchange, symbol):
 
         # --- [ТРАНСПЛАНТАЦИЯ ГЕОМЕТРИИ СВЕЧИ V26.0] ---
         # Расчет полноты живой свечи, чтобы отсечь флэт-шум
-        high_now = max(df['h'].iloc[-1], cur_p)
-        low_now = min(df['l'].iloc[-1], cur_p)
-        live_candle_range = high_now - low_now if (high_now - low_now) > 0 else 0.000001
+#        high_now = max(df['h'].iloc[-1], cur_p)
+#        low_now = min(df['l'].iloc[-1], cur_p)
+#        live_candle_range = high_now - low_now if (high_now - low_now) > 0 else 0.000001
 
-        up_shadow = high_now - cur_p
-        dn_shadow = cur_p - low_now
-        long_body = cur_p - prev_open
-        short_body = prev_open - cur_p
+#        up_shadow = high_now - cur_p
+#        dn_shadow = cur_p - low_now
+#        long_body = cur_p - prev_open
+#        short_body = prev_open - cur_p
 
-        shadow_limit = 0.30  # Тень не более 30% от всей свечи
-        body_limit = 0.60    # Тело не менее 60% от всей свечи
+#        shadow_limit = 0.30  # Тень не более 30% от всей свечи
+#        body_limit = 0.60    # Тело не менее 60% от всей свечи
 
-        if is_buy: # Геометрический фильтр для ЛОНГА
-            if (up_shadow / live_candle_range) > shadow_limit or (long_body / live_candle_range) < body_limit:
-                return None
-        elif is_sell: # Геометрический фильтр для ШОРТА
-            if (dn_shadow / live_candle_range) > shadow_limit or (short_body / live_candle_range) < body_limit:
-                return None
+#        if is_buy: # Геометрический фильтр для ЛОНГА
+#            if (up_shadow / live_candle_range) > shadow_limit or (long_body / live_candle_range) < body_limit:
+#                return None
+#        elif is_sell: # Геометрический фильтр для ШОРТА
+#            if (dn_shadow / live_candle_range) > shadow_limit or (short_body / live_candle_range) < body_limit:
+#                return None
 #=====
         # --- [ВРЕЗКА V29.0: ФИЛЬТР ПРЕДЫСТОРИИ КАСКАДНЫЙ НОЖ (PRE-CANDLE SHIELD)] ---
         # Анализируем 3 предыдущие закрытые свечи (индексы -2, -3, -4)
-        if len(df) >= 5:
-            p_c1 = df.iloc[-2] # Прошлая минута
-            p_c2 = df.iloc[-3] # 2 минуты назад
-            p_c3 = df.iloc[-4] # 3 минуты назад
+#        if len(df) >= 5:
+#            p_c1 = df.iloc[-2] # Прошлая минута
+#            p_c2 = df.iloc[-3] # 2 минуты назад
+#            p_c3 = df.iloc[-4] # 3 минуты назад
 
             # Проверяем, направлены ли они все в одну сторону
-            is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
-            is_3_red   = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+#            is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
+#            is_3_red   = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+
+        # --- [ВРЕЗКА V29.0: ФИЛЬТР ПРЕДЫСТОРИИ КАСКАДНЫЙ НОЖ (PRE-CANDLE SHIELD)] ---
+        if len(df) >= 6:
+            p_c1 = df.iloc[-2]; p_c2 = df.iloc[-3]; p_c3 = df.iloc[-4]; p_c4 = df.iloc[-5]
+            is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o']) and (p_c4['c'] > p_c4['o'])
+            is_3_red = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o']) and (p_c4['c'] < p_c4['o'])
+
 
             if is_buy and is_3_red:
                 # Если ловим лонг, но цена валится каскадом 3 минуты вниз без остановки — ОТМЕНА
@@ -529,7 +543,7 @@ async def check_signal(exchange, symbol):
                     is_meme = any(meme_name in symbol.upper() for meme_name in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
 
                     # Выставляем адаптивный порог объема
-                    required_ratio = 1.8 if is_meme else 1.1
+                    required_ratio = 1.4 if is_meme else 1.02
 
                     # Если объем сквиза меньше требуемого порога — блокируем шумовой вход
                     if volume_ratio < required_ratio:
