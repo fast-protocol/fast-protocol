@@ -50,9 +50,14 @@ def get_coin_dna(symbol):
 #    return DNA_MATRIX.get(clean_name, {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 45})
 
 # Список приоритетных фьючерсных секторов MEXC
+#PRIORITY_LIST = [
+#    'SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT',
+#    'APT/USDT:USDT', 'MANA/USDT:USDT', 'POL/USDT:USDT', '1INCH/USDT:USDT'
+#]
 PRIORITY_LIST = [
-    'SOL/USDT:USDT', 'NEAR/USDT:USDT', 'LDO/USDT:USDT', 'OP/USDT:USDT',
-    'APT/USDT:USDT', 'MANA/USDT:USDT', 'POL/USDT:USDT', '1INCH/USDT:USDT'
+    'SOL/USDT:USDT', 'NEAR/USDT:USDT', 'APT/USDT:USDT', 'SUI/USDT:USDT',
+    'FET/USDT:USDT', 'TIA/USDT:USDT', 'PEPE/USDT:USDT', 'WIF/USDT:USDT',
+    'SHIB/USDT:USDT', 'POL/USDT:USDT'
 ]
 
 class GlobalMemory:
