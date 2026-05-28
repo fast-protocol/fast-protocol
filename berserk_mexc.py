@@ -132,7 +132,7 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
             'leverage': int(25),      # Жесткое плечо 25х
         }
 
-        # СЦЕНАРИЙ 1: Абсолютно верный, низкоуровневый стоп-маркет MEXC API
+        # СЦЕНАРИЙ 1: ДВУХКОНТУРНЫЙ ЖЕЛЕЗНЫЙ СТОП-МАРКЕТ MEXC С ЗАЩИТОЙ ОТ ОШИБКИ 9999 (V25.0)
         if is_stop:
             if price is None:
                 return False
@@ -142,26 +142,36 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
                 mexc_market_id = mexc_market_id.replace('USDT', '_USDT')
 
             exact_trigger_price = float(exchange.price_to_precision(symbol, price))
-
-            # 3: Закрытие Лонга (Sell), 4: Закрытие Шорта (Buy)
             mexc_side = int(3) if side.lower() == 'sell' else int(4)
-            # 1: Срабатывает при падении ниже триггера, 2: При росте выше
             mexc_trend = int(1) if side.lower() == 'sell' else int(2)
 
-            mexc_algo_params = {
-                'symbol': mexc_market_id,
-                'side': mexc_side,
-                'vol': float(qty),
-                'openType': int(1),           # 1: Isolated маржа
-                'triggerType': int(2),        # 2: Активация по Last Price
-                'triggerPrice': exact_trigger_price,
-                'trend': mexc_trend,
-                'orderType': int(5)           # 5: Условный Стоп-Маркет
-            }
+            # КОНТУР А: Основной высокотехнологичный позиционный шлюз планов
+            try:
+                mexc_algo_params = {
+                    'symbol': mexc_market_id, 'side': mexc_side, 'vol': float(qty),
+                    'openType': int(1), 'triggerType': int(2), 'triggerPrice': exact_trigger_price,
+                    'trend': mexc_trend, 'orderType': int(5)
+                }
+                order = exchange.contractPrivatePostOrderCreate(mexc_algo_params)
+                return order
+        except Exception as mexc_9999_err:
+            # --- ШТУЧНЫЙ ФИКС V25.2: РАЗГРУЗКА RATE LIMIT 510 И МАРЖИ 7003 ---
+            # Даем бирже 200 миллисекунд очистить лимиты пакетов
+            time.sleep(0.2)
+            log(f"⚠️ Алго-шлюз MEXC выдал сбой {mexc_9999_err}. Активирую резервный контур стакана CCXT!")
 
-            # Базовый контрактный POST-шлюз ордеров MEXC
-            order = exchange.contractPrivatePostOrderCreate(mexc_algo_params)
-            return order
+            try:
+                ccxt_params = {
+                    'stopPrice': exact_trigger_price,
+                    'triggerPrice': exact_trigger_price,
+                    'type': 'stop_market',
+                    'reduceOnly': True
+                }
+                order = exchange.create_market_order(symbol, side, qty, ccxt_params)
+                return order
+            except Exception as fatal_sl_err:
+                log(f"🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для {symbol}: {fatal_sl_err}")
+                return False
 
         # СЦЕНАРИЙ 2: Пассивный Лимитный Капкан Maker
         elif is_limit:
@@ -801,15 +811,23 @@ async def main_logic():
                                         'side': side, 'vol': vol, 'price': entry_price, 'entry_time': time.time(),
                                         'dna': {'l_off': 0.002, 's_off': 0.002}
                                     }
-
+                    #===
+                    # --- ШТУЧНЫЙ ФИКС V24.8: СИНХРОНИЗАЦИЯ КЛЮЧЕЙ И ИСПРАВЛЕНИЕ NAMEERROR ---
                     for sym in list(memory.active_pos.keys()):
                         if sym not in current_mexc_active:
+                            try:
+                                pos_data = memory.active_pos[sym]
+                                log(f"🧹 Позиция {sym} закрыта на МЕХС (Vol: {pos_data['vol']}). Очи щаем RAM-память аккаунта.")
+                            except:
+                                log(f"🧹 Позиция {sym} закрыта на МЕХС. Принудительный клининг.")
 
-                            pnl_usdt = pos['vol'] * pos['price'] * profit
-                            log(f"🧹 Позиция {sym} закрыта на МЕХС. Очищаем RA.| Заработано: {round( pnl_usdt, 4)} USDT | Equity: ${rund(total_equity, 2)}")
-                            if sym in memory.active_pos: del memory.active_pos[sym]
-                            if sym in memory.tp1_fixed: del memory.tp1_fixed[sym]
-                            if sym in memory.tp2_fixed: del memory.tp2_fixed[sym]
+                            # Каскадное выжигание всех типов ключей
+                            for k in [sym, f"{sym}:USDT", sym.replace(':USDT', '')]:
+                                if k in memory.active_pos: del memory.active_pos[k]
+                                if k in memory.tp1_fixed: del memory.tp1_fixed[k]
+                                if k in memory.tp2_fixed: del memory.tp2_fixed[k]
+                                if k in memory.stop_placed: del memory.stop_placed[k]
+                                if k in memory.max_pnl_observed: del memory.max_pnl_observed[k]
 
                     memory.slots_occupied = len(current_mexc_active)
                     last_pos_sync = now
@@ -899,7 +917,7 @@ async def main_logic():
 
                             log(f"🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): {symbol} {signal['side'].upper()} @ {signal['price']}")
 #========
-            # === [УЗЕЛ V23.6: КВАНТОВЫЙ ВЕНИК КЛИНЕР & МАРКЕТ-УСКОРИТЕЛЬ МЕХС] ===
+            # === [УЗЕЛ V24.8: КВАНТОВЫЙ ВЕНИК КЛИНЕР & МАРКЕТ-УСКОРИТЕЛЬ МЕХС] ===
             for sym_key in list(memory.limit_orders.keys()):
                 order_data = memory.limit_orders[sym_key]
                 order_age = now - order_data['timestamp']
@@ -909,18 +927,18 @@ async def main_logic():
 
                 if order_age >= optimal_ttl:
                     try:
-                        # А. Математический фильтр: проверяем, растет ли минутный объем на пробое торгов
+                        # А. Математический фильтр: проверяем тренд объемов по чистому REST-тикеру
                         try:
-                            ohlcv_check = exchange.fetch_ohlcv(sym_key, '1m', limit=3)
+                            clean_rest_symbol = sym_key.split(':')[0]
+                            ohlcv_check = exchange.fetch_ohlcv(clean_rest_symbol, '1m', limit=3)
                             if len(ohlcv_check) >= 2:
-                                # Индекс 5 в массиве CCXT — это чистый объем минутной свечи
                                 v_now = float(ohlcv_check[-1][5])
                                 v_prev = float(ohlcv_check[-2][5])
                                 volume_growing = v_now > v_prev
                             else:
                                 volume_growing = True
                         except:
-                            volume_growing = True # Резервный эшелон: если API лежит, считаем тренд живым
+                            volume_growing = True
 
                         # Б. Прямой Maker-демонтаж ордера для мгновенного освобождения маржи
                         try:
@@ -928,7 +946,7 @@ async def main_logic():
                         except Exception as direct_cancel_err:
                             err_msg = str(direct_cancel_err).lower()
                             if "not found" in err_msg or "filled" in err_msg:
-                                volume_growing = True # Даем контуру усыновления сработать при сквизе
+                                volume_growing = True
 
                         # В. Принудительно очищаем таблицу лимиток в RAM, предотвращая зависания
                         if sym_key in memory.limit_orders:
@@ -936,9 +954,8 @@ async def main_logic():
 
                         # Г. ИСПОЛНИТЕЛЬНЫЙ МАРКЕТ-КОНТУР: Входим по рынку вдогонку на освобожденную маржу!
                         if volume_growing:
-                            log(f"🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V23.6]: Капкан по {sym_key} не налился за {optimal_ttl}с. Маржа снята, бью по рынку!")
+                            log(f"🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V24.8]: Капкан по {sym_key} не налился за {optimal_ttl}с. Маржа снята, бью по рынку!")
 
-                            # Отправляем чистый рыночный ордер с жестким вшиванием Isolated и плеча 25
                             exit_side_chase = order_data['side']
                             params_chase = {'openType': int(1), 'leverage': int(25)}
                             market_order = exchange.create_order(sym_key, 'market', exit_side_chase, order_data['qty'], None, params_chase)
@@ -953,13 +970,12 @@ async def main_logic():
                                 }
                                 memory.slots_occupied = len(memory.active_pos)
                         else:
-                            log(f"🧹 [ВЕНИК V23.6]: Капкан по {sym_key} удален из стакана. Прорыв пу стой, маркет-вход заблокирован.")
+                            log(f"🧹 [ВЕНИК V24.8]: Капкан по {sym_key} удален из стакана. Прорыв пу стой, маркет-вход заблокирован.")
 
                     except Exception as cancel_err:
-                        # --- СОХРАНЕНИЕ ТВОЕЙ ОРИГИНАЛЬНОЙ ДНК ПЕРЕХВАТА СКВИЗОВ-ПРИЗРАКОВ ---
                         err_msg = str(cancel_err).lower()
                         if "cannot be cancelled" in err_msg or "filled" in err_msg or "not found" in err_msg:
-                            log(f"🔥 ПЕРЕХВАТ СКВИЗА V23.6: Ордер по {sym_key} успел исполниться в долю секунды отмены! Усыновляем позицию.")
+                            log(f"🔥 ПЕРЕХВАТ СКВИЗА V24.8: Ордер по {sym_key} успел исполниться в долю секунды отмены! Усыновляем позицию.")
                             if sym_key not in memory.active_pos:
                                 memory.active_pos[sym_key] = {
                                     'side': order_data['side'],
