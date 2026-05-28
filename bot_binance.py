@@ -470,44 +470,6 @@ async def check_signal(exchange, symbol):
         if not (is_buy or is_sell):
             return None
 #====
-#        is_buy = (cur_p <= long_trigger) and (wick_ratio_long > 0.35)
-#        is_sell = (cur_p >= short_trigger) and (wick_ratio_short > 0.35)
-
-#        if not (is_buy or is_sell): return None
-
-
-
-        # --- [ТРАНСПЛАНТАЦИЯ ГЕОМЕТРИИ СВЕЧИ V26.0] ---
-        # Расчет полноты живой свечи, чтобы отсечь флэт-шум
-#        high_now = max(df['h'].iloc[-1], cur_p)
-#        low_now = min(df['l'].iloc[-1], cur_p)
-#        live_candle_range = high_now - low_now if (high_now - low_now) > 0 else 0.000001
-
-#        up_shadow = high_now - cur_p
-#        dn_shadow = cur_p - low_now
-#        long_body = cur_p - prev_open
-#        short_body = prev_open - cur_p
-
-#        shadow_limit = 0.30  # Тень не более 30% от всей свечи
-#        body_limit = 0.60    # Тело не менее 60% от всей свечи
-
-#        if is_buy: # Геометрический фильтр для ЛОНГА
-#            if (up_shadow / live_candle_range) > shadow_limit or (long_body / live_candle_range) < body_limit:
-#                return None
-#        elif is_sell: # Геометрический фильтр для ШОРТА
-#            if (dn_shadow / live_candle_range) > shadow_limit or (short_body / live_candle_range) < body_limit:
-#                return None
-#=====
-        # --- [ВРЕЗКА V29.0: ФИЛЬТР ПРЕДЫСТОРИИ КАСКАДНЫЙ НОЖ (PRE-CANDLE SHIELD)] ---
-        # Анализируем 3 предыдущие закрытые свечи (индексы -2, -3, -4)
-#        if len(df) >= 5:
-#            p_c1 = df.iloc[-2] # Прошлая минута
-#            p_c2 = df.iloc[-3] # 2 минуты назад
-#            p_c3 = df.iloc[-4] # 3 минуты назад
-
-            # Проверяем, направлены ли они все в одну сторону
-#            is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
-#            is_3_red   = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
 
         # --- [ВРЕЗКА V29.0: ФИЛЬТР ПРЕДЫСТОРИИ КАСКАДНЫЙ НОЖ (PRE-CANDLE SHIELD)] ---
         if len(df) >= 6:
@@ -624,6 +586,8 @@ async def execute_entry(exchange, signal):
     side = signal['side']
     price = signal['price']
     dna = signal['dna']
+    # --- ШТУЧНЫЙ ФИКС V24.8: СНОС СУФФИКСА ДЛЯ ВОЗВРАТА ПРИБЫЛИ К $18 940 ---
+    symbol = symbol.split(':')[0]
 
     try:
         off_val = dna['l_off'] if side == 'buy' else dna['s_off']
@@ -718,6 +682,10 @@ async def monitor_logic(exchange, symbol, pos):
     try:
         # 1. ЧИСТОЕ ЧТЕНИЕ ЦЕНЫ ИЗ WEBSOCKET (Без лагов и мусора)
         # БРОНИРОВАННОЕ ЧТЕНИЕ ЦЕНЫ: Ищем оба формата ключа в WebSocket-потоке
+        # --- ШТУЧНАЯ ВРЕЗКА V24.6: ИНИЦИАЛИЗАЦИЯ ПАРАМЕТРОВ ПОЗИЦИИ ---
+        vol = abs(float(pos.get('contracts', pos.get('initialMargin', 0))))
+        side = pos.get('side', 'long').lower()
+        exit_side = 'SELL' if side in ['long', 'buy'] else 'BUY'
         cur_p = memory.prices.get(symbol)
         if not cur_p:
             alt_symbol = symbol.replace('/', '') # Пробуем формат DOGEUSDT
