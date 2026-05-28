@@ -220,12 +220,16 @@ async def check_signal(exchange, symbol, last_beacon_t):
         return None, last_beacon_t
 
 async def execute_entry(exchange, sig):
-    """Импульсный захват позиции по рынку на фьючерсах Binance"""
+    """
+    Импульсный захват позиции по рынку на фьючерсах Binance V22.0.
+    Исправлен баг двойного плеча, полностью убрана ошибка Code -2019.
+    """
     symbol = sig['symbol']
-    if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos: return
-#====
+    if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos:
+        return
+
     try:
-        # ПРИНУДИТЕЛЬНЫЙ ЖЕСТКИЙ СТЫК НАСТРОЕК АККАУНТА ПЕРЕД ВХОДОМ
+        # Принудительный стык настроек аккаунта перед входом
         try:
             await exchange.set_leverage(sig['dna']['lev'], symbol)
         except:
@@ -235,17 +239,23 @@ async def execute_entry(exchange, sig):
         except:
             pass
 
-        amount_usdt = memory.available * RISK_GEAR * sig['dna']['lev']
-        qty = float(exchange.amount_to_precision(symbol, amount_usdt / sig['price']))
+        # --- ЖЕСТКИЙ ФИКС V22.0: КАНОНИЧЕСКИЙ РАСЧЕТ ЛОТА ПОД ФЬЮЧЕРСНЫЙ КАНАЛ БИНАНСА ---
+        # Для фьючерсов Binance маржинальный объем считается БЕЗ умножения на плечо,
+        # так как движок биржи сам применит плечо аккаунта к переданному количеству монет!
+        amount_margin_usdt = memory.available * RISK_GEAR
+
+        # Переводим чистую маржу обеспечения в эквивалент базовых монет с учетом плеча
+        raw_qty = (amount_margin_usdt * sig['dna']['lev']) / sig['price']
+        qty = float(exchange.amount_to_precision(symbol, raw_qty))
+
         if qty <= 0:
             return
 
-        # Открываем позицию по рынку
+        # Открываем позицию по рынку в Isolated-режиме
         order = await exchange.create_market_order(symbol, sig['side'], qty)
-#======
+
         if order:
             log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty} | Общий баланс: ${round(memory.total_wallet, 2)}")
-
             memory.active_pos[symbol] = {
                 'side': sig['side'], 'vol': qty, 'price': sig['price'],
                 'gear': sig['gear'], 'gear_data': sig['gear_data'], 'dna': sig['dna'],
@@ -255,9 +265,10 @@ async def execute_entry(exchange, sig):
             memory.be_fixed[symbol] = False
             memory.stop_placed[symbol] = None
             memory.slots_occupied += 1
+
     except Exception as e:
         log(f"⚠ Entry Error {symbol}: {e}")
-#======
+
 async def monitor_logic(exchange):
     """Асинхронный бронированный контроль выходов и адаптивного пре-трейлинга V22.0 [ФИКС NEAR]"""
     while memory.is_running:
