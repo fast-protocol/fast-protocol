@@ -154,24 +154,26 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
                 }
                 order = exchange.contractPrivatePostOrderCreate(mexc_algo_params)
                 return order
-        except Exception as mexc_9999_err:
-            # --- ШТУЧНЫЙ ФИКС V25.2: РАЗГРУЗКА RATE LIMIT 510 И МАРЖИ 7003 ---
-            # Даем бирже 200 миллисекунд очистить лимиты пакетов
-            time.sleep(0.2)
-            log(f"⚠️ Алго-шлюз MEXC выдал сбой {mexc_9999_err}. Активирую резервный контур стакана CCXT!")
-
-            try:
-                ccxt_params = {
-                    'stopPrice': exact_trigger_price,
-                    'triggerPrice': exact_trigger_price,
-                    'type': 'stop_market',
-                    'reduceOnly': True
-                }
-                order = exchange.create_market_order(symbol, side, qty, ccxt_params)
-                return order
-            except Exception as fatal_sl_err:
-                log(f"🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для {symbol}: {fatal_sl_err}")
-                return False
+            except Exception as mexc_9999_err:
+                # --- ШТУЧНЫЙ ФИКС V25.5: НИЗКОУРОВНЕВЫЙ REST КОНТУР Б ДЛЯ ИСТРЕБЛЕНИЯ ОШИБКИ 7003 ---
+                time.sleep(0.2)
+                log(f"⚠️ Алго-шлюз MEXC выдал сбой {mexc_9999_err}. Активирую прямой низкоуровневый HTTP Контур Б!")
+                try:
+                    mexc_algo_params_fallback = {
+                        'symbol': mexc_market_id,
+                        'side': mexc_side,
+                        'vol': float(qty),
+                        'openType': int(1),
+                        'triggerType': int(2),
+                        'triggerPrice': exact_trigger_price,
+                        'trend': mexc_trend,
+                        'orderType': int(5)  # Жесткий тип Стоп-Маркет в REST-ядре МЕХС
+                    }
+                    order = exchange.contractPrivatePostOrderCreate(mexc_algo_params_fallback)
+                    return order
+                except Exception as fatal_sl_err:
+                    log(f"🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для {symbol}: {fatal_sl_err}")
+                    return False
 
         # СЦЕНАРИЙ 2: Пассивный Лимитный Капкан Maker
         elif is_limit:
@@ -418,33 +420,36 @@ async def monitor_logic(exchange):
             profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
 #===========
             # --- [ВРЕЗКА V23.0: EMERGENCY TREND EVACUATION ПРОТИВ BTC] ---
+            # --- [ВРЕЗКА V25.5: ВЕКТОРНАЯ АДАПТИВНАЯ ЭВАКУАЦИЯ ПРОТИВ BTC] ---
             # Если Биткоин штормит прямо сейчас (включен MOMENTUM SHIELD)
             if hasattr(memory, 'btc_storm_time') and (now_time - memory.btc_storm_time < 2):
-                # Определяем направление шторма: сверяем последнюю дельту истории BTC
                 if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 2:
                     btc_dir_up = memory.btc_history[-1] > memory.btc_history[-2]
-                    pos_long = pos['side'].lower() == 'buy' or 'long' in pos['side'].lower()
+                    pos_long = pos['side'].lower() in ['buy', 'long']
 
-                    # Коллизия 1: Биткоин летит вверх, а мы стоим в Шорте
-                    # Коллизия 2: Биткоин летит вниз, а мы стоим в Лонге
-                    if (btc_dir_up and not pos_long) or (not btc_dir_up and pos_long):
-                        log(f"🚨 [ЭВАКУАЦИЯ ТРЕНДА]: BTC летит против нашей позиции {symbol}! Экстренный маркет-снос.")
+                    # --- КВАНТОВЫЙ ВЕКТОРНЫЙ ЩИТ V25.5 ---
+                    # Истинный снос срабатывает СТРОГО тогда, когда Биткоин наносит удар в наш залог:
+                    is_long_under_attack = pos_long and not btc_dir_up     # Мы в Лонге, а Биткоин падает
+                    is_short_under_attack = not pos_long and btc_dir_up    # Мы в Шорте, а Биткоин растет
 
-                        # --- ВРЕЗКА V23.1: ТОТАЛЬНЫЙ СHОС ВСЕХ ЛИМИТНЫХ КАПКАНОВ ИЗ СТАКАНОВ ---
-                        # --- ЖЕСТКИЙ ФИКС V23.9: ТОТАЛЬНОЕ ВЫЖИГАНИЕ RAM ПРИ ЭВАКУАЦИИ ---
+                    if is_long_under_attack or is_short_under_attack:
+                        log(f"🚨 [ЭВАКУАЦИЯ ТРЕНДА V25.5]: Поводырь пробивает залог позиции {symbol}! Экстренный маркет-снос.")
                         try:
                             for lim_sym, lim_info in list(memory.limit_orders.items()):
                                 exchange.cancel_order(lim_info['id'], lim_sym)
                             memory.limit_orders.clear()
-                            log(f"🧹 [ЭВАКУАТОР]: Все лимитки {symbol} удалены из стаканов. Чистый у быток: {round(profit*100, 2)}%")
+                            log(f"🧹 [ЭВАКУАТОР]: Лимитки {symbol} удалены. Зафиксированный итог: {r ound(profit*100, 2)}%")
                         except:
                             pass
 
-                        # Немедленный рыночный снос позиции на бирже
-                        params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
-                        exchange.create_order(symbol, 'market', exit_side, pos['vol'], None, params)
+                        # Немедленный рыночный снос позиции на бирже МЕХС
+                        try:
+                            params = {'openType': 1, 'leverage': int(25), 'reduceOnly': True}
+                            exchange.create_order(symbol, 'market', exit_side, pos['vol'], None, params)
+                        except:
+                            pass
 
-                        # Всеядный принудительный клининг RAM-памяти, уничтожающий баг 2009!
+                        # Принудительное тотальное выжигание RAM во всех форматах ключей
                         for k in [symbol, f"{symbol}:USDT", symbol.replace(':USDT', '')]:
                             if k in memory.active_pos: del memory.active_pos[k]
                             if k in memory.tp1_fixed: del memory.tp1_fixed[k]
@@ -455,8 +460,7 @@ async def monitor_logic(exchange):
                         memory.slots_occupied = max(0, memory.slots_occupied - 1)
                         continue
 
-#                        log(f"🧹 [ЭВАКУАТОР]: Оперативная память RAM для {symbol} полностью очищена . Слот свободен.")
-#                        continue
+
 #===========
 #            log(f"⚙️ [ДЕБАГ ЦЕНЫ {symbol}]: profit={round(profit*100,3)}% | cur_p={cur_p} | Вход={pos['price']} | Флаг_ТР1={memory.tp1_fixed.get(symbol)}")
             # ДЕБАГ №4: Выводим PNL в реальном времени, если цена успешно найдена
@@ -507,7 +511,20 @@ async def monitor_logic(exchange):
                 # ТРИГГЕР А: Раннее отсечение сползания альта с учетом проскальзывания на MEXC (60с / -0.08%)
                 # --- [ВРЕЗКА V21.4: УЛЬТИМАТИВНЫЙ СИНДРОМ СПОЛЗАНИЯ МЕХС] ---
                 # ТРИГГЕР А: Раннее отсечение сползания альта (Decay Shield)
-                if age > 60 and profit < -0.0008:
+#                if age > 60 and profit < -0.0008:
+                # --- ШТУЧНЫЙ ФИКС V25.5: ИНТЕГРАЦИЯ ДНК-ТАЙМИНГОВ УДЕРЖАНИЯ ЛОТА ---
+                is_meme_coin = any(m_n in symbol.upper() for m_n in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'BONK'])
+                is_anchor_coin = any(a_n in symbol.upper() for a_n in ['DOT', 'POL', 'BNB', 'XRP', 'ADA'])
+
+                if is_meme_coin:
+                    optimal_decay_ttl = 120    # Мемы: 2 минуты жизни
+                elif is_anchor_coin:
+                    optimal_decay_ttl = 420    # Якоря: 7 минут жизни
+                else:
+                    optimal_decay_ttl = 240    # Тех-Ракеты (NEAR, SOL, APT, SUI): 4 минуты оптимального разбега
+
+                if age > optimal_decay_ttl and profit < -0.0008:
+
                     #log(f"🛡 Decay Shield V16.9: {symbol} утилизирован по времени (Лосс: {round(pro fit*100,2)}%)")
                     # Вычисляем грязную прибыль/убыток в USDT с учетом 25х плеча
                     pnl_usdt = pos['vol'] * pos['price'] * profit
