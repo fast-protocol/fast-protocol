@@ -528,31 +528,30 @@ async def check_signal(exchange, symbol):
 
 #=====
         # --- [ВРЕЗКА V31.0: АДАПТИВНЫЙ ФИЛЬТР ОБЪЕМА (VOLUME SPIKE SHIELD)] ---
+
+        # --- [ВРЕЗКА V24.5: АДАПТИВНЫЙ VOLUME SPIKE & МУСОРНЫЙ ФИЛЬТР БИНАНСА] ---
         try:
             if len(df) >= 7:
-                # Объем текущей сигнальной минутной свечи
+                # Извлекаем объемы свечей (индекс 'v' в DataFrame)
                 live_volume = float(df['v'].iloc[-1])
-
-                # Средний объем предыдущих 5 свечей (отсекая сигнальную)
+                prev_volume = float(df['v'].iloc[-2])
                 mean_volume = float(df['v'].iloc[-6:-1].mean())
 
+                # А. НАШ НОВЫЙ ФИЛЬТР МУСОРНЫХ ВХОДОВ: Если объем падает (v_now < v_prev) — ЖЕСТКИЙ ОТКАЗ
+                if live_volume <= prev_volume:
+                    # log(f"🔍 [МУСОРНЫЙ ОТКАЗ {symbol}]: Импульс затухает. v_now ({round(live_volume,1)}) <= v_prev ({round(prev_volume,1)})")
+                    return None
+
+                # Б. Базовый фильтр аномального всплеска (Volume Ratio)
                 if mean_volume > 0:
                     volume_ratio = live_volume / mean_volume
-
-                    # Маркер сепарации: определяем, является ли актив мем-коином
                     is_meme = any(meme_name in symbol.upper() for meme_name in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
-
-                    # Выставляем адаптивный порог объема
                     required_ratio = 1.4 if is_meme else 1.02
 
-                    # Если объем сквиза меньше требуемого порога — блокируем шумовой вход
                     if volume_ratio < required_ratio:
-                        # log(f"🛡️ Volume Shield: Сигнал {symbol} заблокирован. Ratio: {round(volum e_ratio, 2)} < {required_ratio}")
                         return None
         except Exception as e:
-            # Предохранитель: если данные объема повреждены, пропускаем шаг, чтобы не вешать сканер
             pass
-
 #=====
         # --- [КВАНТОВЫЙ ФИЛЬТР: BTC TREND SHIELD] ---
         # ТВОЙ СИНТАКСИС: Проверяем минутное изменение Биткоина со строгим ключом :USDT
@@ -764,73 +763,83 @@ async def monitor_logic(exchange, symbol, pos):
         # --- [ЖЕСТКИЙ ФИКС КВАНТОВОГО МОДУЛЯ РАННЕГО ВЫХОДА V27.7] ---
         if profit < 0:
             # ТРИГГЕР 1: Эвакуация по импульсу Биткоина (Строго от 4 элементов в истории!)
+            # --- [ВРЕЗКА V24.5: НАПРАВЛЕННАЯ ЭВАКУАЦИЯ BTC НА ПОРОГЕ 0.055%] ---
+            # Анализируем 3-минутный вектор Биткоина (срез по 4 точкам истории)
             if hasattr(memory, 'btc_history') and len(memory.btc_history) >= 4:
                 btc_now = memory.btc_history[-1]
-                btc_then = memory.btc_history[-3] # Срез скорости за 2 минуты
+                btc_then = memory.btc_history[-4]
 
                 if btc_then > 1000 and btc_now > 1000:
-                    btc_move = btc_now / btc_then - 1
+                    btc_move_pct = (btc_now / btc_then) - 1
 
-                    # Фильтр отсечения математических аномалий
-                    if abs(btc_move) < 0.05:
-                        is_long_leak = side in ['long', 'buy'] and btc_move <= -0.0015  # -0.15%
-                        is_short_leak = side in ['short', 'sell'] and btc_move >= 0.0015 # +0.15%
+                    # Проверяем, превысил ли Биткоин критическую скорость шторма в 0.055%
+                    if abs(btc_move_pct) >= 0.00165:
+                        is_pos_long = side.lower() in ['long', 'buy']
 
-                        #
-                        if is_long_leak or is_short_leak:
-                            log(f"🚨 РАННЯЯ ЭВАКУАЦИЯ BTC: {symbol} закрыт принудительно! Поводырь против нас ({round(btc_move*100, 3)}%). Лосс: {round(profit*100, 2)}%")
+                        # ИСТИННЫЙ ВЕКТОРНЫЙ ФИЛЬТР: Эвакуация взводится СТРОГО против нашей маржи
+                        is_long_under_attack = is_pos_long and btc_move_pct <= -0.00165    # Лонг, а BTC падает
+                        is_short_under_attack = not is_pos_long and btc_move_pct >= 0.00165 # Шорт, а BTC растет
+
+                        if is_long_under_attack or is_short_under_attack:
+                            log(f"🚨 [ЭВАКУАЦИЯ BTC V24.5]: Поводырь летит против позиции {symbol} (Скорость BTC: {round(btc_move_pct, 3)}%). Спасаю маржу! Лосс: {round(profit*100, 2)}%")
                             action_triggered_btc = False
                             try:
-                                # ЖЕСТКИЙ ФИКС V28.5: Выжигаем стопы по ID рынка и кроем марком
                                 clean_market_id = symbol.replace('/', '').replace(':USDT', '')
                                 await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
                                 await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': clean_market_id})
-
-                                await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+                                await exchange.create_order(symbol, 'market', 'SELL' if is_pos_long else 'BUY', vol, None, {'reduceOnly': True})
                                 action_triggered_btc = True
                             except Exception as e:
-                                log(f"⚠️ Критическая ошибка эвакуации BTC для {symbol}: {e}")
+                                log(f"⚠ Критическая ошибка эвакуации BTC для {symbol}: {e}")
 
-                            # Чистим память строго во всех форматах ключей
-                            for k in [symbol, symbol.replace(':USDT', '')]:
+                            # Тотальная принудительная зачистка флагов во всех форматах ключей
+                            for k in [symbol, f"{symbol}:USDT", symbol.replace(':USDT', '')]:
                                 if k in memory.active_pos: del memory.active_pos[k]
                                 if k in memory.tp_fixed: del memory.tp_fixed[k]
                                 if k in memory.stop_placed: del memory.stop_placed[k]
                                 if k in memory.trail_active: del memory.trail_active[k]
                                 if k in memory.max_pnl: del memory.max_pnl[k]
 
-                            if action_triggered_btc: return # Намертво обрываем тик
+                            if action_triggered_btc:
+                                return
+
 #==========
             # ТРИГГЕР 2: Эвакуация по затяжному флэтовому болоту альта (Time-Decay)
-            # --- [УЗЕЛ V30.0: КВАНТОВЫЙ ТАЙМЕР 180с + ПОРОГ -0.2% + 6H КУЛДАУН] ---
-            # Зажимаем тиски времени: если за 3 минуты монета не дала отскок и сидит в лоссе > -0.2%
-            if age > 60 and profit < -0.0008:
-                log(f"⏱️ КВАНТОВАЯ ЭВАКУАЦИЯ ТАЙМЕРА: {symbol} утилизирован (Лосс застрял: {round(profit*100, 2)}% | Age: {int(age)}с)")
+            # --- [ВРЕЗКА V24.5: ДИНАМИЧЕСКИЙ ДНК-ТАЙМЕР ЖИЗНИ ЛОТА БИНАНСА] ---
+            # Динамически вычисляем индивидуальный лимит удержания (TTL) на базе класса монеты
+            is_meme_coin = any(m_n in symbol.upper() for m_n in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+            is_anchor_coin = any(a_n in symbol.upper() for a_n in ['DOT', 'POL', 'BNB', 'XRP', 'ADA'])
+
+            if is_meme_coin:
+                optimal_decay_ttl = 120    # Мемы: 2 минуты на взрывной микро-импульс
+            elif is_anchor_coin:
+                optimal_decay_ttl = 420    # Якоря: 7 минут на вязкое раскачивание флэта
+            else:
+                optimal_decay_ttl = 240    # Тех-Ракеты (NEAR, SOL, FET): 4 минуты оптимального разбега
+
+            # Эвакуируем сделку по таймеру только если время вышло и лосс застрял ниже -0.08%
+            if age > optimal_decay_ttl and profit < -0.0008:
+                log(f"⏱️ [ДНК-ТАЙМЕР УТИЛИЗАЦИЯ]: {symbol} утилизирован по лимиту класса ({int(age)}с >= {optimal_decay_ttl}с) | Лосс: {round(profit*100, 2)}%")
                 action_triggered_decay = False
                 try:
                     clean_market_id = symbol.replace('/', '').replace(':USDT', '')
                     await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
                     await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': clean_market_id})
-                    await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
+                    await exchange.create_market_order(symbol, 'SELL' if side in ['long', 'buy'] else 'BUY', vol, {'reduceOnly': True})
                     action_triggered_decay = True
                 except Exception as e:
-                    log(f"⚠️ Критическая ошибка утилизации по таймеру {symbol}: {e}")
+                    log(f"⚠ Критическая ошибка утилизации по таймеру {symbol}: {e}")
 
-                # ЗАПИСЬ ЖЕСТКОГО 6-ЧАСОВОГО КУЛДАУНА ДЛЯ ВЯЛЫХ МОНЕТ (21600 СЕКУНД)
-#                if not hasattr(memory, 'cooldown_fleet'):
-#                    memory.cooldown_fleet = {}
-#                memory.cooldown_fleet[symbol] = time.time() + 10800 # Добавляем +3 часа к базовому (итого 6 часов бана)
-#                memory.cooldown_fleet[symbol.replace(':USDT', '')] = time.time() + 10800
-
-                # Тотальная зачистка флагов оперативной памяти
-                for k in [symbol, symbol.replace(':USDT', '')]:
+                # Тотальная зачистка флагов во всех форматах для разблокировки слота
+                for k in [symbol, f"{symbol}:USDT", symbol.replace(':USDT', '')]:
                     if k in memory.active_pos: del memory.active_pos[k]
                     if k in memory.tp_fixed: del memory.tp_fixed[k]
                     if k in memory.stop_placed: del memory.stop_placed[k]
                     if k in memory.trail_active: del memory.trail_active[k]
                     if k in memory.max_pnl: del memory.max_pnl[k]
+                if action_triggered_decay:
+                    return
 
-                if action_triggered_decay: return # Намертво обрываем тик
 #===
             # ТРИГГЕР Б: Синдром Сползания Импульса (Выдох крупного игрока — без изменений)
             if symbol in memory.max_pnl and memory.max_pnl[symbol] >= 0.0025:
