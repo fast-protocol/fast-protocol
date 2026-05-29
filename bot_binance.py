@@ -485,33 +485,37 @@ async def check_signal(exchange, symbol):
 
             if is_sell and is_3_green:
                 # Если ловим шорт, но цена летит ракетой 3 минуты вверх без откатов — ОТМЕНА
-                # log(f"🛡️ Pre-Candle Shield: Заблокиров ан вход в ШОРТ по {symbol}. Обнаружен растущий каскад.")
+                # log(f"🛡️ Pre-Candle Shield: Заблокирован вход в ШОРТ по {symbol}. Обнаружен расту щий каскад.")
                 return None
 
 #=====
         # --- [ВРЕЗКА V31.0: АДАПТИВНЫЙ ФИЛЬТР ОБЪЕМА (VOLUME SPIKE SHIELD)] ---
-
-        # --- [ВРЕЗКА V24.5: АДАПТИВНЫЙ VOLUME SPIKE & МУСОРНЫЙ ФИЛЬТР БИНАНСА] ---
+        # --- [ВРЕЗКА V26.8: КВАHТОВЫЙ ИHВЕРСНЫЙ VOLUME SHIELD БИHАHСА] ---
         try:
-            if len(df) >= 7:
-                # Извлекаем объемы свечей (индекс 'v' в DataFrame)
-                live_volume = float(df['v'].iloc[-1])
-                prev_volume = float(df['v'].iloc[-2])
-                mean_volume = float(df['v'].iloc[-6:-1].mean())
+             if len(df) >= 7:
+                 live_volume = float(df['v'].iloc[-1])  # Живой объем текущей минуты
+                 prev_volume = float(df['v'].iloc[-2])  # Полный объем прошлой минуты
+                 mean_volume = float(df['v'].iloc[-6:-1].mean())
 
-                # А. НАШ НОВЫЙ ФИЛЬТР МУСОРНЫХ ВХОДОВ: Если объем падает (v_now < v_prev) — ЖЕСТКИЙ ОТКАЗ
-                if live_volume <= prev_volume:
-                    # log(f"🔍 [МУСОРНЫЙ ОТКАЗ {symbol}]: Импульс затухает. v_now ({round(live_volume,1)}) <= v_prev ({round(prev_volume,1)})")
+                 if mean_volume <= 0:
                     return None
+                 volume_ratio = live_volume / mean_volume
 
-                # Б. Базовый фильтр аномального всплеска (Volume Ratio)
-                if mean_volume > 0:
-                    volume_ratio = live_volume / mean_volume
-                    is_meme = any(meme_name in symbol.upper() for meme_name in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
-                    required_ratio = 1.4 if is_meme else 1.02
-
-                    if volume_ratio < required_ratio:
+                 # ИСТИННЫЙ КОHТР-ТРЕHДОВЫЙ ЩИТ: Запрещаем закуп, если лавина ордеров прет на нас
+                 if is_buy_candidate:
+                    # На лоях заходим только когда объем продаж ИССЯКАЕТ (падает ниже предыдущего)
+                    if live_volume >= prev_volume:
                         return None
+                 elif is_sell_candidate:
+                    # На хаях шортим только когда памп ПОЛHОСТЬЮ ВЫДОХСЯ (объем затухает)
+                    if live_volume >= prev_volume:
+                        return None
+
+                 # Базовая защита от микро-шума пустого стакана
+                 is_meme = any(meme_name in symbol.upper() for meme_name in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+                 required_ratio = 1.4 if is_meme else 1.02
+                 if volume_ratio < required_ratio:
+                    return None
         except Exception as e:
             pass
 #=====
