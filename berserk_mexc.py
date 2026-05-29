@@ -156,7 +156,7 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
             except Exception as mexc_9999_err:
                 # КОНТУР Б: Резервный REST-удар триггеров общего стакана при сетевом лаге 9999
                 time.sleep(0.2)
-                log(f"⚠️ Алго-шлюз Контура А выдал лаг {mexc_9999_err}. Активирую резервный Контур Б общего стакана!")
+                #log(f"⚠️ Алго-шлюз Контура А выдал лаг {mexc_9999_err}. Активирую резервный Контур Б общего стакана!")
 
                 try:
                     # Формируем чистый низкоуровневый REST-пакет, переводя тикер через внутренний маркер CCXT
@@ -817,6 +817,15 @@ async def main_logic():
             # А. ТРЕКЕР УСЫНОВЛЕНИЯ ПОЗИЦИЙ СТРОГО РАЗ В 10 СЕКУНД
             if now - last_pos_sync >= 10:
                 try:
+
+                    # --- ШТУЧНЫЙ ФИКС V26.5: ЖИВОЙ ЕЖЕСЕКУНДНЫЙ СЪЕМ EQUITY МЕХС ---
+                    try:
+                        bal_refresh = exchange.fetch_balance({'type': 'swap'})
+                        if isinstance(bal_refresh, dict) and 'USDT' in bal_refresh:
+                            memory.total_wallet = float(bal_refresh['USDT'].get('total', memory.total_wallet))
+                            memory.available = float(bal_refresh['USDT'].get('free', memory.available))
+                    except:
+                        pass
                     raw_positions = exchange.fetch_positions(None, {'type': 'swap'})
                     current_mexc_active = []
 
@@ -960,6 +969,7 @@ async def main_logic():
                 if order_age >= optimal_ttl:
                     try:
                         # А. Математический фильтр: проверяем тренд объемов по чистому REST-тикеру
+                        # --- МОДЕРНИЗАЦИЯ V26.6: КВАНТОВЫЙ ОПЕРЕЖАЮЩИЙ ДЕМОНТАЖ КАПКАНА ---
                         try:
                             clean_rest_symbol = sym_key.split(':')[0]
                             ohlcv_check = exchange.fetch_ohlcv(clean_rest_symbol, '1m', limit=3)
@@ -971,6 +981,19 @@ async def main_logic():
                                 volume_growing = True
                         except:
                             volume_growing = True
+
+                        # ОПЕРЕЖАЮЩИЙ СНОС: Если время еще не вышло, но объем УЖЕ затух — сносим лимитку досрочно!
+                        if not volume_growing and order_age < optimal_ttl:
+                            try:
+                                exchange.cancel_order(order_data['id'], sym_key)
+                                if sym_key in memory.limit_orders:
+                                       del memory.limit_orders[sym_key]
+                                       log(f"🧹 [ВЕНИК V26.6]: Досрочно убрал капкан п {sym_key} Имп ульс сдох до налития")
+                                continue
+                            except:
+                                pass
+
+
 
                         # Б. Прямой Maker-демонтаж ордера для мгновенного освобождения маржи
                         try:
