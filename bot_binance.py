@@ -485,7 +485,7 @@ async def check_signal(exchange, symbol):
 
             if is_sell and is_3_green:
                 # Если ловим шорт, но цена летит ракетой 3 минуты вверх без откатов — ОТМЕНА
-                # log(f"🛡️ Pre-Candle Shield: Заблокирован вход в ШОРТ по {symbol}. Обнаружен расту щий каскад.")
+                # log(f"🛡️ Pre-Candle Shield: Заблокиров ан вход в ШОРТ по {symbol}. Обнаружен растущий каскад.")
                 return None
 
 #=====
@@ -919,6 +919,9 @@ async def monitor_logic(exchange, symbol, pos):
                 bu_price = float(exchange.price_to_precision(symbol, entry_p))
                 rem_qty = exchange.amount_to_precision(symbol, vol - float(close_qty))
 
+                # --- ШТУЧНЫЙ ФИКС V25.0: УМЕНЬШАЕМ ОБЪЕМ В RAM ПОСЛЕ ТЕЙКА-1 ---
+                pos['contracts'] = float(pos['contracts']) - float(close_qty)
+
                 # Ставим защитный БУ-стоп на остаток лота на биржу
                 await exchange.create_order(symbol, 'STOP_MARKET', exit_side, rem_qty, params={'stopPrice': bu_price, 'reduceOnly': True})
 
@@ -965,12 +968,14 @@ async def monitor_logic(exchange, symbol, pos):
     except Exception as e: pass
 
 def clean_memory_keys(symbol):
-    """Тотальная зачистка флагов монеты при выходе"""
-    if symbol in memory.tp_fixed: del memory.tp_fixed[symbol]
-    if symbol in memory.trail_active: del memory.trail_active[symbol]
-    if symbol in memory.stop_placed: del memory.stop_placed[symbol]
-    if symbol in memory.max_pnl: del memory.max_pnl[symbol]
-#==============
+    """Тотальная зачистка флагов монеты при выходе по всем форматам ключей"""
+    # Доработка: удаление флагов в различных форматах ключа символа
+    for k in [symbol, f"{symbol}:USDT", symbol.replace(':USDT', '')]:
+        if k in memory.tp_fixed: del memory.tp_fixed[k]
+        if k in memory.trail_active: del memory.trail_active[k]
+        if k in memory.stop_placed: del memory.stop_placed[k]
+        if k in memory.max_pnl: del memory.max_pnl[k]
+
 async def monitoring_cycle(exchange):
     """Исправленный цикл: передает полный ключ (с :USDT) для точного поиска в памяти."""
     log("👁 Мониторинг позиций запущен.")
