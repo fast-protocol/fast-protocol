@@ -785,7 +785,10 @@ async def monitor_logic(exchange, symbol, pos):
                 optimal_decay_ttl = 240    # Тех-Ракеты (NEAR, SOL, FET): 4 минуты оптимального разбега
 
             # Эвакуируем сделку по таймеру только если время вышло и лосс застрял ниже -0.08%
-            if age > optimal_decay_ttl and profit < -0.0008:
+            #if age > optimal_decay_ttl and profit < -0.0008:
+            # --- ШТУЧНЫЙ ФИКС V27.0: БЛОКИРОВКА ТАЙМЕРА ПРИ АКТИВНОМ ПРЕ-ТРЕЙЛИНГЕ ---
+            # Если по монете пошел скользящий трейлинг прибыли, таймер утилизации блокируется, давая забрать Тейки!
+            if age > optimal_decay_ttl and profit < -0.0008 and not memory.trail_active.get(symbol, False):
                 log(f"⏱️ [ДНК-ТАЙМЕР УТИЛИЗАЦИЯ]: {symbol} утилизирован по лимиту класса ({int(age)}с >= {optimal_decay_ttl}с) | Лосс: {round(profit*100, 2)}%")
                 action_triggered_decay = False
                 try:
@@ -877,92 +880,78 @@ async def monitor_logic(exchange, symbol, pos):
 #==========
         # --- [УЗЕЛ V30.1: ПРЕ-ТРЕЙЛИНГ НА 75% ПУТИ ДО ТЕЙКА 1] ---
 
-        # Расчет критической точки взвода пре-трейлинга (75% от целевого tp1)
+        # --- [ВРЕЗКА V27.0: МОНОЛИТ АДАПТИВНОГО ТРЕЙЛИНГА И ТЕЙКОВ БИНАНСА] ---
         pre_trail_trigger = dna['tp1'] * 0.75
+        trail_key = f"{symbol}_trail"
 
-        # 1. ПРОВЕРКА ВЗВОДА: Если цена прошла 75% пути, но TP1 еще не был выполнен
-        if not memory.tp_fixed[symbol]['tp1'] and profit >= pre_trail_trigger:
+        # А. АДАПТИВНЫЙ КОНТУР: Взводим трейлинг на 75% пути до цели
+        if not memory.tp_status.get(symbol, {}).get('tp1', False) and profit >= pre_trail_trigger:
             if not memory.trail_active.get(symbol, False):
                 memory.trail_active[symbol] = True
                 memory.max_pnl[symbol] = profit
-                log(f"⚡ ПРЕ-ТРЕЙЛИНГ ВЗВЕДЕН: {symbol} прошел 75% пути к цели (+{round(profit*100,2)}%). Защита прибыли активирована.")
+                log(f"🚀 [ПРЕ-ТРЕЙЛИНГ ВЗВЕДЕН]: {symbol} прошел 75% пути. Пик зафиксирован. Защита прибыли включена.")
 
-        # 2. ШТАТНАЯ ФИКСАЦИЯ ТЕЙКА 1 (Если ракета долетела до 100% цели без откатов)
-        if not memory.tp_fixed[symbol]['tp1'] and profit >= dna['tp1']:
+        # Б. КАСКАДНЫЙ ТЕЙК-1: Фиксация 50% объема при долете импульса
+        if not memory.tp_status.get(symbol, {}).get('tp1', False) and profit >= dna['tp1']:
             close_qty_raw = vol * 0.5
-
-            # Защита Notional $5.20
             if (close_qty_raw * cur_p) < 5.2:
-                log(f"⚠ ОБЪЕМ МАЛ ДЛЯ ДРОБЛЕНИЯ {symbol}: Закрываем 100% по рынку для защиты кошелька.")
+                log(f"⚠️ ОБЪЕМ МАЛ ДЛЯ ДРОБЛЕНИЯ {symbol}: Снос 100% лота по рынку для защиты залога.")
                 try:
                     clean_market_id = symbol.replace('/', '').replace(':USDT', '')
                     await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
-                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': clean_market_id})
                     await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
                 except: pass
-
-                for k in [symbol, symbol.replace(':USDT', '')]:
-                    if k in memory.active_pos: del memory.active_pos[k]
+                clean_memory_keys(symbol)
+                if symbol in memory.active_pos: del memory.active_pos[symbol]
                 return
 
-            action_triggered = False
-            try:
-                close_qty = exchange.amount_to_precision(symbol, vol * 0.5)
-                # Фиксируем первые 50% объема в кэш
+           try:
+                close_qty = exchange.amount_to_precision(symbol, close_qty_raw)
                 await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
 
                 clean_market_id = symbol.replace('/', '').replace(':USDT', '')
                 await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
-                await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': clean_market_id})
 
                 bu_price = float(exchange.price_to_precision(symbol, entry_p))
                 rem_qty = exchange.amount_to_precision(symbol, vol - float(close_qty))
+                pos['contracts'] = float(rem_qty)
 
-                # --- ШТУЧНЫЙ ФИКС V25.0: УМЕНЬШАЕМ ОБЪЕМ В RAM ПОСЛЕ ТЕЙКА-1 ---
-                pos['contracts'] = float(pos['contracts']) - float(close_qty)
-
-                # Ставим защитный БУ-стоп на остаток лота на биржу
+                # Ставим безубыток (BU) на остаток позиции
                 await exchange.create_order(symbol, 'STOP_MARKET', exit_side, rem_qty, params={'stopPrice': bu_price, 'reduceOnly': True})
 
-                # Фиксируем флаги: TP1 взят, но Infinity Трейлинг продолжает вести остаток 50%
-                memory.tp_fixed[symbol]['tp1'] = True
-                memory.tp_fixed[symbol]['tp2'] = True # Изолируем старые зависимости
+                memory.tp_status[symbol]['tp1'] = True
                 memory.trail_active[symbol] = True
                 memory.max_pnl[symbol] = profit
+                log(f"🎯 [ТЕЙК-1 BINANCE]: Фиксация 50% по {symbol} (+{round(profit*100, 2)}%). Остаток в безубытке! {bal_str}")
+           except Exception as e:
+                log(f"⚠ Ошибка исполнения Тейка-1 {symbol}: {e}")
+           return
 
-                log(f"🎯 TP1 ВЫПОЛНЕН С ХОДУ: {symbol} (+{round(profit*100,2)}%). Остаток лота ({rem_qty}) продолжает движение в Трейлинге! {bal_str}")
-                action_triggered = True
-            except Exception as e:
-                log(f"⚠️ Ошибка инициализации TP1-Трейлинга {symbol}: {e}")
-
-            if action_triggered: return # Намертво обрываем тик
 #============
         # 6. ВЕДЕНИЕ АДАПТИВНОГО ТРЕЙЛИНГА ПО ШАГАМ
-        if memory.trail_active[symbol]:
-            # ЖЕСТКИЙ ФИКС СИНТАКСИСА V27.8: Переменная current_mode заменена на memory.market_mode
-            trail_step = 0.0045 if memory.market_mode == 'bull' else (0.0015 if memory.market_mode == 'bear' else dna.get('trail', 0.0032))
+        # 6. ВЕДЕНИЕ АДАПТИВНОГО ТРЕЙЛИНГА ПО ШАГАМ V27.0
+        if memory.trail_active.get(symbol, False):
+            is_meme_coin = any(m_n in symbol.upper() for m_n in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+            trail_step = 0.0055 if is_meme_coin else 0.0035  # Адаптивный шаг отката
 
-            if profit > memory.max_pnl[symbol]:
+            if profit > memory.max_pnl.get(symbol, 0.0):
                 memory.max_pnl[symbol] = profit
 
             if profit <= (memory.max_pnl[symbol] - trail_step):
-                # Расчет чистого пикового профита, который был зафиксирован трейлингом
                 peak_profit = memory.max_pnl[symbol]
-                log(f"🏁 ГИБРИДНЫЙ ТРЕЙЛИНГ: Закрытие {symbol} | Итог: +{round(profit*100,2)}% (Пик тренда был: +{round(peak_profit*100,2)}%) {bal_str}")
-
+                log(f"🏁 [ГИБРИДНЫЙ ТРЕЙЛИНГ КАТАПУЛЬТА V27.0]: Выход из {symbol} | Итог: +{round(profit*100, 2)}% (Пик был: +{round(peak_profit*100, 2)}%) {bal_str}")
                 try:
-                    await exchange.cancel_all_orders(symbol)
+                    clean_market_id = symbol.replace('/', '').replace(':USDT', '')
+                    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
                     await exchange.create_market_order(symbol, exit_side, vol, {'reduceOnly': True})
 
-                    # Полностью выжигаем все ключи из памяти для защиты от повторного тика!
-                    for k in [symbol, symbol.replace(':USDT', '')]:
-                        if k in memory.active_pos: del memory.active_pos[k]
-                        if k in memory.tp_fixed: del memory.tp_fixed[k]
-                        if k in memory.stop_placed: del memory.stop_placed[k]
-                        if k in memory.trail_active: del memory.trail_active[k]
+                    # Тотальная зачистка флагов
+                    clean_memory_keys(symbol)
+                    if symbol in memory.active_pos: del memory.active_pos[symbol]
+                    memory.slots_occupied = max(0, memory.slots_occupied - 1)
                 except Exception as e:
-                    log(f"⚠️ Ошибка закрытия трейлинга {symbol}: {e}")
-                return # Намертво обрываем тик после закрытия сделки
+                    log(f"⚠ Ошибка закрытия трейлинга {symbol}: {e}")
+                return
 #=========
     except Exception as e: pass
 
