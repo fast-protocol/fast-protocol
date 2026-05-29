@@ -132,44 +132,53 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
             'leverage': int(25),      # Жесткое плечо 25х
         }
 
-        # СЦЕНАРИЙ 1: ДВУХКОНТУРНЫЙ ЖЕЛЕЗНЫЙ СТОП-МАРКЕТ MEXC С ЗАЩИТОЙ ОТ ОШИБКИ 9999 (V25.0)
+        # СЦЕНАРИЙ 1: КАНОНИЧЕСКИЙ ДВУХКОНТУРНЫЙ СТОП-МАРКЕТ С ИСПРАВЛЕНИЕМ СИМВОЛОВ (V26.0)
         if is_stop:
             if price is None:
                 return False
 
-            mexc_market_id = symbol.replace('/', '').replace(':USDT', '')
-            if 'USDT' in mexc_market_id and '_' not in mexc_market_id:
-                mexc_market_id = mexc_market_id.replace('USDT', '_USDT')
-
             exact_trigger_price = float(exchange.price_to_precision(symbol, price))
-            mexc_side = int(3) if side.lower() == 'sell' else int(4)
-            mexc_trend = int(1) if side.lower() == 'sell' else int(2)
 
-            # КОНТУР А: Основной высокотехнологичный позиционный шлюз планов
+            # КОНТУР А: Универсальный фьючерсный стоп-маркет CCXT (Выставляет План-Ордер)
             try:
                 mexc_algo_params = {
-                    'symbol': mexc_market_id, 'side': mexc_side, 'vol': float(qty),
-                    'openType': int(1), 'triggerType': int(2), 'triggerPrice': exact_trigger_price,
-                    'trend': mexc_trend, 'orderType': int(5)
+                    'stopPrice': exact_trigger_price,
+                    'triggerPrice': exact_trigger_price,
+                    'openType': int(1),           # Isolated маржа
+                    'triggerType': int(2),         # Активация по цене Last Price
+                    'reduceOnly': True
                 }
-                order = exchange.contractPrivatePostOrderCreate(mexc_algo_params)
+
+                # Базовый метод CCXT сам превратит "NEAR/USDT:USDT" в нужный внутренний ID биржи!
+                order = exchange.create_order(symbol, 'stop_market', side, qty, None, mexc_algo_params)
                 return order
+
             except Exception as mexc_9999_err:
-                # --- ШТУЧНЫЙ ФИКС V25.5: НИЗКОУРОВНЕВЫЙ REST КОНТУР Б ДЛЯ ИСТРЕБЛЕНИЯ ОШИБКИ 7003 ---
+                # КОНТУР Б: Резервный REST-удар триггеров общего стакана при сетевом лаге 9999
                 time.sleep(0.2)
-                log(f"⚠️ Алго-шлюз MEXC выдал сбой {mexc_9999_err}. Активирую прямой низкоуровневый HTTP Контур Б!")
+                log(f"⚠️ Алго-шлюз Контура А выдал лаг {mexc_9999_err}. Активирую резервный Контур Б общего стакана!")
+
                 try:
-                    mexc_algo_params_fallback = {
-                        'symbol': mexc_market_id,
-                        'side': mexc_side,
+                    # Формируем чистый низкоуровневый REST-пакет, переводя тикер через внутренний маркер CCXT
+                    mexc_market_id_raw = exchange.market_id(symbol)
+                    mexc_side_raw = int(3) if side.lower() == 'sell' else int(4)
+                    mexc_trend_raw = int(1) if side.lower() == 'sell' else int(2)
+
+                    mexc_base_stop_params = {
+                        'symbol': mexc_market_id_raw,  # Берем системный ID из ядра CCXT (с нижним подчеркиванием!)
+                        'side': mexc_side_raw,
                         'vol': float(qty),
+                        'leverage': int(25),
                         'openType': int(1),
+                        'orderType': int(5),           # 3: Условный маркет общего движка
+                        'price': float(0),             # Рыночное исполнение по триггеру требует 0
                         'triggerType': int(2),
                         'triggerPrice': exact_trigger_price,
-                        'trend': mexc_trend,
-                        'orderType': int(5)  # Жесткий тип Стоп-Маркет в REST-ядре МЕХС
+                        'trend': mexc_trend_raw
                     }
-                    order = exchange.contractPrivatePostOrderCreate(mexc_algo_params_fallback)
+
+                    log(f"🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {mexc_base_stop_params}")
+                    order = exchange.contractPrivatePostOrderCreate(mexc_base_stop_params)
                     return order
                 except Exception as fatal_sl_err:
                     log(f"🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для {symbol}: {fatal_sl_err}")
@@ -229,7 +238,7 @@ async def price_stream(exchange_pro):
                             memory.last_btc_push = now
 
         except Exception as ws_err:
-            log(f"⚠️ Ошибка WebSocket потока цен: {ws_err}")
+            #log(f"⚠️ Ошибка WebSocket потока цен: {ws_err}")
             await asyncio.sleep(1)
 
 async def check_signal(exchange, symbol):
@@ -299,14 +308,20 @@ async def check_signal(exchange, symbol):
         if not (is_sell_candidate or is_buy_candidate):
             return None
 
-        # --- [ФИЛЬТР 2: ADAPTIVE VOLUME SHIELD — АДАПТИВНЫЙ ФИЛЬТР ОБЪЕМА] ---
+        # --- [ФИЛЬТР 2: АДАПТИВНЫЙ VOLUME SPIKE & МУСОРНЫЙ ФИЛЬТР МЕХС V26.0] ---
         live_volume = float(df_candles[-1][5])  # Объем текущей живой минутки
+        prev_volume = float(df_candles[-2][5])  # Объем прошлой закрытой минутки
         mean_volume = sum(float(c[5]) for c in df_candles[-6:-1]) / 5  # Средний за прошлые 5 минут
+
+        # А. НАШ НОВЫЙ ИНСТИТУЦИОНАЛЬНЫЙ ФИЛЬТР: Если объем затухает — ЖЕСТКИЙ ОТКАЗ НА ПОДЛЕТЕ
+        if live_volume <= prev_volume:
+            return None
 
         if mean_volume <= 0:
             return None
-
         volume_ratio = live_volume / mean_volume
+
+
         is_meme = any(m in symbol.upper() for m in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'BONK'])
         required_ratio = 1.8 if is_meme else 1.1
 
@@ -828,15 +843,15 @@ async def main_logic():
                                         'side': side, 'vol': vol, 'price': entry_price, 'entry_time': time.time(),
                                         'dna': {'l_off': 0.002, 's_off': 0.002}
                                     }
-                    #===
-                    # --- ШТУЧНЫЙ ФИКС V24.8: СИНХРОНИЗАЦИЯ КЛЮЧЕЙ И ИСПРАВЛЕНИЕ NAMEERROR ---
+
+                    # --- ШТУЧНЫЙ ФИКС V26.0: СИНХРОНИЗАЦИЯ КЛЮЧЕЙ И ТЕЛЕМЕТРИЯ EQUITY МЕХС ---
                     for sym in list(memory.active_pos.keys()):
                         if sym not in current_mexc_active:
                             try:
                                 pos_data = memory.active_pos[sym]
-                                log(f"🧹 Позиция {sym} закрыта на МЕХС (Vol: {pos_data['vol']}). Очи щаем RAM-память аккаунта.")
+                                log(f"🏁 [ФИКСАЦИЯ МЕХС]: Позиция {sym} полностью закрыта на бирже! | Общая капитализация Equity: ${round(memory.total_wallet, 2)}")
                             except:
-                                log(f"🧹 Позиция {sym} закрыта на МЕХС. Принудительный клининг.")
+                                log(f"🏁 [ФИКСАЦИЯ МЕХС]: Позиция {sym} закрыта. Принудительный клининг. | Equity: ${round(memory.total_wallet, 2)}")
 
                             # Каскадное выжигание всех типов ключей
                             for k in [sym, f"{sym}:USDT", sym.replace(':USDT', '')]:
