@@ -490,33 +490,28 @@ async def check_signal(exchange, symbol):
 
 #=====
         # --- [ВРЕЗКА V31.0: АДАПТИВНЫЙ ФИЛЬТР ОБЪЕМА (VOLUME SPIKE SHIELD)] ---
-        # --- [ВРЕЗКА V26.8: КВАHТОВЫЙ ИHВЕРСНЫЙ VOLUME SHIELD БИHАHСА] ---
+        # --- [ВРЕЗКА V27.0: ПОПУТНЫЙ HFT VOLUME SPIKE SHIELD] ---
         try:
-             if len(df) >= 7:
-                 live_volume = float(df['v'].iloc[-1])  # Живой объем текущей минуты
-                 prev_volume = float(df['v'].iloc[-2])  # Полный объем прошлой минуты
-                 mean_volume = float(df['v'].iloc[-6:-1].mean())
+            if len(df) >= 7:
+                live_volume = float(df['v'].iloc[-1])  # Живой тиковый объем
+                mean_volume = float(df['v'].iloc[-6:-1].mean())  # Средний объем за 5м
 
-                 if mean_volume <= 0:
+                # На Бинансе бьем маркетом вдогонку, поэтому заходим СТРОГО на взрывном попутном объеме!
+                if live_volume <= mean_volume * 1.05:
                     return None
-                 volume_ratio = live_volume / mean_volume
 
-                 # ИСТИННЫЙ КОHТР-ТРЕHДОВЫЙ ЩИТ: Запрещаем закуп, если лавина ордеров прет на нас
-                 if is_buy_candidate:
-                    # На лоях заходим только когда объем продаж ИССЯКАЕТ (падает ниже предыдущего)
-                    if live_volume >= prev_volume:
-                        return None
-                 elif is_sell_candidate:
-                    # На хаях шортим только когда памп ПОЛHОСТЬЮ ВЫДОХСЯ (объем затухает)
-                    if live_volume >= prev_volume:
-                        return None
+            # --- [КАСКАДНЫЙ НОЖ V27.0 — ОПТИМИЗАЦИЯ НА 2 СВЕЧИ] ---
+            # Уходим от слепоты 4 свечей. Запрещаем вход, только если тренд идет 2 минуты стеной против нас
+            if len(df) >= 3:
+                c_0 = float(df['c'].iloc[-1])
+                c_1 = float(df['c'].iloc[-2])
+                c_2 = float(df['c'].iloc[-3])
 
-                 # Базовая защита от микро-шума пустого стакана
-                 is_meme = any(meme_name in symbol.upper() for meme_name in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
-                 required_ratio = 1.4 if is_meme else 1.02
-                 if volume_ratio < required_ratio:
-                    return None
-        except Exception as e:
+                if is_buy_candidate and (c_0 < c_1 and c_1 < c_2):
+                    return None  # Ловить летящий топор нельзя
+                if is_sell_candidate and (c_0 > c_1 and c_1 > c_2):
+                    return None  # Встречать грудью вертикальную ракету нельзя
+        except Exception as input_filter_err:
             pass
 #=====
         # --- [КВАНТОВЫЙ ФИЛЬТР: BTC TREND SHIELD] ---
