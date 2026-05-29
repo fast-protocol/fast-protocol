@@ -417,26 +417,35 @@ async def monitor_logic(exchange):
 #======
 
                 # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Если застряли в болоте)
-                if age > gd['time'] and pnl < gd['tp1'] and not memory.be_fixed.get(symbol, False):
-                    log(f"⏱️ ЗАТУХАНИЕ: {symbol} закрыт по таймеру (Age: {int(age)}с | PNL: {round(pnl*100,2)}%) | Общий баланс: ${round(memory.total_wallet, 2)}")
+                # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Если застряли в болоте)
+                if age > gd['time'] and pnl < gd['tp1']:
+                    # Рассчитываем точный убыток/прибыль в USDT на весь объем позиции (contracts * price * pnl)
+                    pnl_usdt = vol * price * pnl
+
+                    log(f"⏱️ [ТАЙМЕР УТИЛИЗАЦИЯ V25.9]: {clean_symbol} эвакуирован! | Итог: {round(pnl * 100, 2)}% ({round(pnl_usdt, 4)} USDT) | Живой баланс кошелька Equity: ${round(memory.total_wallet, 2)}")
+
                     action_triggered_decay = False
                     try:
-                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                        await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
+                        clean_symbol = symbol.split(':')[0]  # Намертво сносим суффикс :USDT для API Бинанса
+                        await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                        await exchange.create_market_order(clean_symbol, exit_side, pos['vol'])
                         action_triggered_decay = True
-                    except Exception as e:
-                        log(f"⚠ Ошибка эвакуации по таймеру для {symbol}: {e}")
+                    except Exception as decay_err:
+                        log(f"⚠️ Ошибка эвакуации по таймеру для {symbol}: {decay_err}")
 
-                    if symbol in memory.active_pos: del memory.active_pos[symbol]
-                    if symbol in memory.be_fixed: del memory.be_fixed[symbol]
-                    if symbol in memory.stop_placed: del memory.stop_placed[symbol]
-                    if symbol in memory.tp_fixed: del memory.tp_fixed[symbol]
-                    if f"{symbol}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{symbol}_trail"]
+                    # Тотальное каскадное выжигание всех видов ключей из RAM-памяти для обнуления слота
+                    for k in [symbol, f"{symbol}:USDT", symbol.split(':')[0]]:
+                        if k in memory.active_pos: del memory.active_pos[k]
+                        if k in memory.be_fixed: del memory.be_fixed[k]
+                        if k in memory.stop_placed: del memory.stop_placed[k]
+                        if k in memory.tp_fixed: del memory.tp_fixed[k]
+                        if f"{k}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{k}_trail"]
 
                     memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                    if action_triggered_decay: return
+                    if action_triggered_decay:
+                        return
 
-                # 5. ТВОЙ ОРИГИНАЛЬНЫЙ ВЕНИК-ОПРОС ДЛЯ ВЕРИФИКАЦИИ ИЗВНЕ ВНУТРИ ЦИКЛА FOR
+
                 # 5. ТВОЙ ОРИГИНАЛЬНЫЙ ВЕНИК-ОПРОС ДЛЯ ВЕРИФИКАЦИИ ИЗВНЕ ВНУТРИ ЦИКЛА FOR
                 # --- ШТУЧНЫЙ МОНОЛИТ V25.5: ТОТАЛЬНО ЗРЯЧИЙ ВЕНИК BINANCE FUTURES ---
                 if int(time.time()) % 15 == 0:
