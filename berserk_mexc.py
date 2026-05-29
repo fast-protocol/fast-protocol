@@ -177,11 +177,11 @@ def smart_order(exchange, symbol, side, amount, is_limit=False, price=None, is_e
                         'trend': mexc_trend_raw
                     }
 
-                    log(f"🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {mexc_base_stop_params}")
+                    #log(f"🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {mexc_base_stop_params}")
                     order = exchange.contractPrivatePostOrderCreate(mexc_base_stop_params)
                     return order
                 except Exception as fatal_sl_err:
-                    log(f"🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для {symbol}: {fatal_sl_err}")
+                    #log(f"🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для {symbol}: {fatal_sl_err}")
                     return False
 
         # СЦЕНАРИЙ 2: Пассивный Лимитный Капкан Maker
@@ -309,24 +309,33 @@ async def check_signal(exchange, symbol):
             return None
 
         # --- [ФИЛЬТР 2: АДАПТИВНЫЙ VOLUME SPIKE & МУСОРНЫЙ ФИЛЬТР МЕХС V26.0] ---
-        live_volume = float(df_candles[-1][5])  # Объем текущей живой минутки
-        prev_volume = float(df_candles[-2][5])  # Объем прошлой закрытой минутки
-        mean_volume = sum(float(c[5]) for c in df_candles[-6:-1]) / 5  # Средний за прошлые 5 минут
-
-        # А. НАШ НОВЫЙ ИНСТИТУЦИОНАЛЬНЫЙ ФИЛЬТР: Если объем затухает — ЖЕСТКИЙ ОТКАЗ НА ПОДЛЕТЕ
-        if live_volume <= prev_volume:
-            return None
+        # --- [ФИЛЬТР 2: КВАНТОВЫЙ ИHВЕРСНЫЙ VOLUME SHIELD V26.8] ---
+        live_volume = float(df_candles[-1][5])  # Живой тиковый объем текущей минуты
+        prev_volume = float(df_candles[-2][5])  # Полный объем прошлой минуты
+        mean_volume = sum(float(c[5]) for c in df_candles[-6:-1]) / 5
 
         if mean_volume <= 0:
-            return None
+             return None
         volume_ratio = live_volume / mean_volume
 
+        # Вычисляем истинную математическую дельту угасания тренда
+        # Если импульс прет по тренду на нас (live_volume > prev_volume) — мы ОБЯЗАНЫ УЙТИ ИЗ-ПОД УДАРА!
+        if is_buy_candidate:
+           # Ловим разворот на лоях: капкан ставится только если лавина продаж ИССЯКАЕТ (объем падает)
+            if live_volume >= prev_volume:
+               # log(f"🛡️ [VOLUME OVERFLOW]: Слив по {symbol} усиливается. Убираю капкан лонга.")
+                return None
+        elif is_sell_candidate:
+            # Ловим разворот на хаях: капкан шорта ставится только если памп ВЫДОХСЯ (объем падает)
+            if live_volume >= prev_volume:
+                # log(f"🛡️ [VOLUME OVERFLOW]: Памп по {symbol} прет вверх. Убираю капкан шорта.")
+                return None
 
+        # Базовая защита от микро-шума стакана
         is_meme = any(m in symbol.upper() for m in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'BONK'])
         required_ratio = 1.8 if is_meme else 1.1
-
         if volume_ratio < required_ratio:
-            return None  # Пустой шумовой прокол стакана без плотности ордеров
+            return None
 
         # --- [ФИЛЬТР 3: PRE-CANDLE SHIELD — КАСКАДНЫЙ НОЖ ПРЕДЫСТОРИИ] ---
         p_c1 = df_candles[-2]  # Прошлая закрытая минута
@@ -958,7 +967,7 @@ async def main_logic():
 
                             log(f"🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): {symbol} {signal['side'].upper()} @ {signal['price']}")
 #========
-            # === [УЗЕЛ V24.8: КВАНТОВЫЙ ВЕНИК КЛИНЕР & МАРКЕТ-УСКОРИТЕЛЬ МЕХС] ===
+            # === [УЗЕЛ V26.9: ВЕКТОРНЫЙ КВАНТОВЫЙ ВЕНИК & МАРКЕТ-УСКОРИТЕЛЬ МЕХС] ===
             for sym_key in list(memory.limit_orders.keys()):
                 order_data = memory.limit_orders[sym_key]
                 order_age = now - order_data['timestamp']
@@ -968,8 +977,7 @@ async def main_logic():
 
                 if order_age >= optimal_ttl:
                     try:
-                        # А. Математический фильтр: проверяем тренд объемов по чистому REST-тикеру
-                        # --- МОДЕРНИЗАЦИЯ V26.6: КВАНТОВЫЙ ОПЕРЕЖАЮЩИЙ ДЕМОНТАЖ КАПКАНА ---
+                        # А. Математический фильтр: считываем живые 1m свечи по REST-тикеру
                         try:
                             clean_rest_symbol = sym_key.split(':')[0]
                             ohlcv_check = exchange.fetch_ohlcv(clean_rest_symbol, '1m', limit=3)
@@ -982,20 +990,7 @@ async def main_logic():
                         except:
                             volume_growing = True
 
-                        # ОПЕРЕЖАЮЩИЙ СНОС: Если время еще не вышло, но объем УЖЕ затух — сносим лимитку досрочно!
-                        if not volume_growing and order_age < optimal_ttl:
-                            try:
-                                exchange.cancel_order(order_data['id'], sym_key)
-                                if sym_key in memory.limit_orders:
-                                       del memory.limit_orders[sym_key]
-                                       log(f"🧹 [ВЕНИК V26.6]: Досрочно убрал капкан п {sym_key} Имп ульс сдох до налития")
-                                continue
-                            except:
-                                pass
-
-
-
-                        # Б. Прямой Maker-демонтаж ордера для мгновенного освобождения маржи
+                        # Б. Прямой Maker-демонтаж зависшего ордера из стакана
                         try:
                             exchange.cancel_order(order_data['id'], sym_key)
                         except Exception as direct_cancel_err:
@@ -1003,13 +998,28 @@ async def main_logic():
                             if "not found" in err_msg or "filled" in err_msg:
                                 volume_growing = True
 
-                        # В. Принудительно очищаем таблицу лимиток в RAM, предотвращая зависания
+                        # Принудительно очищаем таблицу лимиток в RAM
                         if sym_key in memory.limit_orders:
                             del memory.limit_orders[sym_key]
 
-                        # Г. ИСПОЛНИТЕЛЬНЫЙ МАРКЕТ-КОНТУР: Входим по рынку вдогонку на освобожденную маржу!
-                        if volume_growing:
-                            log(f"🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V24.8]: Капкан по {sym_key} не налился за {optimal_ttl}с. Маржа снята, бью по рынку!")
+                        # В. ИСТИННЫЙ ВЕКТОРНЫЙ ОПРЕДЕЛИТЕЛЬ (Защита от прорыва против маржи)
+                        is_order_buy = order_data['side'].lower() in ['buy', 'long']
+
+                        # Сверяем направление живого сквиза цены относительно нашего капкана
+                        cur_m_price = memory.prices.get(sym_key, 0.0)
+                        if cur_m_price > 0:
+                            price_going_up = cur_m_price > order_data['price']
+                        else:
+                            price_going_up = is_order_buy # Резервный флаг, если сокет завис
+
+                        # Фильтруем вектор: вход вдогонку разрешен ТОЛЬКО если импульс идет ПОПУТНО нашей сделке!
+                        # Если мы хотели BUY, а цена улетела ВВЕРХ без нас -> это истинный пробой тренда, бьем вдогонку.
+                        # Если мы хотели BUY, а цена рушится ВНИЗ на объемах против нас -> маркет-вход блокируется наглухо!
+                        is_trend_support = (is_order_buy and price_going_up) or (not is_order_buy and not price_going_up)
+
+                        # Г. ИСПОЛНИТЕЛЬНЫЙ КОНТУР
+                        if volume_growing and is_trend_support:
+                            log(f"🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V26.9]: Капкан по {sym_key} не налился. Импульс попутный, бью по рынку!")
 
                             exit_side_chase = order_data['side']
                             params_chase = {'openType': int(1), 'leverage': int(25)}
@@ -1025,12 +1035,12 @@ async def main_logic():
                                 }
                                 memory.slots_occupied = len(memory.active_pos)
                         else:
-                            log(f"🧹 [ВЕНИК V24.8]: Капкан по {sym_key} удален из стакана. Прорыв пу стой, маркет-вход заблокирован.")
+                            log(f"🧹 [ВЕНИК V26.9]: Капкан по {sym_key} стерт. Объем затух или сквиз  идет против нас. Маркет-вход ЗАБЛОКИРОВАН.")
 
                     except Exception as cancel_err:
                         err_msg = str(cancel_err).lower()
                         if "cannot be cancelled" in err_msg or "filled" in err_msg or "not found" in err_msg:
-                            log(f"🔥 ПЕРЕХВАТ СКВИЗА V24.8: Ордер по {sym_key} успел исполниться в долю секунды отмены! Усыновляем позицию.")
+                            log(f"🔥 ПЕРЕХВАТ СКВИЗА V26.9: Ордер по {sym_key} успел исполниться в долю секунды отмены! Усыновляем позицию.")
                             if sym_key not in memory.active_pos:
                                 memory.active_pos[sym_key] = {
                                     'side': order_data['side'],
@@ -1042,6 +1052,7 @@ async def main_logic():
                                 memory.slots_occupied = len(memory.active_pos)
                             if sym_key in memory.limit_orders:
                                 del memory.limit_orders[sym_key]
+
 #========
         except Exception as main_err:
             await asyncio.sleep(1)
