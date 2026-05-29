@@ -1,23 +1,13 @@
-import os
-import json
-import time
-import asyncio
-import ccxt.async_support as ccxt
-import pandas as pd
-import numpy as np
 
 # --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
 RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
 MAX_SLOTS = 1          # Максимум 4 параллельных сделки
 LOG_FILE = "ignition__log.txt"
+# --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
+MAX_ACCOUNT_LEVERAGE = 5  # Выставляем 5х (аппаратный потолок субаккаунта)
 
 # --- ТУМБЛЕР РЕЖИМА ДЕБАГА (ВКЛ / ВЫКЛ) ---
 DEBUG_BEACONS = False   # Сделай False, чтобы полностью выключить маяки в консоли
-
-# Поля API Binance
-API_KEY = 
-API_SECRET =
-
 
 class GlobalMemory:
     def __init__(self):
@@ -254,8 +244,8 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
 async def execute_entry(exchange, sig):
     """
-    Импульсный захват позиции по рынку на фьючерсах Binance V24.6.
-    Полностью ликвидирован баг двойного плеча и ошибка Margin is insufficient.
+    Импульсный захват позиции по рынку на фьючерсах Binance V24.9.5.
+    Возврат к рабочей архитектуре create_market_order с прецизией лота.
     """
     raw_symbol = sig['symbol']
 
@@ -266,28 +256,35 @@ async def execute_entry(exchange, sig):
         return
 
     try:
-        # 1. Принудительный базовый стык плеча и Isolated-маржи на Бинансе
-        try: await exchange.set_leverage(sig['dna']['lev'], symbol)
+        # 1. Динамическое определение эффективного плеча с учетом лимита субаккаунта
+        dna_lev = int(sig['dna']['lev'])
+        effective_leverage = min(dna_lev, MAX_ACCOUNT_LEVERAGE)
+
+        # Принудительный базовый стык плеча и Isolated-маржи на Бинансе
+        try: await exchange.set_leverage(effective_leverage, symbol)
         except: pass
         try: await exchange.set_margin_mode('ISOLATED', symbol)
         except: pass
 
-        # 2. МАТЕМАТИЧЕСКИЙ РАСЧЕТ ЛОТА БЕЗ ДВОЙНОГО ПЛЕЧА (По эталону старого рабочего ядра)
-        # Вычисляем чистый объем маржи обеспечения, разрешенный RISK_GEAR
-        amount_margin_usdt = memory.available * RISK_GEAR
+        # 2. МАТЕМАТИЧЕСКИЙ РАСЧЕТ НОМИНАЛЬНОГО ОБЪЕМА ПОД РЕАЛЬНОЕ ПЛЕЧО
+        amount_usdt = memory.available * RISK_GEAR * effective_leverage
 
-        # Переводим маржу в эквивалент монет с учетом плеча и живой цены входа
-        raw_qty = (amount_margin_usdt * sig['dna']['lev']) / sig['price']
+        # Переводим объем в эквивалент базовых монет под реальное плечо 5х
+        raw_qty = amount_usdt / sig['price']
 
-        # Округляем до строгого шага лотов Бинанса, используя очищенный от двоеточий тикер
+        # Округляем строго по фьючерсным шагам Бинанса, используя очищенный тикер
         qty = float(exchange.amount_to_precision(symbol, raw_qty))
 
         if qty <= 0:
             return
 
-        # 3. ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Бьем базовым методом create_order (как в старом рабочем боте)
-        # Это полностью убирает скрытый внутренний перерасчет CCXT
-        order = await exchange.create_order(symbol, 'market', sig['side'], qty)
+        # --- ШТУЧНЫЙ КВАНТОВЫЙ ДЕБАГ V25.0: ВСКРЫТИЕ МАРЖИНАЛЬНОЙ СЛЕПОТЫ ---
+        log(f"🔍 [DEBUG ENTRY]: Available Margin: ${round(memory.available, 4)} | RISK_GEAR: {RISK_GEAR}")
+        log(f"🔍 [DEBUG ENTRY]: Target Leverage: {sig['dna']['lev']}x | Price: {sig['price']}")
+        log(f"🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): ${round(amount_usdt, 2)}")
+        log(f"🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: {qty} монет")
+        # 3. ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Возвращаем проверенный create_market_order из старого рабочего бота!
+        order = await exchange.create_market_order(symbol, sig['side'], qty)
 
         if order:
             log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty} | Общий баланс: ${round(memory.total_wallet, 2)}")
@@ -360,7 +357,7 @@ async def monitor_logic(exchange):
                             'stopPrice': sl_price, 'reduceOnly': True
                         })
                         memory.stop_placed[symbol] = sl_price
-                        log(f"🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: {symbol} @ {sl_price}")
+                        log(f"🛡️ ЖЕСТКИЙ СТОП ВЫСТАВ ЛЕН НА БИРЖУ: {symbol} @ {sl_price}")
                     except Exception as e:
                         log(f"🆘 КРИТИЧЕСКАЯ ОТМЕНА СТОПА БИРЖЕЙ для {symbol}: {e}")
                         # Выставляем флаг аварийно, чтобы код не застревал в цикле
