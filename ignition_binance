@@ -311,152 +311,110 @@ async def monitor_logic(exchange):
                 cur_p = memory.prices.get(symbol)
                 if not cur_p: continue
 
-                # Чистый расчет PNL и параметров жизни сделки
-                pnl = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
+#======
+                # --- [ВРЕЗКА V25.0: МОHОЛИТ УПРАВЛЕHИЯ ВЫХОДАМИ И РАННЕГО БЕЗУБЫТКА БИНАНСА] ---
+                # Синхронизируем ключи: raw_symbol всегда с суффиксом (:USDT), clean_symbol - чистый для API
+                raw_symbol = symbol
+                clean_symbol = raw_symbol.split(':')[0]
+
+                # Вычисляем чистый PNL без учета плеча в зависимости от направления сделки
+                price = float(pos['price'])
+                pnl = (cur_p / price - 1) if pos['side'] == 'buy' else (price / cur_p - 1)
                 gd = pos['gear_data']
                 age = time.time() - pos['entry_time']
                 exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
-                binance_market_id = symbol.replace('/', '').replace(':USDT', '')
+                binance_market_id = raw_symbol.replace('/', '').replace(':USDT', '')
 
-                # --- [ВРЕЗКА V23.0: ИМПУЛЬСНЫЙ DECAY SHIELD ПО ВРЕМЕНИ] ---
-                now_time = time.time()
-               # for symbol, pos in list(memory.active_pos.items()):
-                age_seconds = now_time - pos['entry_time']
+                # А. КОHТУР РАHHЕГО СHАЙПЕРСКОГО БЕЗУБЫТКА (До выполнения Тейка-1)
+                # Если позиция набрала +1.5% чистого хода цены, но Тейк-1 еще не взят — защищаем залог!
+                if not memory.be_fixed.get(raw_symbol, False) and not memory.tp_fixed.get(raw_symbol, False):
+                    if pnl >= 0.015:
+                        log(f"⚡ [БЕЗУБЫТOК БИНАНС V25.0]: {clean_symbol} набрал +1.5% хода. Переношу стоп в ноль.")
+                        try:
+                            # Смещаем защитный стоп-маркет ровно на цену нашего входа
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            stop_params = {'stopPrice': price, 'reduceOnly': True}
+                            await exchange.create_order(clean_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
+                            memory.be_fixed[raw_symbol] = True
+                        except Exception as be_err:
+                            log(f"⚠️ Сбой выставления БУ для {clean_symbol}: {be_err}")
 
-                # Если позиция висит дольше 45 минут (2700 секунд)
-                # и мы еще НЕ успели взвести защитный Пре-Трейлинг:
-                if age_seconds > 2700 and not memory.trail_active.get(symbol, False):
-                    # Живой секундный PNL
-                    cur_p = memory.prices.get(symbol)
-                    if cur_p:
-                        profit = (cur_p / pos['price'] - 1) if pos['side'].lower() == 'buy' else (pos['price'] / cur_p - 1)
+                # Б. КОHТУР АДАПТИВНОГО ТРЕЙЛИHГА НА БАЗЕ ДНК МОHЕТЫ
+                # Определяем шаг отката в зависимости от класса риска (Мемы дышат свободнее)
+                is_meme_coin = any(m_n in clean_symbol.upper() for m_n in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+                optimal_trail_step = 0.0055 if is_meme_coin else 0.0035  # Ракеты: 0.35% отката, Мемы: 0.55%
 
-                        # Если сделка закисла во флэте (убыток не дошел до стопа, но и профита нет)
-                        if profit < 0.005:
-                            log(f"⏱️ [ИМПУЛЬС СДОХ]: Позиция {symbol} закисла на {round(age_seconds/60)} мин. Включаю Decay Shield эвакуации (PNL: {round(profit*100, 2)}%)")
-
-                            # Каноническое рыночное закрытие 100% объема
-                            exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
-                            await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
-
-                            # Чистим память
-                            if symbol in memory.active_pos: del memory.active_pos[symbol]
-                            continue
-                # -----------------------------------------------------------
-
-                # 1. СТАРТОВАЯ ИНИЦИАЛИЗАЦИЯ ЖЕСТКОГО СТОП-ЛОССА НА БИРЖЕ
-                if not memory.stop_placed.get(symbol):
-                    try:
-                        sl_price = pos['price'] * (1 - abs(pos['dna']['sl'])) if pos['side'] == 'buy' else pos['price'] * (1 + abs(pos['dna']['sl']))
-                        sl_price = float(exchange.price_to_precision(symbol, sl_price))
-                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-
-                        # Округляем объем строго по правилам лотов биржи
-                        exact_vol = exchange.amount_to_precision(symbol, pos['vol'])
-                        await exchange.create_order(symbol, 'STOP_MARKET', exit_side, exact_vol, params={
-                            'stopPrice': sl_price, 'reduceOnly': True
-                        })
-                        memory.stop_placed[symbol] = sl_price
-                        log(f"🛡️ ЖЕСТКИЙ СТОП ВЫСТАВЛЕН НА БИРЖУ: {symbol} @ {sl_price}")
-                    except Exception as e:
-                        log(f"🆘 КРИТИЧЕСКАЯ ОТМЕНА СТОПА БИРЖЕЙ для {symbol}: {e}")
-                        # Выставляем флаг аварийно, чтобы код не застревал в цикле
-                        memory.stop_placed[symbol] = pos['price']
-
-                # --- [УЗЕЛ V22.0: АКТИВАЦИЯ ПRE-ТРЕЙЛИНГА НА 75% ПУТИ ДО ТЕЙКА 1] ---
-                pre_trail_trigger = gd['tp1'] * 0.75
-                if not memory.tp_fixed.get(symbol) and pnl >= pre_trail_trigger:
-                    if not memory.tp_fixed.get(f"{symbol}_trail"):
-                        memory.tp_fixed[f"{symbol}_trail"] = True
-                        # Локально взводим максимальный PNL для скользящего шага
+                # Взводим Пре-Трейлинг, если цена прошла 75% пути до Тейка-1
+                if not memory.tp_fixed.get(raw_symbol, False) and pnl >= (gd['tp1'] * 0.75):
+                    trail_key = f"{raw_symbol}_trail"
+                    if not memory.tp_fixed.get(trail_key, False):
+                        memory.tp_fixed[trail_key] = True
                         pos['max_pnl_observed'] = max(pnl, pos.get('max_pnl_observed', pnl))
-                        log(f"⚡ ПРЕ-ТРЕЙЛИНГ ВЗВЕДЕН: {symbol} прошел 75% пути к цели (+{round(pnl*100,2)}%). Защита импульса активирована.")
+                        log(f"🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: {clean_symbol} зафиксировал пик. Контроль отката: {optimal_trail_step*100}%")
 
-                # Динамическое обновление пикового профита для взведенного трейлинга
-                if memory.tp_fixed.get(f"{symbol}_trail"):
+                    # Обновляем пиковую точку экстремума тренда
                     pos['max_pnl_observed'] = max(pnl, pos.get('max_pnl_observed', pnl))
 
-                    # Жесткий снайперский шаг отката для импульсного бота (0.25% во флэте, 0.15% в bear)
-                    # Если в ДНК нет market_mode, используем дефолтный безопасный шаг 0.0022 (0.22%)
-                    trail_step = 0.0015 if pnl < 0 else 0.0022
-
-                    # ПРОВЕРКА СКАТЫВАНИЯ НАЗАД: Ловушка захлопывается, фиксируем 100% объема в плюс!
-                    if pnl <= (pos['max_pnl_observed'] - trail_step):
-                        log(f"🏁 ГИБРИДНЫЙ ИМПУЛЬС-ТРЕЙЛИНГ: Фиксация {symbol} на развороте тренда! Итог: +{round(pnl*100,2)}% (Пик был: +{round(pos['max_pnl_observed']*100,2)}%)")
-                        action_triggered_pre = False
+                    # Проверяем условия критического разворота и выдоха крупного игрока
+                    if pnl <= (pos['max_pnl_observed'] - optimal_trail_step):
+                        log(f"🏁 [ТРЕЙЛИHГ КАТАПУЛЬТА V25.0]: Фиксация {clean_symbol} по откату от пика! Итог: {round(pnl*100, 2)}%")
                         try:
-                            await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                            await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
-                            action_triggered_pre = True
-                        except Exception as e:
-                            log(f"⚠ Ошибка закрытия импульс-трейлинга {symbol}: {e}")
-
-                        if symbol in memory.active_pos: del memory.active_pos[symbol]
-                        if symbol in memory.be_fixed: del memory.be_fixed[symbol]
-                        if symbol in memory.stop_placed: del memory.stop_placed[symbol]
-                        if symbol in memory.tp_fixed: del memory.tp_fixed[symbol]
-                        if f"{symbol}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{symbol}_trail"]
-
-                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                        if action_triggered_pre: return
-
-                # 2. ШТАТНАЯ ФИКСАЦИЯ ТЕЙКА 1 (С ЗАЩИТОЙ ДРОБЛЕНИЯ ЛОТА V22.3)
-                if not memory.tp_fixed.get(symbol, False) and pnl >= gd['tp1']:
-                    try:
-                        # Считаем чистую математическую половину
-                        raw_close_qty = pos['vol'] * 0.5
-                        close_qty_str = exchange.amount_to_precision(symbol, raw_close_qty)
-                        close_qty = float(close_qty_str)
-
-                        # ЗАЩИТА ОКРУГЛЕНИЯ: Если половина объема округлилась в 0 или равна исходному объему
-                        if close_qty <= 0 or close_qty >= pos['vol']:
-                            log(f"⚠ ЛОТ {symbol} СЛИШКОМ МАЛ ДЛЯ ДРОБЛЕНИЯ ({pos['vol']}): Фиксируем 100% объема по рынку.")
-                            await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                            await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
-
-                            if symbol in memory.active_pos: del memory.active_pos[symbol]
-                            if symbol in memory.be_fixed: del memory.be_fixed[symbol]
-                            if symbol in memory.stop_placed: del memory.stop_placed[symbol]
-                            if symbol in memory.tp_fixed: del memory.tp_fixed[symbol]
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']))
+                            if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                            if raw_symbol in memory.be_fixed: del memory.be_fixed[raw_symbol]
+                            if raw_symbol in memory.stop_placed: del memory.stop_placed[raw_symbol]
+                            if raw_symbol in memory.tp_fixed: del memory.tp_fixed[raw_symbol]
+                            if trail_key in memory.tp_fixed: del memory.tp_fixed[trail_key]
                             memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                            return
+                            continue
+                        except Exception as t_err:
+                            log(f"⚠️ Сбой катапультирования по трейлингу {clean_symbol}: {t_err}")
 
-                        # Если лот позволяет дробить — идем по штатному сценарию
-                        await exchange.create_market_order(symbol, exit_side, close_qty_str, {'reduceOnly': True})
-                        memory.tp_fixed[symbol] = True
-
-                        # Пересчитываем остаток
-                        pos['vol'] = float(exchange.amount_to_precision(symbol, pos['vol'] - close_qty))
-                        log(f"🎯 ТЕЙК-1 ВЫПОЛНЕН: {symbol} зафиксирован (+{round(gd['tp1']*100,2)}%)")
-
-                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                        bu_price = float(exchange.price_to_precision(symbol, pos['price']))
-                        await exchange.create_order(symbol, 'STOP_MARKET', exit_side, exchange.amount_to_precision(symbol, pos['vol']), params={
-                            'stopPrice': bu_price, 'reduceOnly': True
-                        })
-                        memory.stop_placed[symbol] = bu_price
-                    except Exception as e:
-                        log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
-
-                # 3. ЛОГИКА ТЕЙК-ПРОФИТА 2 (ФИНАЛ СДЕЛКИ ПРИ ИСТИННОМ ПРОБОЕ)
-                if pnl >= gd['tp2']:
-                    log(f"🏆 ТЕЙК-2 ФИНАЛ: {symbol} зафиксирован (+{round(gd['tp2']*100,2)}%) | Общий баланс: ${round(memory.total_wallet, 2)}")
-                    action_triggered_tp2 = False
+                # В. КОHТУР КАСКАДHЫХ ТЕЙК-ПОИHТОВ (Если трейлинг пролетел мимо импульсом)
+                # ТЕЙК-1: Фиксация 50% объема позиции при достижении главной цели ДНК
+                if not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1']:
+                    log(f"🎯 [ТЕЙК-1 БИHАHС]: Цель по {clean_symbol} взята (+{round(pnl*100, 2)}%). Крою 50% объема.")
                     try:
-                        await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': binance_market_id})
-                        await exchange.create_market_order(symbol, exit_side, pos['vol'], {'reduceOnly': True})
-                        action_triggered_tp2 = True
-                    except Exception as e:
-                        log(f"⚠ Ошибка отправки ордеров Тейка-2 для {symbol}: {e}")
+                        half_qty = float(exchange.amount_to_precision(clean_symbol, pos['vol'] / 2))
+                        if half_qty > 0 and half_qty < pos['vol']:
+                            await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, half_qty))
+                            pos['vol'] = float(exchange.amount_to_precision(clean_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
+                            memory.tp_fixed[raw_symbol] = True
 
-                    if symbol in memory.active_pos: del memory.active_pos[symbol]
-                    if symbol in memory.be_fixed: del memory.be_fixed[symbol]
-                    if symbol in memory.stop_placed: del memory.stop_placed[symbol]
-                    if symbol in memory.tp_fixed: del memory.tp_fixed[symbol]
-                    if f"{symbol}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{symbol}_trail"]
+                            # Автоматический перенос стопа в безубыток после Тейка-1
+                            try:
+                                await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                                stop_params = {'stopPrice': price, 'reduceOnly': True}
+                                await exchange.create_order(clean_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
+                            except:
+                                pass
+                        else:
+                            # Защита дробления мелкого лота
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']))
+                            if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                            continue
+                    except Exception as tp1_err:
+                        log(f"⚠️ Сбой исполнения Тейка-1 для {clean_symbol}: {tp1_err}")
 
-                    memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                    if action_triggered_tp2: return
+                # ТЕЙК-2: Финальное закрытие остатка позиции при достижении экстремума
+                if memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp2']:
+                    log(f"🏆 [ТЕЙК-2 ФИHАЛ]: Позиция {clean_symbol} полностью отработала ДНК-цели (+{round(pnl*100, 2)}%)")
+                    try:
+                        await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                        await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']))
+                        if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                        if raw_symbol in memory.be_fixed: del memory.be_fixed[raw_symbol]
+                        if raw_symbol in memory.stop_placed: del memory.stop_placed[raw_symbol]
+                        if raw_symbol in memory.tp_fixed: del memory.tp_fixed[raw_symbol]
+                        if f"{raw_symbol}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{raw_symbol}_trail"]
+                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                        continue
+                    except Exception as tp2_err:
+                        log(f"⚠️ Сбой исполнения Тейка-2 для {clean_symbol}: {tp2_err}")
+#======
 
                 # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Если застряли в болоте)
                 if age > gd['time'] and pnl < gd['tp1'] and not memory.be_fixed.get(symbol, False):
