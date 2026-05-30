@@ -1,4 +1,3 @@
-
 # Геометрия полос Боллинджера и Капкана
 BB_PERIOD = 20
 BB_STD = 2.2
@@ -485,19 +484,6 @@ async def monitor_logic(exchange):
                         continue
 
 
-#===========
-#            log(f"⚙️ [ДЕБАГ ЦЕНЫ {symbol}]: profit={round(profit*100,3)}% | cur_p={cur_p} | Вход={pos['price']} | Флаг_ТР1={memory.tp1_fixed.get(symbol)}")
-            # ДЕБАГ №4: Выводим PNL в реальном времени, если цена успешно найдена
-#            if int(now_time) % 10 == 0:
-#                log(f"🔥 [DEBUG 4 УСПЕХ]: Монета {symbol} | Цена: {cur_p} | Вход: {pos['price']} | Живой PNL: {round(profit * 100, 2)}%")
-
-            # --- 1. АВАРИЙНЫЙ СHОС ПО ВРЕМЕHИ (Decay Shield 60с) ---
-            if age > 60 and profit < -0.0008:
-                log(f"🏛️ 🛡️ Decay Shield V16.9: {symbol} срезан на 60c (Лосс: {round(profit*100,2)  }%)")
-                exit_side = 'sell' if pos['side'].lower() == 'buy' else 'buy'
-                smart_order(exchange, symbol, exit_side, pos['vol'], is_exit=True)
-                continue
-#===========
             if age > 0:
 #=============
 #                exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
@@ -565,8 +551,10 @@ async def monitor_logic(exchange):
                         exchange.create_order(symbol, 'market', exit_side, pos['vol'], None, params)
                     except Exception as e:
                         # Логируем только реальные сбои, игнорируя повторный спам закрытых ордеров
-                        if "2009" not in str(e):
-                            log(f"⚠ Ошибка утилизации типа А для {symbol}: {e}")
+                        # --- ШТУЧНЫЙ ФИКС V26.9: ГЛУШЕНИЕ ЭХА ПOВТOРНЫХ СHOСOВ МЕХС ---
+                        err_str = str(e).lower()
+                        if "2009" not in err_str and "nonexistent" not in err_str and "closed" not in err_str:
+                            log(f"⚠️ Ошибка утилизации типа А для {symbol}: {e}")
                     finally:
                         # === КОНТУР АБСОЛЮТНОЙ ГАРАНТИИ: ВЫПОЛНЯЕТСЯ ВСЕГДА ===
                         # Выжигаем монету из памяти RAM в любом случае, ликвидируя петлю зацикливания!
@@ -881,8 +869,13 @@ async def main_logic():
 
                     memory.slots_occupied = len(current_mexc_active)
                     last_pos_sync = now
-                except:
-                    pass
+#                except:
+#                    pass
+                except Exception as main_loop_err:
+                    # --- ШТУЧНЫЙ ФИКС V26.9: ГЛУШЕНИЕ ОШИБОК БАЛАНСА И СИРОТ В ХВОСТЕ ЦИКЛА ---
+                    err_str = str(main_loop_err).lower()
+                    if "2009" not in err_str and "2005" not in err_str and "nonexistent" not in err_str:
+                        log(f"⚠️ Системный сбой трекера позиций: {main_loop_err}")
 
             # Б. REST-ПОЛУЧЕНИЕ ЦЕНЫ BTC ДЛЯ ИСТОРИИ СТРОГО РАЗ В 60 СЕКУНД (Защита от дублей)
             if now - memory.last_btc_push >= 60:
