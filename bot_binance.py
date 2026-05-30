@@ -685,16 +685,20 @@ async def monitor_logic(exchange, symbol, pos):
         vol = abs(float(pos.get('contracts', pos.get('initialMargin', 0))))
         side = pos.get('side', 'long').lower()
         exit_side = 'SELL' if side in ['long', 'buy'] else 'BUY'
-        cur_p = memory.prices.get(symbol)
-        if not cur_p:
-            alt_symbol = symbol.replace('/', '') # Пробуем формат DOGEUSDT
-            cur_p = memory.prices.get(alt_symbol)
 
+
+        # --- ШТУЧНЫЙ ФИКС V27.5: СИНХРОНИЗАЦИЯ КЛЮЧЕЙ WEBSOCKET-ПОТОКА ЦЕН ---
+        # Извлекаем чистый тикер "BNB/USDT" для сопоставления с базой WebSocket тиков
+        clean_symbol = symbol.split(':')[0]
+
+        cur_p = memory.prices.get(clean_symbol)
         if not cur_p:
-            # Если в WebSocket пусто — берем живую цену прямо из инфо-пакета позиции на бирже
+            # Если в сокетах микро-секундный пропуск - страхуемся прямым REST марк-прайсом биржи
             cur_p = float(pos.get('markPrice')) if pos.get('markPrice') else float(pos.get('info', {}).get('markPrice', 0))
 
-        if not cur_p or cur_p <= 0: return # Полная защита от деления на ноль
+        if not cur_p or cur_p <= 0:
+            return
+
 
         # 2. РАСЧЕТ PNL С ЗАЩИТОЙ ОТ ИНВЕРСИИ
         entry_p = float(pos['entryPrice'])
@@ -726,6 +730,37 @@ async def monitor_logic(exchange, symbol, pos):
 
         exit_side = 'SELL' if side in ['long', 'buy'] else 'BUY'
         bal_str = f"| Bal: ${round(memory.total_wallet, 2)}"
+
+
+        # --- ШТУЧНЫЙ ФИКС V27.5: НЕЗАВИСИМЫЙ ДНК-ТАЙМЕР УТИЛИЗАЦИИ ВНЕ БЛОКА ЛОССА ---
+        is_meme_coin = any(m_n in symbol.upper() for m_n in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+        is_anchor_coin = any(a_n in symbol.upper() for a_n in ['DOT', 'POL', 'BNB', 'XRP', 'ADA'])
+
+        if is_meme_coin:
+            optimal_decay_ttl = 120
+        elif is_anchor_coin:
+            optimal_decay_ttl = 420
+        else:
+            optimal_decay_ttl = 240  # Тех-Ракеты (NEAR, SOL, FET): 4 минуты оптимального разбега
+
+        # Эвакуируем сделку, если время вышло, но Тейк-1 или Трейлинг еще не активны (флэт)
+        if age > optimal_decay_ttl and not memory.trail_active.get(symbol, False) and not memory.tp_status.get(symbol, {}).get('tp1', False):
+                log(f"⏱️ [ДНК-ТАЙМЕР УТИЛИЗАЦИЯ]: {symbol} утилизирован по лимиту класса ({int(age)}с >= {optimal_decay_ttl}с) | PNL: {round(profit*100, 2)}% {bal_str}")
+                action_triggered_decay = False
+                try:
+                    clean_market_id = symbol.replace('/', '').replace(':USDT', '')
+                    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
+                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': clean_market_id})
+                    await exchange.create_market_order(clean_symbol, exit_side, vol, {'reduceOnly': True})
+                    action_triggered_decay = True
+                except Exception as e:
+                    log(f"⚠️ Критическая ошибка утилизации по таймеру {symbol}: {e}")
+
+                if action_triggered_decay:
+                    clean_memory_keys(symbol)
+                    if symbol in memory.active_pos: del memory.active_pos[symbol]
+                    return
+
 
         # --- [ЖЕСТКИЙ ФИКС КВАНТОВОГО МОДУЛЯ РАННЕГО ВЫХОДА V27.7] ---
         if profit < 0:
@@ -769,50 +804,6 @@ async def monitor_logic(exchange, symbol, pos):
 
                             if action_triggered_btc:
                                 return
-
-#==========
-            # ТРИГГЕР 2: Эвакуация по затяжному флэтовому болоту альта (Time-Decay)
-            # --- [ВРЕЗКА V24.5: ДИНАМИЧЕСКИЙ ДНК-ТАЙМЕР ЖИЗНИ ЛОТА БИНАНСА] ---
-            # Динамически вычисляем индивидуальный лимит удержания (TTL) на базе класса монеты
-            is_meme_coin = any(m_n in symbol.upper() for m_n in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
-            is_anchor_coin = any(a_n in symbol.upper() for a_n in ['DOT', 'POL', 'BNB', 'XRP', 'ADA'])
-
-            if is_meme_coin:
-                optimal_decay_ttl = 120    # Мемы: 2 минуты на взрывной микро-импульс
-            elif is_anchor_coin:
-                optimal_decay_ttl = 420    # Якоря: 7 минут на вязкое раскачивание флэта
-            else:
-                optimal_decay_ttl = 240    # Тех-Ракеты (NEAR, SOL, FET): 4 минуты оптимального разбега
-
-            # Эвакуируем сделку по таймеру только если время вышло и лосс застрял ниже -0.08%
-            #if age > optimal_decay_ttl and profit < -0.0008:
-            # --- ШТУЧНЫЙ ФИКС V27.0: БЛОКИРОВКА ТАЙМЕРА ПРИ АКТИВНОМ ПРЕ-ТРЕЙЛИНГЕ ---
-            # Если по монете пошел скользящий трейлинг прибыли, таймер утилизации блокируется, давая забрать Тейки!
-            #if age > optimal_decay_ttl and profit < -0.0008 and not memory.trail_active.get(symbol, False):
-            # --- МОДЕРНИЗАЦИЯ V27.2: СВОБОДНЫЙ АДАПТИВНЫЙ ТАЙМЕР ВНЕ БЛОКА ЛОССА ---
-            # Выносим проверку на уровень 12 пробелов (прямо под расчет age, вне if profit < 0)
-            if age > optimal_decay_ttl and not memory.trail_active.get(symbol, False) and not memory.tp_status.get(symbol, {}).get('tp1', False):
-
-                log(f"⏱️ [ДНК-ТАЙМЕР УТИЛИЗАЦИЯ]: {symbol} утилизирован по лимиту класса ({int(age)}с >= {optimal_decay_ttl}с) | Лосс: {round(profit*100, 2)}%")
-                action_triggered_decay = False
-                try:
-                    clean_market_id = symbol.replace('/', '').replace(':USDT', '')
-                    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
-                    await exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': clean_market_id})
-                    await exchange.create_market_order(symbol, 'SELL' if side in ['long', 'buy'] else 'BUY', vol, {'reduceOnly': True})
-                    action_triggered_decay = True
-                except Exception as e:
-                    log(f"⚠ Критическая ошибка утилизации по таймеру {symbol}: {e}")
-
-                # Тотальная зачистка флагов во всех форматах для разблокировки слота
-                for k in [symbol, f"{symbol}:USDT", symbol.replace(':USDT', '')]:
-                    if k in memory.active_pos: del memory.active_pos[k]
-                    if k in memory.tp_fixed: del memory.tp_fixed[k]
-                    if k in memory.stop_placed: del memory.stop_placed[k]
-                    if k in memory.trail_active: del memory.trail_active[k]
-                    if k in memory.max_pnl: del memory.max_pnl[k]
-                if action_triggered_decay:
-                    return
 
 #===
             # ТРИГГЕР Б: Синдром Сползания Импульса (Выдох крупного игрока — без изменений)
@@ -910,8 +901,12 @@ async def monitor_logic(exchange, symbol, pos):
                 return
 
             try:
-                close_qty = exchange.amount_to_precision(symbol, close_qty_raw)
-                await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
+                #close_qty = exchange.amount_to_precision(symbol, close_qty_raw)
+                #await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
+
+                # --- ШТУЧНЫЙ ФИКС V27.5: СНОС СУФФИКСОВ ПРИ ОРДЕРЕ ТЕЙКА ---
+                close_qty = exchange.amount_to_precision(clean_symbol, close_qty_raw)
+                await exchange.create_market_order(clean_symbol, exit_side, close_qty, {'reduceOnly': True})
 
                 clean_market_id = symbol.replace('/', '').replace(':USDT', '')
                 await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
