@@ -417,23 +417,19 @@ async def monitor_logic(exchange):
 #======
 
                 # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Если застряли в болоте)
-                # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Если застряли в болоте)
+                # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Time-Decay Shield V27.2)
                 if age > gd['time'] and pnl < gd['tp1']:
-                    # Рассчитываем точный убыток/прибыль в USDT на весь объем позиции (contracts * price * pnl)
-                    pnl_usdt = vol * price * pnl
-
-                    log(f"⏱️ [ТАЙМЕР УТИЛИЗАЦИЯ V25.9]: {clean_symbol} эвакуирован! | Итог: {round(pnl * 100, 2)}% ({round(pnl_usdt, 4)} USDT) | Живой баланс кошелька Equity: ${round(memory.total_wallet, 2)}")
-
+                    log(f"⏱️ [ТАЙМЕР УТИЛИЗАЦИЯ V27.2]: {symbol} завис в болоте флэта ({int(age)}с > {gd['time']}с). Снос позиции.")
                     action_triggered_decay = False
                     try:
-                        clean_symbol = symbol.split(':')[0]  # Намертво сносим суффикс :USDT для API Бинанса
+                        clean_symbol = symbol.split(':')[0]  # Намертво срезаем суффикс :USDT для шлюза Бинанса
                         await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                         await exchange.create_market_order(clean_symbol, exit_side, pos['vol'])
                         action_triggered_decay = True
                     except Exception as decay_err:
                         log(f"⚠️ Ошибка эвакуации по таймеру для {symbol}: {decay_err}")
 
-                    # Тотальное каскадное выжигание всех видов ключей из RAM-памяти для обнуления слота
+                    # Тотальное каскадное выжигание всех типов ключей из RAM-памяти для обнуления слота
                     for k in [symbol, f"{symbol}:USDT", symbol.split(':')[0]]:
                         if k in memory.active_pos: del memory.active_pos[k]
                         if k in memory.be_fixed: del memory.be_fixed[k]
@@ -444,7 +440,6 @@ async def monitor_logic(exchange):
                     memory.slots_occupied = max(0, memory.slots_occupied - 1)
                     if action_triggered_decay:
                         return
-
 
                 # 5. ТВОЙ ОРИГИНАЛЬНЫЙ ВЕНИК-ОПРОС ДЛЯ ВЕРИФИКАЦИИ ИЗВНЕ ВНУТРИ ЦИКЛА FOR
                 # --- ШТУЧНЫЙ МОНОЛИТ V25.5: ТОТАЛЬНО ЗРЯЧИЙ ВЕНИК BINANCE FUTURES ---
