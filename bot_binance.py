@@ -788,7 +788,11 @@ async def monitor_logic(exchange, symbol, pos):
             #if age > optimal_decay_ttl and profit < -0.0008:
             # --- ШТУЧНЫЙ ФИКС V27.0: БЛОКИРОВКА ТАЙМЕРА ПРИ АКТИВНОМ ПРЕ-ТРЕЙЛИНГЕ ---
             # Если по монете пошел скользящий трейлинг прибыли, таймер утилизации блокируется, давая забрать Тейки!
-            if age > optimal_decay_ttl and profit < -0.0008 and not memory.trail_active.get(symbol, False):
+            #if age > optimal_decay_ttl and profit < -0.0008 and not memory.trail_active.get(symbol, False):
+            # --- МОДЕРНИЗАЦИЯ V27.2: СВОБОДНЫЙ АДАПТИВНЫЙ ТАЙМЕР ВНЕ БЛОКА ЛОССА ---
+            # Выносим проверку на уровень 12 пробелов (прямо под расчет age, вне if profit < 0)
+            if age > optimal_decay_ttl and not memory.trail_active.get(symbol, False) and not memory.tp_status.get(symbol, {}).get('tp1', False):
+
                 log(f"⏱️ [ДНК-ТАЙМЕР УТИЛИЗАЦИЯ]: {symbol} утилизирован по лимиту класса ({int(age)}с >= {optimal_decay_ttl}с) | Лосс: {round(profit*100, 2)}%")
                 action_triggered_decay = False
                 try:
@@ -905,7 +909,7 @@ async def monitor_logic(exchange, symbol, pos):
                 if symbol in memory.active_pos: del memory.active_pos[symbol]
                 return
 
-           try:
+            try:
                 close_qty = exchange.amount_to_precision(symbol, close_qty_raw)
                 await exchange.create_market_order(symbol, exit_side, close_qty, {'reduceOnly': True})
 
@@ -923,9 +927,9 @@ async def monitor_logic(exchange, symbol, pos):
                 memory.trail_active[symbol] = True
                 memory.max_pnl[symbol] = profit
                 log(f"🎯 [ТЕЙК-1 BINANCE]: Фиксация 50% по {symbol} (+{round(profit*100, 2)}%). Остаток в безубытке! {bal_str}")
-           except Exception as e:
+            except Exception as e:
                 log(f"⚠ Ошибка исполнения Тейка-1 {symbol}: {e}")
-           return
+            return
 
 #============
         # 6. ВЕДЕНИЕ АДАПТИВНОГО ТРЕЙЛИНГА ПО ШАГАМ
