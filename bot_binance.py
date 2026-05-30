@@ -510,6 +510,30 @@ async def check_signal(exchange, symbol):
                     return None  # Ловить летящий топор нельзя
                 if is_sell_candidate and (c_0 > c_1 and c_1 > c_2):
                     return None  # Встречать грудью вертикальную ракету нельзя
+
+
+            # --- [ВРЕЗКА V27.9: RATIO EXTREME SHIELD — ТИКОВЫЙ ТОРМОЗ ЛЕТЯЩИХ ТОПОРОВ] ---
+            # Запрашиваем живой High и Low текущей минутной свечи из DataFrame
+            live_high = float(df['h'].iloc[-1])
+            live_low = float(df['l'].iloc[-1])
+
+            # Если импульс BUY летит вниз, замеряем расстояние от текущей цены до абсолютного дна свечи
+            if is_buy_candidate and live_low > 0:
+                distance_from_floor = (price / live_low) - 1
+                # Если цена прижата ко дну свечи (расстояние < 0.15%), значит лавина еще прет, дна нет!
+                if distance_from_floor < 0.0015:
+                    log(f"🛡️ [EXTREME SHIELD BUY]: {symbol} летит ломом без отскока. Блокирую вход. ")
+                    return None
+
+            # If импульс SELL летит вверх, замеряем расстояние до абсолютного пика свечи
+            if is_sell_candidate and live_high > 0:
+                distance_from_ceiling = (live_high / price) - 1
+                # Если цена выдавливает хай свечи (расстояние < 0.15%), значит ракета вертикальная, пика нет!
+                if distance_from_ceiling < 0.0015:
+                    log(f"🛡️ [EXTREME SHIELD SELL]: {symbol} прет ракетой без тормозов. Блокирую вх од.")
+                    return None
+
+
         except Exception as input_filter_err:
             pass
 #=====
