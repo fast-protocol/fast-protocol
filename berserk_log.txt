@@ -1,166 +1,39 @@
-[00:30:09] ЛИМИТНЫЙ СНАЙПЕР BERSERK V17.0 ОНЛАЙН. Маржа: $6.64
-[00:30:09] 🏹 Охота лимитными капканами Berserk V16.9 активирована. Патрулирую стаканы...
-[00:30:09] 🔗 Сканирование аккаунта на наличие открытых позиций...
-[00:30:09] 🏛️ 🏹 Охота лимитными капканами Berserk V16.9 активирована. Патрулирую стаканы...
-[00:30:10] 📡 Запуск квантового WebSocket-потока цен для 10 активов...
-[00:31:39] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT BUY @ 0.0873485109058177
-[00:32:24] 🧹 [ВЕНИК V24.8]: Капкан по POL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[00:38:31] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): FET/USDT:USDT SELL @ 0.2348753544043377
-[00:38:46] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт FET/USDT:USDT (35.0 лотов).
-[00:38:47] ⚠️ Алго-шлюз Контура А выдал лаг mexc createSwapOrder() order type must either limit, market, or 1 for limit orders, 2 for post-only orders, 3 for IOC orders, 4 for FOK orders, 5 for market orders or 6 to convert market price to current price. Активирую резервный Контур Б общего стакана!
-[00:38:47] 🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {'symbol': 'FET_USDT', 'side': 4, 'vol': 35.0, 'leverage': 25, 'openType': 1, 'orderType': 3, 'price': 0.0, 'triggerType': 2, 'triggerPrice': 0.2377, 'trend': 2}
-[00:38:48] 🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для FET/USDT:USDT: mexc {"success":false,"code":9999,"message":"Network error. Please try again."}
-[00:38:48] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: FET/USDT:USDT @ 0.2377
-[00:39:11] 🧹 [ВЕНИК V24.8]: Капкан по FET/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[00:39:48] 🏛️ 🛡️ Decay Shield V16.9: FET/USDT:USDT срезан на 60c (Лосс: -0.38%)
-[00:39:50] 🏛️ 🛡️ Decay Shield V16.9: FET/USDT:USDT срезан на 60c (Лосс: -0.38%)
-[00:39:51] ⚠ Сбой шлюза ордеров FET/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[00:39:53] 🏛️ 🛡️ Decay Shield V16.9: FET/USDT:USDT срезан на 60c (Лосс: -0.42%)
-[00:39:53] ⚠ Сбой шлюза ордеров FET/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[00:39:55] 🏛️ 🛡️ Decay Shield V16.9: FET/USDT:USDT срезан на 60c (Лосс: -0.42%)
-[00:39:55] ⚠ Сбой шлюза ордеров FET/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[00:39:57] 🏛️ 🛡️ Decay Shield V16.9: FET/USDT:USDT срезан на 60c (Лосс: -0.42%)
-[00:39:57] ⚠ Сбой шлюза ордеров FET/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[00:39:58] 🏁 [ФИКСАЦИЯ МЕХС]: Позиция FET/USDT:USDT полностью закрыта на бирже! | Общая капитализация Equity: $6.64
-[00:40:00] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): NEAR/USDT:USDT SELL @ 2.4840023729899436
-[00:40:50] 🧹 [ВЕНИК V24.8]: Капкан по NEAR/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход  заблокирован.
-[00:50:53] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): PEPE/USDT:USDT SELL @ 3.419128868183817e-06
-[00:51:33] 🧹 [ВЕНИК V24.8]: Капкан по PEPE/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход  заблокирован.
-[00:54:26] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT BUY @ 0.928896388966407
-[00:55:20] 🧹 [ВЕНИК V24.8]: Капкан по SUI/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[00:55:31] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT BUY @ 0.942910360743431
-[00:56:19] 🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V24.8]: Капкан по APT/USDT:USDT не налился за 40с. Маржа снята, бью по рынку!
-[00:56:30] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт APT/USDT:USDT (818.0 лотов).
-[00:56:32] ⚠️ Алго-шлюз Контура А выдал лаг mexc createSwapOrder() order type must either limit, market, or 1 for limit orders, 2 for post-only orders, 3 for IOC orders, 4 for FOK orders, 5 for market orders or 6 to convert market price to current price. Активирую резервный Контур Б общего стакана!
-[00:56:32] 🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {'symbol': 'APT_USDT', 'side': 3, 'vol': 818.0, 'leverage': 25, 'openType': 1, 'orderType': 3, 'price': 0.0, 'triggerType': 2, 'triggerPrice': 0.9344, 'trend': 1}
-[00:56:32] 🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для APT/USDT:USDT: mexc {"success":false,"code":9999,"message":"Network error. Please try again."}
-[00:56:32] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: APT/USDT:USDT @ 0.9344
-[01:03:03] 🚨 [ЭВАКУАЦИЯ ТРЕНДА V25.5]: Поводырь пробивает залог позиции APT/USDT:USDT! Экстренный маркет-снос.
-[01:03:03] 🧹 [ЭВАКУАТОР]: Лимитки APT/USDT:USDT удалены. Зафиксированный итог: 0.48%
-[01:13:53] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SHIB/USDT:USDT BUY @ 5.3480391377020085e-06
-[01:14:29] 🧹 [ВЕНИК V24.8]: Капкан по SHIB/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход  заблокирован.
-[01:19:28] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT BUY @ 0.9286719366468489
-[01:20:21] 🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V24.8]: Капкан по SUI/USDT:USDT не налился за 40с. Маржа снята, бью по рынку!
-[01:20:22] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт SUI/USDT:USDT (86.0 лотов).
-[01:20:23] ⚠️ Алго-шлюз Контура А выдал лаг mexc createSwapOrder() order type must either limit, market, or 1 for limit orders, 2 for post-only orders, 3 for IOC orders, 4 for FOK orders, 5 for market orders or 6 to convert market price to current price. Активирую резервный Контур Б общего стакана!
-[01:20:23] 🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {'symbol': 'SUI_USDT', 'side': 3, 'vol': 86.0, 'leverage': 25, 'openType': 1, 'orderType': 3, 'price': 0.0, 'triggerType': 2, 'triggerPrice': 0.9176, 'trend': 1}
-[01:20:23] 🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для SUI/USDT:USDT: mexc {"success":false,"code":9999,"message":"Network error. Please try again."}
-[01:20:23] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: SUI/USDT:USDT @ 0.9176
-[01:20:26] 🚨 [ЭВАКУАЦИЯ ТРЕНДА V25.5]: Поводырь пробивает залог позиции SUI/USDT:USDT! Экстренный маркет-снос.
-[01:20:26] 🧹 [ЭВАКУАТОР]: Лимитки SUI/USDT:USDT удалены. Зафиксированный итог: -0.04%
-[01:46:42] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT SELL @ 0.08771541864368643
-[01:47:36] 🧹 [ВЕНИК V24.8]: Капкан по POL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[02:20:56] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT BUY @ 0.9261072674425768
-[02:21:15] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 81.85417426915471
-[02:21:24] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): TIA/USDT:USDT BUY @ 0.4199734219956228
-[02:21:43] 🧹 [ВЕНИК V24.8]: Капкан по SUI/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[02:22:41] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт TIA/USDT:USDT (91.0 лотов).
-[02:22:41] 🚨 [ЭВАКУАЦИЯ ТРЕНДА V25.5]: Поводырь пробивает залог позиции TIA/USDT:USDT! Экстренный маркет-снос.
-[02:25:25] 🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V24.8]: Капкан по SOL/USDT:USDT не налился за 40с. Маржа снята, бью по рынку!
-[02:25:25] 🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V24.8]: Капкан по TIA/USDT:USDT не налился за 40с. Маржа снята, бью по рынку!
-[02:25:27] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт TIA/USDT:USDT (91.0 лотов).
-[02:25:27] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт SOL/USDT:USDT (4.0 лотов).
-[02:25:28] ⚠️ Алго-шлюз Контура А выдал лаг mexc createSwapOrder() order type must either limit, market, or 1 for limit orders, 2 for post-only orders, 3 for IOC orders, 4 for FOK orders, 5 for market orders or 6 to convert market price to current price. Активирую резервный Контур Б общего стакана!
-[02:25:28] 🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {'symbol': 'TIA_USDT', 'side': 3, 'vol': 91.0, 'leverage': 25, 'openType': 1, 'orderType': 3, 'price': 0.0, 'triggerType': 2, 'triggerPrice': 0.4141, 'trend': 1}
-[02:25:28] 🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для TIA/USDT:USDT: mexc {"success":false,"code":9999,"message":"Network error. Please try again."}
-[02:25:28] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: TIA/USDT:USDT @ 0.4141
-[02:25:29] ⚠️ Алго-шлюз Контура А выдал лаг mexc createSwapOrder() order type must either limit, market, or 1 for limit orders, 2 for post-only orders, 3 for IOC orders, 4 for FOK orders, 5 for market orders or 6 to convert market price to current price. Активирую резервный Контур Б общего стакана!
-[02:25:29] 🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {'symbol': 'SOL_USDT', 'side': 3, 'vol': 4.0, 'leverage': 25, 'openType': 1, 'orderType': 3, 'price': 0.0, 'triggerType': 2, 'triggerPrice': 80.93, 'trend': 1}
-[02:25:29] 🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для SOL/USDT:USDT: mexc {"success":false,"code":9999,"message":"Network error. Please try again."}
-[02:25:29] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: SOL/USDT:USDT @ 80.93
-[02:26:27] 🏛️ 🛡️ Decay Shield V16.9: TIA/USDT:USDT срезан на 60c (Лосс: -0.1%)
-[02:26:30] 🏛️ 🛡️ Decay Shield V16.9: TIA/USDT:USDT срезан на 60c (Лосс: -0.1%)
-[02:26:30] ⚠ Сбой шлюза ордеров TIA/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[02:26:32] 🏛️ 🛡️ Decay Shield V16.9: TIA/USDT:USDT срезан на 60c (Лосс: -0.1%)
-[02:26:32] ⚠ Сбой шлюза ордеров TIA/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[02:26:34] 🏛️ 🛡️ Decay Shield V16.9: TIA/USDT:USDT срезан на 60c (Лосс: -0.17%)
-[02:26:34] ⚠ Сбой шлюза ордеров TIA/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[02:26:36] 🏛️ 🛡️ Decay Shield V16.9: TIA/USDT:USDT срезан на 60c (Лосс: -0.17%)
-[02:26:37] ⚠ Сбой шлюза ордеров TIA/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[02:26:37] 🏁 [ФИКСАЦИЯ МЕХС]: Позиция TIA/USDT:USDT полностью закрыта на бирже! | Общая капитализация Equity: $6.64
-[02:27:23] 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USDT срезан на 60c (Лосс: -0.1%)
-[02:27:25] 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USDT срезан на 60c (Лосс: -0.1%)
-[02:27:25] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[02:27:27] 🏛️ 🛡️ Decay Shield V16.9: SOL/USDT:USDT срезан на 60c (Лосс: -0.09%)
-[02:27:28] ⚠ Сбой шлюза ордеров SOL/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[02:27:29] 🏁 [ФИКСАЦИЯ МЕХС]: Позиция SOL/USDT:USDT полностью закрыта на бирже! | Общая капитализация Equity: $6.64
-[02:27:57] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 81.64999204536237
-[02:28:01] ⚠ Сбой шлюза ордеров TIA/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.14929092,"available":3.0877806160900000000000000000000029077}}
-[02:28:10] ⚠ Сбой шлюза ордеров TIA/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.14929092,"available":3.0877806160900000000000000000000029077}}
-[02:28:50] 🧹 [ВЕНИК V24.8]: Капкан по SOL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[02:29:44] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT BUY @ 0.08665810279232772
-[02:30:01] ⚠ Ошибка REST-запроса Поводыря: mexc GET https://api.mexc.com/api/v1/contract/ticker?symbol=BTC_USDT 502 Bad Gateway <html>
-<head><title>502 Bad Gateway</title></head>
-<body>
-<center><h1>502 Bad Gateway</h1></center>
-</body>
-</html>
-[02:30:40] 🧹 [ВЕНИК V24.8]: Капкан по POL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[02:32:21] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 81.47487995878171
-[02:33:12] 🧹 [ВЕНИК V24.8]: Капкан по SOL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[03:07:47] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT SELL @ 81.97302366787056
-[03:08:35] 🧹 [ВЕНИК V24.8]: Капкан по SOL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[03:52:34] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT BUY @ 0.9246862631523385
-[03:52:37] ⚠ Сбой шлюза ордеров WIF/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":3.0963036,"available":2.9684975520900000000000000000000029077}}
-[03:52:40] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт APT/USDT:USDT (826.0 лотов).
-[03:52:42] ⚠️ Алго-шлюз Контура А выдал лаг mexc createSwapOrder() order type must either limit, market, or 1 for limit orders, 2 for post-only orders, 3 for IOC orders, 4 for FOK orders, 5 for market orders or 6 to convert market price to current price. Активирую резервный Контур Б общего стакана!
-[03:52:42] 🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {'symbol': 'APT_USDT', 'side': 3, 'vol': 826.0, 'leverage': 25, 'openType': 1, 'orderType': 3, 'price': 0.0, 'triggerType': 2, 'triggerPrice': 0.9136, 'trend': 1}
-[03:52:42] 🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для APT/USDT:USDT: mexc {"success":false,"code":9999,"message":"Network error. Please try again."}
-[03:52:42] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: APT/USDT:USDT @ 0.9136
-[03:53:15] 🧹 [ВЕНИК V24.8]: Капкан по APT/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[04:05:54] 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT срезан на 60c (Лосс: -0.09%)
-[04:05:57] 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT срезан на 60c (Лосс: -0.09%)
-[04:05:57] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[04:05:59] 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT срезан на 60c (Лосс: -0.09%)
-[04:05:59] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[04:06:01] 🏛️ 🛡️ Decay Shield V16.9: APT/USDT:USDT срезан на 60c (Лосс: -0.09%)
-[04:06:02] ⚠ Сбой шлюза ордеров APT/USDT:USDT (SELL): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[04:06:02] 🏁 [ФИКСАЦИЯ МЕХС]: Позиция APT/USDT:USDT полностью закрыта на бирже! | Общая капитализация Equity: $6.64
-[04:06:53] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT BUY @ 0.08669497787872772
-[04:06:58] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): PEPE/USDT:USDT BUY @ 3.353682165047829e-06
-[04:08:00] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт POL/USDT:USDT (85.0 лотов).
-[04:08:00] 🚨 [ЭВАКУАЦИЯ ТРЕНДА V25.5]: Поводырь пробивает залог позиции POL/USDT:USDT! Экстренный маркет-снос.
-[04:10:00] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT BUY @ 0.9152199550027508
-[04:10:03] ⚠ Сбой шлюза ордеров WIF/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":2.250756,"available":2.1811170080900000000000000000000029077}}
-[04:10:05] ⚠ Сбой шлюза ордеров SHIB/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":2.3078313488,"available":2.1811170080900000000000000000000029077}}
-[04:10:05] 🧹 [ВЕНИК V24.8]: Капкан по POL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[04:10:06] 🧹 [ВЕНИК V24.8]: Капкан по PEPE/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход  заблокирован.
-[04:10:41] 🧹 [ВЕНИК V24.8]: Капкан по SUI/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[04:24:23] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT SELL @ 0.9229497331540261
-[04:25:13] 🧹 [ВЕНИК V24.8]: Капкан по SUI/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[04:45:34] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT SELL @ 82.00327709362978
-[04:45:57] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT SELL @ 0.08731249915228341
-[04:46:25] 🧹 [ВЕНИК V24.8]: Капкан по SOL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[04:46:56] 🧹 [ВЕНИК V24.8]: Капкан по POL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[04:56:35] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT SELL @ 0.9289805293822181
-[04:56:45] ⚠ Сбой шлюза ордеров WIF/USDT:USDT (SELL): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":2.97898738332,"available":2.8452602218980000000000000000000029077}}
-[04:56:53] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): WIF/USDT:USDT SELL @ 0.18530566005523388
-[04:57:24] 🧹 [ВЕНИК V24.8]: Капкан по APT/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[04:57:31] 🧹 [ВЕНИК V24.8]: Капкан по WIF/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[05:22:11] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT BUY @ 0.926402460918014
-[05:24:48] 🧹 [ВЕНИК V24.8]: Капкан по APT/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[06:03:41] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT SELL @ 0.08817197641299443
-[06:04:31] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT SELL @ 0.9295989097978713
-[06:04:36] 🧹 [ВЕНИК V24.8]: Капкан по POL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[06:05:11] 🧹 [ВЕНИК V24.8]: Капкан по SUI/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[06:11:30] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): TIA/USDT:USDT SELL @ 0.41763402929696275
-[06:11:40] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт TIA/USDT:USDT (175.0 лотов).
-[06:11:41] ⚠️ Алго-шлюз Контура А выдал лаг mexc createSwapOrder() order type must either limit, market, or 1 for limit orders, 2 for post-only orders, 3 for IOC orders, 4 for FOK orders, 5 for market orders or 6 to convert market price to current price. Активирую резервный Контур Б общего стакана!
-[06:11:41] 🚨 [DEBUG STOP-B REST V26.0]: Sending Direct Pack: {'symbol': 'TIA_USDT', 'side': 4, 'vol': 175.0, 'leverage': 25, 'openType': 1, 'orderType': 3, 'price': 0.0, 'triggerType': 2, 'triggerPrice': 0.4235, 'trend': 2}
-[06:11:41] 🆘 КАТАСТРОФА: Оба контура стоп-лосса отвергнуты MEXC для TIA/USDT:USDT: mexc {"success":false,"code":9999,"message":"Network error. Please try again."}
-[06:11:41] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: TIA/USDT:USDT @ 0.4235
-[06:12:11] 🧹 [ВЕНИК V24.8]: Капкан по TIA/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[06:12:44] 🏛️ 🛡️ Decay Shield V16.9: TIA/USDT:USDT срезан на 60c (Лосс: -0.1%)
-[06:12:46] 🏛️ 🛡️ Decay Shield V16.9: TIA/USDT:USDT срезан на 60c (Лосс: -0.1%)
-[06:12:46] ⚠ Сбой шлюза ордеров TIA/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[06:12:48] 🏛️ 🛡️ Decay Shield V16.9: TIA/USDT:USDT срезан на 60c (Лосс: -0.1%)
-[06:12:49] ⚠ Сбой шлюза ордеров TIA/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[06:12:51] 🏛️ 🛡️ Decay Shield V16.9: TIA/USDT:USDT срезан на 60c (Лосс: -0.1%)
-[06:12:51] ⚠ Сбой шлюза ордеров TIA/USDT:USDT (BUY): mexc {"success":false,"code":2009,"message":"Position is nonexistent or closed"}
-[06:12:51] 🏁 [ФИКСАЦИЯ МЕХС]: Позиция TIA/USDT:USDT полностью закрыта на бирже! | Общая капитализация Equity: $6.64
-[06:33:44] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT BUY @ 0.9237906768503606
-[06:33:48] ⚠ Сбой шлюза ордеров POL/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":2.92939416,"available":2.7744999280900000000000000000000029077}}
-[06:33:57] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): POL/USDT:USDT BUY @ 0.08777886443728238
-[06:34:06] ⚠ Сбой шлюза ордеров SHIB/USDT:USDT (BUY): mexc {"success":false,"code":2005,"message":"Balance insufficient","_extend":{"cost":1.4287372668,"available":1.3640508880900000000000000000000029077}}
-[06:34:34] 🧹 [ВЕНИК V24.8]: Капкан по SUI/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
-[06:34:43] 🧹 [ВЕНИК V24.8]: Капкан по POL/USDT:USDT удален из стакана. Прорыв пустой, маркет-вход з аблокирован.
+[21:36:58] ЛИМИТНЫЙ СНАЙПЕР BERSERK V17.0 ОНЛАЙН. Маржа: $4.59
+[21:36:58] 🏹 Охота лимитными капканами Berserk V16.9 активирована. Патрулирую стаканы...
+[21:36:58] 🔗 Сканирование аккаунта на наличие открытых позиций...
+[21:36:59] 🏛️ 🏹 Охота лимитными капканами Berserk V16.9 активирована. Патрулирую стаканы...
+[21:37:00] 📡 Запуск квантового WebSocket-потока цен для 10 активов...
+[21:55:52] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 81.52629446235618
+[21:56:38] 🧹 [ВЕНИК V26.9]: Капкан по SOL/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[22:18:42] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): TIA/USDT:USDT SELL @ 0.4116819690574844
+[22:19:23] 🧹 [ВЕНИК V26.9]: Капкан по TIA/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[22:21:16] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT SELL @ 0.9031402839111274
+[22:22:02] 🧹 [ВЕНИК V26.9]: Капкан по SUI/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[01:11:55] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT SELL @ 0.9116214411852498
+[01:12:35] 🧹 [ВЕНИК V26.9]: Капкан по SUI/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[01:12:36] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт SUI/USDT:USDT (62.0 лотов).
+[01:12:38] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: SUI/USDT:USDT @ 0.9225
+[01:41:27] 🚨 [ЭВАКУАЦИЯ ТРЕНДА V25.5]: Поводырь пробивает залог позиции SUI/USDT:USDT! Экстренный маркет-снос.
+[01:41:27] 🧹 [ЭВАКУАТОР]: Лимитки SUI/USDT:USDT удалены. Зафиксированный итог: -0.09%
+[04:06:28] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT BUY @ 0.902200501074813
+[04:07:14] 🔗🔗 ЖИВОЙ ПЕРЕХВАТ MEXC V20.3: Усыновляем контракт SUI/USDT:USDT (62.0 лотов).
+[04:07:15] 🧹 [ВЕНИК V26.9]: Капкан по SUI/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[04:07:16] 🛡️ СЕРВЕРНЫЙ СТОП ВЫСТАВЛЕН: SUI/USDT:USDT @ 0.8914
+[04:10:14] 🚨 [ЭВАКУАЦИЯ ТРЕНДА V25.5]: Поводырь пробивает залог позиции SUI/USDT:USDT! Экстренный маркет-снос.
+[04:10:14] 🧹 [ЭВАКУАТОР]: Лимитки SUI/USDT:USDT удалены. Зафиксированный итог: -0.03%
+[04:27:41] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT BUY @ 82.07583599968945
+[04:27:44] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT BUY @ 0.8937993371981866
+[04:28:36] 🧹 [ВЕНИК V26.9]: Капкан по SOL/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[04:28:37] 🧹 [ВЕНИК V26.9]: Капкан по SUI/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[05:48:36] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT SELL @ 82.75497455262305
+[05:49:28] 🧹 [ВЕНИК V26.9]: Капкан по SOL/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[10:26:20] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): NEAR/USDT:USDT BUY @ 2.4000114576859017
+[10:27:11] 🧹 [ВЕНИК V26.9]: Капкан по NEAR/USDT:USDT стерт. Объем затух или сквиз идет против нас.  Маркет-вход ЗАБЛОКИРОВАН.
+[13:16:23] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT BUY @ 0.8980074523750032
+[13:17:04] 🧹 [ВЕНИК V26.9]: Капкан по SUI/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[15:12:56] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SOL/USDT:USDT SELL @ 82.87609538714982
+[15:13:45] 🧹 [ВЕНИК V26.9]: Капкан по SOL/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[15:39:38] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): APT/USDT:USDT BUY @ 0.9384671204741102
+[15:40:32] 🧹 [ВЕНИК V26.9]: Капкан по APT/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
+[16:39:33] 🚀 ВЗВЕДЕН ЛИМИТНЫЙ КАПКАН Maker (ISOLATED): SUI/USDT:USDT SELL @ 0.9154206425503995
+[16:40:15] 🧹 [ВЕНИК V26.9]: Капкан по SUI/USDT:USDT стерт. Объем затух или сквиз идет против нас. М аркет-вход ЗАБЛОКИРОВАН.
