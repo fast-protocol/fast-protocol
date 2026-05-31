@@ -1,4 +1,3 @@
-
 # --- УПРАВЛЕНИЕ КАПИТАЛОМ ---
 MAX_ACTIVE_SLOTS = 1       # Динамика: 1 (при <$150), 2 (при <$500), 3 (при >$500)
 RISK_GEAR = 0.95           # Общий множитель объема (0.1 - 1.0)
@@ -514,26 +513,49 @@ async def check_signal(exchange, symbol):
 
 
             # --- [ВРЕЗКА V27.9: RATIO EXTREME SHIELD — ТИКОВЫЙ ТОРМОЗ ЛЕТЯЩИХ ТОПОРОВ] ---
-            # Запрашиваем живой High и Low текущей минутной свечи из DataFrame
-            live_high = float(df['h'].iloc[-1])
-            live_low = float(df['l'].iloc[-1])
+            # --- [ВРЕЗКА V28.5: КВАНТОВЫЙ КУМУЛЯТИВНЫЙ И КЛАССОВЫЙ EXTREME SHIELD] ---
+            try:
+                                # Контур 1: Макро-анализ Squeeze Velocity (Защита от системных многоминутных сливов)
+                                if len(df) >= 4:
+                                    # Рассчитываем среднюю цену за последние 3 минуты
+                                    mean_3m = float(df['c'].iloc[-4:-1].mean())
+                                    if mean_3m > 0:
+                                        velocity_pct = abs(price / mean_3m - 1)
+                                        # Если монета каскадно летит камнем/ракетой более чем на 1.8% за 3 минуты - ЖЕСТКИЙ БЛОК
+                                        if velocity_pct >= 0.018:
+                                            # log(f"🛡️ [SQUEEZE VELOCITY BLOCK]: {symbol} летит кас кадным локомотивом ({round(velocity_pct*100, 2)}%). Вход забанен.")
+                                            return None
 
-            # Если импульс BUY летит вниз, замеряем расстояние от текущей цены до абсолютного дна свечи
-            if is_buy_candidate and live_low > 0:
-                distance_from_floor = (price / live_low) - 1
-                # Если цена прижата ко дну свечи (расстояние < 0.15%), значит лавина еще прет, дна нет!
-                if distance_from_floor < 0.0015:
-                    log(f"🛡️ [EXTREME SHIELD BUY]: {symbol} летит ломом без отскока. Блокирую вход. ")
-                    return None
+                                # Контур 2: Микро-анализ Дифференцированного классового тормоза экстремумов
+                                live_high = float(df['h'].iloc[-1])
+                                live_low = float(df['l'].iloc[-1])
 
-            # If импульс SELL летит вверх, замеряем расстояние до абсолютного пика свечи
-            if is_sell_candidate and live_high > 0:
-                distance_from_ceiling = (live_high / price) - 1
-                # Если цена выдавливает хай свечи (расстояние < 0.15%), значит ракета вертикальная, пика нет!
-                if distance_from_ceiling < 0.0015:
-                    log(f"🛡️ [EXTREME SHIELD SELL]: {symbol} прет ракетой без тормозов. Блокирую вх од.")
-                    return None
+                                # Распределяем жесткость необходимого отскока по генетическим классам монет
+                                is_m_coin = any(m_n in symbol.upper() for m_n in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+                                is_a_coin = any(a_n in symbol.upper() for a_n in ['DOT', 'POL', 'BNB', 'XRP', 'ADA'])
 
+                                if is_m_coin:
+                                    required_rebound = 0.0035    # Мемы: требуем тяжелый откуп в 0.35% от лоя/хая
+                                elif is_a_coin:
+                                    required_rebound = 0.0010    # Тяжелые якоря: достаточно микро-торможения в 0.10% плотных плит
+                                else:
+                                    required_rebound = 0.0020    # Тех-Ракеты (FET, NEAR, SOL): оптимальные 0.20% встречного объема
+
+                                # Проверяем торможение лавины ордеров для BUY-импульса
+                                if is_buy_candidate and live_low > 0:
+                                    distance_from_floor = (price / live_low) - 1
+                                    if distance_from_floor < required_rebound:
+                                        # log(f"🛡️ [CLASS EXTREME BUY]: {symbol} не показал встречн ого откупа в {required_rebound*100}%. Блокирую.")
+                                        return None
+
+                                # Проверяем торможение лавины ордеров для SELL-импульса
+                                if is_sell_candidate and live_high > 0:
+                                    distance_from_ceiling = (live_high / price) - 1
+                                    if distance_from_ceiling < required_rebound:
+                                        # log(f"🛡️ [CLASS EXTREME SELL]: {symbol} выдавливает хай б ез встречных продаж. Блокирую.")
+                                        return None
+            except:
+                pass
 
         except Exception as input_filter_err:
             pass
