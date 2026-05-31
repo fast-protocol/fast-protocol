@@ -1,4 +1,3 @@
-
 # --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
 RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
 MAX_SLOTS = 1          # Максимум 4 параллельных сделки
@@ -308,7 +307,9 @@ async def monitor_logic(exchange):
     while memory.is_running:
         for symbol, pos in list(memory.active_pos.items()):
             try:
-                cur_p = memory.prices.get(symbol)
+               # cur_p = memory.prices.get(symbol)
+                clean_symbol = symbol.split(':')[0]
+                cur_p = memory.prices.get(clean_symbol)
                 if not cur_p: continue
 
 #======
