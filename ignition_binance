@@ -1,3 +1,4 @@
+
 # --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
 RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
 MAX_SLOTS = 1          # Максимум 4 параллельных сделки
@@ -307,16 +308,14 @@ async def monitor_logic(exchange):
     while memory.is_running:
         for symbol, pos in list(memory.active_pos.items()):
             try:
-               # cur_p = memory.prices.get(symbol)
-                clean_symbol = symbol.split(':')[0]
-                cur_p = memory.prices.get(clean_symbol)
-                if not cur_p: continue
-
-#======
-                # --- [ВРЕЗКА V25.0: МОHОЛИТ УПРАВЛЕHИЯ ВЫХОДАМИ И РАННЕГО БЕЗУБЫТКА БИНАНСА] ---
-                # Синхронизируем ключи: raw_symbol всегда с суффиксом (:USDT), clean_symbol - чистый для API
+                # --- ШТУЧНЫЙ ФИКС V27.5: НАМЕРТВО СИНХРОНИЗИРУЕМ RAW И CLEAN КЛЮЧИ ---
                 raw_symbol = symbol
                 clean_symbol = raw_symbol.split(':')[0]
+
+                cur_p = memory.prices.get(clean_symbol)
+                if not cur_p:
+                    cur_p = float(pos.get('markPrice')) if pos.get('markPrice') else float(pos.get('info', {}).get('markPrice', 0))
+                if not cur_p or cur_p <= 0: continue
 
                 # Вычисляем чистый PNL без учета плеча в зависимости от направления сделки
                 price = float(pos['price'])
@@ -418,20 +417,23 @@ async def monitor_logic(exchange):
 #======
 
                 # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Если застряли в болоте)
-                # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Time-Decay Shield V27.2)
+                # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Time-Decay Shield V27.5)
+                # Переопределяем gd из пульта по чистому clean_symbol, уходя от краша None
+                gd = memory.all_dna.get(clean_symbol, {}).get(pos['gear'], {'time': 2700, 'tp1': 0.03})
+
                 if age > gd['time'] and pnl < gd['tp1']:
-                    log(f"⏱️ [ТАЙМЕР УТИЛИЗАЦИЯ V27.2]: {symbol} завис в болоте флэта ({int(age)}с > {gd['time']}с). Снос позиции.")
+                    log(f"⏱️ [ТАЙМЕР УТИЛИЗАЦИЯ ИМПУЛЬСНИКА V27.5]: {clean_symbol} завис в минусе ({int(age)}с > {gd['time']}с). Снос позиции.")
                     action_triggered_decay = False
                     try:
-                        clean_symbol = symbol.split(':')[0]  # Намертво срезаем суффикс :USDT для шлюза Бинанса
+                        binance_market_id = raw_symbol.replace('/', '').replace(':USDT', '')
                         await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                         await exchange.create_market_order(clean_symbol, exit_side, pos['vol'])
                         action_triggered_decay = True
                     except Exception as decay_err:
-                        log(f"⚠️ Ошибка эвакуации по таймеру для {symbol}: {decay_err}")
+                        log(f"⚠️ Ошибка маркет-сноса по таймеру для {clean_symbol}: {decay_err}")
 
-                    # Тотальное каскадное выжигание всех типов ключей из RAM-памяти для обнуления слота
-                    for k in [symbol, f"{symbol}:USDT", symbol.split(':')[0]]:
+                    # Тотальное выжигание всех видов и форматов ключей из RAM для обнуления слота
+                    for k in [raw_symbol, clean_symbol, f"{clean_symbol}:USDT"]:
                         if k in memory.active_pos: del memory.active_pos[k]
                         if k in memory.be_fixed: del memory.be_fixed[k]
                         if k in memory.stop_placed: del memory.stop_placed[k]
@@ -441,6 +443,7 @@ async def monitor_logic(exchange):
                     memory.slots_occupied = max(0, memory.slots_occupied - 1)
                     if action_triggered_decay:
                         return
+
 
                 # 5. ТВОЙ ОРИГИНАЛЬНЫЙ ВЕНИК-ОПРОС ДЛЯ ВЕРИФИКАЦИИ ИЗВНЕ ВНУТРИ ЦИКЛА FOR
                 # --- ШТУЧНЫЙ МОНОЛИТ V25.5: ТОТАЛЬНО ЗРЯЧИЙ ВЕНИК BINANCE FUTURES ---
