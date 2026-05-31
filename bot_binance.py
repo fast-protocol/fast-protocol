@@ -1,3 +1,4 @@
+
 # --- УПРАВЛЕНИЕ КАПИТАЛОМ ---
 MAX_ACTIVE_SLOTS = 1       # Динамика: 1 (при <$150), 2 (при <$500), 3 (при >$500)
 RISK_GEAR = 0.95           # Общий множитель объема (0.1 - 1.0)
@@ -882,17 +883,34 @@ async def monitor_logic(exchange, symbol, pos):
 
                 if action_triggered_deadtime: return # Намертво обрываем тик
 #==============
-        # 3. ВЫСТАВЛЕНИЕ РЕАЛЬНОГО СТОПА НА БИРЖУ СРАЗУ ПРИ ВХОДЕ
+        # 3. ВЫСТАВЛЕНИЕ РЕАЛЬНОГО СТОПА НА БИРЖУ СРАЗУ ПРИ ВХОДЕ V27.8
         if not memory.stop_placed.get(symbol):
-            try:
-                sl_price = entry_p * (1 - abs(dna['sl'])) if side in ['long', 'buy'] else entry_p * (1 + abs(dna['sl']))
-                sl_price = float(exchange.price_to_precision(symbol, sl_price))
+                try:
+                    sl_price = entry_p * (1 - abs(dna['sl'])) if side in ['long', 'buy'] else entry_p * (1 + abs(dna['sl']))
+                    sl_price = float(exchange.price_to_precision(clean_symbol, sl_price))
 
-                await exchange.cancel_all_orders(symbol, {'spot': False})
-                await exchange.create_order(symbol, 'STOP_MARKET', exit_side, vol, params={'stopPrice': sl_price, 'reduceOnly': True})
-                memory.stop_placed[symbol] = sl_price
-                log(f"🛡️ СТОП ВЫСТАВЛЕН: {symbol} @ {sl_price} {bal_str}")
-            except Exception as e: log(f"🆘 Ошибка стопа {symbol}: {e}")
+                    # --- АППАРАТНЫЙ ЩИТ: Защита от выставления стопа вдогонку пробитому уровню ---
+                    is_stop_broken = (side in ['long', 'buy'] and cur_p <= sl_price) or (side in ['short', 'sell'] and cur_p >= sl_price)
+                    if is_stop_broken:
+                        log(f"🚨 [СТОП УЖЕ ПРОБИТ ЖИВЫМ ТИКОМ]: Цена {cur_p} улетела за стоп {sl_price} по {clean_symbol}. Включение экстренного маркет-сноса лота!")
+                        try:
+                            clean_market_id = symbol.replace('/', '').replace(':USDT', '')
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': clean_market_id})
+                            await exchange.create_market_order(clean_symbol, exit_side, vol, {'reduceOnly': True})
+                        except: pass
+                        clean_memory_keys(symbol)
+                        if symbol in memory.active_pos: del memory.active_pos[symbol]
+                        return
+
+                    # Выставляем защитный стоп-маркет строго по чистому clean_symbol без суффиксов
+                    exact_vol = exchange.amount_to_precision(clean_symbol, vol)
+                    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': symbol.replace('/', '').replace(':USDT', '')})
+
+                    await exchange.create_order(clean_symbol, 'STOP_MARKET', exit_side, exact_vol, params={'stopPrice': sl_price, 'reduceOnly': True})
+                    memory.stop_placed[symbol] = sl_price
+                    log(f"🛡️ СТОП ВЫСТАВЛЕН: {clean_symbol} @ {sl_price} {bal_str}")
+                except Exception as stop_err:
+                    log(f"🆘 Ошибка контура Стоп-Лосса {clean_symbol}: {stop_err}")
 
         # 4. TP1 С ИСПРАВЛЕННЫМ СТРОКОВЫМ ОБЪЕМОМ И ПЕРЕВОДОМ В РЕАЛЬНЫЙ БУ
 #==========
