@@ -4,7 +4,7 @@ BB_STD = 2.2
 LIMIT_ORDER_TTL = 75           # Время жизни лимитки в стакане (секунды)
 
 # === [УЛЬТИМАТИВНЫЙ ДНК-ПУЛЬТ УПРАВЛЕНИЯ V23.0 МОНОЛИТ] ===
-MAX_SLOTS = 1
+MAX_SLOTS = 3
 RISK_GEAR = 0.80
 DEBUG_BEACONS = True
 
@@ -900,7 +900,7 @@ async def main_logic():
                 avg_btc_move_pct = ((m1_diff + m2_diff) / 2) / btc_window[-1] * 100
 #+++++++++++++++
                 # --- [ФИКС V23.1: БЛОКИРОВКА ЦИКЛА ПРИ ШТОРМЕ] ---
-                if avg_btc_move_pct > 0.045:
+                if avg_btc_move_pct > 0.12:
                     memory.btc_storm_time = now
                     if not hasattr(memory, 'last_momentum_log'): memory.last_momentum_log = 0
                     if now - memory.last_momentum_log >= 60:
@@ -908,9 +908,9 @@ async def main_logic():
                         memory.last_momentum_log = now
 
                 # Жестко обрываем итерацию и уходим на новый круг, если 90 секунд еще не прошло
-                if hasattr(memory, 'btc_storm_time') and (now - memory.btc_storm_time < 90):
-                    await asyncio.sleep(0.5)
-                    continue  # Входы заблокированы наглухо!
+#                if hasattr(memory, 'btc_storm_time') and (now - memory.btc_storm_time < 90):
+#                    await asyncio.sleep(0.5)
+#                    continue  # Входы заблокированы наглухо!
 
 # ------------------------------------------------------------------
 
