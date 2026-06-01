@@ -322,7 +322,7 @@ async def check_signal(exchange, symbol):
         if is_buy_candidate:
            # Ловим разворот на лоях: капкан ставится только если лавина продаж ИССЯКАЕТ (объем падает)
             if live_volume >= prev_volume:
-               # log(f"🛡️ [VOLUME OVERFLOW]: Слив по {symbol} усиливается. Убираю капкан лонга.")
+               # log(f"🛡️ [VOLUME OVERFLOW]: Слив по {symbol} усиливается. Убираю капкан л онга.")
                 return None
         elif is_sell_candidate:
             # Ловим разворот на хаях: капкан шорта ставится только если памп ВЫДОХСЯ (объем падает)
@@ -645,10 +645,10 @@ async def monitor_logic(exchange):
                             memory.tp1_fixed[symbol] = True
                         await asyncio.sleep(0.2)
                         # 2. Рассчитываем и выставляем безубыточный стоп-лосс на остаток позиции
-                        # --- [ВРЕЗКА V28.0: ТОТАЛЬНЫЙ ХРАПОВИК БЕЗУБЫТКА МЕХС] ---
+                        # --- [ВРЕЗКА V28.2: ИСПРАВЛЕННЫЙ ХРАПОВИК С ТЕЛЕМЕТРИЕЙ БАЛАНСА] ---
                         try:
-                            # Намертво сносим старый защитный стоп на бирже
-                            await exchange.cancel_all_orders(symbol, {'spot': False})
+                            # На МЕХС метод возвращает список синхронно, await перед ним вызовет TypeError!
+                            exchange.cancel_all_orders(symbol, {'spot': False})
 
                             # Рассчитываем прецизионную цену БУ ровно на уровень нашего входа
                             bu_price = float(exchange.price_to_precision(symbol, pos['price']))
@@ -659,10 +659,9 @@ async def monitor_logic(exchange):
                                 params={'stopPrice': bu_price, 'reduceOnly': True}
                             )
                             memory.stop_placed[symbol] = bu_price
-                            log(f"🛡️ [ХРАПОВИК МЕХС]: Остаток {symbol} намертво защищен в безубытке  @ {bu_price} {bal_str}")
+                            log(f"🛡️ [ХРАПОВИК МЕХС АКТИВИРОВАН]: Остаток {symbol} защищен в БУ @ { bu_price} | Живой Equity МЕХС: ${round(memory.total_wallet, 2)}")
                         except Exception as bu_err:
                             log(f"⚠️ Сбой авто-переноса в БУ на МЕХС для {symbol}: {bu_err}")
-
 #============
                     except Exception as e:
                         log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
@@ -853,9 +852,9 @@ async def main_logic():
                         if sym not in current_mexc_active:
                             try:
                                 pos_data = memory.active_pos[sym]
-                                log(f"🏁 [ФИКСАЦИЯ МЕХС]: Позиция {sym} полностью закрыта на бирже! | Общая капитализация Equity: ${round(memory.total_wallet, 2)}")
+                                log(f"🏁 [ФИКСАЦИЯ МЕХС]: Позиция {sym} закрыта. Принудительный клининг. | Живой Equity МЕХС: ${round(memory.total_wallet, 2)}")
                             except:
-                                log(f"🏁 [ФИКСАЦИЯ МЕХС]: Позиция {sym} закрыта. Принудительный клининг. | Equity: ${round(memory.total_wallet, 2)}")
+                                log(f"🏁 [ФИКСАЦИЯ МЕХС]: Позиция {sym} закрыта. Принудительный клининг. | Живой Equity МЕХС: ${round(memory.total_wallet, 2)}")
 
                             # Каскадное выжигание всех типов ключей
                             for k in [sym, f"{sym}:USDT", sym.replace(':USDT', '')]:
@@ -1008,23 +1007,56 @@ async def main_logic():
                         # Если мы хотели BUY, а цена рушится ВНИЗ на объемах против нас -> маркет-вход блокируется наглухо!
                         is_trend_support = (is_order_buy and price_going_up) or (not is_order_buy and not price_going_up)
 
-                        # Г. ИСПОЛНИТЕЛЬНЫЙ КОНТУР
+                        # Г. ИСПОЛНИТЕЛЬНЫЙ КОНТУР V28.0 (КВАНТОВАЯ РОТАЦИЯ МАРЖИ И ВХОД НА ВСЕ ДЕПО)
                         if volume_growing and is_trend_support:
-                            log(f"🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V26.9]: Капкан по {sym_key} не налился. Импульс попутный, бью по рынку!")
+                            log(f"🚀 [МАРКЕТ-ВХОД ВДОГОНКУ V28.0]: Капкан по {sym_key} не налился. Выжигаю чужие лимитки для входа на 100% депо!")
+                            try:
+                                # Намертво стираем абсолютно все остальные неналитые лимитные капканы на аккаунте
+                                for any_sym in list(memory.limit_orders.keys()):
+                                    try:
+                                        await exchange.cancel_order(memory.limit_orders[any_sym]['id'], any_sym)
+                                        del memory.limit_orders[any_sym]
+                                    except: pass
 
-                            exit_side_chase = order_data['side']
-                            params_chase = {'openType': int(1), 'leverage': int(25)}
-                            market_order = exchange.create_order(sym_key, 'market', exit_side_chase, order_data['qty'], None, params_chase)
+                                await asyncio.sleep(0.2) # Пауза 200мс для обновления кэша баланса МЕХС
 
-                            if market_order:
-                                memory.active_pos[sym_key] = {
-                                    'side': order_data['side'],
-                                    'vol': order_data['qty'],
-                                    'price': float(market_order.get('price', order_data['price'])),
-                                    'entry_time': time.time(),
-                                    'dna': order_data['dna']
-                                }
-                                memory.slots_occupied = len(memory.active_pos)
+                                # Считываем тотально освобожденный баланс кошелька
+                                bal_refresh = await exchange.fetch_balance({'type': 'swap'})
+                                if isinstance(bal_refresh, dict) and 'USDT' in bal_refresh:
+                                    memory.available = float(bal_refresh['USDT'].get('free', memory.available))
+
+                                # Пересчитываем максимальный объем USDT от всего свободного капитала
+                                amount_usdt = memory.available * RISK_GEAR * 25
+                                contract_value_usdt = order_data['price'] * contract_size
+                                new_qty = amount_usdt / contract_value_usdt
+
+                                # Страховой демпфер под неделимый шаг лотов МЕХС для SOL/SUI/APT/TIA/NEAR
+                                if any(token in sym_key.upper() for token in ['SOL', 'SUI', 'APT', 'NEAR', 'TIA']):
+                                    new_qty = new_qty / 10.0
+
+                                # Округляем до разрешенного биржей количества контрактов
+                                new_qty = float(exchange.amount_to_precision(sym_key, new_qty))
+                                if new_qty <= 0: continue
+
+                                exit_side_chase = order_data['side']
+                                params_chase = {'openType': int(1), 'leverage': int(25)}
+
+                                # Ударяем по рынку вдогонку на всю доступную котлету
+                                market_order = exchange.create_order(sym_key, 'market', exit_side_chase, new_qty, None, params_chase)
+
+                                if market_order:
+                                    # Записываем сделку в оперативную память с прецизионной точностью нового объема
+                                    memory.active_pos[sym_key] = {
+                                        'side': order_data['side'],
+                                        'vol': new_qty,
+                                        'price': float(market_order.get('price', order_data['price'])),
+                                        'entry_time': time.time(),
+                                        'dna': order_data['dna']
+                                    }
+                                    memory.slots_occupied = len(memory.active_pos)
+                            except Exception as market_chaser_err:
+                                log(f"⚠️ Сбой маркет-входа вдогонку для {sym_key}: {market_chaser_err}")
+
                         else:
                             log(f"🧹 [ВЕНИК V26.9]: Капкан по {sym_key} стерт. Объем затух или сквиз  идет против нас. Маркет-вход ЗАБЛОКИРОВАН.")
 
