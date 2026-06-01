@@ -20,12 +20,12 @@ DNA_MATRIX = {
     'JASMY/USDT:USDT':  {'l_off': 0.0045, 's_off': 0.0045, 'tp1': 0.0090, 'tp2': 0.0280, 'tp3': 0.0400, 'sl': 0.015, 'ttl': 30},
 
     # КЛАСС 2: Технологичные Ракеты (Оптимальные капканы, средние тейки, маркет-вход 40с)
-    'SOL/USDT:USDT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
+    'SOL/USDT:USDT': {'l_off': 0.0045, 's_off': 0.0045, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 120},
+    'SUI/USDT:USDT': {'l_off': 0.0035, 's_off': 0.0035, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 60},
+    'APT/USDT:USDT': {'l_off': 0.0035, 's_off': 0.0035, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 60},
     'NEAR/USDT:USDT':   {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
-    'SUI/USDT:USDT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
     'FET/USDT:USDT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
     'TIA/USDT:USDT':    {'l_off': 0.0030, 's_off': 0.0030, 'tp1': 0.0070, 'tp2': 0.0200, 'tp3': 0.0450, 'sl': 0.014, 'ttl': 40},
-    'APT/USDT:USDT':    {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
     'RNDR/USDT:USDT':   {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
     'RENDER/USDT:USDT': {'l_off': 0.0025, 's_off': 0.0025, 'tp1': 0.0065, 'tp2': 0.0185, 'tp3': 0.0420, 'sl': 0.012, 'ttl': 40},
 
@@ -645,26 +645,24 @@ async def monitor_logic(exchange):
                             memory.tp1_fixed[symbol] = True
                         await asyncio.sleep(0.2)
                         # 2. Рассчитываем и выставляем безубыточный стоп-лосс на остаток позиции
+                        # --- [ВРЕЗКА V28.0: ТОТАЛЬНЫЙ ХРАПОВИК БЕЗУБЫТКА МЕХС] ---
                         try:
-#                        try: exchange.fapiPrivateDeleteAlgoOpenOrders({'symbol': mexc_market_id})
-#                        except: pass
-                            # Добавили .lower() для защиты регистра букв усыновленных позиций
-                            is_buy = pos['side'].lower() == 'buy' or 'long' in pos['side'].lower()
-                            bu_price = pos['price'] * (1 - 0.0005) if is_buy else pos['price'] * (1 + 0.0005)
-                            bu_price_precision = float(exchange.price_to_precision(symbol, bu_price))
+                            # Намертво сносим старый защитный стоп на бирже
+                            await exchange.cancel_all_orders(symbol, {'spot': False})
 
-#                            exact_remainder_vol = float(exchange.amount_to_precision(symbol, pos['vol']))
-#                            smart_order(exchange, symbol, exit_side, exact_remainder_vol, price=bu_price_precision, is_stop=True)
-                            # --- ШТУЧНЫЙ ФИКС V21.6: СИНХРOНИЗАЦИЯ ОБЪЕМА БЕЗУБЫТКА ПОД REDUCE_ONLY ---
-                            # Берем точный уменьшенный остаток в RAM после списания Тейка-1
-                            exact_remainder_vol = float(exchange.amount_to_precision(symbol, pos['vol']))
+                            # Рассчитываем прецизионную цену БУ ровно на уровень нашего входа
+                            bu_price = float(exchange.price_to_precision(symbol, pos['price']))
 
-                            if exact_remainder_vol > 0:
-                                smart_order(exchange, symbol, exit_side, exact_remainder_vol, price=bu_price_precision, is_stop=True)
-                                memory.stop_placed[symbol] = bu_price_precision
-                            memory.stop_placed[symbol] = bu_price_precision
-                        except Exception as e_m2:
-                            log(f"🆘 Ошибка выставления безубытка на МЕХС: {e_m2}")
+                            # Выставляем новый безубыточный СТОП-МАРКЕТ на МЕХС на оставшиеся 50% объема лота
+                            await exchange.create_order(
+                                symbol, 'STOP_MARKET', exit_side, rem_vol,
+                                params={'stopPrice': bu_price, 'reduceOnly': True}
+                            )
+                            memory.stop_placed[symbol] = bu_price
+                            log(f"🛡️ [ХРАПОВИК МЕХС]: Остаток {symbol} намертво защищен в безубытке  @ {bu_price} {bal_str}")
+                        except Exception as bu_err:
+                            log(f"⚠️ Сбой авто-переноса в БУ на МЕХС для {symbol}: {bu_err}")
+
 #============
                     except Exception as e:
                         log(f"🆘 Ошибка исполнения Тейка 1 {symbol}: {e}")
