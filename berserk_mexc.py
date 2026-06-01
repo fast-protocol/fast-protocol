@@ -653,11 +653,12 @@ async def monitor_logic(exchange):
                             # Рассчитываем прецизионную цену БУ ровно на уровень нашего входа
                             bu_price = float(exchange.price_to_precision(symbol, pos['price']))
 
-                            # Выставляем новый безубыточный СТОП-МАРКЕТ на МЕХС на оставшиеся 50% объема лота
+                            # Выставляем новый безубыточный СТОП-МАРКЕТ на МЕХС на реальный остаток лота из RAM
                             await exchange.create_order(
-                                symbol, 'STOP_MARKET', exit_side, rem_vol,
+                                symbol, 'STOP_MARKET', exit_side, pos['vol'],
                                 params={'stopPrice': bu_price, 'reduceOnly': True}
                             )
+
                             memory.stop_placed[symbol] = bu_price
                             log(f"🛡️ [ХРАПОВИК МЕХС АКТИВИРОВАН]: Остаток {symbol} защищен в БУ @ { bu_price} | Живой Equity МЕХС: ${round(memory.total_wallet, 2)}")
                         except Exception as bu_err:
@@ -1025,9 +1026,19 @@ async def main_logic():
                                 if isinstance(bal_refresh, dict) and 'USDT' in bal_refresh:
                                     memory.available = float(bal_refresh['USDT'].get('free', memory.available))
 
+                                # --- ШТУЧНЫЙ ФИКС V28.3: АВТOHOMHOE ИЗВЛЕЧЕHИЕ CONTRACT_SIZE МЕХС ---
+                                try:
+                                    market_data_chase = exchange.market(sym_key)
+                                    live_contract_size = float(market_data_chase.get('contractSize', 1.0))
+                                except:
+                                    live_contract_size = 1.0
+
                                 # Пересчитываем максимальный объем USDT от всего свободного капитала
                                 amount_usdt = memory.available * RISK_GEAR * 25
-                                contract_value_usdt = order_data['price'] * contract_size
+                                contract_value_usdt = order_data['price'] * live_contract_size
+                                new_qty = amount_usdt / contract_value_usdt
+
+
                                 new_qty = amount_usdt / contract_value_usdt
 
                                 # Страховой демпфер под неделимый шаг лотов МЕХС для SOL/SUI/APT/TIA/NEAR
