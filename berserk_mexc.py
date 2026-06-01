@@ -5,7 +5,7 @@ LIMIT_ORDER_TTL = 75           # Время жизни лимитки в ста�
 
 # === [УЛЬТИМАТИВНЫЙ ДНК-ПУЛЬТ УПРАВЛЕНИЯ V23.0 МОНОЛИТ] ===
 MAX_SLOTS = 1
-RISK_GEAR = 0.50
+RISK_GEAR = 0.80
 DEBUG_BEACONS = True
 
 # Каноническая матрица индивидуальных параметров под каждый класс активов
@@ -538,7 +538,7 @@ async def monitor_logic(exchange):
                     #log(f"🛡 Decay Shield V16.9: {symbol} утилизирован по времени (Лосс: {round(pro fit*100,2)}%)")
                     # Вычисляем грязную прибыль/убыток в USDT с учетом 25х плеча
                     pnl_usdt = pos['vol'] * pos['price'] * profit
-                    log(f"🛡️ [DECAY SHIELD EXIT]: {symbol} утилизирован по времени. Итог: {round(pr ofit*100, 2)}% | Прибыль: {round(pnl_usdt, 4)} USDT | Equity: ${round(total_equity, 2)}")
+                    log(f"🛡️ [DECAY SHIELD EXIT]: {symbol} утилизирован по времени. | Итог: {round( profit * 100, 2)}% ({round(pnl_usdt, 4)} USDT) | Живой Equity МЕХС: ${round(memory.total_wallet, 2)}")
                     action_triggered_decay = False
 #===================
                     # --- ЖЕСТКИЙ МОНОЛИТ V24.2: ДВУХКОНТУРНАЯ ИЗОЛЯЦИЯ DECAY SHIELD ---
