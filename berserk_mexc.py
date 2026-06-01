@@ -322,7 +322,7 @@ async def check_signal(exchange, symbol):
         if is_buy_candidate:
            # Ловим разворот на лоях: капкан ставится только если лавина продаж ИССЯКАЕТ (объем падает)
             if live_volume >= prev_volume:
-               # log(f"🛡️ [VOLUME OVERFLOW]: Слив по {symbol} усиливается. Убираю капкан л онга.")
+               # log(f"🛡️ [VOLUME OVERFLOW]: Слив по {symbol} усиливается. Убираю капкан лонга.")
                 return None
         elif is_sell_candidate:
             # Ловим разворот на хаях: капкан шорта ставится только если памп ВЫДОХСЯ (объем падает)
@@ -1014,7 +1014,7 @@ async def main_logic():
                                 # Намертво стираем абсолютно все остальные неналитые лимитные капканы на аккаунте
                                 for any_sym in list(memory.limit_orders.keys()):
                                     try:
-                                        await exchange.cancel_order(memory.limit_orders[any_sym]['id'], any_sym)
+                                        exchange.cancel_order(memory.limit_orders[any_sym]['id'], any_sym)
                                         del memory.limit_orders[any_sym]
                                     except: pass
 
