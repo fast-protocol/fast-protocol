@@ -305,24 +305,89 @@ async def execute_entry(exchange, sig):
 async def monitor_logic(exchange):
     """Асинхронный бронированный контроль выходов и адаптивного пре-трейлинга V22.0 [ФИКС NEAR]"""
     while memory.is_running:
+        # --- [ВРЕЗКА V28.4: СКВОЗНОЙ ДЕБАГ ШЛЮЗА ВЫХОДОВ] ---
+#        if int(time.time()) % 5 == 0:
+#            log(f"🛰️ [DEBUG GATE 1]: Цикл while активен. Текущий размер RAM active_pos: {len(memor y.active_pos)}")
+#            log(f"🛰️ [DEBUG GATE 2]: Сырые ключи в памяти active_pos: {list(memory.active_pos.keys ())}")
+
+        # Микро-пауза 200мс для предотвращения зависания процессора
+        await asyncio.sleep(0.2)
+
         for symbol, pos in list(memory.active_pos.items()):
+            # --- [DEBUG GATE 3]: Прорвались внутрь цикла обхода конкретного тикера! ---
+#            if int(time.time()) % 5 == 0:
+#                log(f"🛰️ [DEBUG GATE 3]: Вошли в цикл. Текущий symbol={symbol} | pos.keys={list(po s.keys()) if isinstance(pos, dict) else 'NOT_A_DICT'}")
             try:
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 1]: Начинаем расчет параметров для {clean_symbol}. Текущая цена cur_p={cur_p}")
+
+
                 # --- ШТУЧНЫЙ ФИКС V27.5: НАМЕРТВО СИНХРОНИЗИРУЕМ RAW И CLEAN КЛЮЧИ ---
                 raw_symbol = symbol
                 clean_symbol = raw_symbol.split(':')[0]
 
+                # --- [ВРЕЗКА V28.9: ПРЯМОЙ REST-ПРОРЫВ К ЦЕНАМ БИНАНСА] ---
                 cur_p = memory.prices.get(clean_symbol)
-                if not cur_p:
-                    cur_p = float(pos.get('markPrice')) if pos.get('markPrice') else float(pos.get('info', {}).get('markPrice', 0))
-                if not cur_p or cur_p <= 0: continue
 
+                # Если в RAM памяти сокетов пусто или ноль — пробиваем прямой запрос на биржу
+                if not cur_p or float(cur_p) <= 0:
+                    try:
+                        # Собираем жесткий биржевой ID контракта (XRPUSDT)
+                        #binance_ticker_id = str(raw_symbol).replace('/', '').replace(':USDT', '')
+                        binance_ticker_id = str(raw_symbol).split(':')[0].replace('/', '')
+                        # Запрашиваем живую цену маркировки напрямую через REST шлюз
+                        rest_resp = await exchange.fapiPublicGetTickerPrice({'symbol': binance_ticker_id})
+                        if isinstance(rest_resp, dict) and 'price' in rest_resp:
+                            cur_p = float(rest_resp['price'])
+                        elif isinstance(rest_resp, list) and len(rest_resp) > 0:
+                            cur_p = float(rest_resp[0].get('price', 0))
+                    except Exception as rest_price_err:
+                        pass
+
+                # Если цена все еще не найдена в сокетах и REST — пробуем старый марк-прайс из pos
+                if not cur_p or float(cur_p) <= 0:
+                    cur_p = float(pos.get('markPrice')) if pos.get('markPrice') else float(pos.get('info', {}).get('markPrice', 0))
+
+                # Если тотальный глухой вакуум — аварийно пропускаем тик во избежание ZeroDivisionError
+                if not cur_p or float(cur_p) <= 0:
+                    continue
+
+                cur_p = float(cur_p) # Жестко гарантируем float тип данных
                 # Вычисляем чистый PNL без учета плеча в зависимости от направления сделки
-                price = float(pos['price'])
-                pnl = (cur_p / price - 1) if pos['side'] == 'buy' else (price / cur_p - 1)
-                gd = pos['gear_data']
-                age = time.time() - pos['entry_time']
+#                price = float(pos['price'])
+
+                #pnl = (cur_p / price - 1) if pos['side'] == 'buy' else (price / cur_p - 1)
+                #gd = pos['gear_data']
+                #age = time.time() - pos['entry_time']
+
+                # --- ШТУЧНЫЙ ФИКС V28.3: ЗАЩИТА СИРОТ RECOVERED ОТ КРАША KEYERROR ---
+                pnl = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 2]: PNL успешно рассчитан: {round(pnl*100, 4)}%")
+
+                # Безопасное извлечение ДНК-параметров без падения в KeyError
+                gd = pos.get('gear_data', memory.all_dna.get(clean_symbol, {}).get('G1', {'time': 2700, 'tp1': 0.03}))
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 3]: ДНК успешно извлечена. Лимит времени: {gd.get('time')}с")
+
+
+                # Если позиция подхвачена через RECOVERED и висит со вчерашнего дня — взрываем таймер утилизации принудительно
+                if pos.get('is_recovered', True) or (time.time() - pos['entry_time'] < 60 and pnl < 0):
+                    age = gd.get('time', 2700) + 100  # Намертво выставляем возраст > 45 минут
+                else:
+                    age = time.time() - pos['entry_time']
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 4]: Возраст сделки посчитан: {round(age, 1)}с")
+
+
                 exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
                 binance_market_id = raw_symbol.replace('/', '').replace(':USDT', '')
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 5]: Все переменные собраны. Переходим к дебагу утилизации...")
 
                 # А. КОHТУР РАHHЕГО СHАЙПЕРСКОГО БЕЗУБЫТКА (До выполнения Тейка-1)
                 # Если позиция набрала +1.5% чистого хода цены, но Тейк-1 еще не взят — защищаем залог!
@@ -425,9 +490,15 @@ async def monitor_logic(exchange):
                 # Переопределяем параметры ДНК из пульта по чистому clean_symbol
                 gd = memory.all_dna.get(clean_symbol, {}).get(pos['gear'], {'time': 2700, 'tp1': 0.03})
 
-                if age > gd['time'] and pnl < gd['tp1'] and not memory.be_fixed.get(raw_symbol, False):
-                    log(f"⏱️ [ТАЙМЕР УТИЛИЗАЦИЯ V27.8]: {clean_symbol} завис во флэте ({int(age)}с > {gd['time']}с). Снос позиции.")
+                # --- [ВРЕЗКА V28.0: ТЕЛЕМЕТРИЧЕСКИЙ ДЕБАГ-ВЫВОД ДЛЯ ВЕРИФИКАЦИИ ТАЙМЕРА] ---
+                # Бот раз в 10 секунд выплюнет в консоль точные параметры, которые видит его ядро
+#                if int(time.time()) % 10 == 0:
+#                    log(f"🔍 [DEBUG DECAY XRP]: age={round(age,1)}с | limit_time={gd.get('time')}с | pnl={round(pnl*100,4)}% | limit_tp1={round(gd.get('tp1',0)*100,2)}%")
+                # Условие сработает, если превышен таймер ИЛИ если просадка пробила критический пол в -1.6%
+                if (age > gd['time'] and pnl < gd['tp1']) or (pnl <= -0.016):
+                    log(f"⏱️🏁 [ЭВАКУАЦИЯ V29.1]: Снос {clean_symbol} | Возраст: {int(age)}с/{gd['time']}с | PNL: {round(pnl*100, 2)}%")
                     action_triggered_decay = False
+
                     try:
                         await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                         # Принудительно вытягиваем float-объем и обрезаем по шагам лотов биржи Бинанс
@@ -451,7 +522,7 @@ async def monitor_logic(exchange):
                         return
 
                 # 5. ТОТАЛЬНО ЗРЯЧИЙ ВЕНИК-ОПРОС BINANCE FUTURES (Реставрация старого канона V27.8)
-                if int(time.time()) % 15 == 0 and age > 15:
+                if int(time.time()) % 15 == 0 and age > 90:
                     try:
                         positions = await exchange.fetch_positions()
                         live_symbols = [p['symbol'] for p in positions if abs(float(p.get('contracts', 0))) > 0.00001]
