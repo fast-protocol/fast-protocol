@@ -525,11 +525,19 @@ async def monitor_logic(exchange):
                 if int(time.time()) % 15 == 0 and age > 90:
                     try:
                         positions = await exchange.fetch_positions()
-                        live_symbols = [p['symbol'] for p in positions if abs(float(p.get('contracts', 0))) > 0.00001]
+                        #live_symbols = [p['symbol'] for p in positions if abs(float(p.get('contracts', 0))) > 0.00001]
 
                         # Приводим тикер к единому биржевому REST-стандарту без косых черт
-                        clean_live_key = clean_symbol.replace('/', '')
-                        if clean_live_key not in live_symbols:
+                        #clean_live_key = clean_symbol.replace('/', '')
+
+                        # --- [ВРЕЗКА V29.5: ТОТАЛЬНОЕ RAW-ЗРЕНИЕ ВЕНИКА BINANCE] ---
+                        # Собираем чистые сырые тикеры позиций напрямую из CCXT-пакета Бинанса
+                        live_symbols = [str(p['symbol']) for p in positions if abs(float(p.get('contracts', p.get('positionAmt', 0)))) > 0.00001]
+
+                        # Сверяем исходный raw_symbol (XRP/USDT:USDT) напрямую с биржевым массивом
+                        if raw_symbol not in live_symbols:
+
+                        #if clean_live_key not in live_symbols:
                             log(f"🧹 [ВЕНИК V27.8]: Позиция {clean_symbol} реально закрыта извне (Ст оп/БУ). Очистка RAM.")
                             if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
                             if raw_symbol in memory.be_fixed: del memory.be_fixed[raw_symbol]
