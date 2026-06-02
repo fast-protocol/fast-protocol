@@ -1,3 +1,4 @@
+
 # --- УПРАВЛЕНИЕ КАПИТАЛОМ ---
 MAX_ACTIVE_SLOTS = 1       # Динамика: 1 (при <$150), 2 (при <$500), 3 (при >$500)
 RISK_GEAR = 0.95           # Общий множитель объема (0.1 - 1.0)
@@ -259,8 +260,14 @@ async def position_tracker(exchange):
             # АВТОМАТИЧЕСКАЯ ОЧИСТКА СЛОВАРЕЙ ПРИ ЗАКРЫТИИ СДЕЛКИ
             for sym in list(memory.active_pos.keys()):
                 if sym not in active:
-                    log(f"🧹 Позиция {sym} закрыта на бирже. Очистка системных флагов.")
-                    clean_memory_keys(sym)
+                    # Извлекаем возраст сделки из RAM памяти бота
+                    pos_age = time.time() - memory.entry_times.get(sym, time.time())
+
+                    # Веник имеет право стереть флаги, только если сделка живет дольше 15 секунд!
+                    if pos_age > 15:
+                        log(f"🧹 Позиция {sym} закрыта на бирже. Очистка системных флагов.")
+                        clean_memory_keys(sym)
+
 
             memory.active_pos = active
             memory.slots_occupied = len(active)
