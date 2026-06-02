@@ -1,4 +1,3 @@
-
 # --- УПРАВЛЕНИЕ КАПИТАЛОМ ---
 MAX_ACTIVE_SLOTS = 1       # Динамика: 1 (при <$150), 2 (при <$500), 3 (при >$500)
 RISK_GEAR = 0.95           # Общий множитель объема (0.1 - 1.0)
@@ -574,9 +573,9 @@ async def check_signal(exchange, symbol):
             btc_prev = memory.btc_history[-2]
             btc_change = btc_now / btc_prev - 1
 
-            if is_buy and btc_change < -0.0004: # Блокируем лонг альта при проливе BTC
+            if is_buy and btc_change < -0.0012: # Блокируем лонг альта при проливе BTC
                 return None
-            if is_sell and btc_change > 0.0004: # Блокируем шорт альта при пампе BTC
+            if is_sell and btc_change > 0.0012: # Блокируем шорт альта при пампе BTC
                 return None
 
 
@@ -700,14 +699,15 @@ async def execute_entry(exchange, signal):
         order = await exchange.create_market_order(symbol, side, amount)
 
         if order:
-            # ОБЯЗАТЕЛЬНО РАСКОММЕНТИРУЙ ЭТО:
-            # Мгновенно сообщаем мониторингу о новой позиции, не дожидаясь трекера
-            memory.active_pos[symbol] = {
+            # --- ШТУЧНЫЙ ФИКС V29.6: СИНХРОНИЗАЦИЯ RAW КЛЮЧЕЙ ДЛЯ ВЕНИКА БИHАHСА ---
+            raw_binance_key = f"{symbol}:USDT" if ":USDT" not in symbol else symbol
+            memory.active_pos[raw_binance_key] = {
                 'symbol': symbol,
                 'side': side,
                 'entryPrice': price,
                 'contracts': amount
             }
+
             # 4. Инициализация "Живой Памяти" для этой сделки
             memory.entry_times[symbol] = time.time()
             memory.be_levels[symbol] = dna['sl'] # Начальный стоп
