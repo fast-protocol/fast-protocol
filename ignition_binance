@@ -3,7 +3,7 @@ RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
 MAX_SLOTS = 1          # Максимум 4 параллельных сделки
 LOG_FILE = "ignition__log.txt"
 # --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
-MAX_ACCOUNT_LEVERAGE = 5  # Выставляем 5х (аппаратный потолок субаккаунта)
+MAX_ACCOUNT_LEVERAGE = 20  # Выставляем 5х (аппаратный потолок субаккаунта)
 
 # --- ТУМБЛЕР РЕЖИМА ДЕБАГА (ВКЛ / ВЫКЛ) ---
 DEBUG_BEACONS = False   # Сделай False, чтобы полностью выключить маяки в консоли
@@ -455,7 +455,8 @@ async def monitor_logic(exchange):
                             try:
                                 await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                                 stop_params = {'stopPrice': price, 'reduceOnly': True}
-                                await exchange.create_order(clean_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
+                                #await exchange.create_order(clean_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
+                                await exchange.create_order(raw_symbol, 'STOP_MARKET', exit_side, rem_qty, params={'stopPrice': bu_price, 'reduceOnly': True})
                             except:
                                 pass
                         else:
@@ -486,40 +487,64 @@ async def monitor_logic(exchange):
 #======
 
                 # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Если застряли в болоте)
-                # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Time-Decay Shield V27.8)
-                # Переопределяем параметры ДНК из пульта по чистому clean_symbol
+
+                # 4. КОНТУР УТИЛИЗАЦИИ И ЖЕСТКОГО СНОСА ПО МАТРИЦЕ ДНК-КЛАССОВ V31.0
                 gd = memory.all_dna.get(clean_symbol, {}).get(pos['gear'], {'time': 2700, 'tp1': 0.03})
 
-                # --- [ВРЕЗКА V28.0: ТЕЛЕМЕТРИЧЕСКИЙ ДЕБАГ-ВЫВОД ДЛЯ ВЕРИФИКАЦИИ ТАЙМЕРА] ---
-                # Бот раз в 10 секунд выплюнет в консоль точные параметры, которые видит его ядро
-#                if int(time.time()) % 10 == 0:
-#                    log(f"🔍 [DEBUG DECAY XRP]: age={round(age,1)}с | limit_time={gd.get('time')}с | pnl={round(pnl*100,4)}% | limit_tp1={round(gd.get('tp1',0)*100,2)}%")
-                # Условие сработает, если превышен таймер ИЛИ если просадка пробила критический пол в -1.6%
-                if (age > gd['time'] and pnl < gd['tp1']) or (pnl <= -0.016):
-                    log(f"⏱️🏁 [ЭВАКУАЦИЯ V29.1]: Снос {clean_symbol} | Возраст: {int(age)}с/{gd['time']}с | PNL: {round(pnl*100, 2)}%")
-                    action_triggered_decay = False
+                # --- [ВРЕЗКА V31.0: ИНТЕЛЛЕКТУАЛЬНЫЙ КЛАССИФИКАТОР ВОЛАТИЛЬНОСТИ] ---
+                # Принудительно определяем параметры стопа и Храповика в зависимости от генетики монеты
+                token_upper = clean_symbol.upper()
 
+                if any(meme in token_upper for meme in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME']):
+                    # Класс «МЕМЫ»
+                    class_sl = -0.0074
+                    class_trigger_pct = 0.81
+                elif any(tech in token_upper for tech in ['SOL', 'TRB', 'APT', 'FIL', 'STORJ', 'GLM', 'TIA', 'AEVO', 'C98']):
+                    # Класс «ТЕХ-ДРАЙВЕРЫ»
+                    class_sl = -0.0053
+                    class_trigger_pct = 0.77
+                else:
+                    # Класс «ЯКОРЯ» (Все остальные монеты по дефолту)
+                    class_sl = -0.0038
+                    class_trigger_pct = 0.72
+
+                # --- ВЫЧИСЛИТЕЛЬНОЕ ЯДРО СНОСА ПО КОНТУРАМ ЗАЩИТЫ ---
+                # Контур 1: Таймер флэта (Если прошло 45 минут, а Тейка-1 еще не было)
+                is_time_out = (age > gd['time'] and pnl < gd['tp1'])
+
+                # Контур 2: Досрочный Программный Храповик RAM (Взводится до Тейка-1 при прохождении Х% пути к цели)
+                is_bu_triggered = (pnl >= gd['tp1'] * class_trigger_pct) and (pnl <= 0.0009)
+
+                # Контур 3: Жесткий Стоп смерти импульса первой фазы (Если ракета сразу летит против нас)
+                is_momentum_dead = (pnl <= class_sl)
+
+                if is_time_out or is_bu_triggered or is_momentum_dead:
+                    log(f"⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос {clean_symbol} | PNL: {round(pnl*100, 3)}% | Триггер: T={is_time_out}/BU={is_bu_triggered}/SL={is_momentum_dead}")
+                    action_triggered_decay = False
                     try:
+                        # Наносекундно зачищаем сопутствующие лимитки на Бинансе
+                        binance_market_id = raw_symbol.replace('/', '').replace(':USDT', '')
                         await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
-                        # Принудительно вытягиваем float-объем и обрезаем по шагам лотов биржи Бинанс
+
+                        # Извлекаем прецизионный float-объем напрямую из CCXT пакета позиции
                         exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
-                        # Отправляем ордер по raw_symbol с обязательным reduceOnly для моментального схлопывания позиции
+
+                        # Бьем встречным маркетом с флагом reduceOnly для моментального схлопывания контракта
                         await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
                         action_triggered_decay = True
                     except Exception as decay_err:
-                        log(f"⚠️ Ошибка маркет-сноса по таймеру для {clean_symbol}: {decay_err}")
+                        log(f"⚠ Ошибка маркет-сноса матрицы классов для {clean_symbol}: {decay_err}")
 
-                    # Тотальное каскадное выжигание флагов из RAM для полного обнуления слота
+                    # Тотальное каскадное выжигание RAM-памяти для полного освобождения маржинального слота
                     for k in [raw_symbol, clean_symbol, f"{clean_symbol}:USDT"]:
                         if k in memory.active_pos: del memory.active_pos[k]
                         if k in memory.be_fixed: del memory.be_fixed[k]
                         if k in memory.stop_placed: del memory.stop_placed[k]
                         if k in memory.tp_fixed: del memory.tp_fixed[k]
-                        if f"{k}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{k}_trail"]
 
                     memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                    if action_triggered_decay:
-                        return
+                    continue
+
 
                 # 5. ТОТАЛЬНО ЗРЯЧИЙ ВЕНИК-ОПРОС BINANCE FUTURES (Реставрация старого канона V27.8)
                 if int(time.time()) % 15 == 0 and age > 90:
