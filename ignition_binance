@@ -1,7 +1,7 @@
 # --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
 RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
-MAX_SLOTS = 1          # Максимум 4 параллельных сделки
-LOG_FILE = "ignition__log.txt"
+MAX_SLOTS = 2          # Максимум 4 параллельных сделки
+LOG_FILE = "ignition_log.txt"
 # --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
 MAX_ACCOUNT_LEVERAGE = 20  # Выставляем 5х (аппаратный потолок субаккаунта)
 
@@ -117,6 +117,45 @@ async def check_signal(exchange, symbol, last_beacon_t):
         cur_p = memory.prices.get(symbol)
         if not dna or not cur_p:
             return None, last_beacon_t
+
+        # ==================================================================================
+        # --- [ВРЕЗКА V32.2 МОНОЛИТ: ИСПРАВЛЕННЫЙ И ЗРЯЧИЙ ДЕТЕКТОР ЛЖИ МАРКЕТ-МЕЙКЕРА] ---
+        # ==================================================================================
+        try:
+            # --- КОНТУР 1: СПОТ-ФЬЮЧЕРСНЫЙ АРБИТРАЖНЫЙ ШЛЮЗ (SPOOFING DETECTOR) ---
+            # Извлекаем легитимный спотовый тикер CCXT стандарта Бинанса (например, "SOL/USDT")
+            spot_symbol = str(symbol).split(':')[0]
+
+            # Вытягиваем живую спотовую цену из нашей RAM-памяти сокетов
+            spot_price_raw = memory.prices.get(spot_symbol, memory.prices.get(spot_symbol.replace('/', '')))
+
+            if spot_price_raw and float(spot_price_raw) > 0:
+                spot_price = float(spot_price_raw)
+                # Рассчитываем наносекундный рассинхрон цены фьючерса и спота
+                basis_pct = abs(cur_p / spot_price - 1.0) * 100.0
+
+                # Если фьючерс оторвался от реального спота более чем на 0.25% — это фантомный сквиз ММ
+                if basis_pct >= 0.25:
+                    log(f"🛑 [SPOOFING SHIELD]: Отмена входа по {symbol}! Обнаружен фантомный сквиз фьючерса. Фьюч: {cur_p} | Спот: {spot_price} | Базис: {round(basis_pct, 3)}% > 0.25%")
+                    return None, last_beacon_t
+
+            # --- КОНТУР 2: ПЛОТНОСТЬ ДЕЛЬТЫ СТАКАHА (MARKET DEPTH SHIELD) ---
+            # Запрашиваем быстрый стакан фьючерса (ближайшие 5 лимитных ордеров)
+            order_book = await exchange.fetch_order_book(symbol, 5)
+
+            # Бронированный расчет суммарных объемов лимитных плит без риска TypeError
+            total_bids_vol = sum(float(b[1]) for b in order_book.get('bids', []) if len(b) > 1) if order_book.get('bids') else 0
+            total_asks_vol = sum(float(a[1]) for a in order_book.get('asks', []) if len(a) > 1) if order_book.get('asks') else 0
+
+            # Если ММ выдернул лимитки (воздушная яма), объем падает критически ниже 0.1 контракта
+            if total_bids_vol < 0.1 or total_asks_vol < 0.1:
+                log(f"🧹 [DELTA DEPTH SHIELD]: Отмена входа по {symbol}! Обнаружена воздушная яма ММ . Bids Vol: {round(total_bids_vol, 3)} | Asks Vol: {round(total_asks_vol, 3)}")
+                return None, last_beacon_t
+
+        except Exception as mm_detect_err:
+            # Аварийный шлюз: если API Бинанса лагает на запросе стакана, не рискуем маржой
+            return None, last_beacon_t
+        # ==================================================================================
 
         # 1. ЗАГРУЗКА И ВЕРИФИКАЦИЯ СВЕЧНОГО МАССИВА
         ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
