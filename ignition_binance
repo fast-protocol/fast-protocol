@@ -164,13 +164,13 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
             # --- КОНТУР 3: СКОРОСТЬ ДЕЛЬТЫ ОБЪЕМА (VOLUME VELOCITY DELTA V34.0) ---
             # Извлекаем объем текущей минутной свечи (первые секунды импульса)
-            v_now = float(df['v'].iloc[-1])
-            v_mean = float(df['v'].mean())
+ #           v_now = float(df['v'].iloc[-1])
+ #           v_mean = float(df['v'].mean())
 
             # Если цена летит, но объем первого тика вялый (меньше среднего в 1.8 раза) — это пустой сквиз ММ
-            if v_now < (v_mean * 1.8):
-                log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену  через вакуум. Vol: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
-                return None, last_beacon_t
+ #           if v_now < (v_mean * 1.8):
+ #               log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену  через вакуум. Vol: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
+ #               return None, last_beacon_t
 
             log(f"⚙️ [DEBUG 3]: {symbol} получил стакан успешно. Проверяю объемы...")
 
@@ -188,6 +188,16 @@ async def check_signal(exchange, symbol, last_beacon_t):
             return None, last_beacon_t
 
         df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+
+
+        # --- КОНТУР 3: СКОРОСТЬ ДЕЛЬТЫ ОБЪЕМА (VOLUME VELOCITY DELTA V34.0) ---
+        v_now = float(df['v'].iloc[-1])
+        v_mean = float(df['v'].mean())
+        if v_now < (v_mean * 1.8):
+            # Если объем первого тика вялый — ММ гонит цену искусственно. Отмена!
+           log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену через  вакуум. Vo l: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
+           return None, last_beacon_t
+
 
         # 2. РАСЧЕТ ИНДИКАТОРОВ БОЛЛИНДЖЕРА НА NUMPY
         ma_series = df['c'].rolling(20).mean()
