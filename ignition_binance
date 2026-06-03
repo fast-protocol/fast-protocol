@@ -437,7 +437,7 @@ async def monitor_logic(exchange):
                             # Смещаем защитный стоп-маркет ровно на цену нашего входа
                             await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                             stop_params = {'stopPrice': price, 'reduceOnly': True}
-                            await exchange.create_order(clean_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
+                            await exchange.create_order(raw_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
                             memory.be_fixed[raw_symbol] = True
                         except Exception as be_err:
                             log(f"⚠️ Сбой выставления БУ для {clean_symbol}: {be_err}")
