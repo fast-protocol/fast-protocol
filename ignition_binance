@@ -3,7 +3,7 @@ RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
 MAX_SLOTS = 2          # Максимум 4 параллельных сделки
 LOG_FILE = "ignition_log.txt"
 # --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
-MAX_ACCOUNT_LEVERAGE = 20  # Выставляем 5х (аппаратный потолок субаккаунта)
+MAX_ACCOUNT_LEVERAGE = 25  # Выставляем 5х (аппаратный потолок субаккаунта)
 
 # --- ТУМБЛЕР РЕЖИМА ДЕБАГА (ВКЛ / ВЫКЛ) ---
 DEBUG_BEACONS = False   # Сделай False, чтобы полностью выключить маяки в консоли
@@ -143,7 +143,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
                     log(f"🛑 [SPOOFING SHIELD]: Отмена входа по {symbol}! Обнаружен фантомный сквиз фьючерса. Фьюч: {cur_p} | Спот: {spot_price} | Базис: {round(basis_pct, 3)}% > 0.25%")
                     return None, last_beacon_t
 
-            log(f"⚙️ [DEBUG 2]: {symbol} прошел Спот-Шлюз. Запрашиваю стакан...")
+#            log(f"⚙️ [DEBUG 2]: {symbol} прошел Спот-Шлюз. Запрашиваю стакан...")
 
 
             # --- КОНТУР 2: СВЕРХСКОРОСТНОЙ ШЛЮЗ ПЛОТНОСТИ ОЗУ (БЕЗ СЕТЕВЫХ ЛАГОВ BINANCE) ---
@@ -172,7 +172,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
  #               log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену  через вакуум. Vol: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
  #               return None, last_beacon_t
 
-            log(f"⚙️ [DEBUG 3]: {symbol} получил стакан успешно. Проверяю объемы...")
+ #           log(f"⚙️ [DEBUG 3]: {symbol} получил стакан успешно. Проверяю объемы...")
 
         except Exception as mm_detect_err:
             # Аварийный шлюз: если API Бинанса лагает на запросе стакана, не рискуем маржой
@@ -195,7 +195,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
         v_mean = float(df['v'].mean())
         if v_now < (v_mean * 1.8):
             # Если объем первого тика вялый — ММ гонит цену искусственно. Отмена!
-           log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену через  вакуум. Vo l: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
+#           log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену чере з вакуум. Vo l: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
            return None, last_beacon_t
 
 
