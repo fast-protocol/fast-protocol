@@ -435,12 +435,8 @@ async def monitor_logic(exchange):
                     continue
 
                 cur_p = float(cur_p) # Жестко гарантируем float тип данных
-                # Вычисляем чистый PNL без учета плеча в зависимости от направления сделки
-#                price = float(pos['price'])
 
-                #pnl = (cur_p / price - 1) if pos['side'] == 'buy' else (price / cur_p - 1)
-                #gd = pos['gear_data']
-                #age = time.time() - pos['entry_time']
+                # Вычисляем чистый PNL без учета плеча в зависимости от направления сделки
 
                 # --- ШТУЧНЫЙ ФИКС V28.3: ЗАЩИТА СИРОТ RECOVERED ОТ КРАША KEYERROR ---
                 pnl = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
@@ -487,7 +483,7 @@ async def monitor_logic(exchange):
 
                 # Б. КОHТУР АДАПТИВНОГО ТРЕЙЛИHГА НА БАЗЕ ДНК МОHЕТЫ
                 # Определяем шаг отката в зависимости от класса риска (Мемы дышат свободнее)
-                is_meme_coin = any(m_n in clean_symbol.upper() for m_n in ['PEPE', 'SHIB', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+                is_meme_coin = any(m_n in clean_symbol.upper() for m_n in ['1000PEPE', '1000SHIB', '1000FLOKI', '1000BONK', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
                 optimal_trail_step = 0.0055 if is_meme_coin else 0.0035  # Ракеты: 0.35% отката, Мемы: 0.55%
 
                 # Взводим Пре-Трейлинг, если цена прошла 75% пути до Тейка-1
@@ -528,7 +524,9 @@ async def monitor_logic(exchange):
                     log(f"🎯 [ТЕЙК-1 БИHАHС]: Цель по {clean_symbol} взята (+{round(pnl*100, 2)}%). Крою 50% объема.")
                     try:
                         half_qty = float(exchange.amount_to_precision(clean_symbol, pos['vol'] / 2))
-                        if half_qty > 0 and half_qty < pos['vol']:
+                        # --- [ВРЕЗКА V37.0: ПЫЛЕСОС МЕЛОЧИ В ТЕЙКЕ-1] ---
+                        total_pos_usd = pos['vol'] * cur_p
+                        if total_pos_usd > 2.0 and half_qty > 0 and half_qty < pos['vol']:
                             await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, half_qty))
                             pos['vol'] = float(exchange.amount_to_precision(clean_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
                             memory.tp_fixed[raw_symbol] = True
@@ -597,7 +595,9 @@ async def monitor_logic(exchange):
                 is_time_out = (age > gd['time'] and pnl < gd['tp1'])
 
                 # Контур 2: Досрочный Программный Храповик RAM (Взводится до Тейка-1 при прохождении Х% пути к цели)
-                is_bu_triggered = (pnl >= gd['tp1'] * class_trigger_pct) and (pnl <= 0.0009)
+        #        is_bu_triggered = (pnl >= gd['tp1'] * class_trigger_pct) and (pnl <= 0.0009)
+                # Контур 2: Досрочный Храповик RAM (До Тейка-1 взводится на 77% пути, после Тейка-1 защищает остаток в +0.09%)
+                is_bu_triggered = (not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1'] * class_trigger_pct and pnl <= 0.0009) or (memory.tp_fixed.get(raw_symbol, False) and pnl <= 0.0009)
 
                 # Контур 3: Жесткий Стоп смерти импульса первой фазы (Если ракета сразу летит против нас)
                 is_momentum_dead = (pnl <= class_sl)
@@ -641,7 +641,28 @@ async def monitor_logic(exchange):
 
                         # --- [ВРЕЗКА V29.5: ТОТАЛЬНОЕ RAW-ЗРЕНИЕ ВЕНИКА BINANCE] ---
                         # Собираем чистые сырые тикеры позиций напрямую из CCXT-пакета Бинанса
-                        live_symbols = [str(p['symbol']) for p in positions if abs(float(p.get('contracts', p.get('positionAmt', 0)))) > 0.00001]
+                        #live_symbols = [str(p['symbol']) for p in positions if abs(float(p.get('contracts', p.get('positionAmt', 0)))) > 0.00001]
+
+                        # --- [ВРЕЗКА V37.0: АППАРАТНЫЙ ПЫЛЕСОС СИРОТ И ПЫЛИ ВЕНИКА] ---
+                        live_symbols = []
+                        for p in positions:
+                            p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
+                            if p_vol > 0.00001:
+                                p_price = float(p.get('entryPrice', p.get('markPrice', 1.0)))
+                                # Если долларовый вес позиции на бирже меньше $1.0 — это мусорный остаток округления!
+                                if (p_vol * p_price) < 1.0:
+                                    try:
+                                        # Намертво выжигаем остаток встречным ордером reduceOnly, освобождая слот
+                                        p_raw_sym = p['symbol']
+                                        p_clean_sym = p_raw_sym.split(':')[0]
+                                        p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
+                                        p_exact_vol = float(exchange.amount_to_precision(p_clean_sym, p_vol))
+                                        await exchange.create_market_order(p_raw_sym, p_exit_side, p_exact_vol, {'reduceOnly': True})
+                                        log(f"🧹🔥 [ПЫЛЕСОС МЕЛОЧИ]: Уничтожен мусорный остаток {p_c lean_sym} весом ${round(p_vol * p_price, 2)}. Слот свободен!")
+                                    except: pass
+                                else:
+                                    live_symbols.append(str(p['symbol']))
+
 
                         # Сверяем исходный raw_symbol (XRP/USDT:USDT) напрямую с биржевым массивом
                         if raw_symbol not in live_symbols:
