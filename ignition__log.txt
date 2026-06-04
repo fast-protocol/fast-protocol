@@ -1,88 +1,66 @@
-[2026-06-03 23:24:31] 🚀 🧹 [VOLUME VELOCITY]: Отмена входа по AAVE/USDT:USDT! Импульс пустой, ММ го нит цену через вакуум. Vo l: 75.7 < Требуемого: 829.2
-[2026-06-03 23:24:34] 🚀 ✅ TITAN IGNITION V21.8 ONLINE. Охота на 33 секторов.
-[2026-06-03 23:24:35] 🚀 💰 Стартовый баланс успешно считан: $10.48
-[2026-06-03 23:31:46] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $10.1704 | RISK_GEAR: 0.7
-[2026-06-03 23:31:46] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.2047
-[2026-06-03 23:31:46] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $142.39
-[2026-06-03 23:31:46] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 695.5 монет
-[2026-06-03 23:31:48] 🚀 🔥 ВХОД [G2]: CRV/USDT SELL | Price: 0.2047 | Vol: 695.5 | Общий баланс: $10.48
-[2026-06-04 00:00:52] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $3.2588 | RISK_GEAR: 0.7
-[2026-06-04 00:00:52] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.932
-[2026-06-04 00:00:52] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $45.62
-[2026-06-04 00:00:52] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 48.9 монет
-[2026-06-04 00:00:55] 🚀 🔥 ВХОД [G2]: FIL/USDT BUY | Price: 0.932 | Vol: 48.9 | Общий баланс: $11.18
-[2026-06-04 00:15:20] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос CRV/USDT | PNL: -0.389% | Триггер: T=False/BU=False/SL=True
-[2026-06-04 00:26:25] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос FIL/USDT | PNL: -0.536% | Триггер: T=False/BU=False/SL=True
-[2026-06-04 00:26:48] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $7.4855 | RISK_GEAR: 0.7
-[2026-06-04 00:26:48] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 71.2
-[2026-06-04 00:26:48] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $104.8
-[2026-06-04 00:26:48] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 1.47 монет
-[2026-06-04 00:26:50] 🚀 🔥 ВХОД [G1]: SOL/USDT SELL | Price: 71.2 | Vol: 1.47 | Общий баланс: $9.68
-[2026-06-04 00:26:59] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $7.4855 | RISK_GEAR: 0.7
-[2026-06-04 00:26:59] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.8194
-[2026-06-04 00:26:59] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $104.8
-[2026-06-04 00:26:59] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 127.8 монет
-[2026-06-04 00:27:01] 🚀 ⚠ Entry Error SUI/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-06-04 00:27:30] 🚀 🔍 [TREND SHIELD ADA/USDT:USDT]: Отмена! Монета перегрета (0.89% > 0.8%). Пропускаем хаи.
-[2026-06-04 00:27:59] 🚀 🪓 [DYNAMIC KNIFE]: Отмена Лонга по DOGE/USDT:USDT! Каскад 3 свечей на лоу  канала Боллинджера (Ниже MA20). Цена: 0.09076 <= MA20: 0.0915
-[2026-06-04 00:29:30] 🚀 🔍 [TREND SHIELD FIL/USDT:USDT]: Отмена! Монета перегрета (1.25% > 0.8%). Пропускаем хаи.
-[2026-06-04 00:29:33] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: SOL/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
-[2026-06-04 00:29:46] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по SOL/USDT взята (+0.76%). Крою 50% объема.
-[2026-06-04 00:29:48] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $4.187 | RISK_GEAR: 0.7
-[2026-06-04 00:29:48] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 617.56
-[2026-06-04 00:29:48] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $58.62
-[2026-06-04 00:29:48] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 0.09 монет
-[2026-06-04 00:29:51] 🚀 🔥 ВХОД [G2]: BNB/USDT SELL | Price: 617.56 | Vol: 0.09 | Общий баланс: $9.51
-[2026-06-04 00:31:00] 🚀 🔍 [TREND SHIELD GRT/USDT:USDT]: Отмена! Монета перегрета (1.32% > 0.8%). Пропускаем хаи.
-[2026-06-04 00:39:38] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: BNB/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
-[2026-06-04 01:13:00] 🚀 🔍 [TREND SHIELD LDO/USDT:USDT]: Отмена! Монета перегрета (0.81% > 0.8%). Пропускаем хаи.
-[2026-06-04 01:16:01] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по BNB/USDT взята (+0.83%). Крою 50% объема.
-[2026-06-04 01:16:19] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция SOL/USDT полностью отработала ДНК-цели (+1.95%)
-[2026-06-04 01:16:33] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $5.6337 | RISK_GEAR: 0.7
-[2026-06-04 01:16:33] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 1.1823
-[2026-06-04 01:16:33] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $78.87
-[2026-06-04 01:16:33] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 66.7 монет
-[2026-06-04 01:16:35] 🚀 🔥 ВХОД [G1]: XRP/USDT SELL | Price: 1.1823 | Vol: 66.7 | Общий баланс: $11.15
-[2026-06-04 01:17:00] 🚀 🔍 [TREND SHIELD GLM/USDT:USDT]: Отмена! Монета перегрета (0.9% > 0.8%). Пропускаем хаи.
-[2026-06-04 01:18:00] 🚀 🔍 [TREND SHIELD CRV/USDT:USDT]: Отмена! Монета перегрета (0.88% > 0.8%). Пропускаем хаи.
-[2026-06-04 01:21:12] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: XRP/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
-[2026-06-04 01:22:44] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по XRP/USDT взята (+0.65%). Крою 50% объема.
-[2026-06-04 01:23:22] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция BNB/USDT полностью отработала ДНК-цели (+1.83%)
-[2026-06-04 01:24:00] 🚀 🔍 [TREND SHIELD NEAR/USDT:USDT]: Отмена! Монета перегрета (1.54% > 1.4%). Пропускаем хаи.
-[2026-06-04 01:26:00] 🚀 🔍 [TREND SHIELD GLM/USDT:USDT]: Отмена! Монета перегрета (1.25% > 0.8%). Пропускаем хаи.
-[2026-06-04 01:48:51] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция XRP/USDT полностью отработала ДНК-цели (+1.52%)
-[2026-06-04 01:50:38] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $11.3118 | RISK_GEAR: 0.7
-[2026-06-04 01:50:38] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 68.81
-[2026-06-04 01:50:38] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $158.37
-[2026-06-04 01:50:38] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 2.3 монет
-[2026-06-04 01:50:41] 🚀 🔥 ВХОД [G2]: SOL/USDT SELL | Price: 68.81 | Vol: 2.3 | Общий баланс: $12.08
-[2026-06-04 01:51:30] 🚀 🔍 [TREND SHIELD CRV/USDT:USDT]: Отмена! Монета перегрета (0.89% > 0.8%). Пропускаем хаи.
-[2026-06-04 01:54:00] 🚀 🔍 [TREND SHIELD WIF/USDT:USDT]: Отмена! Монета перегрета (2.93% > 2.5%). Пропускаем хаи.
-[2026-06-04 01:54:07] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $3.6205 | RISK_GEAR: 0.7
-[2026-06-04 01:54:07] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.08825
-[2026-06-04 01:54:07] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $50.69
-[2026-06-04 01:54:07] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 574.0 монет
-[2026-06-04 01:54:09] 🚀 🔥 ВХОД [G1]: DOGE/USDT SELL | Price: 0.08825 | Vol: 574.0 | Общий баланс: $12.66
-[2026-06-04 02:01:16] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: SOL/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
-[2026-06-04 02:02:09] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по SOL/USDT взята (+1.04%). Крою 50% объема.
-[2026-06-04 02:02:34] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: DOGE/USDT зафиксировал пик. Контроль отката: 0.5499999999999999%
-[2026-06-04 02:02:49] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по DOGE/USDT взята (+0.78%). Крою 50% объема.
-[2026-06-04 02:03:30] 🚀 🔍 [TREND SHIELD LINK/USDT:USDT]: Отмена! Монета перегрета (1.68% > 0.8%). Пропускаем хаи.
-[2026-06-04 02:04:57] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция DOGE/USDT полностью отработала ДНК-цели (+2.32%)
-[2026-06-04 02:05:04] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция SOL/USDT полностью отработала ДНК-цели (+2.95%)
-[2026-06-04 02:07:00] 🚀 🔍 [TREND SHIELD AAVE/USDT:USDT]: Отмена! Монета перегрета (1.91% > 0.8%). Пропускаем хаи.
-[2026-06-04 03:04:58] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $15.2172 | RISK_GEAR: 0.7
-[2026-06-04 03:04:58] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.004866
-[2026-06-04 03:04:58] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $213.04
-[2026-06-04 03:04:58] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 43781.0 монет
-[2026-06-04 03:05:01] 🚀 🔥 ВХОД [G1]: JASMY/USDT BUY | Price: 0.004866 | Vol: 43781.0 | Общий баланс: $16.02
-[2026-06-04 03:15:46] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: JASMY/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
-[2026-06-04 03:16:28] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по JASMY/USDT взята (+1.09%). Крою 50% объема.
-[2026-06-04 04:33:00] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $10.9235 | RISK_GEAR: 0.7
-[2026-06-04 04:33:00] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 71.1
-[2026-06-04 04:33:00] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $152.93
-[2026-06-04 04:33:00] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 2.15 монет
-[2026-06-04 04:33:02] 🚀 🔥 ВХОД [G1]: SOL/USDT SELL | Price: 71.1 | Vol: 2.15 | Общий баланс: $18.46
-[2026-06-04 04:56:12] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: SOL/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
-[2026-06-04 05:00:55] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по SOL/USDT взята (+0.62%). Крою 50% объема.
-[2026-06-04 05:20:57] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос JASMY/USDT | PNL: -0.432% | Триггер: T=False/BU=False/SL=True
+[2026-06-04 14:01:45] 🚀 !!! С Т А Р Т !!!  Общий баланс кошелька: $15.79 | Свободно для HFT: $15.79
+[2026-06-04 15:06:46] 🚀 🔍 [Debug entry]: Available Margin: $15.3155 | RISK_GEAR: 0.7
+[2026-06-04 15:06:46] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 70.27
+[2026-06-04 15:06:46] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $268.02
+[2026-06-04 15:06:46] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 3.81 монет
+[2026-06-04 15:06:49] 🚀 🔥 ВХОД [G2]: SOL/USDT BUY | Price: 70.27 | Vol: 3.81 | Общий баланс: $15.79
+[2026-06-04 15:06:58] 🚀 🔍 [Debug entry]: Available Margin: $15.3155 | RISK_GEAR: 0.7
+[2026-06-04 15:06:58] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.8012
+[2026-06-04 15:06:58] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $268.02
+[2026-06-04 15:06:58] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 334.5 монет
+[2026-06-04 15:07:00] 🚀 ⚠ Entry Error SUI/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
+[2026-06-04 15:10:00] 🚀 🔍 [Trend shield GALA/USDT:USDT]: Отмена! Монета перегрета (1.19% > 0.8%). Пропускаем хаи.
+[2026-06-04 15:17:45] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос SOL/USDT | PNL: -0.626% | Триггер: T=False/BU=False/SL=True
+[2026-06-04 15:57:40] 🚀 🔍 [Debug entry]: Available Margin: $13.3934 | RISK_GEAR: 0.7
+[2026-06-04 15:57:40] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.1146
+[2026-06-04 15:57:40] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $234.38
+[2026-06-04 15:57:40] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 2045.2 монет
+[2026-06-04 15:57:42] 🚀 🔥 ВХОД [G1]: OP/USDT BUY | Price: 0.1146 | Vol: 2045.2 | Общий баланс: $13.81
+[2026-06-04 16:05:14] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос OP/USDT | PNL: -0.611% | Триггер: T=False/BU=False/SL=True
+[2026-06-04 16:10:00] 🚀 🔍 [Trend shield NEAR/USDT:USDT]: Отмена! Монета перегрета (1.54% > 1.4%). Пропускаем хаи.
+[2026-06-04 17:35:00] 🚀 🔍 [Trend shield FIL/USDT:USDT]: Отмена! Монета перегрета (0.94% > 0.8%). Пропускаем хаи.
+[2026-06-04 18:31:36] 🚀 🪓 [ynamic knife]: Отмена Шорта по XRP/USDT:USDT! Каскад 3 свечей на хаях к анала Боллинджера (Выше MA20). Цена: 1.179 >= MA20: 1.1697
+[2026-06-04 19:29:29] 🚀 🔍 [Debug entry]: Available Margin: $11.068 | RISK_GEAR: 0.7
+[2026-06-04 19:29:29] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.1988
+[2026-06-04 19:29:29] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $193.69
+[2026-06-04 19:29:29] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 974.2 монет
+[2026-06-04 19:29:31] 🚀 🔥 ВХОД [G1]: CRV/USDT SELL | Price: 0.1988 | Vol: 974.2 | Общий баланс: $11.41
+[2026-06-04 19:38:11] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по CRV/USDT!
+[2026-06-04 19:38:36] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по CRV/USDT взята (+0.51%). Крою 50% объема.
+[2026-06-04 19:38:45] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.45% | Пик: 0.51% | Trigger: 0.1985
+[2026-06-04 19:44:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.4% | Пик: 0.51% | Trigger: 0.1985
+[2026-06-04 19:44:15] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.4% | Пик: 0.51% | Trigger: 0.1985
+[2026-06-04 19:45:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.45% | Пик: 0.51% | Trigger: 0.1985
+[2026-06-04 19:45:45] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.45% | Пик: 0.51% | Trigger: 0.1985
+[2026-06-04 19:46:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.4% | Пик: 0.51% | Trigger: 0.1985
+[2026-06-04 19:46:45] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.45% | Пик: 0.51% | Trigger: 0.1985
+[2026-06-04 19:47:30] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.56% | Пик: 0.61% | Trigger: 0.1983
+[2026-06-04 19:47:45] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.56% | Пик: 0.61% | Trigger: 0.1983
+[2026-06-04 19:48:15] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.61% | Пик: 0.61% | Trigger: 0.1983
+[2026-06-04 19:48:30] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.56% | Пик: 0.61% | Trigger: 0.1983
+[2026-06-04 19:49:15] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.66% | Пик: 0.66% | Trigger: 0.1982
+[2026-06-04 19:50:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.66% | Пик: 0.71% | Trigger: 0.1981
+[2026-06-04 19:50:45] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.66% | Пик: 0.71% | Trigger: 0.1981
+[2026-06-04 19:51:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.76% | Пик: 0.76% | Trigger: 0.198
+[2026-06-04 19:51:45] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.66% | Пик: 0.76% | Trigger: 0.198
+[2026-06-04 19:52:30] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.81% | Пик: 0.81% | Trigger: 0.1979
+[2026-06-04 19:53:15] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.81% | Пик: 0.91% | Trigger: 0.1977
+[2026-06-04 19:53:30] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.81% | Пик: 0.91% | Trigger: 0.1977
+[2026-06-04 19:54:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 1.02% | Пик: 1.02% | Trigger: 0.1975
+[2026-06-04 19:54:15] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 1.07% | Пик: 1.07% | Trigger: 0.1974
+[2026-06-04 19:55:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.86% | Пик: 1.07% | Trigger: 0.1974
+[2026-06-04 19:55:45] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.91% | Пик: 1.07% | Trigger: 0.1974
+[2026-06-04 19:56:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.91% | Пик: 1.07% | Trigger: 0.1974
+[2026-06-04 19:56:30] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.86% | Пик: 1.07% | Trigger: 0.1974
+[2026-06-04 19:57:15] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.91% | Пик: 1.07% | Trigger: 0.1974
+[2026-06-04 19:58:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.86% | Пик: 1.07% | Trigger: 0.1974
+[2026-06-04 19:58:45] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.81% | Пик: 1.07% | Trigger: 0.1974
+[2026-06-04 19:59:00] 🚀 ⚙️ [ДЕБАГ CRV/USDT]: PNL: 0.81% | Пик: 1.07% | Trigger: 0.1974
+[2026-06-04 19:59:23] 🚀 🏁 [КАТАПУЛЬТА]: Снос CRV/USDT по отрезку от пика! Trig: 0.1974
+[2026-06-04 20:06:05] 🚀 🔍 [Debug entry]: Available Margin: $11.7313 | RISK_GEAR: 0.7
+[2026-06-04 20:06:05] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 68.58
+[2026-06-04 20:06:05] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $205.3
+[2026-06-04 20:06:05] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 2.99 монет
+[2026-06-04 20:06:07] 🚀 🔥 ВХОД [G1]: SOL/USDT SELL | Price: 68.58 | Vol: 2.99 | Общий баланс: $12.09
+[2026-06-04 20:07:50] 🚀 🪓 [ynamic knife]: Отмена Лонга по ADA/USDT:USDT! Каскад 3 свечей на лоу ка нала Боллинджера (Ниже MA20). Цена: 0.1846 <= MA20: 0.186
+[2026-06-04 20:17:23] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос SOL/USDT | PNL: -0.551% | Триггер: T=False/BU=False/SL=True
