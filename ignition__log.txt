@@ -1,94 +1,88 @@
-[2026-05-24 21:02:49] 🚀 ✅ TITAN IGNITION V21.8 ONLINE. Охота на 22 секторов.
-[2026-05-24 21:02:51] 🚀 💰 Стартовый баланс успешно считан: $7.75
-[2026-05-24 21:04:05] 🚀 ⚠ Entry Error NEAR/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-24 21:30:08] 🚀 ⚠ Entry Error SOL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-24 21:36:00] 🚀 🔍 [TREND SHIELD PENDLE/USDT:USDT]: Отмена! Монета перегрета (1.26% > 0.8%). Пропускаем хаи.
-[2026-05-24 22:05:56] 🚀 ⚠ Entry Error BNB/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-24 22:12:00] 🚀 🔍 [TREND SHIELD LINK/USDT:USDT]: Отмена! Монета перегрета (0.95% > 0.8%). Пропускаем хаи.
-[2026-05-24 22:38:40] 🚀 ⚠ Entry Error NEAR/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-24 22:39:45] 🚀 ⚠ Entry Error FIL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 00:10:41] 🚀 ⚠ Entry Error LINK/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 01:59:36] 🚀 ⚠ Entry Error LINK/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 05:09:06] 🚀 ⚠ Entry Error AVAX/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 05:39:29] 🚀 ⚠ Entry Error SUI/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 06:03:53] 🚀 ⚠ Entry Error NEAR/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 06:17:01] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 08:21:36] 🚀 ⚠ Entry Error FET/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 08:37:07] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 09:46:06] 🚀 ⚠ Entry Error NEAR/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 09:47:25] 🚀 ✅ TITAN IGNITION V21.8 ONLINE. Охота на 22 секторов.
-[2026-05-25 09:47:28] 🚀 💰 Стартовый баланс успешно считан: $7.75
-[2026-05-25 10:37:13] 🚀 ✅ TITAN IGNITION V21.8 ONLINE. Охота на 22 секторов.
-[2026-05-25 10:37:16] 🚀 💰 Стартовый баланс успешно считан: $7.75
-[2026-05-25 11:08:07] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 12:04:43] 🚀 ⚠ Entry Error FIL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 13:54:00] 🚀 🔍 [TREND SHIELD NEAR/USDT:USDT]: Отмена! Монета перегрета (1.77% > 1.4%). Пропускаем хаи.
-[2026-05-25 14:07:00] 🚀 🔍 [TREND SHIELD PENDLE/USDT:USDT]: Отмена! Монета перегрета (1.02% > 0.8%). Пропускаем хаи.
-[2026-05-25 14:41:30] 🚀 🔍 [TREND SHIELD PENDLE/USDT:USDT]: Отмена! Монета перегрета (0.84% > 0.8%). Пропускаем хаи.
-[2026-05-25 15:17:09] 🚀 ⚠ Entry Error BNB/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 16:48:07] 🚀 ⚠ Entry Error APT/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 16:52:47] 🚀 ✅ TITAN IGNITION V21.8 ONLINE. Охота на 22 секторов.
-[2026-05-25 16:52:50] 🚀 💰 Стартовый баланс успешно считан: $10.74
-[2026-05-25 21:13:30] 🚀 🔍 [TREND SHIELD FET/USDT:USDT]: Отмена! Монета перегрета (1.58% > 1.4%). Пропускаем хаи.
-[2026-05-25 22:04:21] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 22:28:48] 🚀 ⚠ Entry Error XRP/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-25 23:27:10] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 00:54:07] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 01:05:29] 🚀 ⚠ Entry Error NEAR/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 01:34:00] 🚀 ⚠ Entry Error AVAX/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 04:05:57] 🚀 ⚠ Entry Error BNB/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 04:24:25] 🚀 ⚠ Entry Error NEAR/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 04:26:54] 🚀 ⚠ Entry Error SUI/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 04:30:04] 🚀 ⚠ Entry Error SOL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 06:49:00] 🚀 🔍 [TREND SHIELD FET/USDT:USDT]: Отмена! Монета перегрета (1.42% > 1.4%). Пропускаем хаи.
-[2026-05-26 07:11:58] 🚀 ⚠ Entry Error LINK/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 07:29:12] 🚀 ✅ TITAN IGNITION V21.8 ONLINE. Охота на 22 секторов.
-[2026-05-26 07:29:15] 🚀 💰 Стартовый баланс успешно считан: $10.74
-[2026-05-26 08:14:30] 🚀 🔍 [TREND SHIELD FET/USDT:USDT]: Отмена! Монета перегрета (1.47% > 1.4%). Пропускаем хаи.
-[2026-05-26 08:35:00] 🚀 🔍 [TREND SHIELD FET/USDT:USDT]: Отмена! Монета перегрета (2.44% > 1.4%). Пропускаем хаи.
-[2026-05-26 10:16:02] 🚀 ⚠ Entry Error BNB/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 10:19:51] 🚀 ⚠ Entry Error FIL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 10:20:00] 🚀 🔍 [TREND SHIELD PENDLE/USDT:USDT]: Отмена! Монета перегрета (1.43% > 0.8%). Пропускаем хаи.
-[2026-05-26 10:20:45] 🚀 ⚠ Entry Error FIL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 10:31:00] 🚀 🔍 [TREND SHIELD PENDLE/USDT:USDT]: Отмена! Монета перегрета (0.95% > 0.8%). Пропускаем хаи.
-[2026-05-26 10:59:59] 🚀 ⚠ Entry Error FET/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 12:07:47] 🚀 ⚠ Entry Error SUI/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 13:04:22] 🚀 ⚠ Balance Error: binance GET https://fapi.binance.com/fapi/v3/account?timestamp=1779800662693&recvWindow=10000&signature=a765ac7449674a17b731ba91ef5c517d93d3c5a7c301e926db97bf632eb34ad9
-[2026-05-26 13:22:46] 🚀 ⚠ Entry Error SUI/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 13:50:09] 🚀 ⚠ Entry Error SOL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 13:53:30] 🚀 🔍 [TREND SHIELD FIL/USDT:USDT]: Отмена! Монета перегрета (0.99% > 0.8%). Пропускаем хаи.
-[2026-05-26 14:06:02] 🚀 ⚠ Entry Error TIA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 14:18:55] 🚀 ⚠ Entry Error BNB/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 14:29:01] 🚀 ⚠ Entry Error LINK/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 14:39:02] 🚀 ⚠ Entry Error SOL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 14:39:56] 🚀 ⚠ Entry Error SOL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 14:41:00] 🚀 🔍 [TREND SHIELD AVAX/USDT:USDT]: Отмена! Монета перегрета (0.89% > 0.8%). Пропускаем хаи.
-[2026-05-26 14:42:30] 🚀 🔍 [TREND SHIELD FIL/USDT:USDT]: Отмена! Монета перегрета (1.73% > 0.8%). Пропускаем хаи.
-[2026-05-26 14:43:30] 🚀 🔍 [VOLUME SHIELD BNB/USDT:USDT]: Отмена! Прорыв на затухающем объеме (Вялый закисающий импульс).
-[2026-05-26 15:31:55] 🚀 ⚠ Entry Error BNB/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 15:42:00] 🚀 🔍 [TREND SHIELD PENDLE/USDT:USDT]: Отмена! Монета перегрета (1.22% > 0.8%). Пропускаем хаи.
-[2026-05-26 15:53:44] 🚀 ⚠ Entry Error LINK/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 15:54:02] 🚀 ⚠ Entry Error BNB/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 17:19:02] 🚀 ⚠ Entry Error XRP/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 17:20:45] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 17:20:58] 🚀 ⚠ Entry Error DOGE/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 17:21:30] 🚀 ⚠ Entry Error LINK/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 17:24:30] 🚀 🔍 [TREND SHIELD FET/USDT:USDT]: Отмена! Монета перегрета (1.82% > 1.4%). Пропускаем хаи.
-[2026-05-26 17:31:00] 🚀 🔍 [TREND SHIELD LDO/USDT:USDT]: Отмена! Монета перегрета (1.08% > 0.8%). Пропускаем хаи.
-[2026-05-26 19:15:03] 🚀 ⚠ Entry Error AAVE/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 20:23:01] 🚀 ⚠ Entry Error NEAR/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 21:13:38] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 23:47:02] 🚀 ⚠ Entry Error NEAR/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-26 23:52:30] 🚀 🔍 [TREND SHIELD NEAR/USDT:USDT]: Отмена! Монета перегрета (1.96% > 1.4%). Пропускаем хаи.
-[2026-05-27 01:22:48] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-27 01:47:06] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-27 02:11:00] 🚀 🔍 [TREND SHIELD FIL/USDT:USDT]: Отмена! Монета перегрета (0.85% > 0.8%). Пропускаем хаи.
-[2026-05-27 04:05:30] 🚀 🔍 [TREND SHIELD FIL/USDT:USDT]: Отмена! Монета перегрета (0.89% > 0.8%). Пропускаем хаи.
-[2026-05-27 04:19:50] 🚀 ⚠ Entry Error LDO/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-27 04:20:30] 🚀 🔍 [TREND SHIELD FIL/USDT:USDT]: Отмена! Монета перегрета (1.49% > 0.8%). Пропускаем хаи.
-[2026-05-27 05:35:30] 🚀 🔍 [TREND SHIELD FIL/USDT:USDT]: Отмена! Монета перегрета (0.81% > 0.8%). Пропускаем хаи.
-[2026-05-27 07:17:07] 🚀 ⚠ Entry Error APT/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-27 07:50:02] 🚀 ⚠ Entry Error FIL/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-27 08:06:05] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-27 08:06:58] 🚀 ⚠ Entry Error ADA/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
-[2026-05-27 09:29:00] 🚀 ⚠ Entry Error XRP/USDT:USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
+[2026-06-03 23:24:31] 🚀 🧹 [VOLUME VELOCITY]: Отмена входа по AAVE/USDT:USDT! Импульс пустой, ММ го нит цену через вакуум. Vo l: 75.7 < Требуемого: 829.2
+[2026-06-03 23:24:34] 🚀 ✅ TITAN IGNITION V21.8 ONLINE. Охота на 33 секторов.
+[2026-06-03 23:24:35] 🚀 💰 Стартовый баланс успешно считан: $10.48
+[2026-06-03 23:31:46] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $10.1704 | RISK_GEAR: 0.7
+[2026-06-03 23:31:46] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.2047
+[2026-06-03 23:31:46] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $142.39
+[2026-06-03 23:31:46] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 695.5 монет
+[2026-06-03 23:31:48] 🚀 🔥 ВХОД [G2]: CRV/USDT SELL | Price: 0.2047 | Vol: 695.5 | Общий баланс: $10.48
+[2026-06-04 00:00:52] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $3.2588 | RISK_GEAR: 0.7
+[2026-06-04 00:00:52] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.932
+[2026-06-04 00:00:52] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $45.62
+[2026-06-04 00:00:52] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 48.9 монет
+[2026-06-04 00:00:55] 🚀 🔥 ВХОД [G2]: FIL/USDT BUY | Price: 0.932 | Vol: 48.9 | Общий баланс: $11.18
+[2026-06-04 00:15:20] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос CRV/USDT | PNL: -0.389% | Триггер: T=False/BU=False/SL=True
+[2026-06-04 00:26:25] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос FIL/USDT | PNL: -0.536% | Триггер: T=False/BU=False/SL=True
+[2026-06-04 00:26:48] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $7.4855 | RISK_GEAR: 0.7
+[2026-06-04 00:26:48] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 71.2
+[2026-06-04 00:26:48] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $104.8
+[2026-06-04 00:26:48] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 1.47 монет
+[2026-06-04 00:26:50] 🚀 🔥 ВХОД [G1]: SOL/USDT SELL | Price: 71.2 | Vol: 1.47 | Общий баланс: $9.68
+[2026-06-04 00:26:59] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $7.4855 | RISK_GEAR: 0.7
+[2026-06-04 00:26:59] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.8194
+[2026-06-04 00:26:59] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $104.8
+[2026-06-04 00:26:59] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 127.8 монет
+[2026-06-04 00:27:01] 🚀 ⚠ Entry Error SUI/USDT: binance {"code":-2019,"msg":"Margin is insufficient."}
+[2026-06-04 00:27:30] 🚀 🔍 [TREND SHIELD ADA/USDT:USDT]: Отмена! Монета перегрета (0.89% > 0.8%). Пропускаем хаи.
+[2026-06-04 00:27:59] 🚀 🪓 [DYNAMIC KNIFE]: Отмена Лонга по DOGE/USDT:USDT! Каскад 3 свечей на лоу  канала Боллинджера (Ниже MA20). Цена: 0.09076 <= MA20: 0.0915
+[2026-06-04 00:29:30] 🚀 🔍 [TREND SHIELD FIL/USDT:USDT]: Отмена! Монета перегрета (1.25% > 0.8%). Пропускаем хаи.
+[2026-06-04 00:29:33] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: SOL/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
+[2026-06-04 00:29:46] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по SOL/USDT взята (+0.76%). Крою 50% объема.
+[2026-06-04 00:29:48] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $4.187 | RISK_GEAR: 0.7
+[2026-06-04 00:29:48] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 617.56
+[2026-06-04 00:29:48] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $58.62
+[2026-06-04 00:29:48] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 0.09 монет
+[2026-06-04 00:29:51] 🚀 🔥 ВХОД [G2]: BNB/USDT SELL | Price: 617.56 | Vol: 0.09 | Общий баланс: $9.51
+[2026-06-04 00:31:00] 🚀 🔍 [TREND SHIELD GRT/USDT:USDT]: Отмена! Монета перегрета (1.32% > 0.8%). Пропускаем хаи.
+[2026-06-04 00:39:38] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: BNB/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
+[2026-06-04 01:13:00] 🚀 🔍 [TREND SHIELD LDO/USDT:USDT]: Отмена! Монета перегрета (0.81% > 0.8%). Пропускаем хаи.
+[2026-06-04 01:16:01] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по BNB/USDT взята (+0.83%). Крою 50% объема.
+[2026-06-04 01:16:19] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция SOL/USDT полностью отработала ДНК-цели (+1.95%)
+[2026-06-04 01:16:33] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $5.6337 | RISK_GEAR: 0.7
+[2026-06-04 01:16:33] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 1.1823
+[2026-06-04 01:16:33] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $78.87
+[2026-06-04 01:16:33] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 66.7 монет
+[2026-06-04 01:16:35] 🚀 🔥 ВХОД [G1]: XRP/USDT SELL | Price: 1.1823 | Vol: 66.7 | Общий баланс: $11.15
+[2026-06-04 01:17:00] 🚀 🔍 [TREND SHIELD GLM/USDT:USDT]: Отмена! Монета перегрета (0.9% > 0.8%). Пропускаем хаи.
+[2026-06-04 01:18:00] 🚀 🔍 [TREND SHIELD CRV/USDT:USDT]: Отмена! Монета перегрета (0.88% > 0.8%). Пропускаем хаи.
+[2026-06-04 01:21:12] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: XRP/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
+[2026-06-04 01:22:44] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по XRP/USDT взята (+0.65%). Крою 50% объема.
+[2026-06-04 01:23:22] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция BNB/USDT полностью отработала ДНК-цели (+1.83%)
+[2026-06-04 01:24:00] 🚀 🔍 [TREND SHIELD NEAR/USDT:USDT]: Отмена! Монета перегрета (1.54% > 1.4%). Пропускаем хаи.
+[2026-06-04 01:26:00] 🚀 🔍 [TREND SHIELD GLM/USDT:USDT]: Отмена! Монета перегрета (1.25% > 0.8%). Пропускаем хаи.
+[2026-06-04 01:48:51] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция XRP/USDT полностью отработала ДНК-цели (+1.52%)
+[2026-06-04 01:50:38] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $11.3118 | RISK_GEAR: 0.7
+[2026-06-04 01:50:38] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 68.81
+[2026-06-04 01:50:38] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $158.37
+[2026-06-04 01:50:38] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 2.3 монет
+[2026-06-04 01:50:41] 🚀 🔥 ВХОД [G2]: SOL/USDT SELL | Price: 68.81 | Vol: 2.3 | Общий баланс: $12.08
+[2026-06-04 01:51:30] 🚀 🔍 [TREND SHIELD CRV/USDT:USDT]: Отмена! Монета перегрета (0.89% > 0.8%). Пропускаем хаи.
+[2026-06-04 01:54:00] 🚀 🔍 [TREND SHIELD WIF/USDT:USDT]: Отмена! Монета перегрета (2.93% > 2.5%). Пропускаем хаи.
+[2026-06-04 01:54:07] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $3.6205 | RISK_GEAR: 0.7
+[2026-06-04 01:54:07] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.08825
+[2026-06-04 01:54:07] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $50.69
+[2026-06-04 01:54:07] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 574.0 монет
+[2026-06-04 01:54:09] 🚀 🔥 ВХОД [G1]: DOGE/USDT SELL | Price: 0.08825 | Vol: 574.0 | Общий баланс: $12.66
+[2026-06-04 02:01:16] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: SOL/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
+[2026-06-04 02:02:09] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по SOL/USDT взята (+1.04%). Крою 50% объема.
+[2026-06-04 02:02:34] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: DOGE/USDT зафиксировал пик. Контроль отката: 0.5499999999999999%
+[2026-06-04 02:02:49] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по DOGE/USDT взята (+0.78%). Крою 50% объема.
+[2026-06-04 02:03:30] 🚀 🔍 [TREND SHIELD LINK/USDT:USDT]: Отмена! Монета перегрета (1.68% > 0.8%). Пропускаем хаи.
+[2026-06-04 02:04:57] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция DOGE/USDT полностью отработала ДНК-цели (+2.32%)
+[2026-06-04 02:05:04] 🚀 🏆 [ТЕЙК-2 ФИHАЛ]: Позиция SOL/USDT полностью отработала ДНК-цели (+2.95%)
+[2026-06-04 02:07:00] 🚀 🔍 [TREND SHIELD AAVE/USDT:USDT]: Отмена! Монета перегрета (1.91% > 0.8%). Пропускаем хаи.
+[2026-06-04 03:04:58] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $15.2172 | RISK_GEAR: 0.7
+[2026-06-04 03:04:58] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 0.004866
+[2026-06-04 03:04:58] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $213.04
+[2026-06-04 03:04:58] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 43781.0 монет
+[2026-06-04 03:05:01] 🚀 🔥 ВХОД [G1]: JASMY/USDT BUY | Price: 0.004866 | Vol: 43781.0 | Общий баланс: $16.02
+[2026-06-04 03:15:46] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: JASMY/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
+[2026-06-04 03:16:28] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по JASMY/USDT взята (+1.09%). Крою 50% объема.
+[2026-06-04 04:33:00] 🚀 🔍 [DEBUG ENTRY]: Available Margin: $10.9235 | RISK_GEAR: 0.7
+[2026-06-04 04:33:00] 🚀 🔍 [DEBUG ENTRY]: Target Leverage: 25x | Price: 71.1
+[2026-06-04 04:33:00] 🚀 🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): $152.93
+[2026-06-04 04:33:00] 🚀 🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: 2.15 монет
+[2026-06-04 04:33:02] 🚀 🔥 ВХОД [G1]: SOL/USDT SELL | Price: 71.1 | Vol: 2.15 | Общий баланс: $18.46
+[2026-06-04 04:56:12] 🚀 🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: SOL/USDT зафиксировал пик. Контроль отката: 0.35000000000000003%
+[2026-06-04 05:00:55] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по SOL/USDT взята (+0.62%). Крою 50% объема.
+[2026-06-04 05:20:57] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос JASMY/USDT | PNL: -0.432% | Триггер: T=False/BU=False/SL=True
