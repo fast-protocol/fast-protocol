@@ -51,7 +51,9 @@ async def update_balance(exchange):
 
             # Ищем чистую доступную маржу Isolated-активов среди JSON-массива биржи
             usdt_asset = next((a for a in assets if a.get('asset') == 'USDT'), {})
-            avail_margin = float(usdt_asset.get('availableBalance', bal.get('free', {}).get('USDT', 0)))
+            #avail_margin = float(usdt_asset.get('availableBalance', bal.get('free', {}).get('USDT', 0)))
+            # --- [ШТУЧНЫЙ ФИКС V37.2: ИСТИННЫЙ СВОБОДНЫЙ БАЛАНС ФЬЮЧЕРСОВ] ---
+            avail_margin = float(m_info.get('availableBalance', usdt_asset.get('availableBalance', bal.get('free', {}).get('USDT', 0))))
 
             # Возвращаем переменную free для предотвращения NameError ниже по коду
             free = avail_margin
@@ -61,8 +63,8 @@ async def update_balance(exchange):
             memory.total_wallet = float(bal.get('total', {}).get('USDT', 0))
 
             if memory.start_balance == 0:
-                memory.start_balance = free
-                log(f"💰 Стартовый баланс успешно считан: ${round(free, 2)}")
+                memory.start_balance = memory.total_wallet
+                log(f"!!! С Т А Р Т !!!  Общий баланс кошелька: ${round(memory.total_wallet, 2)} | Свободно для HFT: ${round(free, 2)}")
 
             # --- [ЖЕСТКИЙ ФИКС V22.4: ПРИНУДИТЕЛЬНЫЙ ФОНОВЫЙ КЛУБ ИЗОЛЯЦИИ БИНАНСА] ---
             # При каждом тике баланса бот намертво забивает режим ISOLATED для всей обоймы
@@ -240,7 +242,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
         # Если монета улетела в космос выше лимита класса — глухая блокировка ордера
         if current_altitude > max_alt_pct:
             if int(time.time()) % 30 == 0:
-                log(f"🔍 [TREND SHIELD {symbol}]: Отмена! Монета перегрета ({round(current_altitude, 2)}% > {max_alt_pct}%). Пропускаем хаи.")
+                log(f"🔍 [Trend shield {symbol}]: Отмена! Монета перегрета ({round(current_altitude, 2)}% > {max_alt_pct}%). Пропускаем хаи.")
             return None, last_beacon_t
 
         # 4. ТВОЙ ОРИГИНАЛЬНЫЙ ТУМБЛЕР ДВУХ СКОРОСТЕЙ G1 / G2
@@ -277,7 +279,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
         if v_now < v_p1 and v_p1 < v_p2:
             if int(time.time()) % 45 == 0:
-                log(f"🔍 [VOLUME SHIELD {symbol}]: Отмена! Прорыв на затухающем объеме (Вялый закисающий импульс).")
+                log(f"🔍 [Volume shield {symbol}]: Отмена! Прорыв на затухающем объеме (Вялый закисающий импульс).")
             return None, last_beacon_t
 
         # Твоя оригинальная проверка плотности тикового объема под конкретную передачу
@@ -300,13 +302,13 @@ async def check_signal(exchange, symbol, last_beacon_t):
         # Контур Лонга: если 3 свечи красные, но мы ВЫШЕ MA20 (в благоприятной зоне) — вход разрешен!
         # Блокировка включится, только если мы упали под MA20 (в неблагоприятную зону)
         if is_buy_candidate and is_3_red and cur_p <= ma_prev:
-            log(f"🪓 [DYNAMIC KNIFE]: Отмена Лонга по {symbol}! Каскад 3 свечей на лоу канала Боллин джера (Ниже MA20). Цена: {cur_p} <= MA20: {round(ma_prev, 4)}")
+            log(f"🪓 [ynamic knife]: Отмена Лонга по {symbol}! Каскад 3 свечей на лоу канала Боллинд жера (Ниже MA20). Цена: {cur_p} <= MA20: {round(ma_prev, 4)}")
             return None, last_beacon_t
 
         # Контур Шорта: если 3 свечи зеленые, но мы НИЖЕ MA20 (благоприятная зона разгона) — вход разрешен!
         # Намертво блокируем шорт, только если цена находится на самых хаях канала (выше MA20)
         if is_sell_candidate and is_3_green and cur_p >= ma_prev:
-            log(f"🪓 [DYNAMIC KNIFE]: Отмена Шорта по {symbol}! Каскад 3 свечей на хаях канала Болли нджера (Выше MA20). Цена: {cur_p} >= MA20: {round(ma_prev, 4)}")
+            log(f"🪓 [ynamic knife]: Отмена Шорта по {symbol}! Каскад 3 свечей на хаях канала Боллин джера (Выше MA20). Цена: {cur_p} >= MA20: {round(ma_prev, 4)}")
             return None, last_beacon_t
 
         # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
@@ -360,10 +362,10 @@ async def execute_entry(exchange, sig):
             return
 
         # --- ШТУЧНЫЙ КВАНТОВЫЙ ДЕБАГ V25.0: ВСКРЫТИЕ МАРЖИНАЛЬНОЙ СЛЕПОТЫ ---
-        log(f"🔍 [DEBUG ENTRY]: Available Margin: ${round(memory.available, 4)} | RISK_GEAR: {RISK_GEAR}")
-        log(f"🔍 [DEBUG ENTRY]: Target Leverage: {sig['dna']['lev']}x | Price: {sig['price']}")
-        log(f"🔍 [DEBUG ENTRY]: Calculated Nom Volume (with leverage): ${round(amount_usdt, 2)}")
-        log(f"🔍 [DEBUG ENTRY]: FINAL ROUNDED QTY TO BINANCE: {qty} монет")
+        log(f"🔍 [Debug entry]: Available Margin: ${round(memory.available, 4)} | RISK_GEAR: {RISK_GEAR}")
+        log(f"🔍 [Debug entry]: Target Leverage: {sig['dna']['lev']}x | Price: {sig['price']}")
+        log(f"🔍 [Debug entry]: Calculated Nom Volume (with leverage): ${round(amount_usdt, 2)}")
+        log(f"🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: {qty} монет")
         # 3. ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Возвращаем проверенный create_market_order из старого рабочего бота!
         order = await exchange.create_market_order(symbol, sig['side'], qty)
 
@@ -484,39 +486,53 @@ async def monitor_logic(exchange):
                 # Б. КОHТУР АДАПТИВНОГО ТРЕЙЛИHГА НА БАЗЕ ДНК МОHЕТЫ
                 # Определяем шаг отката в зависимости от класса риска (Мемы дышат свободнее)
                 is_meme_coin = any(m_n in clean_symbol.upper() for m_n in ['1000PEPE', '1000SHIB', '1000FLOKI', '1000BONK', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
-                optimal_trail_step = 0.0055 if is_meme_coin else 0.0035  # Ракеты: 0.35% отката, Мемы: 0.55%
 
-                # Взводим Пре-Трейлинг, если цена прошла 75% пути до Тейка-1
-                if not memory.tp_fixed.get(raw_symbol, False) and pnl >= (gd['tp1'] * 0.75):
-                    trail_key = f"{raw_symbol}_trail"
+                # --- [ВРЕЗКА V37.5: БЕЗОПАСНЫЙ СЛЕ ДЯЩИЙ ТРЕЙЛИНГ И ДЕБАГ ВЫХОДОВ] ---
+                optimal_trail_step = 0.0055 if is_meme_coin else 0.0035
+                trail_key = f"{raw_symbol}_trail"
+
+                if pnl >= (gd['tp1'] * 0.75):
                     if not memory.tp_fixed.get(trail_key, False):
                         memory.tp_fixed[trail_key] = True
-                        pos['max_pnl_observed'] = max(pnl, pos.get('max_pnl_observed', pnl))
-                        log(f"🚀 [ПРЕ-ТРЕЙЛИHГ ВЗВЕДЕH]: {clean_symbol} зафиксировал пик. Контроль отката: {optimal_trail_step*100}%")
+                        memory.prices[f"{raw_symbol}_peak"] = pnl
+                        log(f"⚙️ [ТРЕЙЛИHГ]: Взведен по {clean_symbol}!")
 
-                    # Обновляем пиковую точку экстремума тренда
-                    pos['max_pnl_observed'] = max(pnl, pos.get('max_pnl_observed', pnl))
+                    current_peak = memory.prices.get(f"{raw_symbol}_peak", pnl)
+                    if pnl > current_peak:
+                        memory.prices[f"{raw_symbol}_peak"] = pnl
+                        current_peak = pnl
 
-                    # Проверяем условия критического разворота и выдоха крупного игрока
-                    if pnl <= (pos['max_pnl_observed'] - optimal_trail_step):
-                        log(f"🏁 [ТРЕЙЛИHГ КАТАПУЛЬТА V25.0]: Фиксация {clean_symbol} по откату от пика! Итог: {round(pnl*100, 2)}%")
+                    entry_price_f = float(pos['price'])
+                    if pos['side'] == 'buy':
+                        peak_geo = entry_price_f * (1.0 + current_peak)
+                        catapult_trigger = peak_geo * (1.0 - optimal_trail_step)
+                        is_catapult_fired = (cur_p <= catapult_trigger)
+                    else:
+                        peak_geo = entry_price_f * (1.0 - current_peak)
+                        catapult_trigger = peak_geo * (1.0 + optimal_trail_step)
+                        is_catapult_fired = (cur_p >= catapult_trigger)
+
+                    if int(time.time()) % 15 == 0:
+                        p_pct = round(pnl * 100, 2)
+                        pk_pct = round(current_peak * 100, 2)
+                        trg = round(catapult_trigger, 4)
+                        log(f"⚙️ [ДЕБАГ {clean_symbol}]: PNL: {p_pct}% | Пик: {pk_pct}% | Trigger: {trg}")
+
+                    if is_catapult_fired:
+                        trg = round(catapult_trigger, 4)
+                        log(f"🏁 [КАТАПУЛЬТА]: Снос {clean_symbol} по отрезку от пика! Trig: {trg}")
                         try:
-                            # --- ШТУЧНЫЙ ФИКС V27.6: ПРИНУДИТЕЛЬНЫЙ FLOAT И REDUCE_ONLY ДЛЯ КАТАПУЛЬТЫ ---
                             await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                             exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
-                            # Передаем raw_symbol с суффиксом, чтобы Бинанс принял reduceOnly и схлопнул лонг!
                             await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
-
-                            # Тотальное выжигание флагов из RAM
-                            if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
-                            if raw_symbol in memory.be_fixed: del memory.be_fixed[raw_symbol]
-                            if raw_symbol in memory.stop_placed: del memory.stop_placed[raw_symbol]
-                            if raw_symbol in memory.tp_fixed: del memory.tp_fixed[raw_symbol]
-                            if trail_key in memory.tp_fixed: del memory.tp_fixed[trail_key]
-                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
-                            continue
                         except Exception as t_err:
-                            log(f"⚠ Сбой катапультирования по трейлингу {clean_symbol}: {t_err}")
+                            log(f"⚠ Сбой катапультирования {clean_symbol}: {t_err}")
+
+                        if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                        if trail_key in memory.tp_fixed: del memory.tp_fixed[trail_key]
+                        if f"{raw_symbol}_peak" in memory.prices: del memory.prices[f"{raw_symbol}_peak"]
+                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                        continue
 
                 # В. КОHТУР КАСКАДHЫХ ТЕЙК-ПОИHТОВ (Если трейлинг пролетел мимо импульсом)
                 # ТЕЙК-1: Фиксация 50% объема позиции при достижении главной цели ДНК
