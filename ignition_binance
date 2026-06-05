@@ -290,7 +290,8 @@ async def check_signal(exchange, symbol, last_beacon_t):
         is_buy_candidate = (cur_p > open_p)
         is_sell_candidate = (cur_p < open_p)
 
-        # 7. ТВОЙ ОРИГИНАЛЬНЫЙ КАСКАДНЫЙ НOЖ (PRE-CANDLE SHIELD)
+
+#=====  # 7. ТВОЙ ОРИГИНАЛЬНЫЙ КАСКАДНЫЙ НOЖ (PRE-CANDLE SHIELD)
         p_c1 = df.iloc[-2]
         p_c2 = df.iloc[-3]
         p_c3 = df.iloc[-4]
@@ -301,15 +302,38 @@ async def check_signal(exchange, symbol, last_beacon_t):
         # --- [ВРЕЗКА V34.0: ИНТЕЛЛЕКТУАЛЬНЫЙ ДИНАМИЧЕСКИЙ КАСКАДНЫЙ НОЖ С ПРИВЯЗКОЙ К MA20] ---
         # Контур Лонга: если 3 свечи красные, но мы ВЫШЕ MA20 (в благоприятной зоне) — вход разрешен!
         # Блокировка включится, только если мы упали под MA20 (в неблагоприятную зону)
-        if is_buy_candidate and is_3_red and cur_p <= ma_prev:
-            log(f"🪓 [ynamic knife]: Отмена Лонга по {symbol}! Каскад 3 свечей на лоу канала Боллинд жера (Ниже MA20). Цена: {cur_p} <= MA20: {round(ma_prev, 4)}")
-            return None, last_beacon_t
+#        if is_buy_candidate and is_3_red and cur_p <= ma_prev:
+#            log(f"🪓 [ynamic knife]: Отмена Лонга по {symbol}! Каскад 3 свечей на лоу канала Боллин джера (Ниже MA20). Цена: {cur_p} <= MA20: {round(ma_prev, 4)}")
+#            return None, last_beacon_t
 
         # Контур Шорта: если 3 свечи зеленые, но мы НИЖЕ MA20 (благоприятная зона разгона) — вход разрешен!
         # Намертво блокируем шорт, только если цена находится на самых хаях канала (выше MA20)
-        if is_sell_candidate and is_3_green and cur_p >= ma_prev:
-            log(f"🪓 [ynamic knife]: Отмена Шорта по {symbol}! Каскад 3 свечей на хаях канала Боллин джера (Выше MA20). Цена: {cur_p} >= MA20: {round(ma_prev, 4)}")
-            return None, last_beacon_t
+#        if is_sell_candidate and is_3_green and cur_p >= ma_prev:
+#            log(f"🪓 [ynamic knife]: Отмена Шорта по {symbol}! Каскад 3 свечей на хаях канала Болли нджера (Выше MA20). Цена: {cur_p} >= MA20: {round(ma_prev, 4)}")
+#            return None, last_beacon_t
+
+        # --- [ВРЕЗКА V38.5: АДАПТИВНЫЙ МОНОЛИТ И ЗРЯЧИЙ ВЗРЫВ НИТКИ С ВЕРИФИКАЦИЕЙ СПОТА] ---
+        channel_width = abs(p_up - p_dn) / ma_prev * 100.0
+
+        # Вытягиваем спотовую цену для наносекундной верификации взрыва нитки
+        s_ticker = str(symbol).split(':')
+        s_price_raw = memory.prices.get(s_ticker, memory.prices.get(s_ticker.replace('/', '')))
+        s_price = float(s_price_raw) if s_price_raw else cur_p
+        s_basis = abs(cur_p / s_price - 1.0) * 100.0
+
+        # Истинный взрыв нитки: канал узкий, скорость бешеная, объем есть И СПОТ ПОДТВЕРЖДАЕТ (базис < 0.25%)
+        is_nitka_explosion = (channel_width < 0.65 and w_growth >= 1.25 and df['v'].iloc[-1] > df['v'].mean() * 2.0 and s_basis < 0.25)
+
+        if not is_nitka_explosion:
+            adaptive_offset = 0.25 if channel_width < 1.5 else 0.05
+            long_barrier = ma_prev * (1.0 - adaptive_offset)
+            short_barrier = ma_prev * (1.0 + adaptive_offset)
+
+            if is_buy_candidate and is_3_red and cur_p <= long_barrier:
+                return None, last_beacon_t
+
+            if is_sell_candidate and is_3_green and cur_p >= short_barrier:
+                return None, last_beacon_t
 
         # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
         return {
