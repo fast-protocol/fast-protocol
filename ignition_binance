@@ -1,6 +1,6 @@
 # --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
 RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
-MAX_SLOTS = 2          # Максимум 4 параллельных сделки
+MAX_SLOTS = 4          # Максимум 4 параллельных сделки
 LOG_FILE = "ignition_log.txt"
 # --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
 MAX_ACCOUNT_LEVERAGE = 25  # Выставляем 5х (аппаратный потолок субаккаунта)
@@ -181,7 +181,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
             return None, last_beacon_t
         # ==================================================================================
 
-#        log(f"⚙️ [DEBUG 4]: {symbol} прошел все ММ-фильтры! Проверяю Динамический Нож...")
+  #      log(f"⚙️ [DEBUG 4]: {symbol} прошел все ММ-фильтры! Проверяю Динамический Нож...")
 
 
         # 1. ЗАГРУЗКА И ВЕРИФИКАЦИЯ СВЕЧНОГО МАССИВА
@@ -312,28 +312,49 @@ async def check_signal(exchange, symbol, last_beacon_t):
 #            log(f"🪓 [ynamic knife]: Отмена Шорта по {symbol}! Каскад 3 свечей на хаях канала Болли нджера (Выше MA20). Цена: {cur_p} >= MA20: {round(ma_prev, 4)}")
 #            return None, last_beacon_t
 
-        # --- [ВРЕЗКА V38.5: АДАПТИВНЫЙ МОНОЛИТ И ЗРЯЧИЙ ВЗРЫВ НИТКИ С ВЕРИФИКАЦИЕЙ СПОТА] ---
+        log(f"⚙️ [DEBUG 2перед ниткой..")
+
+
+        # --- [ВРЕЗКА V39.5: ПОКАНАЛЬНЫЙ НОЖ И ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ] ---
         channel_width = abs(p_up - p_dn) / ma_prev * 100.0
 
-        # Вытягиваем спотовую цену для наносекундной верификации взрыва нитки
-        s_ticker = str(symbol).split(':')
-        s_price_raw = memory.prices.get(s_ticker, memory.prices.get(s_ticker.replace('/', '')))
+        # 1. СHАЙПЕРСКИЙ СБOР СПOТ-ТИКЕРА ИЗ СТРОКИ СКАHЕРА
+        s_ticker_clean = str(symbol).split(':')[0].replace('/', '')
+        s_price_raw = memory.prices.get(s_ticker_clean)
         s_price = float(s_price_raw) if s_price_raw else cur_p
         s_basis = abs(cur_p / s_price - 1.0) * 100.0
 
-        # Истинный взрыв нитки: канал узкий, скорость бешеная, объем есть И СПОТ ПОДТВЕРЖДАЕТ (базис < 0.25%)
+        # 2. ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ ОБЪЕМОВ (ЗАЩИТА ОТ АЙСБЕРГ-РАЗВОРОТОВ ММ)
+        live_ticker_data = memory.prices.get(s_ticker_clean + "_full", {})
+        is_delta_safe = True
+        if live_ticker_data:
+            # Считываем кумулятивные объемы Taker Buy/Sell за последние тики сокетов
+            t_buy_vol = float(live_ticker_data.get('v', 0))
+            t_sell_vol = float(live_ticker_data.get('q', 1))
+            if is_buy_candidate and (t_sell_vol > t_buy_vol * 1.65): is_delta_safe = False # Скрытые продажи китов
+            if is_sell_candidate and (t_buy_vol > t_sell_vol * 1.65): is_delta_safe = False # Скрытый откуп китов
+
+        # Истинный взрыв нитки: канал узкий, скорость бешеная, спот подтверждает базисом
         is_nitka_explosion = (channel_width < 0.65 and w_growth >= 1.25 and df['v'].iloc[-1] > df['v'].mean() * 2.0 and s_basis < 0.25)
 
         if not is_nitka_explosion:
-            adaptive_offset = 0.25 if channel_width < 1.5 else 0.05
+            # ПОКАНАЛЬНЫЙ РАЗЖИМ: Мемы летят свободно (5%), тяжелые Якоря зажимаем жестко (15%)
+            is_meme = any(m in symbol.upper() for m in ['1000PEPE', 'WIF', 'POPCAT', '1000SHIB', '1000BONK', '1000FLOKI', 'DOGE'])
+            adaptive_offset = 0.05 if is_meme else 0.15
+
             long_barrier = ma_prev * (1.0 - adaptive_offset)
             short_barrier = ma_prev * (1.0 + adaptive_offset)
 
-            if is_buy_candidate and is_3_red and cur_p <= long_barrier:
-                return None, last_beacon_t
+            # Точечная блокировка Ножей с учетом Шлюза Паритета Дельты
+            if is_buy_candidate and is_3_red:
+                if cur_p <= long_barrier or not is_delta_safe:
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Лонга по {symbol}! Адаптивный б арьер или скрытый Айсберг ММ.")
+                    return None, last_beacon_t
 
-            if is_sell_candidate and is_3_green and cur_p >= short_barrier:
-                return None, last_beacon_t
+            if is_sell_candidate and is_3_green:
+                if cur_p >= short_barrier or not is_delta_safe:
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Шорта по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
+                    return None, last_beacon_t
 
         # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
         return {
@@ -363,6 +384,17 @@ async def execute_entry(exchange, sig):
         return
 
     try:
+
+        # --- [ВРЕЗКА V39.5: ПРЕДOХРАНИТЕЛЬ МАРЖИ И ЗАПРЕТ МУСOРНЫХ СЛOТOВ] ---
+        # Запрашиваем живой доступный остаток на бирже прямо перед ударом
+        bal_info = await exchange.fetch_balance()
+        live_available = float(bal_info.get('info', {}).get('availableBalance', 0))
+
+        # Жесткий порог: если свободной маржи меньше $2.0 — запрещаем открывать новые слоты!
+        if live_available < 2.0:
+            log(f"🛡️ [MARGIN FLOOR SHIELD]: Отмена входа по {sig['symbol']}. Доступно всего ${round (live_available, 2)} < Лимита $2.0. Копим кэш до Тейков!")
+            return
+
         # 1. Динамическое определение эффективного плеча с учетом лимита субаккаунта
         dna_lev = int(sig['dna']['lev'])
         effective_leverage = min(dna_lev, MAX_ACCOUNT_LEVERAGE)
@@ -511,7 +543,8 @@ async def monitor_logic(exchange):
                 # Определяем шаг отката в зависимости от класса риска (Мемы дышат свободнее)
                 is_meme_coin = any(m_n in clean_symbol.upper() for m_n in ['1000PEPE', '1000SHIB', '1000FLOKI', '1000BONK', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
 
-                # --- [ВРЕЗКА V37.5: БЕЗОПАСНЫЙ СЛЕ ДЯЩИЙ ТРЕЙЛИНГ И ДЕБАГ ВЫХОДОВ] ---
+                # --- [ВРЕЗКА V39.5: ПРЕЦИЗИОННЫЙ СЛЕДЯЩИЙ ТРЕЙЛИНГ С ОКРУГЛЕНИЕМ БИЗНЕС-ЛОГОВ] ---
+
                 optimal_trail_step = 0.0055 if is_meme_coin else 0.0035
                 trail_key = f"{raw_symbol}_trail"
 
@@ -529,22 +562,23 @@ async def monitor_logic(exchange):
                     entry_price_f = float(pos['price'])
                     if pos['side'] == 'buy':
                         peak_geo = entry_price_f * (1.0 + current_peak)
-                        catapult_trigger = peak_geo * (1.0 - optimal_trail_step)
+                        catapult_trigger_raw = peak_geo * (1.0 - optimal_trail_step)
+                        # НАМЕРТВО ОКРУГЛЯЕМ ТРИГГЕР ПОД СТАНДАРТ БИРЖИ ДЛЯ ЕЛОЗЯЩИХ МЕМОВ (ТИПА PEPE)
+                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
                         is_catapult_fired = (cur_p <= catapult_trigger)
                     else:
                         peak_geo = entry_price_f * (1.0 - current_peak)
-                        catapult_trigger = peak_geo * (1.0 + optimal_trail_step)
+                        catapult_trigger_raw = peak_geo * (1.0 + optimal_trail_step)
+                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
                         is_catapult_fired = (cur_p >= catapult_trigger)
 
                     if int(time.time()) % 15 == 0:
                         p_pct = round(pnl * 100, 2)
                         pk_pct = round(current_peak * 100, 2)
-                        trg = round(catapult_trigger, 4)
-                        log(f"⚙️ [ДЕБАГ {clean_symbol}]: PNL: {p_pct}% | Пик: {pk_pct}% | Trigger: {trg}")
+                        log(f"⚙️ [ДЕБАГ {clean_symbol}]: PNL: {p_pct}% | Пик: {pk_pct}% | Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
 
                     if is_catapult_fired:
-                        trg = round(catapult_trigger, 4)
-                        log(f"🏁 [КАТАПУЛЬТА]: Снос {clean_symbol} по отрезку от пика! Trig: {trg}")
+                        log(f"🏁 [КАТАПУЛЬТА]: Снос {clean_symbol} по откату от пика! Trigger Цена: {catapult_trigger}")
                         try:
                             await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                             exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
@@ -557,7 +591,6 @@ async def monitor_logic(exchange):
                         if f"{raw_symbol}_peak" in memory.prices: del memory.prices[f"{raw_symbol}_peak"]
                         memory.slots_occupied = max(0, memory.slots_occupied - 1)
                         continue
-
                 # В. КОHТУР КАСКАДHЫХ ТЕЙК-ПОИHТОВ (Если трейлинг пролетел мимо импульсом)
                 # ТЕЙК-1: Фиксация 50% объема позиции при достижении главной цели ДНК
                 if not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1']:
