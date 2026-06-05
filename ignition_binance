@@ -348,7 +348,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
             # Точечная блокировка Ножей с учетом Шлюза Паритета Дельты
             if is_buy_candidate and is_3_red:
                 if cur_p <= long_barrier or not is_delta_safe:
-                    log(f"🪓 [KNIFE BLOCK]: Отмена Лонга по {symbol}! Адаптивный б арьер или скрытый Айсберг ММ.")
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Лонга по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
                     return None, last_beacon_t
 
             if is_sell_candidate and is_3_green:
@@ -543,42 +543,47 @@ async def monitor_logic(exchange):
                 # Определяем шаг отката в зависимости от класса риска (Мемы дышат свободнее)
                 is_meme_coin = any(m_n in clean_symbol.upper() for m_n in ['1000PEPE', '1000SHIB', '1000FLOKI', '1000BONK', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
 
-                # --- [ВРЕЗКА V39.5: ПРЕЦИЗИОННЫЙ СЛЕДЯЩИЙ ТРЕЙЛИНГ С ОКРУГЛЕНИЕМ БИЗНЕС-ЛОГОВ] ---
-
+                # --- [ВРЕЗКА V39.6: АБСОЛЮТНО ЗРЯЧИЙ HFT-ТРЕЙЛИНГ И ФИКС ШОРТ-КАТАПУЛЬТЫ] ---
                 optimal_trail_step = 0.0055 if is_meme_coin else 0.0035
                 trail_key = f"{raw_symbol}_trail"
+                peak_memory_key = f"{raw_symbol}_max_peak_observed"
 
-                if pnl >= (gd['tp1'] * 0.75):
+                if pnl >= (gd['tp1'] * 0.75) or memory.tp_fixed.get(trail_key, False):
                     if not memory.tp_fixed.get(trail_key, False):
                         memory.tp_fixed[trail_key] = True
-                        memory.prices[f"{raw_symbol}_peak"] = pnl
+                        memory.prices[peak_memory_key] = pnl
                         log(f"⚙️ [ТРЕЙЛИHГ]: Взведен по {clean_symbol}!")
 
-                    current_peak = memory.prices.get(f"{raw_symbol}_peak", pnl)
+                    current_peak = memory.prices.get(peak_memory_key, pnl)
                     if pnl > current_peak:
-                        memory.prices[f"{raw_symbol}_peak"] = pnl
+                        memory.prices[peak_memory_key] = pnl
                         current_peak = pnl
 
                     entry_price_f = float(pos['price'])
-                    if pos['side'] == 'buy':
+
+                    # Проверяем направление строго по CCXT-стандарту фьючерсов Binance (long/short)
+                    is_pos_long = str(pos.get('side', '')).lower() in ['long', 'buy']
+
+                    if is_pos_long:
                         peak_geo = entry_price_f * (1.0 + current_peak)
                         catapult_trigger_raw = peak_geo * (1.0 - optimal_trail_step)
-                        # НАМЕРТВО ОКРУГЛЯЕМ ТРИГГЕР ПОД СТАНДАРТ БИРЖИ ДЛЯ ЕЛОЗЯЩИХ МЕМОВ (ТИПА PEPE)
                         catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
                         is_catapult_fired = (cur_p <= catapult_trigger)
                     else:
+                        # Корректная тригонометрия шорта: откат вверх от дна прибыли
                         peak_geo = entry_price_f * (1.0 - current_peak)
                         catapult_trigger_raw = peak_geo * (1.0 + optimal_trail_step)
                         catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
                         is_catapult_fired = (cur_p >= catapult_trigger)
 
+                    # Выводим дебаг в консоль раз в 15 секунд
                     if int(time.time()) % 15 == 0:
                         p_pct = round(pnl * 100, 2)
                         pk_pct = round(current_peak * 100, 2)
-                        log(f"⚙️ [ДЕБАГ {clean_symbol}]: PNL: {p_pct}% | Пик: {pk_pct}% | Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
+                        log(f"⚙️ [ДЕБАГ ТРЕЙЛИНГА {clean_symbol}]: PNL: {p_pct}% | Пик: {pk_pct}% | Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
 
                     if is_catapult_fired:
-                        log(f"🏁 [КАТАПУЛЬТА]: Снос {clean_symbol} по откату от пика! Trigger Цена: {catapult_trigger}")
+                        log(f"🏁 [КАТАПУЛЬТА]: Снос {clean_symbol} по откату от пика! Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
                         try:
                             await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                             exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
@@ -588,9 +593,10 @@ async def monitor_logic(exchange):
 
                         if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
                         if trail_key in memory.tp_fixed: del memory.tp_fixed[trail_key]
-                        if f"{raw_symbol}_peak" in memory.prices: del memory.prices[f"{raw_symbol}_peak"]
+                        if peak_memory_key in memory.prices: del memory.prices[peak_memory_key]
                         memory.slots_occupied = max(0, memory.slots_occupied - 1)
                         continue
+
                 # В. КОHТУР КАСКАДHЫХ ТЕЙК-ПОИHТОВ (Если трейлинг пролетел мимо импульсом)
                 # ТЕЙК-1: Фиксация 50% объема позиции при достижении главной цели ДНК
                 if not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1']:
@@ -717,25 +723,26 @@ async def monitor_logic(exchange):
                         #live_symbols = [str(p['symbol']) for p in positions if abs(float(p.get('contracts', p.get('positionAmt', 0)))) > 0.00001]
 
                         # --- [ВРЕЗКА V37.0: АППАРАТНЫЙ ПЫЛЕСОС СИРОТ И ПЫЛИ ВЕНИКА] ---
+
+                        # --- [ВРЕЗКА V40.0: ИСТИННЫЙ СБОРЩИК ПЫЛИ ВЕНИКА] ---
                         live_symbols = []
                         for p in positions:
                             p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
                             if p_vol > 0.00001:
                                 p_price = float(p.get('entryPrice', p.get('markPrice', 1.0)))
-                                # Если долларовый вес позиции на бирже меньше $1.0 — это мусорный остаток округления!
+                                p_raw_sym = str(p['symbol'])
+                                p_clean_sym = p_raw_sym.split(':')[0]
+
+                                # Если долларовая стоимость позы меньше $1.0 — сжигаем мусор встречным ордером!
                                 if (p_vol * p_price) < 1.0:
                                     try:
-                                        # Намертво выжигаем остаток встречным ордером reduceOnly, освобождая слот
-                                        p_raw_sym = p['symbol']
-                                        p_clean_sym = p_raw_sym.split(':')[0]
                                         p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
                                         p_exact_vol = float(exchange.amount_to_precision(p_clean_sym, p_vol))
                                         await exchange.create_market_order(p_raw_sym, p_exit_side, p_exact_vol, {'reduceOnly': True})
-                                        log(f"🧹🔥 [ПЫЛЕСОС МЕЛОЧИ]: Уничтожен мусорный остаток {p_c lean_sym} весом ${round(p_vol * p_price, 2)}. Слот свободен!")
+                                        log(f"🧹🔥 [ПЫЛЕСОС]: Выжжен остаток {p_clean_sym} весом ${r ound(p_vol * p_price, 2)}!")
                                     except: pass
                                 else:
-                                    live_symbols.append(str(p['symbol']))
-
+                                    live_symbols.append(p_raw_sym)
 
                         # Сверяем исходный raw_symbol (XRP/USDT:USDT) напрямую с биржевым массивом
                         if raw_symbol not in live_symbols:
