@@ -742,7 +742,7 @@ async def monitor_logic(exchange):
                                     try:
                                         p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
                                #         p_exact_vol = float(exchange.amount_to_precision(p_clean_sym, p_vol))
-                                        p_exact_vol = float(exchange.amount_to_precision(str(p_clean_sym), p_vol))
+                                        p_exact_vol = float(exchange.amount_to_precision(p_clean_sym, p_vol))
                                         await exchange.create_market_order(p_raw_sym, p_exit_side, p_exact_vol, {'reduceOnly': True})
                                         log(f"🧹🔥 [ПЫЛЕСОС]: Выжжен остаток {p_clean_sym} весом ${r ound(p_vol * p_price, 2)}!")
                                     except: pass
