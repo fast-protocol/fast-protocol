@@ -82,44 +82,46 @@ async def update_balance(exchange):
                     # --- [ВРЕЗКА V40.5: АППАРАТНЫЙ УТРЕННИЙ ПЫЛЕСОС ПЕРВОГО ТИКА] ---
                     live_symbols = []
                     for p in positions:
-                        p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
-                        if p_vol > 0.00001:
-                            p_price = float(p.get('entryPrice', p.get('markPrice', 1.0)))
-                            p_raw_sym = str(p['symbol'])
-                            p_clean_sym = p_raw_sym.split(':')[0]
+                            p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
+                            if p_vol > 0.00001:
+                                p_price = float(p.get('entryPrice', p.get('markPrice', 1.0)))
+                                p_raw_sym = str(p['symbol'])
 
-                            # Если общая стоимость позы на бирже меньше $1.0 — это мусорный остаток! Уничтожаем мгновенно!
-                            if (p_vol * p_price) < 1.0:
-                                try:
-                                    p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
-                                    p_exact_vol = float(exchange.amount_to_precision(p_clean_sym, p_vol))
-                                    await exchange.create_market_order(p_raw_sym, p_exit_side, p_exact_vol, {'reduceOnly': True})
-                                    log(f"🧹🔥 [УТРЕННИЙ ПЫЛЕСОС]: Намертво уничтожен мусорный остат ок {p_clean_sym} весом ${round(p_vol * p_price, 2)}!")
-                                except: pass
-                            else:
-                                live_symbols.append(p_raw_sym)
+                                # Если общая стоимость позы меньше $1.0 — уничтожаем мгновенно
+                                if (p_vol * p_price) < 1.0:
+                                    try:
+                                        p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
+                                        p_exact_vol = float(exchange.amount_to_precision(p_raw_sym, p_vol))
+                                        p_params = {'reduceOnly': True}
+                                        await exchange.create_order(p_raw_sym, 'MARKET', p_exit_side, p_exact_vol, params=p_params)
+                                        log(f"🧹🔥 [УТРЕННИЙ ПЫЛЕСОС]: Намертво уничтожен мусорный о статок {p_raw_sym} весом ${round(p_vol * p_price, 2)}!")
+                                    except: pass
+                                    continue
+                                else:
+                                    live_symbols.append(p_raw_sym)
 
-                            if p_raw_sym not in memory.active_pos and p_raw_sym in memory.all_dna:
-                                entry_p = float(p.get('entryPrice', p.get('price', 0)))
-                                #side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
-                                #side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
+                                    # Жесткое усыновление тяжелых позиций строго по знаку объема
+                                    # --- ЖЕСТКИЙ ФИКС V43.8: СИНХРОНИЗАЦИЯ КЛЮЧЕЙ С ДНК-ПУЛЬТОМ ---
+                                    clean_dna_key = p_raw_sym.split(':')[0]
+                                    if p_raw_sym not in memory.active_pos and clean_dna_key in memory.all_dna:
+                                        p_amt_raw = float(p.get('positionAmt', 0))
+                                        if p_amt_raw == 0:
+                                            continue
 
-                                p_amt_raw = float(p.get('positionAmt', 0))
-                                if p_amt_raw == 0: continue  # Намертво выжигаем пустые дубликаты Бинанса!
-                                side = 'buy' if p_amt_raw > 0 else 'sell'
+                                        side = 'buy' if p_amt_raw > 0 else 'sell'
+                                        entry_p = float(p.get('entryPrice', p.get('price', 0)))
+                                        dna = memory.all_dna[clean_dna_key]
 
-                                dna = memory.all_dna[p_raw_sym]
-
-                                memory.active_pos[p_raw_sym] = {
-                                    'side': side, 'vol': p_vol, 'price': entry_p,
-                                    'gear': 'g1', 'gear_data': dna['g1'], 'dna': dna,
-                                    'entry_time': time.time()
-                                }
-                                memory.tp_fixed[p_raw_sym] = False
-                                memory.be_fixed[p_raw_sym] = False
-                                memory.stop_placed[p_raw_sym] = entry_p
-                                memory.slots_occupied += 1
-                                log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Успешно подхвачен ядром выходов!")
+                                        memory.active_pos[p_raw_sym] = {
+                                            'side': side, 'vol': p_vol, 'price': entry_p,
+                                            'gear': 'g1', 'gear_data': dna['g1'], 'dna': dna,
+                                            'entry_time': time.time()
+                                        }
+                                        memory.tp_fixed[p_raw_sym] = False
+                                        memory.be_fixed[p_raw_sym] = False
+                                        memory.stop_placed[p_raw_sym] = entry_p
+                                        memory.slots_occupied += 1
+                                        log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Успешно подхвачен ядром выходов!")
                 except Exception as sync_err:
                     log(f"⚠ Ошибка синхронизации позиций при старте: {sync_err}")
                 first_run_sync = False
@@ -375,7 +377,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
             if is_sell_candidate and is_3_green:
                 if cur_p >= short_barrier or not is_delta_safe:
-                    log(f"🪓 [KNIFE BLOCK]: Отмена Шорта по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Шорта по {symbol}! Адаптивный барьер или ск рытый Айсберг ММ.")
                     return None, last_beacon_t
 
         # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
@@ -796,85 +798,46 @@ async def monitor_logic(exchange):
                 if int(time.time()) % 15 == 0 and age > 90:
                     try:
                         positions = await exchange.fetch_positions()
-                        #live_symbols = [p['symbol'] for p in positions if abs(float(p.get('contracts', 0))) > 0.00001]
 
-                        # Приводим тикер к единому биржевому REST-стандарту без косых черт
-                        #clean_live_key = clean_symbol.replace('/', '')
-
-                        # --- [ВРЕЗКА V29.5: ТОТАЛЬНОЕ RAW-ЗРЕНИЕ ВЕНИКА BINANCE] ---
-                        # Собираем чистые сырые тикеры позиций напрямую из CCXT-пакета Бинанса
-                        #live_symbols = [str(p['symbol']) for p in positions if abs(float(p.get('contracts', p.get('positionAmt', 0)))) > 0.00001]
-
-                        # --- [ВРЕЗКА V37.0: АППАРАТНЫЙ ПЫЛЕСОС СИРОТ И ПЫЛИ ВЕНИКА] ---
-
-                        # --- [ВРЕЗКА V40.0: ИСТИННЫЙ СБОРЩИК ПЫЛИ ВЕНИКА] ---
+                        # --- [КОНТУР 1: КРУГЛОСУТОЧНЫЙ ПЫЛЕСОС МУСОРА МЕНЬШЕ $1] ---
                         live_symbols = []
                         for p in positions:
                             p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
                             if p_vol > 0.00001:
                                 p_price = float(p.get('entryPrice', p.get('markPrice', 1.0)))
                                 p_raw_sym = str(p['symbol'])
-                                p_clean_sym = p_raw_sym.split(':')[0]
 
-                                # Если долларовая стоимость позы меньше $1.0 — сжигаем мусор встречным ордером!
-
-                                # Если общая стоимость позы на бирже меньше $1.0 — это мусорный остаток! Уничтожаем мгновенно!
-                                # --- [КОНТУР V43.0: ИСТИННЫЙ ПЫЛЕСОС И ЗРЯЧЕЕ УСЫНОВЛЕНИЕ ЛОНГОВ] ---
+                                # Если в процессе работы позиция усохла меньше $1.0 — выжигаем её!
                                 if (p_vol * p_price) < 1.0:
-                                 try:
-                                    p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
-                                    p_exact_vol = float(exchange.amount_to_precision(p_raw_sym, p_vol))
-                                    p_params = {'reduceOnly': True}
-                                    await exchange.create_order(p_raw_sym, 'MARKET', p_exit_side, p_exact_vol, params=p_params)
-                                    log(f"🧹🔥 [УТРЕННИЙ ПЫЛЕСОС]: Намертво уничтожен мусорный остат ок {p_raw_sym} весом ${round(p_vol * p_price, 2)}!")
-                                 except: pass
-                                 continue
+                                    try:
+                                        p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
+                                        p_exact_vol = float(exchange.amount_to_precision(p_raw_sym, p_vol))
+                                        p_params = {'reduceOnly': True}
+                                        await exchange.create_order(p_raw_sym, 'MARKET', p_exit_side, p_exact_vol, params=p_params)
+                                        log(f"🧹🔥 [ПЫЛЕСОС ВЕНИКА]: В процессе работы уничтожен мус ор {p_raw_sym} весом ${round(p_vol * p_price, 2)}!")
+                                    except: pass
+                                    continue
                                 else:
-                                  live_symbols.append(p_raw_sym)
+                                    live_symbols.append(p_raw_sym)
 
-                                  # Шлюз усыновления тяжелых живых позиций
-                                  if p_raw_sym not in memory.active_pos and p_raw_sym in memory.all_dna:
-                                    p_amt_raw = float(p.get('positionAmt', 0))
-                                    if p_amt_raw == 0:
-                                        continue
+                        # --- [КОНТУР 2: ОЧИСТКА RAM ОТ ЗАКРЫТЫХ ИЗВНЕ ПОЗИЦИЙ] ---
+                        if raw_symbol not in live_symbols:
+                            log(f"🧹 [ВЕНИК V43.5]: Позиция {clean_symbol} реально закрыта извне (Ст оп/БУ/Маркет). Очистка RAM.")
 
-                                    side = 'buy' if p_amt_raw > 0 else 'sell'
-                                    entry_p = float(p.get('entryPrice', p.get('price', 0)))
-                                    dna = memory.all_dna[p_raw_sym]
+                            # Намертво выжигаем позицию из ОЗУ по всем маскам ключей
+                            short_key = str(raw_symbol).split(':')[0]
+                            for key_to_del in [raw_symbol, short_key]:
+                                if key_to_del in memory.active_pos: del memory.active_pos[key_to_del]
+                                if key_to_del in memory.be_fixed: del memory.be_fixed[key_to_del]
+                                if key_to_del in memory.stop_placed: del memory.stop_placed[key_to_del]
+                                if key_to_del in memory.tp_fixed: del memory.tp_fixed[key_to_del]
 
-                                    memory.active_pos[p_raw_sym] = {
-                                        'side': side, 'vol': p_vol, 'price': entry_p,
-                                        'gear': 'g1', 'gear_data': dna['g1'], 'dna': dna,
-                                        'entry_time': time.time()
-                                    }
-                                    memory.tp_fixed[p_raw_sym] = False
-                                    memory.be_fixed[p_raw_sym] = False
-                                    memory.stop_placed[p_raw_sym] = entry_p
-                                    memory.slots_occupied += 1
-                                    log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Успешно подхвачен ядром выходов!")
-                                except Exception as p_err:
-                                    log(f"⚠ Сбой Пылесоса внутри try по {p_raw_sym}: {p_err}")
-                                continue
-
-                                live_symbols.append(p_raw_sym)
-
-                        # Сверяем исходный raw_symbol (XRP/USDT:USDT) напрямую с биржевым массивом
-                        # --- [ФИКС V40.8: ТОТАЛЬНОЕ ВЫЖИГАНИЕ ФАНТОМНЫХ СЛОТОВ ИЗ ОЗУ] ---
-                        # Выжигаем позицию по всем маскам ключей, чтобы исключить заклинивание
-                        short_key = str(raw_symbol).split(':')[0]
-                        for key_to_del in [raw_symbol, short_key]:
-                            if key_to_del in memory.active_pos: del memory.active_pos[key_to_del]
-                            if key_to_del in memory.be_fixed: del memory.be_fixed[key_to_del]
-                            if key_to_del in memory.stop_placed: del memory.stop_placed[key_to_del]
-                            if key_to_del in memory.tp_fixed: del memory.tp_fixed[key_to_del]
-
-                        if trail_key in memory.tp_fixed: del memory.tp_fixed[trail_key]
-                        # Принудительно разжимаем счетчик слотов
-                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
-
+                            if f"{raw_symbol}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{raw_symbol}_trail"]
+                            if f"{raw_symbol}_max_peak_observed" in memory.prices: del memory.prices[f"{raw_symbol}_max_peak_observed"]
+                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                            continue
                     except Exception as venik_err:
                         pass
-
 #======
             except Exception as e:
                 pass
