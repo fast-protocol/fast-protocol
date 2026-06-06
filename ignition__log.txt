@@ -1,107 +1,310 @@
-[2026-06-05 14:43:57] 🚀 !!! С Т А Р Т !!!  Общий баланс кошелька: $13.76 | Свободно для HFT: $13.76
-[2026-06-05 15:09:54] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 15:09:54] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 15:10:01] 🚀 🔍 [Debug entry]: Available Margin: $13.3431 | RISK_GEAR: 0.7
-[2026-06-05 15:10:01] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 579.2
-[2026-06-05 15:10:01] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $233.5
-[2026-06-05 15:10:01] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.4 монет
-[2026-06-05 15:10:03] 🚀 🔥 ВХОД [G2]: BNB/USDT SELL | Price: 579.2 | Vol: 0.4 | Общий баланс: $13.76
-[2026-06-05 15:25:23] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос BNB/USDT | PNL: -0.425% | Триггер: T=False/BU=False/SL=True
-[2026-06-05 15:38:00] 🚀 🔍 [Trend shield LINK/USDT:USDT]: Отмена! Монета перегрета (0.81% > 0.8%). Пропускаем хаи.
-[2026-06-05 16:08:00] 🚀 🔍 [Trend shield LDO/USDT:USDT]: Отмена! Монета перегрета (1.29% > 0.8%). Пропускаем хаи.
-[2026-06-05 16:09:18] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 16:09:18] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 16:09:25] 🚀 🔍 [Debug entry]: Available Margin: $11.9615 | RISK_GEAR: 0.7
-[2026-06-05 16:09:25] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 574.98
-[2026-06-05 16:09:25] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $209.33
-[2026-06-05 16:09:25] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.36 монет
-[2026-06-05 16:09:28] 🚀 🔥 ВХОД [G1]: BNB/USDT SELL | Price: 574.98 | Vol: 0.36 | Общий баланс: $12.33
-[2026-06-05 16:09:30] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 16:09:30] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 16:09:37] 🚀 🔍 [Debug entry]: Available Margin: $3.9327 | RISK_GEAR: 0.7
-[2026-06-05 16:09:37] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.089
-[2026-06-05 16:09:37] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $68.82
-[2026-06-05 16:09:37] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 63.1 монет
-[2026-06-05 16:09:39] 🚀 🔥 ВХОД [G2]: XRP/USDT SELL | Price: 1.089 | Vol: 63.1 | Общий баланс: $12.24
-[2026-06-05 16:09:57] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 16:09:57] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 16:09:59] 🚀 🛡️ [MARGIN FLOOR SHIELD]: Отмена входа по CRV/USDT:USDT. Доступно всего $1 .3 < Лимита $2.0. Копим кэш до Тейков!
-[2026-06-05 16:11:38] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по BNB/USDT!
-[2026-06-05 16:11:38] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по BNB/USDT взята (+0.56%). Крою 50% объема.
-[2026-06-05 16:12:39] 🚀 🏁 [КАТАПУЛЬТА]: Снос BNB/USDT по отрезку от пика! Trig: 570.1897
-[2026-06-05 16:13:10] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос XRP/USDT | PNL: -0.53% | Триггер: T=False/BU=False/SL=True
-[2026-06-05 17:16:29] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 17:16:29] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 17:16:36] 🚀 🔍 [Debug entry]: Available Margin: $12.4776 | RISK_GEAR: 0.7
-[2026-06-05 17:16:36] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 574.27
-[2026-06-05 17:16:36] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $218.36
-[2026-06-05 17:16:36] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.38 монет
-[2026-06-05 17:16:38] 🚀 🔥 ВХОД [G2]: BNB/USDT SELL | Price: 574.27 | Vol: 0.38 | Общий баланс: $12.86
-[2026-06-05 17:16:40] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос BNB/USDT | PNL: -0.052% | Триггер: T=False/BU=True/SL=False
-[2026-06-05 18:20:54] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 18:20:54] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 18:21:01] 🚀 🔍 [Debug entry]: Available Margin: $12.4908 | RISK_GEAR: 0.7
-[2026-06-05 18:21:01] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 64.49
-[2026-06-05 18:21:01] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $218.59
-[2026-06-05 18:21:01] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 3.38 монет
-[2026-06-05 18:21:03] 🚀 🔥 ВХОД [G1]: SOL/USDT SELL | Price: 64.49 | Vol: 3.38 | Общий баланс: $12.88
-[2026-06-05 18:25:01] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 18:25:01] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 18:25:08] 🚀 🔍 [Debug entry]: Available Margin: $3.91 | RISK_GEAR: 0.7
-[2026-06-05 18:25:08] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 571.16
-[2026-06-05 18:25:08] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $68.43
-[2026-06-05 18:25:08] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.11 монет
-[2026-06-05 18:25:10] 🚀 🔥 ВХОД [G1]: BNB/USDT SELL | Price: 571.16 | Vol: 0.11 | Общий баланс: $13.75
-[2026-06-05 18:26:24] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по SOL/USDT!
-[2026-06-05 18:26:42] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по SOL/USDT взята (+0.61%). Крою 50% объема.
-[2026-06-05 18:29:00] 🚀 🔍 [Trend shield GLM/USDT:USDT]: Отмена! Монета перегрета (0.91% > 0.8%). Пропускаем хаи.
-[2026-06-05 18:29:00] 🚀 ⚙️ [ДЕБАГ SOL/USDT]: PNL: 0.7% | Пик: 0.7% | Trigger: 64.261
-[2026-06-05 18:29:52] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по BNB/USDT!
-[2026-06-05 18:30:02] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по BNB/USDT взята (+0.53%). Крою 50% объема.
-[2026-06-05 18:30:15] 🚀 ⚙️ [ДЕБАГ SOL/USDT]: PNL: 0.77% | Пик: 0.81% | Trigger: 64.1897
-[2026-06-05 18:31:29] 🚀 🏁 [КАТАПУЛЬТА]: Снос SOL/USDT по отрезку от пика! Trig: 64.0875
-[2026-06-05 18:32:30] 🚀 ⚙️ [ДЕБАГ BNB/USDT]: PNL: 0.44% | Пик: 0.53% | Trigger: 570.1428
-[2026-06-05 18:35:00] 🚀 ⚙️ [ДЕБАГ BNB/USDT]: PNL: 0.56% | Пик: 0.56% | Trigger: 569.9501
-[2026-06-05 18:35:15] 🚀 ⚙️ [ДЕБАГ BNB/USDT]: PNL: 0.53% | Пик: 0.56% | Trigger: 569.9501
-[2026-06-05 18:36:00] 🚀 ⚙️ [ДЕБАГ BNB/USDT]: PNL: 0.58% | Пик: 0.58% | Trigger: 569.8283
-[2026-06-05 18:36:30] 🚀 ⚙️ [ДЕБАГ BNB/USDT]: PNL: 0.78% | Пик: 0.81% | Trigger: 568.5157
-[2026-06-05 18:37:15] 🚀 ⚙️ [ДЕБАГ BNB/USDT]: PNL: 0.77% | Пик: 0.82% | Trigger: 568.4443
-[2026-06-05 18:38:00] 🚀 🔍 [Trend shield INJ/USDT:USDT]: Отмена! Монета перегрета (0.83% > 0.8%). Пропускаем хаи.
-[2026-06-05 18:38:00] 🚀 ⚙️ [ДЕБАГ BNB/USDT]: PNL: 0.82% | Пик: 0.95% | Trigger: 567.7396
-[2026-06-05 18:38:20] 🚀 🏁 [КАТАПУЛЬТА]: Снос BNB/USDT по отрезку от пика! Trig: 567.7396
-[2026-06-05 18:52:47] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 18:52:47] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 18:52:53] 🚀 🔍 [Debug entry]: Available Margin: $14.2478 | RISK_GEAR: 0.7
-[2026-06-05 18:52:53] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.07996
-[2026-06-05 18:52:53] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $249.34
-[2026-06-05 18:52:53] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 3118.0 монет
-[2026-06-05 18:52:56] 🚀 🔥 ВХОД [G2]: DOGE/USDT SELL | Price: 0.07996 | Vol: 3118.0 | Общий баланс: $14.69
-[2026-06-05 18:54:00] 🚀 🔍 [Trend shield GLM/USDT:USDT]: Отмена! Монета перегрета (0.89% > 0.8%). Пропускаем хаи.
-[2026-06-05 18:57:02] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос DOGE/USDT | PNL: -0.806% | Триггер: T=False/BU=False/SL=True
-[2026-06-05 19:01:00] 🚀 🔍 [Trend shield TRB/USDT:USDT]: Отмена! Монета перегрета (1.51% > 0.8%). Пропускаем хаи.
-[2026-06-05 19:27:00] 🚀 🔍 [Trend shield PENDLE/USDT:USDT]: Отмена! Монета перегрета (0.95% > 0.8%). Пропускаем хаи.
-[2026-06-05 19:46:51] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 19:46:51] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 19:46:58] 🚀 🔍 [Debug entry]: Available Margin: $11.4954 | RISK_GEAR: 0.7
-[2026-06-05 19:46:58] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.0026817
-[2026-06-05 19:46:58] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $201.17
-[2026-06-05 19:46:58] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 75015.0 монет
-[2026-06-05 19:47:00] 🚀 🔥 ВХОД [G1]: 1000PEPE/USDT BUY | Price: 0.0026817 | Vol: 75015.0 | Общий баланс: $11.85
-[2026-06-05 19:48:19] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по 1000PEPE/USDT!
-[2026-06-05 19:50:00] 🚀 🔍 [Trend shield AAVE/USDT:USDT]: Отмена! Монета перегрета (1.54% > 0.8%). Пропускаем хаи.
-[2026-06-05 19:50:45] 🚀 ⚙️ [ДЕБАГ 1000PEPE/USDT]: PNL: 1.01% | Пик: 1.08% | Trigger: 0.0027
-[2026-06-05 19:51:28] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по 1000PEPE/USDT взята (+1.23%). Крою 50% объема.
-[2026-06-05 19:52:15] 🚀 ⚙️ [ДЕБАГ 1000PEPE/USDT]: PNL: 1.03% | Пик: 1.24% | Trigger: 0.0027
-[2026-06-05 19:52:45] 🚀 ⚙️ [ДЕБАГ 1000PEPE/USDT]: PNL: 1.0% | Пик: 1.24% | Trigger: 0.0027
-[2026-06-05 20:02:07] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос 1000PEPE/USDT | PNL: 0.06% | Триггер: T=False/BU=True/SL=False
-[2026-06-05 20:11:01] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-05 20:11:01] 🚀 ⚙️ [DEBUG перед ножом..
-[2026-06-05 20:11:08] 🚀 🔍 [Debug entry]: Available Margin: $11.5917 | RISK_GEAR: 0.7
-[2026-06-05 20:11:08] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.6622
-[2026-06-05 20:11:08] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $202.86
-[2026-06-05 20:11:08] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 306.3 монет
-[2026-06-05 20:11:10] 🚀 🔥 ВХОД [G2]: APT/USDT SELL | Price: 0.6622 | Vol: 306.3 | Общий баланс: $11.95
-[2026-06-05 20:15:29] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос APT/USDT | PNL: -0.556% | Триггер: T=False/BU=False/SL=True
-[2026-06-05 20:16:00] 🚀 🔍 [Trend shield AVAX/USDT:USDT]: Отмена! Монета перегрета (3.6% > 0.8%). Пропускаем хаи.
-[2026-06-05 20:16:58] 🚀 ✅ TITAN IGNITION V21.8 ONLINE. Охота на 33 секторов.
-[2026-06-05 20:16:59] 🚀 !!! С Т А Р Т !!!  Общий баланс кошелька: $9.91 | Свободно для HFT: $9.91
+[2026-06-06 00:32:57] 🚀 !!! С Т А Р Т !!!  Общий баланс кошелька: $9.97 | Свободно для HFT: $9.97
+[2026-06-06 00:33:49] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 00:33:55] 🚀 🔍 [Debug entry]: Available Margin: $9.9692 | RISK_GEAR: 0.7
+[2026-06-06 00:33:55] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.1064
+[2026-06-06 00:33:55] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $174.46
+[2026-06-06 00:33:55] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 157.6 монет
+[2026-06-06 00:33:58] 🚀 🔥 ВХОД [G1]: XRP/USDT SELL | Price: 1.1064 | Vol: 157.6 | Общий баланс: $9.97
+[2026-06-06 00:55:49] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос XRP/USDT | PNL: -0.441% | Триггер: T=False/BU=False/SL=True
+[2026-06-06 01:10:03] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 01:10:10] 🚀 🔍 [Debug entry]: Available Margin: $9.101 | RISK_GEAR: 0.7
+[2026-06-06 01:10:10] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.6727
+[2026-06-06 01:10:10] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $159.27
+[2026-06-06 01:10:10] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 236.7 монет
+[2026-06-06 01:10:12] 🚀 🔥 ВХОД [G1]: APT/USDT SELL | Price: 0.6727 | Vol: 236.7 | Общий баланс: $9.1
+[2026-06-06 01:17:00] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по APT/USDT!
+[2026-06-06 01:17:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.54% | Пик: 0.54% | Trigger Цена: 0.6714 | Текущая: 0.6691
+[2026-06-06 01:17:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.55% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.669
+[2026-06-06 01:18:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.6% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.6687
+[2026-06-06 01:18:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.58% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.6688
+[2026-06-06 01:19:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.52% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.6692
+[2026-06-06 01:19:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.61% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.6686
+[2026-06-06 01:19:48] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по APT/USDT взята (+0.7%). Крою 50% объема.
+[2026-06-06 01:20:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.84% | Пик: 0.84% | Trigger Цена: 0.6694 | Текущая: 0.6671
+[2026-06-06 01:20:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.82% | Пик: 0.88% | Trigger Цена: 0.6691 | Текущая: 0.6672
+[2026-06-06 01:21:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.87% | Пик: 0.88% | Trigger Цена: 0.6691 | Текущая: 0.6669
+[2026-06-06 01:21:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.96% | Пик: 0.98% | Trigger Цена: 0.6685 | Текущая: 0.6663
+[2026-06-06 01:21:34] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 01:21:41] 🚀 🔍 [Debug entry]: Available Margin: $6.2576 | RISK_GEAR: 0.7
+[2026-06-06 01:21:41] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.964
+[2026-06-06 01:21:41] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $109.51
+[2026-06-06 01:21:41] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 55.0 монет
+[2026-06-06 01:21:43] 🚀 🔥 ВХОД [G1]: NEAR/USDT SELL | Price: 1.964 | Vol: 55.0 | Общий баланс: $10.13
+[2026-06-06 01:21:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.08% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.6655
+[2026-06-06 01:23:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.92% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.6666
+[2026-06-06 01:23:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.99% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.6661
+[2026-06-06 01:24:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.01% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.666
+[2026-06-06 01:24:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.02% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.6659
+[2026-06-06 01:25:29] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 01:25:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.13% | Пик: 1.16% | Trigger Цена: 0.6672 | Текущая: 0.6652
+[2026-06-06 01:26:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.08% | Пик: 1.16% | Trigger Цена: 0.6672 | Текущая: 0.6655
+[2026-06-06 01:27:12] 🚀 🏁 [КАТАПУЛЬТА]: Снос APT/USDT по откату от пика! Trigger Цена: 0.6672 | Текущая: 0.6672
+[2026-06-06 01:28:37] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос NEAR/USDT | PNL: -0.557% | Триггер: T=False/BU=False/SL=True
+[2026-06-06 01:32:52] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 01:32:59] 🚀 🔍 [Debug entry]: Available Margin: $9.0121 | RISK_GEAR: 0.7
+[2026-06-06 01:32:59] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.1834
+[2026-06-06 01:32:59] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $157.71
+[2026-06-06 01:32:59] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 859.9 монет
+[2026-06-06 01:33:01] 🚀 🔥 ВХОД [G1]: CRV/USDT SELL | Price: 0.1834 | Vol: 859.9 | Общий баланс: $9.01
+[2026-06-06 01:42:36] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по CRV/USDT!
+[2026-06-06 01:42:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.44% | Пик: 0.44% | Trigger Цена: 0.1832 | Текущая: 0.1826
+[2026-06-06 01:43:06] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по CRV/USDT взята (+0.55%). Крою 50% объема.
+[2026-06-06 01:43:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.55% | Пик: 0.55% | Trigger Цена: 0.183 | Текущая: 0.1824
+[2026-06-06 01:43:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.55% | Пик: 0.55% | Trigger Цена: 0.183 | Текущая: 0.1824
+[2026-06-06 01:44:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.49% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1825
+[2026-06-06 01:45:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.49% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1825
+[2026-06-06 01:45:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.38% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1827
+[2026-06-06 01:46:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.33% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1828
+[2026-06-06 01:46:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.27% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1829
+[2026-06-06 01:46:30] 🚀 🏁 [КАТАПУЛЬТА]: Снос CRV/USDT по откату от пика! Trigger Цена: 0.1829 | Текущая: 0.1829
+[2026-06-06 02:07:00] 🚀 🔍 [Trend shield ADA/USDT:USDT]: Отмена! Монета перегрета (0.96% > 0.8%). Пропускаем хаи.
+[2026-06-06 02:17:41] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 02:17:47] 🚀 🔍 [Debug entry]: Available Margin: $9.2847 | RISK_GEAR: 0.7
+[2026-06-06 02:17:47] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 575.46
+[2026-06-06 02:17:47] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $162.48
+[2026-06-06 02:17:47] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.28 монет
+[2026-06-06 02:17:50] 🚀 🔥 ВХОД [G1]: BNB/USDT SELL | Price: 575.46 | Vol: 0.28 | Общий баланс: $9.29
+[2026-06-06 02:19:58] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 02:20:04] 🚀 🔍 [Debug entry]: Available Margin: $2.827 | RISK_GEAR: 0.7
+[2026-06-06 02:20:04] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.725
+[2026-06-06 02:20:04] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $49.47
+[2026-06-06 02:20:04] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 68.2 монет
+[2026-06-06 02:20:07] 🚀 🔥 ВХОД [G1]: FIL/USDT BUY | Price: 0.725 | Vol: 68.2 | Общий баланс: $9.26
+[2026-06-06 02:23:29] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по FIL/USDT!
+[2026-06-06 02:23:46] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по FIL/USDT взята (+0.69%). Крою 50% объема.
+[2026-06-06 02:24:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА FIL/USDT]: PNL: 0.55% | Пик: 0.69% | Trigger Цена: 0.727 | Текущая: 0.729
+[2026-06-06 02:24:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА FIL/USDT]: PNL: 0.41% | Пик: 0.69% | Trigger Цена: 0.727 | Текущая: 0.728
+[2026-06-06 02:25:16] 🚀 🏁 [КАТАПУЛЬТА]: Снос FIL/USDT по откату от пика! Trigger Цена: 0.727 | Текущая: 0.727
+[2026-06-06 02:46:51] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос BNB/USDT | PNL: -0.398% | Триггер: T=False/BU=False/SL=True
+[2026-06-06 03:05:53] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 03:05:59] 🚀 🔍 [Debug entry]: Available Margin: $8.6091 | RISK_GEAR: 0.7
+[2026-06-06 03:05:59] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 574.23
+[2026-06-06 03:05:59] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $150.66
+[2026-06-06 03:05:59] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.26 монет
+[2026-06-06 03:06:02] 🚀 🔥 ВХОД [G2]: BNB/USDT SELL | Price: 574.23 | Vol: 0.26 | Общий баланс: $8.61
+[2026-06-06 03:13:52] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос BNB/USDT | PNL: -0.385% | Триггер: T=False/BU=False/SL=True
+[2026-06-06 03:22:04] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 03:22:11] 🚀 🔍 [Debug entry]: Available Margin: $8.119 | RISK_GEAR: 0.7
+[2026-06-06 03:22:11] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.958
+[2026-06-06 03:22:11] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $142.08
+[2026-06-06 03:22:11] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 72.0 монет
+[2026-06-06 03:22:13] 🚀 🔥 ВХОД [G2]: NEAR/USDT BUY | Price: 1.958 | Vol: 72.0 | Общий баланс: $8.12
+[2026-06-06 03:32:27] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос NEAR/USDT | PNL: -0.409% | Триггер: T=False/BU=False/SL=True
+[2026-06-06 04:03:50] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 04:03:57] 🚀 🔍 [Debug entry]: Available Margin: $7.3301 | RISK_GEAR: 0.7
+[2026-06-06 04:03:57] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.619
+[2026-06-06 04:03:57] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $128.28
+[2026-06-06 04:03:57] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 79.2 монет
+[2026-06-06 04:03:59] 🚀 🔥 ВХОД [G2]: RENDER/USDT SELL | Price: 1.619 | Vol: 79.2 | Общий баланс: $7.33
+[2026-06-06 04:04:04] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 04:04:10] 🚀 🔍 [Debug entry]: Available Margin: $2.1188 | RISK_GEAR: 0.7
+[2026-06-06 04:04:10] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 7.275
+[2026-06-06 04:04:10] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $37.08
+[2026-06-06 04:04:10] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 5.09 монет
+[2026-06-06 04:04:13] 🚀 🔥 ВХОД [G2]: LINK/USDT SELL | Price: 7.275 | Vol: 5.09 | Общий баланс: $7.33
+[2026-06-06 04:05:44] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 04:06:00] 🚀 🔍 [Trend shield GLM/USDT:USDT]: Отмена! Монета перегрета (0.83% > 0.8%). Пропускаем хаи.
+[2026-06-06 04:06:54] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 04:06:54] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по LINK/USDT!
+[2026-06-06 04:07:09] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по RENDER/USDT!
+[2026-06-06 04:07:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 0.78% | Пик: 0.8% | Trigger Цена: 7.242 | Текущая: 7.219
+[2026-06-06 04:07:36] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по RENDER/USDT взята (+1.31%). Крою 50% объема.
+[2026-06-06 04:07:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА RENDER/USDT]: PNL: 1.19% | Пик: 1.31% | Trigger Цена: 1.603 | Текущая: 1.6
+[2026-06-06 04:07:50] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 04:07:56] 🚀 🔍 [Debug entry]: Available Margin: $3.9211 | RISK_GEAR: 0.7
+[2026-06-06 04:07:56] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 569.68
+[2026-06-06 04:07:56] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $68.62
+[2026-06-06 04:07:56] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.12 монет
+[2026-06-06 04:07:56] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.03%). Крою 50% объема.
+[2026-06-06 04:07:59] 🚀 🔥 ВХОД [G2]: BNB/USDT SELL | Price: 569.68 | Vol: 0.12 | Общий баланс: $8.45
+[2026-06-06 04:07:59] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:08:03] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.07%). Крою 50% объема.
+[2026-06-06 04:08:06] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:08:12] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.03%). Крою 50% объема.
+[2026-06-06 04:08:15] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:08:26] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.04%). Крою 50% объема.
+[2026-06-06 04:08:28] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:08:39] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.08%). Крою 50% объема.
+[2026-06-06 04:08:42] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:08:48] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 04:08:48] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.11%). Крою 50% объема.
+[2026-06-06 04:08:51] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:08:57] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.14%). Крою 50% объема.
+[2026-06-06 04:09:00] 🚀 🔍 [Trend shield AVAX/USDT:USDT]: Отмена! Монета перегрета (1.93% > 0.8%). Пропускаем хаи.
+[2026-06-06 04:09:00] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:09:11] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.14%). Крою 50% объема.
+[2026-06-06 04:09:13] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:09:24] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.44%). Крою 50% объема.
+[2026-06-06 04:09:27] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:09:33] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.35%). Крою 50% объема.
+[2026-06-06 04:09:36] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:09:42] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.38%). Крою 50% объема.
+[2026-06-06 04:09:45] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:09:49] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 04:09:56] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.35%). Крою 50% объема.
+[2026-06-06 04:09:58] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:10:00] 🚀 🔍 [Trend shield TIA/USDT:USDT]: Отмена! Монета перегрета (1.68% > 1.4%). Пропускаем хаи.
+[2026-06-06 04:10:05] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.41%). Крою 50% объема.
+[2026-06-06 04:10:07] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:10:14] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.39%). Крою 50% объема.
+[2026-06-06 04:10:16] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:10:23] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.49%). Крою 50% объема.
+[2026-06-06 04:10:25] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:10:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА RENDER/USDT]: PNL: 1.57% | Пик: 1.63% | Trigger Цена: 1.598 | Текущая: 1.594
+[2026-06-06 04:10:37] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:10:39] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:10:39] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.54%). Крою 50% объема.
+[2026-06-06 04:10:41] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:10:48] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.44%). Крою 50% объема.
+[2026-06-06 04:10:50] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:10:57] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.42%). Крою 50% объема.
+[2026-06-06 04:10:59] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:11:06] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.41%). Крою 50% объема.
+[2026-06-06 04:11:08] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:11:12] 🚀 🏁 [КАТАПУЛЬТА]: Снос RENDER/USDT по откату от пика! Trigger Цена: 1.598 | Текущая: 1.6
+[2026-06-06 04:11:19] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.37%). Крою 50% объема.
+[2026-06-06 04:11:21] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:11:26] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.29%). Крою 50% объема.
+[2026-06-06 04:11:28] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:11:37] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.34%). Крою 50% объема.
+[2026-06-06 04:11:39] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:11:44] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.34%). Крою 50% объема.
+[2026-06-06 04:11:46] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:11:51] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.37%). Крою 50% объема.
+[2026-06-06 04:11:53] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:11:58] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.34%). Крою 50% объема.
+[2026-06-06 04:12:00] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:12:09] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.48%). Крою 50% объема.
+[2026-06-06 04:12:11] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:12:16] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:12:18] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:12:18] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.55%). Крою 50% объема.
+[2026-06-06 04:12:20] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:12:25] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:12:27] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:12:27] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.56%). Крою 50% объема.
+[2026-06-06 04:12:29] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:12:34] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:12:36] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:12:36] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.52%). Крою 50% объема.
+[2026-06-06 04:12:38] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:12:42] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:12:45] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:12:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.55% | Пик: 1.56% | Trigger Цена: 7.186 | Текущая: 7.164
+[2026-06-06 04:12:45] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.55%). Крою 50% объема.
+[2026-06-06 04:12:47] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:12:51] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:12:54] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:12:54] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.63%). Крою 50% объема.
+[2026-06-06 04:12:56] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:13:00] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:13:03] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:13:03] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.65%). Крою 50% объема.
+[2026-06-06 04:13:05] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:13:09] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:13:12] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:13:12] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.63%). Крою 50% объема.
+[2026-06-06 04:13:14] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:13:18] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:13:21] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:13:21] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.61%). Крою 50% объема.
+[2026-06-06 04:13:23] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:13:27] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:13:30] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:13:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.69% | Пик: 1.69% | Trigger Цена: 7.177 | Текущая: 7.154
+[2026-06-06 04:13:30] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.69%). Крою 50% объема.
+[2026-06-06 04:13:32] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:13:36] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:13:39] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:13:39] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.78%). Крою 50% объема.
+[2026-06-06 04:13:41] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:13:45] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:13:48] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:13:48] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.79%). Крою 50% объема.
+[2026-06-06 04:13:50] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:13:54] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:13:57] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:13:57] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.79%). Крою 50% объема.
+[2026-06-06 04:13:59] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:14:04] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:14:06] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:14:06] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.82%). Крою 50% объема.
+[2026-06-06 04:14:08] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:14:13] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:14:15] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:14:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.79% | Пик: 1.82% | Trigger Цена: 7.168 | Текущая: 7.147
+[2026-06-06 04:14:15] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.79%). Крою 50% объема.
+[2026-06-06 04:14:17] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:14:22] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:14:24] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:14:24] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.73%). Крою 50% объема.
+[2026-06-06 04:14:26] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:14:31] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:14:33] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:14:33] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.76%). Крою 50% объема.
+[2026-06-06 04:14:35] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:14:40] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:14:42] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:14:42] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.75%). Крою 50% объема.
+[2026-06-06 04:14:44] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:14:49] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:14:51] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:14:51] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.61%). Крою 50% объема.
+[2026-06-06 04:14:53] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:14:58] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:15:00] 🚀 🔍 [Trend shield GRT/USDT:USDT]: Отмена! Монета перегрета (0.93% > 0.8%). Пропускаем хаи.
+[2026-06-06 04:15:00] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:15:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.51% | Пик: 1.82% | Trigger Цена: 7.168 | Текущая: 7.167
+[2026-06-06 04:15:00] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.51%). Крою 50% объема.
+[2026-06-06 04:15:02] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:15:07] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:15:09] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:15:09] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.69%). Крою 50% объема.
+[2026-06-06 04:15:11] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:15:16] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:15:18] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:15:18] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.69%). Крою 50% объема.
+[2026-06-06 04:15:20] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:15:23] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по BNB/USDT!
+[2026-06-06 04:15:25] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:15:27] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:15:27] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.99%). Крою 50% объема.
+[2026-06-06 04:15:29] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:15:34] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:15:36] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:15:36] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.91%). Крою 50% объема.
+[2026-06-06 04:15:38] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:15:43] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:15:45] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:15:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.83% | Пик: 1.99% | Trigger Цена: 7.155 | Текущая: 7.144
+[2026-06-06 04:15:45] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.83%). Крою 50% объема.
+[2026-06-06 04:15:47] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:15:52] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:15:54] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:15:54] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.76%). Крою 50% объема.
+[2026-06-06 04:15:56] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:16:01] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
+[2026-06-06 04:16:03] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
+[2026-06-06 04:16:03] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.76%). Крою 50% объема.
+[2026-06-06 04:16:05] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
+[2026-06-06 04:16:10] 🚀 🏁 [КАТАПУЛЬТА]: Снос LINK/USDT по откату от пика! Trigger Цена: 7.155 | Текущая: 7.17
+[2026-06-06 04:16:21] 🚀 🏁 [КАТАПУЛЬТА]: Снос BNB/USDT по откату от пика! Trigger Цена: 568.19 | Текущая: 568.33
+[2026-06-06 04:21:00] 🚀 🔍 [Trend shield STORJ/USDT:USDT]: Отмена! Монета перегрета (1.38% > 0.8%). Пропускаем хаи.
+[2026-06-06 04:28:00] 🚀 🔍 [Trend shield GALA/USDT:USDT]: Отмена! Монета перегрета (1.06% > 0.8%). Пропускаем хаи.
+[2026-06-06 05:23:00] 🚀 🔍 [Trend shield STORJ/USDT:USDT]: Отмена! Монета перегрета (2.23% > 0.8%). Пропускаем хаи.
+[2026-06-06 06:01:59] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 06:02:06] 🚀 🔍 [Debug entry]: Available Margin: $9.3787 | RISK_GEAR: 0.7
+[2026-06-06 06:02:06] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.2022
+[2026-06-06 06:02:06] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $164.13
+[2026-06-06 06:02:06] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 136.0 монет
+[2026-06-06 06:02:08] 🚀 🔥 ВХОД [G1]: PENDLE/USDT BUY | Price: 1.2022 | Vol: 136.0 | Общий баланс: $9.38
+[2026-06-06 06:04:34] 🚀 ⚙️ [DEBUG 2перед ниткой..
+[2026-06-06 06:04:41] 🚀 🔍 [Debug entry]: Available Margin: $2.8404 | RISK_GEAR: 0.7
+[2026-06-06 06:04:41] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.093
+[2026-06-06 06:04:41] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $49.71
+[2026-06-06 06:04:41] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 45.4 монет
+[2026-06-06 06:04:43] 🚀 🔥 ВХОД [G2]: XRP/USDT SELL | Price: 1.093 | Vol: 45.4 | Общий баланс: $10.03
+[2026-06-06 06:05:17] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по PENDLE/USDT!
+[2026-06-06 06:05:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА PENDLE/USDT]: PNL: 0.61% | Пик: 0.7% | Trigger Цена: 1.2064 | Текущая: 1.2095
+[2026-06-06 06:06:06] 🚀 🏁 [КАТАПУЛЬТА]: Снос PENDLE/USDT по откату от пика! Trigger Цена: 1.2064 | Текущая: 1.2064
+[2026-06-06 06:20:51] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос XRP/USDT | PNL: -0.392% | Триггер: T=False/BU=False/SL=True
