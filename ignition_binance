@@ -78,6 +78,16 @@ async def update_balance(exchange):
             if first_run_sync:
                 try:
                     positions = await exchange.fetch_positions()
+                    # --- [ТОТАЛЬНЫЙ ДЕБАГ-РАДАР V45.0: ВСКРЫТИЕ СЛЕПОТЫ СИРОТ] ---
+                    log(f"🕵️‍♂️ [DEBUG BALANCE]: Биржа вернула всего {len(positions)} позиций из AP I.")
+                    for testing_p in positions:
+                        t_vol = abs(float(testing_p.get('contracts', testing_p.get('positionAmt', 0))))
+                        if t_vol > 0.00001:
+                            t_sym = str(testing_p['symbol'])
+                            t_price = float(testing_p.get('entryPrice', testing_p.get('markPrice', 1.0)))
+                            is_in_dna = t_sym in memory.all_dna
+                            is_in_active = t_sym in memory.active_pos
+                            log(f"🔍 [DEBUG POSITION]: Монета: {t_sym} | Vol: {t_vol} | USD: {round(t_vol*t_price, 2)} | Есть в ДНК: {is_in_dna} | Есть в RAM: {is_in_active}")
 
                     # --- [ВРЕЗКА V40.5: АППАРАТНЫЙ УТРЕННИЙ ПЫЛЕСОС ПЕРВОГО ТИКА] ---
                     live_symbols = []
@@ -103,15 +113,18 @@ async def update_balance(exchange):
                                     # Жесткое усыновление тяжелых позиций строго по знаку объема
                                     # --- ЖЕСТКИЙ ФИКС V43.8: СИНХРОНИЗАЦИЯ КЛЮЧЕЙ С ДНК-ПУЛЬТОМ ---
                                     clean_dna_key = p_raw_sym.split(':')[0]
-                                    if p_raw_sym not in memory.active_pos and clean_dna_key in memory.all_dna:
-                                        p_amt_raw = float(p.get('positionAmt', 0))
-                                        if p_amt_raw == 0:
+                                    #if p_raw_sym not in memory.active_pos and clean_dna_key in memory.all_dna:
+                                    if p_raw_sym not in memory.active_pos and p_raw_sym in memory.all_dna:
+                                        # --- УЛЬТИМАТИВНЫЙ ФИКС V48.0: ЧТЕНИЕ ЗHАКА ИЗ СЫРOГO API БИHАHСА ---
+                                        raw_info_amt = float(p.get('info', {}).get('positionAmt', 0))
+                                        if raw_info_amt == 0:
                                             continue
+                                        side = 'buy' if raw_info_amt > 0 else 'sell'
 
-                                        side = 'buy' if p_amt_raw > 0 else 'sell'
+
                                         entry_p = float(p.get('entryPrice', p.get('price', 0)))
-                                        dna = memory.all_dna[clean_dna_key]
-
+                                        #dna = memory.all_dna[clean_dna_key]
+                                        dna = memory.all_dna[p_raw_sym]
                                         memory.active_pos[p_raw_sym] = {
                                             'side': side, 'vol': p_vol, 'price': entry_p,
                                             'gear': 'g1', 'gear_data': dna['g1'], 'dna': dna,
@@ -121,7 +134,8 @@ async def update_balance(exchange):
                                         memory.be_fixed[p_raw_sym] = False
                                         memory.stop_placed[p_raw_sym] = entry_p
                                         memory.slots_occupied += 1
-                                        log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Успешно подхвачен ядром выходов!")
+                                        #log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Успешно подхвачен ядром выходов!")
+                                        log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Направление {side} Успешно подхвачен ядром выходов!")
                 except Exception as sync_err:
                     log(f"⚠ Ошибка синхронизации позиций при старте: {sync_err}")
                 first_run_sync = False
@@ -377,7 +391,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
             if is_sell_candidate and is_3_green:
                 if cur_p >= short_barrier or not is_delta_safe:
-                    log(f"🪓 [KNIFE BLOCK]: Отмена Шорта по {symbol}! Адаптивный барьер или ск рытый Айсберг ММ.")
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Шорта по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
                     return None, last_beacon_t
 
         # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
@@ -638,7 +652,8 @@ async def monitor_logic(exchange):
                         peak_geo = entry_price_f * (1.0 + current_peak)
                         catapult_trigger_raw = peak_geo * (1.0 - optimal_trail_step)
 #                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
-                        catapult_trigger = float(exchange.price_to_precision(raw_symbol.split(':'), catapult_trigger_raw))
+                        catapult_trigger = float(exchange.price_to_precision(raw_symbol.split(':')[0], catapult_trigger_raw))
+
                         is_catapult_fired = (cur_p <= catapult_trigger)
                     else:
                         # Корректная тригонометрия шорта: откат вверх от дна прибыли
@@ -680,10 +695,10 @@ async def monitor_logic(exchange):
                         total_pos_usd = pos['vol'] * cur_p
                         if total_pos_usd > 2.0 and half_qty > 0 and half_qty < pos['vol']:
 #===
-                            p_params = {'reduceOnly': True}
-                            await exchange.create_order(raw_symbol, 'MARKET', exit_side, half_qty, params=p_params)
+#                            p_params = {'reduceOnly': True}
+#                            await exchange.create_order(raw_symbol, 'MARKET', exit_side, half_qty, params=p_params)
 #===
-#                            await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol, half_qty))
+                            await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol, half_qty))
 #                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
                             pos['vol'] = float(exchange.amount_to_precision(raw_symbol.split(':')[0], pos['vol'] - half_qty))
                             memory.tp_fixed[raw_symbol] = True
@@ -775,9 +790,9 @@ async def monitor_logic(exchange):
                         exact_clean_vol = float(exchange.amount_to_precision(raw_symbol, float(pos['vol'])))
 
                         # Бьем встречным маркетом с флагом reduceOnly для моментального схлопывания контракта
-#                        await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
-                        p_params = {'reduceOnly': True}
-                        await exchange.create_order(raw_symbol, 'MARKET', exit_side, exact_clean_vol, params=p_params)
+                        await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
+#                        p_params = {'reduceOnly': True}
+#                        await exchange.create_order(raw_symbol, 'MARKET', exit_side, exact_clean_vol, params=p_params)
 
                         action_triggered_decay = True
                     except Exception as decay_err:
