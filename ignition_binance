@@ -1,310 +1,825 @@
-[2026-06-06 00:32:57] 🚀 !!! С Т А Р Т !!!  Общий баланс кошелька: $9.97 | Свободно для HFT: $9.97
-[2026-06-06 00:33:49] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 00:33:55] 🚀 🔍 [Debug entry]: Available Margin: $9.9692 | RISK_GEAR: 0.7
-[2026-06-06 00:33:55] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.1064
-[2026-06-06 00:33:55] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $174.46
-[2026-06-06 00:33:55] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 157.6 монет
-[2026-06-06 00:33:58] 🚀 🔥 ВХОД [G1]: XRP/USDT SELL | Price: 1.1064 | Vol: 157.6 | Общий баланс: $9.97
-[2026-06-06 00:55:49] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос XRP/USDT | PNL: -0.441% | Триггер: T=False/BU=False/SL=True
-[2026-06-06 01:10:03] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 01:10:10] 🚀 🔍 [Debug entry]: Available Margin: $9.101 | RISK_GEAR: 0.7
-[2026-06-06 01:10:10] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.6727
-[2026-06-06 01:10:10] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $159.27
-[2026-06-06 01:10:10] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 236.7 монет
-[2026-06-06 01:10:12] 🚀 🔥 ВХОД [G1]: APT/USDT SELL | Price: 0.6727 | Vol: 236.7 | Общий баланс: $9.1
-[2026-06-06 01:17:00] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по APT/USDT!
-[2026-06-06 01:17:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.54% | Пик: 0.54% | Trigger Цена: 0.6714 | Текущая: 0.6691
-[2026-06-06 01:17:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.55% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.669
-[2026-06-06 01:18:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.6% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.6687
-[2026-06-06 01:18:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.58% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.6688
-[2026-06-06 01:19:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.52% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.6692
-[2026-06-06 01:19:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.61% | Пик: 0.67% | Trigger Цена: 0.6705 | Текущая: 0.6686
-[2026-06-06 01:19:48] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по APT/USDT взята (+0.7%). Крою 50% объема.
-[2026-06-06 01:20:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.84% | Пик: 0.84% | Trigger Цена: 0.6694 | Текущая: 0.6671
-[2026-06-06 01:20:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.82% | Пик: 0.88% | Trigger Цена: 0.6691 | Текущая: 0.6672
-[2026-06-06 01:21:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.87% | Пик: 0.88% | Trigger Цена: 0.6691 | Текущая: 0.6669
-[2026-06-06 01:21:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.96% | Пик: 0.98% | Trigger Цена: 0.6685 | Текущая: 0.6663
-[2026-06-06 01:21:34] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 01:21:41] 🚀 🔍 [Debug entry]: Available Margin: $6.2576 | RISK_GEAR: 0.7
-[2026-06-06 01:21:41] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.964
-[2026-06-06 01:21:41] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $109.51
-[2026-06-06 01:21:41] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 55.0 монет
-[2026-06-06 01:21:43] 🚀 🔥 ВХОД [G1]: NEAR/USDT SELL | Price: 1.964 | Vol: 55.0 | Общий баланс: $10.13
-[2026-06-06 01:21:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.08% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.6655
-[2026-06-06 01:23:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.92% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.6666
-[2026-06-06 01:23:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 0.99% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.6661
-[2026-06-06 01:24:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.01% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.666
-[2026-06-06 01:24:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.02% | Пик: 1.08% | Trigger Цена: 0.6678 | Текущая: 0.6659
-[2026-06-06 01:25:29] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 01:25:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.13% | Пик: 1.16% | Trigger Цена: 0.6672 | Текущая: 0.6652
-[2026-06-06 01:26:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА APT/USDT]: PNL: 1.08% | Пик: 1.16% | Trigger Цена: 0.6672 | Текущая: 0.6655
-[2026-06-06 01:27:12] 🚀 🏁 [КАТАПУЛЬТА]: Снос APT/USDT по откату от пика! Trigger Цена: 0.6672 | Текущая: 0.6672
-[2026-06-06 01:28:37] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос NEAR/USDT | PNL: -0.557% | Триггер: T=False/BU=False/SL=True
-[2026-06-06 01:32:52] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 01:32:59] 🚀 🔍 [Debug entry]: Available Margin: $9.0121 | RISK_GEAR: 0.7
-[2026-06-06 01:32:59] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.1834
-[2026-06-06 01:32:59] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $157.71
-[2026-06-06 01:32:59] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 859.9 монет
-[2026-06-06 01:33:01] 🚀 🔥 ВХОД [G1]: CRV/USDT SELL | Price: 0.1834 | Vol: 859.9 | Общий баланс: $9.01
-[2026-06-06 01:42:36] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по CRV/USDT!
-[2026-06-06 01:42:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.44% | Пик: 0.44% | Trigger Цена: 0.1832 | Текущая: 0.1826
-[2026-06-06 01:43:06] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по CRV/USDT взята (+0.55%). Крою 50% объема.
-[2026-06-06 01:43:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.55% | Пик: 0.55% | Trigger Цена: 0.183 | Текущая: 0.1824
-[2026-06-06 01:43:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.55% | Пик: 0.55% | Trigger Цена: 0.183 | Текущая: 0.1824
-[2026-06-06 01:44:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.49% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1825
-[2026-06-06 01:45:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.49% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1825
-[2026-06-06 01:45:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.38% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1827
-[2026-06-06 01:46:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.33% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1828
-[2026-06-06 01:46:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА CRV/USDT]: PNL: 0.27% | Пик: 0.6% | Trigger Цена: 0.1829 | Текущая: 0.1829
-[2026-06-06 01:46:30] 🚀 🏁 [КАТАПУЛЬТА]: Снос CRV/USDT по откату от пика! Trigger Цена: 0.1829 | Текущая: 0.1829
-[2026-06-06 02:07:00] 🚀 🔍 [Trend shield ADA/USDT:USDT]: Отмена! Монета перегрета (0.96% > 0.8%). Пропускаем хаи.
-[2026-06-06 02:17:41] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 02:17:47] 🚀 🔍 [Debug entry]: Available Margin: $9.2847 | RISK_GEAR: 0.7
-[2026-06-06 02:17:47] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 575.46
-[2026-06-06 02:17:47] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $162.48
-[2026-06-06 02:17:47] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.28 монет
-[2026-06-06 02:17:50] 🚀 🔥 ВХОД [G1]: BNB/USDT SELL | Price: 575.46 | Vol: 0.28 | Общий баланс: $9.29
-[2026-06-06 02:19:58] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 02:20:04] 🚀 🔍 [Debug entry]: Available Margin: $2.827 | RISK_GEAR: 0.7
-[2026-06-06 02:20:04] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 0.725
-[2026-06-06 02:20:04] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $49.47
-[2026-06-06 02:20:04] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 68.2 монет
-[2026-06-06 02:20:07] 🚀 🔥 ВХОД [G1]: FIL/USDT BUY | Price: 0.725 | Vol: 68.2 | Общий баланс: $9.26
-[2026-06-06 02:23:29] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по FIL/USDT!
-[2026-06-06 02:23:46] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по FIL/USDT взята (+0.69%). Крою 50% объема.
-[2026-06-06 02:24:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА FIL/USDT]: PNL: 0.55% | Пик: 0.69% | Trigger Цена: 0.727 | Текущая: 0.729
-[2026-06-06 02:24:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА FIL/USDT]: PNL: 0.41% | Пик: 0.69% | Trigger Цена: 0.727 | Текущая: 0.728
-[2026-06-06 02:25:16] 🚀 🏁 [КАТАПУЛЬТА]: Снос FIL/USDT по откату от пика! Trigger Цена: 0.727 | Текущая: 0.727
-[2026-06-06 02:46:51] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос BNB/USDT | PNL: -0.398% | Триггер: T=False/BU=False/SL=True
-[2026-06-06 03:05:53] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 03:05:59] 🚀 🔍 [Debug entry]: Available Margin: $8.6091 | RISK_GEAR: 0.7
-[2026-06-06 03:05:59] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 574.23
-[2026-06-06 03:05:59] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $150.66
-[2026-06-06 03:05:59] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.26 монет
-[2026-06-06 03:06:02] 🚀 🔥 ВХОД [G2]: BNB/USDT SELL | Price: 574.23 | Vol: 0.26 | Общий баланс: $8.61
-[2026-06-06 03:13:52] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос BNB/USDT | PNL: -0.385% | Триггер: T=False/BU=False/SL=True
-[2026-06-06 03:22:04] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 03:22:11] 🚀 🔍 [Debug entry]: Available Margin: $8.119 | RISK_GEAR: 0.7
-[2026-06-06 03:22:11] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.958
-[2026-06-06 03:22:11] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $142.08
-[2026-06-06 03:22:11] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 72.0 монет
-[2026-06-06 03:22:13] 🚀 🔥 ВХОД [G2]: NEAR/USDT BUY | Price: 1.958 | Vol: 72.0 | Общий баланс: $8.12
-[2026-06-06 03:32:27] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос NEAR/USDT | PNL: -0.409% | Триггер: T=False/BU=False/SL=True
-[2026-06-06 04:03:50] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 04:03:57] 🚀 🔍 [Debug entry]: Available Margin: $7.3301 | RISK_GEAR: 0.7
-[2026-06-06 04:03:57] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.619
-[2026-06-06 04:03:57] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $128.28
-[2026-06-06 04:03:57] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 79.2 монет
-[2026-06-06 04:03:59] 🚀 🔥 ВХОД [G2]: RENDER/USDT SELL | Price: 1.619 | Vol: 79.2 | Общий баланс: $7.33
-[2026-06-06 04:04:04] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 04:04:10] 🚀 🔍 [Debug entry]: Available Margin: $2.1188 | RISK_GEAR: 0.7
-[2026-06-06 04:04:10] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 7.275
-[2026-06-06 04:04:10] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $37.08
-[2026-06-06 04:04:10] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 5.09 монет
-[2026-06-06 04:04:13] 🚀 🔥 ВХОД [G2]: LINK/USDT SELL | Price: 7.275 | Vol: 5.09 | Общий баланс: $7.33
-[2026-06-06 04:05:44] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 04:06:00] 🚀 🔍 [Trend shield GLM/USDT:USDT]: Отмена! Монета перегрета (0.83% > 0.8%). Пропускаем хаи.
-[2026-06-06 04:06:54] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 04:06:54] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по LINK/USDT!
-[2026-06-06 04:07:09] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по RENDER/USDT!
-[2026-06-06 04:07:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 0.78% | Пик: 0.8% | Trigger Цена: 7.242 | Текущая: 7.219
-[2026-06-06 04:07:36] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по RENDER/USDT взята (+1.31%). Крою 50% объема.
-[2026-06-06 04:07:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА RENDER/USDT]: PNL: 1.19% | Пик: 1.31% | Trigger Цена: 1.603 | Текущая: 1.6
-[2026-06-06 04:07:50] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 04:07:56] 🚀 🔍 [Debug entry]: Available Margin: $3.9211 | RISK_GEAR: 0.7
-[2026-06-06 04:07:56] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 569.68
-[2026-06-06 04:07:56] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $68.62
-[2026-06-06 04:07:56] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 0.12 монет
-[2026-06-06 04:07:56] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.03%). Крою 50% объема.
-[2026-06-06 04:07:59] 🚀 🔥 ВХОД [G2]: BNB/USDT SELL | Price: 569.68 | Vol: 0.12 | Общий баланс: $8.45
-[2026-06-06 04:07:59] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:08:03] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.07%). Крою 50% объема.
-[2026-06-06 04:08:06] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:08:12] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.03%). Крою 50% объема.
-[2026-06-06 04:08:15] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:08:26] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.04%). Крою 50% объема.
-[2026-06-06 04:08:28] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:08:39] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.08%). Крою 50% объема.
-[2026-06-06 04:08:42] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:08:48] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 04:08:48] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.11%). Крою 50% объема.
-[2026-06-06 04:08:51] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:08:57] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.14%). Крою 50% объема.
-[2026-06-06 04:09:00] 🚀 🔍 [Trend shield AVAX/USDT:USDT]: Отмена! Монета перегрета (1.93% > 0.8%). Пропускаем хаи.
-[2026-06-06 04:09:00] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:09:11] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.14%). Крою 50% объема.
-[2026-06-06 04:09:13] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:09:24] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.44%). Крою 50% объема.
-[2026-06-06 04:09:27] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:09:33] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.35%). Крою 50% объема.
-[2026-06-06 04:09:36] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:09:42] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.38%). Крою 50% объема.
-[2026-06-06 04:09:45] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:09:49] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 04:09:56] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.35%). Крою 50% объема.
-[2026-06-06 04:09:58] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:10:00] 🚀 🔍 [Trend shield TIA/USDT:USDT]: Отмена! Монета перегрета (1.68% > 1.4%). Пропускаем хаи.
-[2026-06-06 04:10:05] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.41%). Крою 50% объема.
-[2026-06-06 04:10:07] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:10:14] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.39%). Крою 50% объема.
-[2026-06-06 04:10:16] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:10:23] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.49%). Крою 50% объема.
-[2026-06-06 04:10:25] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:10:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА RENDER/USDT]: PNL: 1.57% | Пик: 1.63% | Trigger Цена: 1.598 | Текущая: 1.594
-[2026-06-06 04:10:37] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:10:39] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:10:39] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.54%). Крою 50% объема.
-[2026-06-06 04:10:41] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:10:48] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.44%). Крою 50% объема.
-[2026-06-06 04:10:50] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:10:57] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.42%). Крою 50% объема.
-[2026-06-06 04:10:59] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:11:06] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.41%). Крою 50% объема.
-[2026-06-06 04:11:08] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:11:12] 🚀 🏁 [КАТАПУЛЬТА]: Снос RENDER/USDT по откату от пика! Trigger Цена: 1.598 | Текущая: 1.6
-[2026-06-06 04:11:19] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.37%). Крою 50% объема.
-[2026-06-06 04:11:21] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:11:26] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.29%). Крою 50% объема.
-[2026-06-06 04:11:28] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:11:37] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.34%). Крою 50% объема.
-[2026-06-06 04:11:39] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:11:44] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.34%). Крою 50% объема.
-[2026-06-06 04:11:46] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:11:51] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.37%). Крою 50% объема.
-[2026-06-06 04:11:53] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:11:58] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.34%). Крою 50% объема.
-[2026-06-06 04:12:00] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:12:09] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.48%). Крою 50% объема.
-[2026-06-06 04:12:11] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:12:16] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:12:18] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:12:18] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.55%). Крою 50% объема.
-[2026-06-06 04:12:20] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:12:25] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:12:27] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:12:27] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.56%). Крою 50% объема.
-[2026-06-06 04:12:29] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:12:34] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:12:36] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:12:36] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.52%). Крою 50% объема.
-[2026-06-06 04:12:38] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:12:42] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:12:45] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:12:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.55% | Пик: 1.56% | Trigger Цена: 7.186 | Текущая: 7.164
-[2026-06-06 04:12:45] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.55%). Крою 50% объема.
-[2026-06-06 04:12:47] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:12:51] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:12:54] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:12:54] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.63%). Крою 50% объема.
-[2026-06-06 04:12:56] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:13:00] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:13:03] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:13:03] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.65%). Крою 50% объема.
-[2026-06-06 04:13:05] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:13:09] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:13:12] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:13:12] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.63%). Крою 50% объема.
-[2026-06-06 04:13:14] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:13:18] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:13:21] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:13:21] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.61%). Крою 50% объема.
-[2026-06-06 04:13:23] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:13:27] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:13:30] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:13:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.69% | Пик: 1.69% | Trigger Цена: 7.177 | Текущая: 7.154
-[2026-06-06 04:13:30] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.69%). Крою 50% объема.
-[2026-06-06 04:13:32] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:13:36] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:13:39] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:13:39] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.78%). Крою 50% объема.
-[2026-06-06 04:13:41] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:13:45] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:13:48] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:13:48] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.79%). Крою 50% объема.
-[2026-06-06 04:13:50] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:13:54] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:13:57] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:13:57] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.79%). Крою 50% объема.
-[2026-06-06 04:13:59] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:14:04] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:14:06] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:14:06] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.82%). Крою 50% объема.
-[2026-06-06 04:14:08] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:14:13] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:14:15] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:14:15] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.79% | Пик: 1.82% | Trigger Цена: 7.168 | Текущая: 7.147
-[2026-06-06 04:14:15] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.79%). Крою 50% объема.
-[2026-06-06 04:14:17] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:14:22] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:14:24] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:14:24] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.73%). Крою 50% объема.
-[2026-06-06 04:14:26] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:14:31] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:14:33] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:14:33] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.76%). Крою 50% объема.
-[2026-06-06 04:14:35] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:14:40] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:14:42] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:14:42] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.75%). Крою 50% объема.
-[2026-06-06 04:14:44] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:14:49] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:14:51] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:14:51] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.61%). Крою 50% объема.
-[2026-06-06 04:14:53] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:14:58] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:15:00] 🚀 🔍 [Trend shield GRT/USDT:USDT]: Отмена! Монета перегрета (0.93% > 0.8%). Пропускаем хаи.
-[2026-06-06 04:15:00] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:15:00] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.51% | Пик: 1.82% | Trigger Цена: 7.168 | Текущая: 7.167
-[2026-06-06 04:15:00] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.51%). Крою 50% объема.
-[2026-06-06 04:15:02] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:15:07] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:15:09] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:15:09] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.69%). Крою 50% объема.
-[2026-06-06 04:15:11] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:15:16] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:15:18] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:15:18] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.69%). Крою 50% объема.
-[2026-06-06 04:15:20] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:15:23] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по BNB/USDT!
-[2026-06-06 04:15:25] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:15:27] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:15:27] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.99%). Крою 50% объема.
-[2026-06-06 04:15:29] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:15:34] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:15:36] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:15:36] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.91%). Крою 50% объема.
-[2026-06-06 04:15:38] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:15:43] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:15:45] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:15:45] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА LINK/USDT]: PNL: 1.83% | Пик: 1.99% | Trigger Цена: 7.155 | Текущая: 7.144
-[2026-06-06 04:15:45] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.83%). Крою 50% объема.
-[2026-06-06 04:15:47] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:15:52] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:15:54] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:15:54] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.76%). Крою 50% объема.
-[2026-06-06 04:15:56] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:16:01] 🚀 ⚡ [БЕЗУБЫТOК БИНАНС V25.0]: LINK/USDT набрал +1.5% хода. Переношу стоп в ноль.
-[2026-06-06 04:16:03] 🚀 ⚠️ Сбой выставления БУ для LINK/USDT: name 'price' is not defined
-[2026-06-06 04:16:03] 🚀 🎯 [ТЕЙК-1 БИHАHС]: Цель по LINK/USDT взята (+1.76%). Крою 50% объема.
-[2026-06-06 04:16:05] 🚀 ⚠️ Сбой исполнения Тейка-1 для LINK/USDT: binance {"code":-4164,"msg":"Order's notional must be no smaller than 20 (unless you choose reduce only)."}
-[2026-06-06 04:16:10] 🚀 🏁 [КАТАПУЛЬТА]: Снос LINK/USDT по откату от пика! Trigger Цена: 7.155 | Текущая: 7.17
-[2026-06-06 04:16:21] 🚀 🏁 [КАТАПУЛЬТА]: Снос BNB/USDT по откату от пика! Trigger Цена: 568.19 | Текущая: 568.33
-[2026-06-06 04:21:00] 🚀 🔍 [Trend shield STORJ/USDT:USDT]: Отмена! Монета перегрета (1.38% > 0.8%). Пропускаем хаи.
-[2026-06-06 04:28:00] 🚀 🔍 [Trend shield GALA/USDT:USDT]: Отмена! Монета перегрета (1.06% > 0.8%). Пропускаем хаи.
-[2026-06-06 05:23:00] 🚀 🔍 [Trend shield STORJ/USDT:USDT]: Отмена! Монета перегрета (2.23% > 0.8%). Пропускаем хаи.
-[2026-06-06 06:01:59] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 06:02:06] 🚀 🔍 [Debug entry]: Available Margin: $9.3787 | RISK_GEAR: 0.7
-[2026-06-06 06:02:06] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.2022
-[2026-06-06 06:02:06] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $164.13
-[2026-06-06 06:02:06] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 136.0 монет
-[2026-06-06 06:02:08] 🚀 🔥 ВХОД [G1]: PENDLE/USDT BUY | Price: 1.2022 | Vol: 136.0 | Общий баланс: $9.38
-[2026-06-06 06:04:34] 🚀 ⚙️ [DEBUG 2перед ниткой..
-[2026-06-06 06:04:41] 🚀 🔍 [Debug entry]: Available Margin: $2.8404 | RISK_GEAR: 0.7
-[2026-06-06 06:04:41] 🚀 🔍 [Debug entry]: Target Leverage: 25x | Price: 1.093
-[2026-06-06 06:04:41] 🚀 🔍 [Debug entry]: Calculated Nom Volume (with leverage): $49.71
-[2026-06-06 06:04:41] 🚀 🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: 45.4 монет
-[2026-06-06 06:04:43] 🚀 🔥 ВХОД [G2]: XRP/USDT SELL | Price: 1.093 | Vol: 45.4 | Общий баланс: $10.03
-[2026-06-06 06:05:17] 🚀 ⚙️ [ТРЕЙЛИHГ]: Взведен по PENDLE/USDT!
-[2026-06-06 06:05:30] 🚀 ⚙️ [ДЕБАГ ТРЕЙЛИНГА PENDLE/USDT]: PNL: 0.61% | Пик: 0.7% | Trigger Цена: 1.2064 | Текущая: 1.2095
-[2026-06-06 06:06:06] 🚀 🏁 [КАТАПУЛЬТА]: Снос PENDLE/USDT по откату от пика! Trigger Цена: 1.2064 | Текущая: 1.2064
-[2026-06-06 06:20:51] 🚀 ⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос XRP/USDT | PNL: -0.392% | Триггер: T=False/BU=False/SL=True
+# --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
+RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
+MAX_SLOTS = 4          # Максимум 4 параллельных сделки
+LOG_FILE = "ignition_log.txt"
+# --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
+MAX_ACCOUNT_LEVERAGE = 25  # Выставляем 5х (аппаратный потолок субаккаунта)
+
+# --- ТУМБЛЕР РЕЖИМА ДЕБАГА (ВКЛ / ВЫКЛ) ---
+DEBUG_BEACONS = False   # Сделай False, чтобы полностью выключить маяки в консоли
+
+class GlobalMemory:
+    def __init__(self):
+        self.prices = {}
+        self.active_pos = {}
+        self.all_dna = {}
+        self.is_running = True
+        self.slots_occupied = 0
+        self.available = 0.0
+        self.start_balance = 0.0
+        self.total_wallet = 0.0
+
+        self.be_fixed = {}
+        self.stop_placed = {}
+        self.tp_fixed = {}
+
+memory = GlobalMemory()
+
+def log(msg):
+    t = time.strftime('%Y-%m-%d %H:%M:%S')
+    formatted = f"[{t}] 🚀 {msg}"
+    print(formatted)
+    try:
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(formatted + "\n")
+    except:
+        pass
+
+async def update_balance(exchange):
+    """Фоновое обновление баланса, ЖЕСТКИЙ переключатель ISOLATED и усыновление сирот V22.4"""
+    first_run_sync = True
+    while memory.is_running:
+        try:
+            # 1. Запрашиваем баланс кошелька фьючерсов
+
+            # --- ШТУЧНЫЙ ФИКС V24.9: КВАНТОВЫЙ СЪЕМ ДОСТУПНОЙ МАРЖИ BINANCE ---
+            bal = await exchange.fetch_balance()
+
+            # Извлекаем аппаратный availableBalance фьючерсного шлюза Binance
+            m_info = bal.get('info', {})
+            assets = m_info.get('assets', [])
+
+            # Ищем чистую доступную маржу Isolated-активов среди JSON-массива биржи
+            usdt_asset = next((a for a in assets if a.get('asset') == 'USDT'), {})
+            #avail_margin = float(usdt_asset.get('availableBalance', bal.get('free', {}).get('USDT', 0)))
+            # --- [ШТУЧНЫЙ ФИКС V37.2: ИСТИННЫЙ СВОБОДНЫЙ БАЛАНС ФЬЮЧЕРСОВ] ---
+            avail_margin = float(m_info.get('availableBalance', usdt_asset.get('availableBalance', bal.get('free', {}).get('USDT', 0))))
+
+            # Возвращаем переменную free для предотвращения NameError ниже по коду
+            free = avail_margin
+
+            # Резервируем скрытый 3% буфер на Slippage проскальзывание рыночного ордера Taker
+            memory.available = avail_margin * 0.97
+            memory.total_wallet = float(bal.get('total', {}).get('USDT', 0))
+
+            if memory.start_balance == 0:
+                memory.start_balance = memory.total_wallet
+                log(f"!!! С Т А Р Т !!!  Общий баланс кошелька: ${round(memory.total_wallet, 2)} | Свободно для HFT: ${round(free, 2)}")
+
+            # --- [ЖЕСТКИЙ ФИКС V22.4: ПРИНУДИТЕЛЬНЫЙ ФОНОВЫЙ КЛУБ ИЗОЛЯЦИИ БИНАНСА] ---
+            # При каждом тике баланса бот намертво забивает режим ISOLATED для всей обоймы
+            for sym in memory.all_dna.keys():
+                try:
+                    await exchange.set_margin_mode('ISOLATED', sym)
+                except:
+                    pass # Если позиция уже изолирована, биржа пропустит шаг без краша
+
+            # --- [ШЛЮЗ СИНХРОНИЗАЦИИ ПОЗИЦИЙ ПОСЛЕ РЕСТАРТА (УСЫНОВЛЕНИЕ СИРОТ)] ---
+            if first_run_sync:
+                try:
+                    positions = await exchange.fetch_positions()
+                    for p in positions:
+                        vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
+                        if vol > 0.00001:
+                            raw_sym = p['symbol']
+                            if raw_sym not in memory.active_pos and raw_sym in memory.all_dna:
+                                entry_p = float(p.get('entryPrice', p.get('price', 0)))
+                                side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
+                                side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
+                                dna = memory.all_dna[raw_sym]
+
+                                memory.active_pos[raw_sym] = {
+                                    'side': side, 'vol': vol, 'price': entry_p,
+                                    'gear': 'g1', 'gear_data': dna['g1'], 'dna': dna,
+                                    'entry_time': time.time()
+                                }
+                                memory.tp_fixed[raw_sym] = False
+                                memory.be_fixed[raw_sym] = False
+                                memory.stop_placed[raw_sym] = entry_p
+                                memory.slots_occupied += 1
+                                log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {raw_sym} ({vol} единиц). Успешно подхвачен ядром выходов!")
+                except Exception as sync_err:
+                    log(f"⚠ Ошибка синхронизации позиций при старте: {sync_err}")
+                first_run_sync = False
+
+            # Контрольная пауза тика опроса баланса и удержания шлюзов
+            await asyncio.sleep(15)
+
+        except Exception as e:
+            log(f"⚠ Balance Error: {e}")
+            await asyncio.sleep(20)
+
+async def check_signal(exchange, symbol, last_beacon_t):
+    """
+    Сканирование импульсов V24.0: Сплав скоростей G1/G2, Trend Altitude и 3M Volume.
+    Полностью очищен от слепых зон и ложных стопов на хаях.
+    """
+    try:
+        dna = memory.all_dna.get(symbol)
+        cur_p = memory.prices.get(symbol)
+        if not dna or not cur_p:
+            return None, last_beacon_t
+
+        # --- [ШТУЧНЫЙ ФИКС V34.2: ТОТАЛЬНЫЙ ЗАПРЕТ ПОВТОРНЫХ ВХОДОВ В ОДИН АКТИВ] ---
+        if symbol in memory.active_pos or symbol.split(':')[0] in memory.active_pos:
+            return None, last_beacon_t
+
+        # ==================================================================================
+        # --- [ВРЕЗКА V32.2 МОНОЛИТ: ИСПРАВЛЕННЫЙ И ЗРЯЧИЙ ДЕТЕКТОР ЛЖИ МАРКЕТ-МЕЙКЕРА] ---
+        # ==================================================================================
+        try:
+            # --- КОНТУР 1: СПОТ-ФЬЮЧЕРСНЫЙ АРБИТРАЖНЫЙ ШЛЮЗ (SPOOFING DETECTOR) ---
+            # Извлекаем легитимный спотовый тикер CCXT стандарта Бинанса (например, "SOL/USDT")
+            spot_symbol = str(symbol).split(':')[0]
+
+            # Вытягиваем живую спотовую цену из нашей RAM-памяти сокетов
+            spot_price_raw = memory.prices.get(spot_symbol, memory.prices.get(spot_symbol.replace('/', '')))
+
+            if spot_price_raw and float(spot_price_raw) > 0:
+                spot_price = float(spot_price_raw)
+                # Рассчитываем наносекундный рассинхрон цены фьючерса и спота
+                basis_pct = abs(cur_p / spot_price - 1.0) * 100.0
+
+                # Если фьючерс оторвался от реального спота более чем на 0.25% — это фантомный сквиз ММ
+                if basis_pct >= 0.25:
+                    log(f"🛑 [SPOOFING SHIELD]: Отмена входа по {symbol}! Обнаружен фантомный сквиз фьючерса. Фьюч: {cur_p} | Спот: {spot_price} | Базис: {round(basis_pct, 3)}% > 0.25%")
+                    return None, last_beacon_t
+
+#            log(f"⚙️ [DEBUG 2]: {symbol} прошел Спот-Шлюз. Запрашиваю стакан...")
+
+
+            # --- КОНТУР 2: СВЕРХСКОРОСТНОЙ ШЛЮЗ ПЛОТНОСТИ ОЗУ (БЕЗ СЕТЕВЫХ ЛАГОВ BINANCE) ---
+            # Измеряем спред на основе живого сокет-пакета, полностью заменяя fetch_order_book
+            # Если ММ выдернет лимитки (воздушная яма), сокет-спред мгновенно расширится
+            spot_ticker_key = str(symbol).split(':')[0].replace('/', '')
+            live_ticker_data = memory.prices.get(spot_ticker_key + "_full", {})
+
+            # Если биржа передает расширенный спред между лучшим Bid и Ask в сокетах более 0.4%
+            if live_ticker_data:
+                bid = float(live_ticker_data.get('b', 0))
+                ask = float(live_ticker_data.get('a', 0))
+                if bid > 0 and ask > 0:
+                    spread_pct = abs(ask / bid - 1.0) * 100.0
+                    if spread_pct >= 0.40:
+                        log(f"🧹 [DELTA DEPTH SHIELD]: Отмена входа по {symbol}! Воздушная яма спред а в сокетах ММ. Спред: {round(spread_pct, 3)}% >= 0.4%")
+                        return None, last_beacon_t
+
+            # --- КОНТУР 3: СКОРОСТЬ ДЕЛЬТЫ ОБЪЕМА (VOLUME VELOCITY DELTA V34.0) ---
+            # Извлекаем объем текущей минутной свечи (первые секунды импульса)
+ #           v_now = float(df['v'].iloc[-1])
+ #           v_mean = float(df['v'].mean())
+
+            # Если цена летит, но объем первого тика вялый (меньше среднего в 1.8 раза) — это пустой сквиз ММ
+ #           if v_now < (v_mean * 1.8):
+ #               log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену  через вакуум. Vol: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
+ #               return None, last_beacon_t
+
+ #           log(f"⚙️ [DEBUG 3]: {symbol} получил стакан успешно. Проверяю объемы...")
+
+        except Exception as mm_detect_err:
+            # Аварийный шлюз: если API Бинанса лагает на запросе стакана, не рискуем маржой
+            return None, last_beacon_t
+        # ==================================================================================
+
+  #      log(f"⚙️ [DEBUG 4]: {symbol} прошел все ММ-фильтры! Проверяю Динамический Нож...")
+
+
+        # 1. ЗАГРУЗКА И ВЕРИФИКАЦИЯ СВЕЧНОГО МАССИВА
+        ohlcv = await exchange.fetch_ohlcv(symbol, '1m', limit=30)
+        if len(ohlcv) < 21:
+            return None, last_beacon_t
+
+        df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+
+
+        # --- КОНТУР 3: СКОРОСТЬ ДЕЛЬТЫ ОБЪЕМА (VOLUME VELOCITY DELTA V34.0) ---
+        v_now = float(df['v'].iloc[-1])
+        v_mean = float(df['v'].mean())
+        if v_now < (v_mean * 1.8):
+            # Если объем первого тика вялый — ММ гонит цену искусственно. Отмена!
+#           log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену чере з вакуум. Vo l: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
+           return None, last_beacon_t
+
+
+        # 2. РАСЧЕТ ИНДИКАТОРОВ БОЛЛИНДЖЕРА НА NUMPY
+        ma_series = df['c'].rolling(20).mean()
+        std_series = df['c'].rolling(20).std()
+
+        ma = ma_series.to_numpy()
+        std = std_series.to_numpy()
+
+        ma_prev = ma[-2]
+        std_prev = std[-2]
+
+        if std_prev == 0 or ma_prev == 0 or pd.isna(ma_prev) or pd.isna(std_prev):
+            return None, last_beacon_t
+
+        p_up = ma_prev + (2.1 * std_prev)
+        p_dn = ma_prev - (2.1 * std_prev)
+        curr_w = (p_up - p_dn) / ma_prev * 100
+
+        p_up_prev = ma[-3] + (2.1 * std[-3])
+        p_dn_prev = ma[-3] - (2.1 * std[-3])
+        if ma[-3] == 0:
+            return None, last_beacon_t
+
+        prev_w = (p_up_prev - p_dn_prev) / ma[-3] * 100
+        w_growth = curr_w / prev_w
+
+        # 3. ФИЛЬТР 1: TREND ALTITUDE SHIELD (Запрет перегретых хаев)
+        # Динамически вычисляем класс риска монеты по её тикеру
+        sym_upper = symbol.upper()
+        if any(mem in sym_upper for mem in ['1000PEPE', 'WIF', '1000SHIB', '1000BONK', '1000FLOKI','DOGE', 'NOT', 'POPCAT', 'JASMY']):
+            max_alt_pct = 2.5   # Класс 1: Мемы (Предел отрыва от MA20 2.5%)
+        elif any(tech in sym_upper for tech in ['SOL', 'NEAR', 'SUI', 'FET', 'TIA', 'APT', 'OP', 'RENDER']):
+            max_alt_pct = 1.4   # Класс 2: Технологичная альта (Предел 1.4%)
+        else:
+            max_alt_pct = 0.8   # Класс 3: Тяжелые якоря (Предел 0.8%)
+
+        # Измеряем текущую высоту (отрыв) живой цены от средней линии MA20
+        current_altitude = abs(cur_p / ma_prev - 1) * 100
+
+        # Если монета улетела в космос выше лимита класса — глухая блокировка ордера
+        if current_altitude > max_alt_pct:
+            if int(time.time()) % 30 == 0:
+                log(f"🔍 [Trend shield {symbol}]: Отмена! Монета перегрета ({round(current_altitude, 2)}% > {max_alt_pct}%). Пропускаем хаи.")
+            return None, last_beacon_t
+
+        # 4. ТВОЙ ОРИГИНАЛЬНЫЙ ТУМБЛЕР ДВУХ СКОРОСТЕЙ G1 / G2
+        open_p = df['o'].iloc[-1]
+        change = abs(cur_p / open_p - 1)
+        gear = None
+
+        if 'g2' in dna and change >= dna['g2']['speed']:
+            gear = 'g2'
+        elif 'g1' in dna and change >= dna['g1']['speed']:
+            gear = 'g1'
+
+        # --- [ТУМБЛЕРНЫЙ МАЯК ОХОТНИКА: ДЕБАГ-ТРАНСЛЯЦИЯ] ---
+        if DEBUG_BEACONS and (time.time() - last_beacon_t > 60):
+            vol_last = df['v'].iloc[-1]
+            vol_avg = df['v'].mean()
+            clean_name = symbol.split(':')[0]
+            beacon_msg = f"🔍 МАЯК СКАНЕРА [{clean_name}]: Цена: {cur_p} | Взрыв BB: {round(w_growth,3)}x | Высота: {round(current_altitude,2)}% | Скорость: {round(change*100,3)}% "
+            if gear:
+                beacon_msg += f"| Передача: {gear.upper()} ✅ | Объем тика: {round(vol_last,1)} (Нужно: {round(vol_avg*dna[gear]['vol'],1)})"
+            else:
+                beacon_msg += f"| Скорость мала ❌"
+            # log(beacon_msg)
+            last_beacon_t = time.time()
+
+        # Базовая проверка на наличие взрыва волатильности и взвода передачи
+        if w_growth < dna['w_grow'] or not gear:
+            return None, last_beacon_t
+
+        # 5. ФИЛЬТР 2: НАКОПИТЕЛЬНЫЙ 3-МИНУТНЫЙ ОБЪЕМ (Уничтожение висяков)
+        v_now = float(df['v'].iloc[-1])
+        v_p1 = float(df['v'].iloc[-2])
+        v_p2 = float(df['v'].iloc[-3])
+
+        if v_now < v_p1 and v_p1 < v_p2:
+            if int(time.time()) % 45 == 0:
+                log(f"🔍 [Volume shield {symbol}]: Отмена! Прорыв на затухающем объеме (Вялый закисающий импульс).")
+            return None, last_beacon_t
+
+        # Твоя оригинальная проверка плотности тикового объема под конкретную передачу
+        if df['v'].iloc[-1] < df['v'].mean() * dna[gear]['vol']:
+            return None, last_beacon_t
+
+        # 6. ВЫЧИСЛЕНИЕ НАПРАВЛЕНИЯ КАНOНИЧЕСКОГО ИМПУЛЬСА
+        is_buy_candidate = (cur_p > open_p)
+        is_sell_candidate = (cur_p < open_p)
+
+
+#=====  # 7. ТВОЙ ОРИГИНАЛЬНЫЙ КАСКАДНЫЙ НOЖ (PRE-CANDLE SHIELD)
+        p_c1 = df.iloc[-2]
+        p_c2 = df.iloc[-3]
+        p_c3 = df.iloc[-4]
+
+        is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
+        is_3_red   = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+
+        # --- [ВРЕЗКА V34.0: ИНТЕЛЛЕКТУАЛЬНЫЙ ДИНАМИЧЕСКИЙ КАСКАДНЫЙ НОЖ С ПРИВЯЗКОЙ К MA20] ---
+        # Контур Лонга: если 3 свечи красные, но мы ВЫШЕ MA20 (в благоприятной зоне) — вход разрешен!
+        # Блокировка включится, только если мы упали под MA20 (в неблагоприятную зону)
+#        if is_buy_candidate and is_3_red and cur_p <= ma_prev:
+#            log(f"🪓 [ynamic knife]: Отмена Лонга по {symbol}! Каскад 3 свечей на лоу канала Боллин джера (Ниже MA20). Цена: {cur_p} <= MA20: {round(ma_prev, 4)}")
+#            return None, last_beacon_t
+
+        # Контур Шорта: если 3 свечи зеленые, но мы НИЖЕ MA20 (благоприятная зона разгона) — вход разрешен!
+        # Намертво блокируем шорт, только если цена находится на самых хаях канала (выше MA20)
+#        if is_sell_candidate and is_3_green and cur_p >= ma_prev:
+#            log(f"🪓 [ynamic knife]: Отмена Шорта по {symbol}! Каскад 3 свечей на хаях канала Болли нджера (Выше MA20). Цена: {cur_p} >= MA20: {round(ma_prev, 4)}")
+#            return None, last_beacon_t
+
+        log(f"⚙️ [DEBUG 2перед ниткой..")
+
+
+        # --- [ВРЕЗКА V39.5: ПОКАНАЛЬНЫЙ НОЖ И ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ] ---
+        channel_width = abs(p_up - p_dn) / ma_prev * 100.0
+
+        # 1. СHАЙПЕРСКИЙ СБOР СПOТ-ТИКЕРА ИЗ СТРОКИ СКАHЕРА
+        s_ticker_clean = str(symbol).split(':')[0].replace('/', '')
+        s_price_raw = memory.prices.get(s_ticker_clean)
+        s_price = float(s_price_raw) if s_price_raw else cur_p
+        s_basis = abs(cur_p / s_price - 1.0) * 100.0
+
+        # 2. ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ ОБЪЕМОВ (ЗАЩИТА ОТ АЙСБЕРГ-РАЗВОРОТОВ ММ)
+        live_ticker_data = memory.prices.get(s_ticker_clean + "_full", {})
+        is_delta_safe = True
+        if live_ticker_data:
+            # Считываем кумулятивные объемы Taker Buy/Sell за последние тики сокетов
+            t_buy_vol = float(live_ticker_data.get('v', 0))
+            t_sell_vol = float(live_ticker_data.get('q', 1))
+            if is_buy_candidate and (t_sell_vol > t_buy_vol * 1.65): is_delta_safe = False # Скрытые продажи китов
+            if is_sell_candidate and (t_buy_vol > t_sell_vol * 1.65): is_delta_safe = False # Скрытый откуп китов
+
+        # Истинный взрыв нитки: канал узкий, скорость бешеная, спот подтверждает базисом
+        is_nitka_explosion = (channel_width < 0.65 and w_growth >= 1.25 and df['v'].iloc[-1] > df['v'].mean() * 2.0 and s_basis < 0.25)
+
+        if not is_nitka_explosion:
+            # ПОКАНАЛЬНЫЙ РАЗЖИМ: Мемы летят свободно (5%), тяжелые Якоря зажимаем жестко (15%)
+            is_meme = any(m in symbol.upper() for m in ['1000PEPE', 'WIF', 'POPCAT', '1000SHIB', '1000BONK', '1000FLOKI', 'DOGE'])
+            adaptive_offset = 0.05 if is_meme else 0.15
+
+            long_barrier = ma_prev * (1.0 - adaptive_offset)
+            short_barrier = ma_prev * (1.0 + adaptive_offset)
+
+            # Точечная блокировка Ножей с учетом Шлюза Паритета Дельты
+            if is_buy_candidate and is_3_red:
+                if cur_p <= long_barrier or not is_delta_safe:
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Лонга по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
+                    return None, last_beacon_t
+
+            if is_sell_candidate and is_3_green:
+                if cur_p >= short_barrier or not is_delta_safe:
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Шорта по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
+                    return None, last_beacon_t
+
+        # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
+        return {
+            'symbol': symbol,
+            'side': 'buy' if is_buy_candidate else 'sell',
+            'gear': gear,
+            'price': cur_p,
+            'dna': dna,
+            'gear_data': dna[gear]
+        }, last_beacon_t
+
+    except Exception as err:
+        # Полная изоляция критических сбоев расчета
+        return None, last_beacon_t
+
+async def execute_entry(exchange, sig):
+    """
+    Импульсный захват позиции по рынку на фьючерсах Binance V40.0.
+    Безошибочный монолит с проверкой маржи и фиксом косой черты плеч.
+    """
+    # 1. АППАРАТНЫЙ ПРЕДОХРАНИТЕЛЬ: Выполняется до любых расчетов маржи кошелька
+    try:
+        bal_info = await exchange.fetch_balance()
+        live_available = float(bal_info.get('info', {}).get('availableBalance', 0))
+        if live_available < 2.0:
+            # Бесшумный выход, если Бинанс лагает или маржи реально мало
+            return
+    except:
+        return
+
+    raw_symbol = sig['symbol']
+    # Очищаем тикер для внутренних RAM флагов ('LINK/USDT')
+    symbol = raw_symbol.split(':')[0]
+
+    if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos:
+        return
+
+    try:
+        # СБОР ЖЕСТКОГО БИРЖЕВОГО ID КОНТРАКТА ДЛЯ МЕТОДОВ ПЛЕЧА BINANCE ('ADAUSDT')
+        binance_id_clean = str(symbol).replace('/', '')
+
+        # Динамическое определение эффективного плеча с учетом лимита субаккаунта
+        dna_lev = int(sig['dna']['lev'])
+        effective_leverage = min(dna_lev, MAX_ACCOUNT_LEVERAGE)
+
+        # Очищаем тикер от косой черты специально для API Бинанса
+        binance_id_clean = str(symbol).replace('/', '')
+        try: await exchange.set_leverage(effective_leverage, binance_id_clean)
+        except: pass
+        try: await exchange.set_margin_mode('ISOLATED', binance_id_clean)
+        except: pass
+
+        # МАТЕМАТИЧЕСКИЙ РАСЧЕТ НОМИНАЛЬНОГО ОБЪЕМА ПОД ОБНОВЛЕННУЮ МАРЖУ ОЗУ
+#        amount_usdt = memory.available * RISK_GEAR * effective_leverage
+        amount_usdt = float(live_available) * RISK_GEAR * effective_leverage
+
+        # Переводим объем в эквивалент базовых монет
+        raw_qty = amount_usdt / sig['price']
+
+        # Округляем строго по фьючерсным шагам Бинанса, используя стандартный тикер
+        qty = float(exchange.amount_to_precision(symbol, raw_qty))
+        if qty <= 0:
+            return
+
+        # --- ШТУЧНЫЙ КВАНТОВЫЙ ДЕБАГ V40.0: ВСКРЫТИЕ МАРЖИНАЛЬНОЙ СЛЕПОТЫ ---
+        log(f"🔍 [Debug entry]: Available Margin: ${round(live_available, 4)} | RISK_GEAR: {RISK_GEAR}")
+        log(f"🔍 [Debug entry]: Target Leverage: {sig['dna']['lev']}x | Price: {sig['price']}")
+        log(f"🔍 [Debug entry]: Calculated Nom Volume (with leverage): ${round(amount_usdt, 2)}")
+        log(f"🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: {qty} монет")
+
+        # ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Рыночный приказ входа
+        order = await exchange.create_market_order(symbol, sig['side'], qty)
+        if order:
+            log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty} | Общий баланс: ${round(memory.total_wallet, 2)}")
+
+            # Записываем сделку в RAM под чистым биржевым ключом
+            memory.active_pos[raw_symbol] = {
+                'side': sig['side'], 'vol': qty, 'price': sig['price'],
+                'gear': sig['gear'], 'gear_data': sig['gear_data'], 'dna': sig['dna'],
+                'entry_time': time.time()
+            }
+            memory.tp_fixed[symbol] = False
+            memory.be_fixed[symbol] = False
+            memory.stop_placed[symbol] = None
+            memory.slots_occupied += 1
+
+    except Exception as e:
+        log(f"⚠ Entry Error {symbol}: {e}")
+
+async def monitor_logic(exchange):
+    """Асинхронный бронированный контроль выходов и адаптивного пре-трейлинга V22.0 [ФИКС NEAR]"""
+    while memory.is_running:
+        # --- [ВРЕЗКА V28.4: СКВОЗНОЙ ДЕБАГ ШЛЮЗА ВЫХОДОВ] ---
+#        if int(time.time()) % 5 == 0:
+#            log(f"🛰️ [DEBUG GATE 1]: Цикл while активен. Текущий размер RAM active_pos: {len(memor y.active_pos)}")
+#            log(f"🛰️ [DEBUG GATE 2]: Сырые ключи в памяти active_pos: {list(memory.active_pos.keys ())}")
+
+        # Микро-пауза 200мс для предотвращения зависания процессора
+        await asyncio.sleep(0.2)
+
+        for symbol, pos in list(memory.active_pos.items()):
+            # --- [DEBUG GATE 3]: Прорвались внутрь цикла обхода конкретного тикера! ---
+#            if int(time.time()) % 5 == 0:
+#                log(f"🛰️ [DEBUG GATE 3]: Вошли в цикл. Текущий symbol={symbol} | pos.keys={list(po s.keys()) if isinstance(pos, dict) else 'NOT_A_DICT'}")
+            try:
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 1]: Начинаем расчет параметров для {clean_symbol}. Текущая цена cur_p={cur_p}")
+
+
+                # --- ШТУЧНЫЙ ФИКС V27.5: НАМЕРТВО СИНХРОНИЗИРУЕМ RAW И CLEAN КЛЮЧИ ---
+                raw_symbol = symbol
+                clean_symbol = raw_symbol.split(':')[0]
+
+                # --- [ВРЕЗКА V28.9: ПРЯМОЙ REST-ПРОРЫВ К ЦЕНАМ БИНАНСА] ---
+                cur_p = memory.prices.get(clean_symbol)
+
+                # Если в RAM памяти сокетов пусто или ноль — пробиваем прямой запрос на биржу
+                if not cur_p or float(cur_p) <= 0:
+                    try:
+                        # Собираем жесткий биржевой ID контракта (XRPUSDT)
+                        #binance_ticker_id = str(raw_symbol).replace('/', '').replace(':USDT', '')
+                        binance_ticker_id = str(raw_symbol).split(':')[0].replace('/', '')
+                        # Запрашиваем живую цену маркировки напрямую через REST шлюз
+                        rest_resp = await exchange.fapiPublicGetTickerPrice({'symbol': binance_ticker_id})
+                        if isinstance(rest_resp, dict) and 'price' in rest_resp:
+                            cur_p = float(rest_resp['price'])
+                        elif isinstance(rest_resp, list) and len(rest_resp) > 0:
+                            cur_p = float(rest_resp[0].get('price', 0))
+                    except Exception as rest_price_err:
+                        pass
+
+                # Если цена все еще не найдена в сокетах и REST — пробуем старый марк-прайс из pos
+                if not cur_p or float(cur_p) <= 0:
+                    cur_p = float(pos.get('markPrice')) if pos.get('markPrice') else float(pos.get('info', {}).get('markPrice', 0))
+
+                # Если тотальный глухой вакуум — аварийно пропускаем тик во избежание ZeroDivisionError
+                if not cur_p or float(cur_p) <= 0:
+                    continue
+
+                cur_p = float(cur_p) # Жестко гарантируем float тип данных
+
+                # Вычисляем чистый PNL без учета плеча в зависимости от направления сделки
+
+                # --- ШТУЧНЫЙ ФИКС V28.3: ЗАЩИТА СИРОТ RECOVERED ОТ КРАША KEYERROR ---
+                pnl = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 2]: PNL успешно рассчитан: {round(pnl*100, 4)}%")
+
+                # Безопасное извлечение ДНК-параметров без падения в KeyError
+                gd = pos.get('gear_data', memory.all_dna.get(clean_symbol, {}).get('G1', {'time': 2700, 'tp1': 0.03}))
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 3]: ДНК успешно извлечена. Лимит времени: {gd.get('time')}с")
+
+
+                # Если позиция подхвачена через RECOVERED и висит со вчерашнего дня — взрываем таймер утилизации принудительно
+                if pos.get('is_recovered', True) or (time.time() - pos['entry_time'] < 60 and pnl < 0):
+                    age = gd.get('time', 2700) + 100  # Намертво выставляем возраст > 45 минут
+                else:
+                    age = time.time() - pos['entry_time']
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 4]: Возраст сделки посчитан: {round(age, 1)}с")
+
+
+                exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
+                binance_market_id = raw_symbol.replace('/', '').replace(':USDT', '')
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 5]: Все переменные собраны. Переходим к дебагу утилизации...")
+
+                # А. КОHТУР РАHHЕГО СHАЙПЕРСКОГО БЕЗУБЫТКА (До выполнения Тейка-1)
+                # Если позиция набрала +1.5% чистого хода цены, но Тейк-1 еще не взят — защищаем залог!
+                if not memory.be_fixed.get(raw_symbol, False) and not memory.tp_fixed.get(raw_symbol, False):
+                    if pnl >= 0.015:
+                        log(f"⚡ [БЕЗУБЫТOК БИНАНС V25.0]: {clean_symbol} набрал +1.5% хода. Переношу стоп в ноль.")
+                        try:
+                            # Смещаем защитный стоп-маркет ровно на цену нашего входа
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            stop_params = {'stopPrice': price, 'reduceOnly': True}
+                            await exchange.create_order(raw_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
+                            memory.be_fixed[raw_symbol] = True
+                        except Exception as be_err:
+                            log(f"⚠️ Сбой выставления БУ для {clean_symbol}: {be_err}")
+
+                # Б. КОHТУР АДАПТИВНОГО ТРЕЙЛИHГА НА БАЗЕ ДНК МОHЕТЫ
+                # Определяем шаг отката в зависимости от класса риска (Мемы дышат свободнее)
+                is_meme_coin = any(m_n in clean_symbol.upper() for m_n in ['1000PEPE', '1000SHIB', '1000FLOKI', '1000BONK', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+
+                # --- [ВРЕЗКА V39.6: АБСОЛЮТНО ЗРЯЧИЙ HFT-ТРЕЙЛИНГ И ФИКС ШОРТ-КАТАПУЛЬТЫ] ---
+                optimal_trail_step = 0.0055 if is_meme_coin else 0.0035
+                trail_key = f"{raw_symbol}_trail"
+                peak_memory_key = f"{raw_symbol}_max_peak_observed"
+
+                if pnl >= (gd['tp1'] * 0.75) or memory.tp_fixed.get(trail_key, False):
+                    if not memory.tp_fixed.get(trail_key, False):
+                        memory.tp_fixed[trail_key] = True
+                        memory.prices[peak_memory_key] = pnl
+                        log(f"⚙️ [ТРЕЙЛИHГ]: Взведен по {clean_symbol}!")
+
+                    current_peak = memory.prices.get(peak_memory_key, pnl)
+                    if pnl > current_peak:
+                        memory.prices[peak_memory_key] = pnl
+                        current_peak = pnl
+
+                    entry_price_f = float(pos['price'])
+
+                    # Проверяем направление строго по CCXT-стандарту фьючерсов Binance (long/short)
+                    is_pos_long = str(pos.get('side', '')).lower() in ['long', 'buy']
+
+                    if is_pos_long:
+                        peak_geo = entry_price_f * (1.0 + current_peak)
+                        catapult_trigger_raw = peak_geo * (1.0 - optimal_trail_step)
+                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
+                        is_catapult_fired = (cur_p <= catapult_trigger)
+                    else:
+                        # Корректная тригонометрия шорта: откат вверх от дна прибыли
+                        peak_geo = entry_price_f * (1.0 - current_peak)
+                        catapult_trigger_raw = peak_geo * (1.0 + optimal_trail_step)
+                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
+                        is_catapult_fired = (cur_p >= catapult_trigger)
+
+                    # Выводим дебаг в консоль раз в 15 секунд
+                    if int(time.time()) % 15 == 0:
+                        p_pct = round(pnl * 100, 2)
+                        pk_pct = round(current_peak * 100, 2)
+                        log(f"⚙️ [ДЕБАГ ТРЕЙЛИНГА {clean_symbol}]: PNL: {p_pct}% | Пик: {pk_pct}% | Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
+
+                    if is_catapult_fired:
+                        log(f"🏁 [КАТАПУЛЬТА]: Снос {clean_symbol} по откату от пика! Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
+                        try:
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
+                            await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
+                        except Exception as t_err:
+                            log(f"⚠ Сбой катапультирования {clean_symbol}: {t_err}")
+
+                        if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                        if trail_key in memory.tp_fixed: del memory.tp_fixed[trail_key]
+                        if peak_memory_key in memory.prices: del memory.prices[peak_memory_key]
+                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                        continue
+
+                # В. КОHТУР КАСКАДHЫХ ТЕЙК-ПОИHТОВ (Если трейлинг пролетел мимо импульсом)
+                # ТЕЙК-1: Фиксация 50% объема позиции при достижении главной цели ДНК
+                if not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1']:
+                    log(f"🎯 [ТЕЙК-1 БИHАHС]: Цель по {clean_symbol} взята (+{round(pnl*100, 2)}%). Крою 50% объема.")
+                    try:
+                        half_qty = float(exchange.amount_to_precision(clean_symbol, pos['vol'] / 2))
+                        # --- [ВРЕЗКА V37.0: ПЫЛЕСОС МЕЛОЧИ В ТЕЙКЕ-1] ---
+                        total_pos_usd = pos['vol'] * cur_p
+                        if total_pos_usd > 2.0 and half_qty > 0 and half_qty < pos['vol']:
+                            await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, half_qty))
+                            pos['vol'] = float(exchange.amount_to_precision(clean_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
+                            memory.tp_fixed[raw_symbol] = True
+
+                            # Автоматический перенос стопа в безубыток после Тейка-1
+                            try:
+                                await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                                stop_params = {'stopPrice': price, 'reduceOnly': True}
+                                # --- ШТУЧНЫЙ ФИКС V32.4: ЗРЯЧИЙ БЕЗУБЫТОК ПОСЛЕ ТЕЙКА-1 ---
+                                # Берем реальную цену входа из RAM и оставшийся объем half_qty
+                                #live_bu_price = float(exchange.price_to_precision(clean_symbol, pos['price']))
+                                #await exchange.create_order(raw_symbol, 'STOP_MARKET', exit_side, half_qty, params={'stopPrice': live_bu_price, 'reduceOnly': True})
+                                stop_p = {'stopPrice': live_bu_price, 'reduceOnly': True}
+                                await exchange.create_order(raw_symbol, 'STOP_MARKET', exit_side, half_qty, params=stop_p)
+                            except:
+                                pass
+                        else:
+                            # Защита дробления мелкого лота
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']))
+                            if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                            continue
+                    except Exception as tp1_err:
+                        log(f"⚠️ Сбой исполнения Тейка-1 для {clean_symbol}: {tp1_err}")
+
+                # ТЕЙК-2: Финальное закрытие остатка позиции при достижении экстремума
+                if memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp2']:
+                    log(f"🏆 [ТЕЙК-2 ФИHАЛ]: Позиция {clean_symbol} полностью отработала ДНК-цели (+{round(pnl*100, 2)}%)")
+                    try:
+                        await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                        await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']))
+                        if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                        if raw_symbol in memory.be_fixed: del memory.be_fixed[raw_symbol]
+                        if raw_symbol in memory.stop_placed: del memory.stop_placed[raw_symbol]
+                        if raw_symbol in memory.tp_fixed: del memory.tp_fixed[raw_symbol]
+                        if f"{raw_symbol}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{raw_symbol}_trail"]
+                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                        continue
+                    except Exception as tp2_err:
+                        log(f"⚠️ Сбой исполнения Тейка-2 для {clean_symbol}: {tp2_err}")
+#======
+
+                # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Если застряли в болоте)
+
+                # 4. КОНТУР УТИЛИЗАЦИИ И ЖЕСТКОГО СНОСА ПО МАТРИЦЕ ДНК-КЛАССОВ V31.0
+                gd = memory.all_dna.get(clean_symbol, {}).get(pos['gear'], {'time': 2700, 'tp1': 0.03})
+
+                # --- [ВРЕЗКА V31.0: ИНТЕЛЛЕКТУАЛЬНЫЙ КЛАССИФИКАТОР ВОЛАТИЛЬНОСТИ] ---
+                # Принудительно определяем параметры стопа и Храповика в зависимости от генетики монеты
+                token_upper = clean_symbol.upper()
+
+                if any(meme in token_upper for meme in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME']):
+                    # Класс «МЕМЫ»
+                    class_sl = -0.0074
+                    class_trigger_pct = 0.81
+                elif any(tech in token_upper for tech in ['SOL', 'TRB', 'APT', 'FIL', 'RENDER', 'FET', 'OP', 'STORJ', 'GLM', 'TIA', 'AEVO', 'C98']):
+                    # Класс «ТЕХ-ДРАЙВЕРЫ»
+                    class_sl = -0.0053
+                    class_trigger_pct = 0.77
+                else:
+                    # Класс «ЯКОРЯ» (Все остальные монеты по дефолту)
+                    class_sl = -0.0038
+                    class_trigger_pct = 0.72
+
+                # --- ВЫЧИСЛИТЕЛЬНОЕ ЯДРО СНОСА ПО КОНТУРАМ ЗАЩИТЫ ---
+                # Контур 1: Таймер флэта (Если прошло 45 минут, а Тейка-1 еще не было)
+                is_time_out = (age > gd['time'] and pnl < gd['tp1'])
+
+                # Контур 2: Досрочный Программный Храповик RAM (Взводится до Тейка-1 при прохождении Х% пути к цели)
+        #        is_bu_triggered = (pnl >= gd['tp1'] * class_trigger_pct) and (pnl <= 0.0009)
+                # Контур 2: Досрочный Храповик RAM (До Тейка-1 взводится на 77% пути, после Тейка-1 защищает остаток в +0.09%)
+                is_bu_triggered = (not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1'] * class_trigger_pct and pnl <= 0.0009) or (memory.tp_fixed.get(raw_symbol, False) and pnl <= 0.0009)
+
+                # Контур 3: Жесткий Стоп смерти импульса первой фазы (Если ракета сразу летит против нас)
+                is_momentum_dead = (pnl <= class_sl)
+
+                if is_time_out or is_bu_triggered or is_momentum_dead:
+                    log(f"⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос {clean_symbol} | PNL: {round(pnl*100, 3)}% | Триггер: T={is_time_out}/BU={is_bu_triggered}/SL={is_momentum_dead}")
+                    action_triggered_decay = False
+                    try:
+                        # Наносекундно зачищаем сопутствующие лимитки на Бинансе
+                        binance_market_id = raw_symbol.replace('/', '').replace(':USDT', '')
+                        await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+
+                        # Извлекаем прецизионный float-объем напрямую из CCXT пакета позиции
+                        exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
+
+                        # Бьем встречным маркетом с флагом reduceOnly для моментального схлопывания контракта
+                        await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
+                        action_triggered_decay = True
+                    except Exception as decay_err:
+                        log(f"⚠ Ошибка маркет-сноса матрицы классов для {clean_symbol}: {decay_err}")
+
+                    # Тотальное каскадное выжигание RAM-памяти для полного освобождения маржинального слота
+                    for k in [raw_symbol, clean_symbol, f"{clean_symbol}:USDT"]:
+                        if k in memory.active_pos: del memory.active_pos[k]
+                        if k in memory.be_fixed: del memory.be_fixed[k]
+                        if k in memory.stop_placed: del memory.stop_placed[k]
+                        if k in memory.tp_fixed: del memory.tp_fixed[k]
+
+                    memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                    continue
+
+
+                # 5. ТОТАЛЬНО ЗРЯЧИЙ ВЕНИК-ОПРОС BINANCE FUTURES (Реставрация старого канона V27.8)
+                if int(time.time()) % 15 == 0 and age > 90:
+                    try:
+                        positions = await exchange.fetch_positions()
+                        #live_symbols = [p['symbol'] for p in positions if abs(float(p.get('contracts', 0))) > 0.00001]
+
+                        # Приводим тикер к единому биржевому REST-стандарту без косых черт
+                        #clean_live_key = clean_symbol.replace('/', '')
+
+                        # --- [ВРЕЗКА V29.5: ТОТАЛЬНОЕ RAW-ЗРЕНИЕ ВЕНИКА BINANCE] ---
+                        # Собираем чистые сырые тикеры позиций напрямую из CCXT-пакета Бинанса
+                        #live_symbols = [str(p['symbol']) for p in positions if abs(float(p.get('contracts', p.get('positionAmt', 0)))) > 0.00001]
+
+                        # --- [ВРЕЗКА V37.0: АППАРАТНЫЙ ПЫЛЕСОС СИРОТ И ПЫЛИ ВЕНИКА] ---
+
+                        # --- [ВРЕЗКА V40.0: ИСТИННЫЙ СБОРЩИК ПЫЛИ ВЕНИКА] ---
+                        live_symbols = []
+                        for p in positions:
+                            p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
+                            if p_vol > 0.00001:
+                                p_price = float(p.get('entryPrice', p.get('markPrice', 1.0)))
+                                p_raw_sym = str(p['symbol'])
+                                p_clean_sym = p_raw_sym.split(':')[0]
+
+                                # Если долларовая стоимость позы меньше $1.0 — сжигаем мусор встречным ордером!
+                                if (p_vol * p_price) < 1.0:
+                                    try:
+                                        p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
+                               #         p_exact_vol = float(exchange.amount_to_precision(p_clean_sym, p_vol))
+                                        p_exact_vol = float(exchange.amount_to_precision(str(p_clean_sym), p_vol))
+                                        await exchange.create_market_order(p_raw_sym, p_exit_side, p_exact_vol, {'reduceOnly': True})
+                                        log(f"🧹🔥 [ПЫЛЕСОС]: Выжжен остаток {p_clean_sym} весом ${r ound(p_vol * p_price, 2)}!")
+                                    except: pass
+                                else:
+                                    live_symbols.append(p_raw_sym)
+
+                        # Сверяем исходный raw_symbol (XRP/USDT:USDT) напрямую с биржевым массивом
+                        if raw_symbol not in live_symbols:
+
+                        #if clean_live_key not in live_symbols:
+                            log(f"🧹 [ВЕНИК V27.8]: Позиция {clean_symbol} реально закрыта извне (Ст оп/БУ). Очистка RAM.")
+                            if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                            if raw_symbol in memory.be_fixed: del memory.be_fixed[raw_symbol]
+                            if raw_symbol in memory.stop_placed: del memory.stop_placed[raw_symbol]
+                            if raw_symbol in memory.tp_fixed: del memory.tp_fixed[raw_symbol]
+                            if f"{raw_symbol}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{raw_symbol}_trail"]
+                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                    except Exception as venik_err:
+                        pass
+
+#======
+            except Exception as e:
+                pass
+
+        await asyncio.sleep(0.5)
+
+async def main():
+    exchange = ccxt.binance({
+        'apiKey': API_KEY, 'secret': API_SECRET,
+        'options': {'defaultType': 'future'}, 'enableRateLimit': True
+    })
+    # --- ШТУЧНЫЙ ФИКС V24.9: АСИНХРОННЫЙ ПРОГРЕВ МАКРО-СПЕЦИФИКАЦИЙ БИНАНСА ---
+    await exchange.load_markets()
+
+    with open('dna_ignition.json', 'r') as f:
+        memory.all_dna = json.load(f)
+
+    log(f"✅ TITAN IGNITION V21.8 ONLINE. Охота на {len(memory.all_dna)} секторов.")
+
+    async def price_stream():
+        symbols = list(memory.all_dna.keys())
+        last_prices_beacon = time.time()
+        while memory.is_running:
+            try:
+                tickers = await exchange.fetch_tickers()
+                for s in symbols:
+                    if s in tickers and tickers[s].get('last'):
+                        memory.prices[s] = float(tickers[s]['last'])
+
+                # --- [ТУМБЛЕРНЫЙ МАЯК ПОТOKA ЦЕН: РАБОТАЕТ ПРИ TRUE] ---
+                if DEBUG_BEACONS and (time.time() - last_prices_beacon > 120):
+                    log(f"📡 МАЯК ЦЕН: Поток стабилен. На связи {len(memory.prices)}/{len(symbols)} секторов фьючерсного стакана.")
+                    last_prices_beacon = time.time()
+
+                await asyncio.sleep(1)
+            except Exception:
+                await asyncio.sleep(5)
+
+    async def hunter_loop():
+        await asyncio.sleep(5)
+        last_beacon_t = 0
+        while memory.is_running:
+            for s in memory.all_dna.keys():
+                sig, last_beacon_t = await check_signal(exchange, s, last_beacon_t)
+                if sig:
+                    await execute_entry(exchange, sig)
+            await asyncio.sleep(0.4)
+
+    try:
+        await asyncio.gather(
+            update_balance(exchange),
+            price_stream(),
+            hunter_loop(),
+            monitor_logic(exchange)
+        )
+    finally:
+        await exchange.close()
+
+if __name__ == "__main__":
+    asyncio.run(main())
