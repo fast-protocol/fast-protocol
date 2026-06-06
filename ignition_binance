@@ -101,8 +101,11 @@ async def update_balance(exchange):
 
                             if p_raw_sym not in memory.active_pos and p_raw_sym in memory.all_dna:
                                 entry_p = float(p.get('entryPrice', p.get('price', 0)))
-                                side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
-                                side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
+                                #side_raw = p.get('side', p.get('positionSide', 'LONG')).lower()
+                                #side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
+
+                                p_amt_raw = float(p.get('positionAmt', 0))
+                                side = 'buy' if p_amt_raw > 0 else 'sell'
                                 dna = memory.all_dna[p_raw_sym]
 
                                 memory.active_pos[p_raw_sym] = {
@@ -622,12 +625,12 @@ async def monitor_logic(exchange):
                 if not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1']:
                     log(f"🎯 [ТЕЙК-1 БИHАHС]: Цель по {clean_symbol} взята (+{round(pnl*100, 2)}%). Крою 50% объема.")
                     try:
-                        half_qty = float(exchange.amount_to_precision(clean_symbol, pos['vol'] / 2))
+                        half_qty = float(exchange.amount_to_precision(raw_symbol, pos['vol'] / 2))
                         # --- [ВРЕЗКА V37.0: ПЫЛЕСОС МЕЛОЧИ В ТЕЙКЕ-1] ---
                         total_pos_usd = pos['vol'] * cur_p
                         if total_pos_usd > 2.0 and half_qty > 0 and half_qty < pos['vol']:
-                            await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, half_qty))
-                            pos['vol'] = float(exchange.amount_to_precision(clean_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
+                            await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol, half_qty))
+                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
                             memory.tp_fixed[raw_symbol] = True
 
                             # Автоматический перенос стопа в безубыток после Тейка-1
@@ -713,7 +716,7 @@ async def monitor_logic(exchange):
                         await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
 
                         # Извлекаем прецизионный float-объем напрямую из CCXT пакета позиции
-                        exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
+                        exact_clean_vol = float(exchange.amount_to_precision(raw_symbol, float(pos['vol'])))
 
                         # Бьем встречным маркетом с флагом reduceOnly для моментального схлопывания контракта
                         await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
