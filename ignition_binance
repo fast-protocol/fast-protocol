@@ -372,59 +372,59 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
 async def execute_entry(exchange, sig):
     """
-    Импульсный захват позиции по рынку на фьючерсах Binance V24.9.5.
-    Возврат к рабочей архитектуре create_market_order с прецизией лота.
+    Импульсный захват позиции по рынку на фьючерсах Binance V40.0.
+    Безошибочный монолит с проверкой маржи и фиксом косой черты плеч.
     """
-    raw_symbol = sig['symbol']
+    # 1. АППАРАТНЫЙ ПРЕДОХРАНИТЕЛЬ: Выполняется до любых расчетов маржи кошелька
+    try:
+        bal_info = await exchange.fetch_balance()
+        live_available = float(bal_info.get('info', {}).get('availableBalance', 0))
+        if live_available < 2.0:
+            # Бесшумный выход, если Бинанс лагает или маржи реально мало
+            return
+    except:
+        return
 
-    # КАНОНИЧЕСКИЙ ОЧИСТИТЕЛЬ ТИКЕРА: Приводим 'LINK/USDT:USDT' к биржевому формату 'LINK/USDT'
+    raw_symbol = sig['symbol']
+    # Очищаем тикер для внутренних RAM флагов ('LINK/USDT')
     symbol = raw_symbol.split(':')[0]
 
     if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos:
         return
 
     try:
+        # СБОР ЖЕСТКОГО БИРЖЕВОГО ID КОНТРАКТА ДЛЯ МЕТОДОВ ПЛЕЧА BINANCE ('ADAUSDT')
+        binance_id_clean = str(symbol).replace('/', '')
 
-        # --- [ВРЕЗКА V39.5: ПРЕДOХРАНИТЕЛЬ МАРЖИ И ЗАПРЕТ МУСOРНЫХ СЛOТOВ] ---
-        # Запрашиваем живой доступный остаток на бирже прямо перед ударом
-        bal_info = await exchange.fetch_balance()
-        live_available = float(bal_info.get('info', {}).get('availableBalance', 0))
-
-        # Жесткий порог: если свободной маржи меньше $2.0 — запрещаем открывать новые слоты!
-        if live_available < 2.0:
-            log(f"🛡️ [MARGIN FLOOR SHIELD]: Отмена входа по {sig['symbol']}. Доступно всего ${round (live_available, 2)} < Лимита $2.0. Копим кэш до Тейков!")
-            return
-
-        # 1. Динамическое определение эффективного плеча с учетом лимита субаккаунта
+        # Динамическое определение эффективного плеча с учетом лимита субаккаунта
         dna_lev = int(sig['dna']['lev'])
         effective_leverage = min(dna_lev, MAX_ACCOUNT_LEVERAGE)
 
-        # Принудительный базовый стык плеча и Isolated-маржи на Бинансе
-        try: await exchange.set_leverage(effective_leverage, symbol)
+        # Принудительный базовый стык плеча и Isolated-маржи на Бинансе по ЧИСТОМУ ID
+        try: await exchange.set_leverage(effective_leverage, binance_id_clean)
         except: pass
-        try: await exchange.set_margin_mode('ISOLATED', symbol)
+        try: await exchange.set_margin_mode('ISOLATED', binance_id_clean)
         except: pass
 
-        # 2. МАТЕМАТИЧЕСКИЙ РАСЧЕТ НОМИНАЛЬНОГО ОБЪЕМА ПОД РЕАЛЬНОЕ ПЛЕЧО
+        # МАТЕМАТИЧЕСКИЙ РАСЧЕТ НОМИНАЛЬНОГО ОБЪЕМА ПОД ОБНОВЛЕННУЮ МАРЖУ ОЗУ
         amount_usdt = memory.available * RISK_GEAR * effective_leverage
 
-        # Переводим объем в эквивалент базовых монет под реальное плечо 5х
+        # Переводим объем в эквивалент базовых монет
         raw_qty = amount_usdt / sig['price']
 
-        # Округляем строго по фьючерсным шагам Бинанса, используя очищенный тикер
+        # Округляем строго по фьючерсным шагам Бинанса, используя стандартный тикер
         qty = float(exchange.amount_to_precision(symbol, raw_qty))
-
         if qty <= 0:
             return
 
-        # --- ШТУЧНЫЙ КВАНТОВЫЙ ДЕБАГ V25.0: ВСКРЫТИЕ МАРЖИНАЛЬНОЙ СЛЕПОТЫ ---
+        # --- ШТУЧНЫЙ КВАНТОВЫЙ ДЕБАГ V40.0: ВСКРЫТИЕ МАРЖИНАЛЬНОЙ СЛЕПОТЫ ---
         log(f"🔍 [Debug entry]: Available Margin: ${round(memory.available, 4)} | RISK_GEAR: {RISK_GEAR}")
         log(f"🔍 [Debug entry]: Target Leverage: {sig['dna']['lev']}x | Price: {sig['price']}")
         log(f"🔍 [Debug entry]: Calculated Nom Volume (with leverage): ${round(amount_usdt, 2)}")
         log(f"🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: {qty} монет")
-        # 3. ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Возвращаем проверенный create_market_order из старого рабочего бота!
-        order = await exchange.create_market_order(symbol, sig['side'], qty)
 
+        # ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Рыночный приказ входа
+        order = await exchange.create_market_order(symbol, sig['side'], qty)
         if order:
             log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty} | Общий баланс: ${round(memory.total_wallet, 2)}")
 
@@ -616,8 +616,10 @@ async def monitor_logic(exchange):
                                 stop_params = {'stopPrice': price, 'reduceOnly': True}
                                 # --- ШТУЧНЫЙ ФИКС V32.4: ЗРЯЧИЙ БЕЗУБЫТОК ПОСЛЕ ТЕЙКА-1 ---
                                 # Берем реальную цену входа из RAM и оставшийся объем half_qty
-                                live_bu_price = float(exchange.price_to_precision(clean_symbol, pos['price']))
-                                await exchange.create_order(raw_symbol, 'STOP_MARKET', exit_side, half_qty, params={'stopPrice': live_bu_price, 'reduceOnly': True})
+                                #live_bu_price = float(exchange.price_to_precision(clean_symbol, pos['price']))
+                                #await exchange.create_order(raw_symbol, 'STOP_MARKET', exit_side, half_qty, params={'stopPrice': live_bu_price, 'reduceOnly': True})
+                                stop_p = {'stopPrice': live_bu_price, 'reduceOnly': True}
+                                await exchange.create_order(raw_symbol, 'STOP_MARKET', exit_side, half_qty, params=stop_p)
                             except:
                                 pass
                         else:
@@ -737,7 +739,8 @@ async def monitor_logic(exchange):
                                 if (p_vol * p_price) < 1.0:
                                     try:
                                         p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
-                                        p_exact_vol = float(exchange.amount_to_precision(p_clean_sym, p_vol))
+                               #         p_exact_vol = float(exchange.amount_to_precision(p_clean_sym, p_vol))
+                                        p_exact_vol = float(exchange.amount_to_precision(str(p_clean_sym), p_vol))
                                         await exchange.create_market_order(p_raw_sym, p_exit_side, p_exact_vol, {'reduceOnly': True})
                                         log(f"🧹🔥 [ПЫЛЕСОС]: Выжжен остаток {p_clean_sym} весом ${r ound(p_vol * p_price, 2)}!")
                                     except: pass
