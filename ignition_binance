@@ -105,7 +105,9 @@ async def update_balance(exchange):
                                 #side = 'buy' if ('long' in side_raw or 'buy' in side_raw) else 'sell'
 
                                 p_amt_raw = float(p.get('positionAmt', 0))
+                                if p_amt_raw == 0: continue  # Намертво выжигаем пустые дубликаты Бинанса!
                                 side = 'buy' if p_amt_raw > 0 else 'sell'
+
                                 dna = memory.all_dna[p_raw_sym]
 
                                 memory.active_pos[p_raw_sym] = {
@@ -377,14 +379,48 @@ async def check_signal(exchange, symbol, last_beacon_t):
                     return None, last_beacon_t
 
         # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
+        # --- [ВРЕЗКА V43.0: АДАПТИВНЫЕ ПОЛОСЫ ДНК И ТУМБЛЕР РЕЖИМА ОРДЕРА] ---
+        channel_width = abs(p_up - p_dn) / ma_prev * 100.0
+        is_meme = any(m in symbol.upper() for m in ['PEPE', 'WIF', 'POPCAT', 'SHIB', 'BONK', 'FLOKI', 'DOGE'])
+        is_anchor = any(a in symbol.upper() for a in ['BNB', 'LINK', 'AVAX', 'ADA', 'CRV'])
+
+        # Настраиваем индивидуальные пороги Ракета/Откат под классы монет
+        if is_meme:
+            rocket_threshold, rebound_pct = 3.5, 0.0048
+        elif is_anchor:
+            rocket_threshold, rebound_pct = 1.1, 0.0018
+        else:
+            rocket_threshold, rebound_pct = 1.8, 0.0030
+
+        # Выбираем режим ордера: MARKET для истинного взрыва, LIMIT для отката
+        sig_gear = 'MARKET' if (channel_width >= rocket_threshold and w_growth >= 1.25) else 'LIMIT'
+
+        target_price = cur_p
+        if sig_gear == 'LIMIT':
+            target_price = cur_p * (1.0 - rebound_pct) if is_buy_candidate else cur_p * (1.0 + rebound_pct)
+
+        # Контур Ножа Боллинджера: страхует только рыночные ордера
+        adaptive_offset = 0.05 if is_meme else 0.15
+        long_barrier, short_barrier = ma_prev * (1.0 - adaptive_offset), ma_prev * (1.0 + adaptive_offset)
+
+        if sig_gear == 'MARKET':
+            if is_buy_candidate and is_3_red and cur_p <= long_barrier: return None, last_beacon_t
+            if is_sell_candidate and is_3_green and cur_p >= short_barrier: return None, last_beacon_t
+
         return {
-            'symbol': symbol,
-            'side': 'buy' if is_buy_candidate else 'sell',
-            'gear': gear,
-            'price': cur_p,
-            'dna': dna,
-            'gear_data': dna[gear]
+            'symbol': raw_symbol, 'side': 'buy' if is_buy_candidate else 'sell',
+            'price': target_price, 'gear_type': sig_gear,
+            'gear': 'g2' if is_g2 else 'g1', 'gear_data': gd, 'dna': current_dna
         }, last_beacon_t
+
+ #       return {
+ #           'symbol': symbol,
+ #           'side': 'buy' if is_buy_candidate else 'sell',
+ #           'gear': gear,
+ #           'price': cur_p,
+ #           'dna': dna,
+ #           'gear_data': dna[gear]
+ #       }, last_beacon_t
 
     except Exception as err:
         # Полная изоляция критических сбоев расчета
@@ -446,7 +482,16 @@ async def execute_entry(exchange, sig):
         log(f"🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: {qty} монет")
 
         # ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Рыночный приказ входа
-        order = await exchange.create_market_order(symbol, sig['side'], qty)
+
+#        order = await exchange.create_market_order(symbol, sig['side'], qty)
+
+        # ИСПОЛНИТЕЛЬНЫЙ ШЛЮЗ V43.0: МАРКЕТ В РАКЕТУ / ПАССИВНЫЙ ЛИМИТ В ОТКАТ
+        g_type = sig.get('gear_type', 'MARKET')
+        if g_type == 'MARKET':
+            order = await exchange.create_market_order(symbol, sig['side'], qty)
+        else:
+            order = await exchange.create_order(raw_symbol, 'LIMIT', sig['side'], qty, price=sig['price'])
+
         if order:
             log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty} | Общий баланс: ${round(memory.total_wallet, 2)}")
 
@@ -590,13 +635,15 @@ async def monitor_logic(exchange):
                     if is_pos_long:
                         peak_geo = entry_price_f * (1.0 + current_peak)
                         catapult_trigger_raw = peak_geo * (1.0 - optimal_trail_step)
-                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
+#                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
+                        catapult_trigger = float(exchange.price_to_precision(raw_symbol.split(':'), catapult_trigger_raw))
                         is_catapult_fired = (cur_p <= catapult_trigger)
                     else:
                         # Корректная тригонометрия шорта: откат вверх от дна прибыли
                         peak_geo = entry_price_f * (1.0 - current_peak)
                         catapult_trigger_raw = peak_geo * (1.0 + optimal_trail_step)
-                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
+#                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
+                        catapult_trigger = float(exchange.price_to_precision(raw_symbol.split(':'), catapult_trigger_raw))
                         is_catapult_fired = (cur_p >= catapult_trigger)
 
                     # Выводим дебаг в консоль раз в 15 секунд
@@ -625,12 +672,18 @@ async def monitor_logic(exchange):
                 if not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1']:
                     log(f"🎯 [ТЕЙК-1 БИHАHС]: Цель по {clean_symbol} взята (+{round(pnl*100, 2)}%). Крою 50% объема.")
                     try:
-                        half_qty = float(exchange.amount_to_precision(raw_symbol, pos['vol'] / 2))
+            #            half_qty = float(exchange.amount_to_precision(raw_symbol, pos['vol'] / 2))
+                        half_qty = float(exchange.amount_to_precision(raw_symbol.split(':')[0], pos['vol'] / 2))
                         # --- [ВРЕЗКА V37.0: ПЫЛЕСОС МЕЛОЧИ В ТЕЙКЕ-1] ---
                         total_pos_usd = pos['vol'] * cur_p
                         if total_pos_usd > 2.0 and half_qty > 0 and half_qty < pos['vol']:
-                            await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol, half_qty))
-                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
+#===
+                            p_params = {'reduceOnly': True}
+                            await exchange.create_order(raw_symbol, 'MARKET', exit_side, half_qty, params=p_params)
+#===
+#                            await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol, half_qty))
+#                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
+                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol.split(':')[0], pos['vol'] - half_qty))
                             memory.tp_fixed[raw_symbol] = True
 
                             # Автоматический перенос стопа в безубыток после Тейка-1
@@ -697,7 +750,8 @@ async def monitor_logic(exchange):
 
                 # --- ВЫЧИСЛИТЕЛЬНОЕ ЯДРО СНОСА ПО КОНТУРАМ ЗАЩИТЫ ---
                 # Контур 1: Таймер флэта (Если прошло 45 минут, а Тейка-1 еще не было)
-                is_time_out = (age > gd['time'] and pnl < gd['tp1'])
+#                is_time_out = (age > gd['time'] and pnl < gd['tp1'])
+                is_time_out = ((time.time() - pos['entry_time']) > gd['time'] and pnl < gd['tp1'])
 
                 # Контур 2: Досрочный Программный Храповик RAM (Взводится до Тейка-1 при прохождении Х% пути к цели)
         #        is_bu_triggered = (pnl >= gd['tp1'] * class_trigger_pct) and (pnl <= 0.0009)
@@ -719,7 +773,10 @@ async def monitor_logic(exchange):
                         exact_clean_vol = float(exchange.amount_to_precision(raw_symbol, float(pos['vol'])))
 
                         # Бьем встречным маркетом с флагом reduceOnly для моментального схлопывания контракта
-                        await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
+#                        await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
+                        p_params = {'reduceOnly': True}
+                        await exchange.create_order(raw_symbol, 'MARKET', exit_side, exact_clean_vol, params=p_params)
+
                         action_triggered_decay = True
                     except Exception as decay_err:
                         log(f"⚠ Ошибка маркет-сноса матрицы классов для {clean_symbol}: {decay_err}")
@@ -762,19 +819,42 @@ async def monitor_logic(exchange):
                                 # Если долларовая стоимость позы меньше $1.0 — сжигаем мусор встречным ордером!
 
                                 # Если общая стоимость позы на бирже меньше $1.0 — это мусорный остаток! Уничтожаем мгновенно!
+                                # --- [КОНТУР V43.0: ИСТИННЫЙ ПЫЛЕСОС И ЗРЯЧЕЕ УСЫНОВЛЕНИЕ ЛОНГОВ] ---
                                 if (p_vol * p_price) < 1.0:
                                  try:
                                     p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
-                                    # Скармливаем сырой строковый тикер с двоеточием, чтобы CCXT Бинанса не падал в краш!
                                     p_exact_vol = float(exchange.amount_to_precision(p_raw_sym, p_vol))
                                     p_params = {'reduceOnly': True}
                                     await exchange.create_order(p_raw_sym, 'MARKET', p_exit_side, p_exact_vol, params=p_params)
-
-                                    #cawait exchange.create_market_order(p_raw_sym, p_exit_side, p_exact_vol, {'reduceOnly': True})
                                     log(f"🧹🔥 [УТРЕННИЙ ПЫЛЕСОС]: Намертво уничтожен мусорный остат ок {p_raw_sym} весом ${round(p_vol * p_price, 2)}!")
-                                 except Exception as p_err:
-                                    log(f"⚠ Сбой Пылесоса внутри try по {p_raw_sym}: {p_err}")
+                                 except: pass
                                  continue
+                                else:
+                                  live_symbols.append(p_raw_sym)
+
+                                  # Шлюз усыновления тяжелых живых позиций
+                                  if p_raw_sym not in memory.active_pos and p_raw_sym in memory.all_dna:
+                                    p_amt_raw = float(p.get('positionAmt', 0))
+                                    if p_amt_raw == 0:
+                                        continue
+
+                                    side = 'buy' if p_amt_raw > 0 else 'sell'
+                                    entry_p = float(p.get('entryPrice', p.get('price', 0)))
+                                    dna = memory.all_dna[p_raw_sym]
+
+                                    memory.active_pos[p_raw_sym] = {
+                                        'side': side, 'vol': p_vol, 'price': entry_p,
+                                        'gear': 'g1', 'gear_data': dna['g1'], 'dna': dna,
+                                        'entry_time': time.time()
+                                    }
+                                    memory.tp_fixed[p_raw_sym] = False
+                                    memory.be_fixed[p_raw_sym] = False
+                                    memory.stop_placed[p_raw_sym] = entry_p
+                                    memory.slots_occupied += 1
+                                    log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Успешно подхвачен ядром выходов!")
+                                except Exception as p_err:
+                                    log(f"⚠ Сбой Пылесоса внутри try по {p_raw_sym}: {p_err}")
+                                continue
 
                                 live_symbols.append(p_raw_sym)
 
@@ -844,8 +924,21 @@ async def main():
             await asyncio.sleep(0.4)
 
     try:
+       # await asyncio.gather(
+       #     update_balance(exchange),
+       #     price_stream(),
+       #     hunter_loop(),
+       #     monitor_logic(exchange)
+       # )
+        # --- [ФИКС V43.2: АСИНХРОННЫЙ ЗАМОК СТЕРИЛИЗАЦИИ ОЗУ СИРОТ] ---
+        # 1. Сначала жестко запускаем фоновый съем балансов и Пылесос
+        asyncio.create_task(update_balance(exchange))
+
+        # 2. Даем шлюзам Бинанса 5 секунд форы обновиться и усыновить контракты
+        await asyncio.sleep(5)
+
+        # 3. Безопасно врубаем круглосуточные стримы, сканер и мониторинг выходов
         await asyncio.gather(
-            update_balance(exchange),
             price_stream(),
             hunter_loop(),
             monitor_logic(exchange)
