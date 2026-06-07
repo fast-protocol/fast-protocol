@@ -212,11 +212,10 @@ async def check_signal(exchange, symbol, last_beacon_t):
         if not dna or not cur_p:
             return None, last_beacon_t
 
-#==========================   ФИКС V80.5: АВТОМАТИЧЕСКАЯ КОРОБКА ПЕРЕДАЧ ДНК   ==================
-        # Вызываем глобальные тумблеры управления скоростью из кода бота
+#==========================   ФИКС V85.0: ГИБРИДНАЯ КРOСС-КOРOБКА DNA MULTIPLIERS   ============
         global transmission_mode, manual_gear_select
 
-        # Извлекаем базовую g1-передачу из JSON для текущей монеты
+        # Извлекаем индивидуальный g1-блок параметров монеты из JSON пульта
         gd = dna['g1'] if 'g1' in dna else dna
 
         # Контур авто-определения фазы рынка по времени сервера (UTC)
@@ -225,24 +224,27 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
         active_gear = manual_gear_select
         if transmission_mode == 'AUTO':
-            # Окна HFT-волатильности: Азия (03:30-06:00 МСК) и Америка (16:30-19:00 МСК)
-#==========================   ФИКС V82.0: ЖЕСТКИЙ ПРИОРИТЕТ ЕСО В ВЫХОДНЫЕ И ОПТИМИЗАЦИЯ СТОПОВ   =
-            # 1. Если сегодня выходной — намертво держим оборонительный режим ECO, игнорируя часы
             if is_weekend:
-                active_gear = 'ECO'
-            # 2. Азиатские и Американские окна DRIVE включаются строго в рабочие дни будней
+                active_gear = 'ECO'    # Выходной день — режим защиты маржи коэффициентами
             elif (0 <= current_hour <= 3) or (13 <= current_hour <= 16):
-                active_gear = 'DRIVE'
+                active_gear = 'DRIVE'  # Будни, HFT-сессии — режим быстрого скальпинга
             else:
-                active_gear = 'CRUISE'
+                active_gear = 'CRUISE' # Стандартные будни — чистый исходный ДНК-тренд
 
-        # Ювелирная калибровка параметров под реальную физику проскальзывания Бинанса
+        # Наносекундное динамическое перемножение коэффициентов ОЗУ под активную фазу
         if active_gear == 'DRIVE':
-            # Скальпинг: тейк микро-импульсов +0.45%, но стоп расширяем до -1.15% (защита от сквизов)
-            gd['risk'], gd['tp1'], gd['sl'], gd['time'] = 0.75, 0.0045, -0.0115, 180
+            # Сжимаем тейк-1 (*0.6), поджимаем стоп (*0.8), увеличиваем риск-нагрузку
+            gd['risk'] = float(gd.get('risk', 0.70)) * 1.15
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 0.60
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 0.85
+            gd['time'] = 180
         elif active_gear == 'ECO':
-            # Выходные: берем только глубокие откаты лимиток, тейк +0.80%, стоп широкий -1.45%
-            gd['risk'], gd['tp1'], gd['sl'], gd['time'] = 0.45, 0.0080, -0.0145, 450
+            # Расширяем тейк-1 (*1.1), раздвигаем стоп (*1.3) для защиты от шпилек ММ, режем риск
+            gd['risk'] = float(gd.get('risk', 0.70)) * 0.65
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 1.10
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 1.30
+            gd['time'] = 450
+
         else:
             # Режим CRUISE — оставляет твои первозданные проектные настройки из JSON пульта
             pass
@@ -543,8 +545,11 @@ async def execute_entry(exchange, sig):
         except: pass
 
         # МАТЕМАТИЧЕСКИЙ РАСЧЕТ НОМИНАЛЬНОГО ОБЪЕМА ПОД ОБНОВЛЕННУЮ МАРЖУ ОЗУ
-#        amount_usdt = memory.available * RISK_GEAR * effective_leverage
-        amount_usdt = float(live_available) * RISK_GEAR * effective_leverage
+#        amount_usdt = float(live_available) * RISK_GEAR * effective_leverage
+#==========================   ФИКС V83.0: ИНТЕГРАЦИЯ РИСКА ТРАНСМИССИИ ИЗ ОЗУ   ================
+        # Читаем адаптивный риск текущей передачи скорости (DRIVE / ECO / CRUISE)
+        adaptive_risk = float(sig['gear_data']['risk'])
+        amount_usdt = float(live_available) * adaptive_risk * effective_leverage
 
         # Переводим объем в эквивалент базовых монет
         raw_qty = amount_usdt / sig['price']
@@ -570,16 +575,24 @@ async def execute_entry(exchange, sig):
         log(f"⚡ [DEBUG EXECUTE]: Попытка входа по {symbol} | Тип ордера: {g_type} | Направление: {sig['side']} | Лот: {qty}")
 
         if g_type == 'MARKET':
+          try:
             log(f"🚀 [DEBUG ENTRY]: Отправляю рыночный ордер MARKET по {symbol}...")
             order = await exchange.create_market_order(symbol, sig['side'], qty)
             log(f"🚀 [DEBUG ENTRY]: Ордер MARKET по {symbol} успешно принят биржей! ID: {order.get('id') if order else 'None'}")
+#==========================   ФИКС V83.0: ЧИСТЫЙ ТИКЕР ЛИМИТКИ И ЗРЯЧИЙ ДЕБАГ   =================
+          except Exception as market_err:
+            log(f"🚨 [ОШИБКА БИРЖИ MARKET]: Бинанс отклонил рыночный ордер по symbol {symbol}: {market_err}")
         else:
+          try:
             log(f"📥 [DEBUG ENTRY]: Выставляю пассивную лимитку LIMIT по {symbol} по цене {sig['price']}...")
-            order = await exchange.create_order(raw_symbol, 'LIMIT', sig['side'], qty, price=sig['price'])
+            # Скармливаем CCXT чистый тикер symbol ("LINK/USDT") вместо raw_symbol с двоеточием
+            order = await exchange.create_order(symbol, 'LIMIT', sig['side'], qty, price=sig['price'])
             log(f"📥 [DEBUG ENTRY]: Лимитка LIMIT по {symbol} успешно упала в стакан! ID: {order.get('id') if order else 'None'}")
+          except Exception as limit_err:
+            log(f"🚨 [ОШИБКА БИРЖИ LIMIT]: Бинанс отклонил лимитную заявку по symbol {symbol}: {limit_err}")
 #================================================================================================
-
         if order:
+          try:
             log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty} | Общий баланс: ${round(memory.total_wallet, 2)}")
 
             # Записываем сделку в RAM под чистым биржевым ключом
@@ -592,9 +605,12 @@ async def execute_entry(exchange, sig):
             memory.be_fixed[symbol] = False
             memory.stop_placed[symbol] = None
             memory.slots_occupied += 1
+          except Exception as ram_err:
+            log(f"🚨 [ОШИБКА ОЗУ]: Сбой записи позиции в оперативную память: {ram_err}")
 
+#==========================   ФИКС V83.0: ЗРЯЧИЙ ВЫВОД КРАШЕЙ КАНАЛА ВХОДОВ   ===================
     except Exception as e:
-        log(f"⚠ Entry Error {symbol}: {e}")
+        log(f"🚨 [КРИТ ИСПОЛHИТЕЛЯ]: Тотальный срыв входа по монете {s}: {e}")
 
 async def monitor_logic(exchange):
     """Асинхронный бронированный контроль выходов и адаптивного пре-трейлинга V22.0 [ФИКС NEAR]"""
@@ -602,7 +618,7 @@ async def monitor_logic(exchange):
         # --- [ВРЕЗКА V28.4: СКВОЗНОЙ ДЕБАГ ШЛЮЗА ВЫХОДОВ] ---
 #        if int(time.time()) % 5 == 0:
 #            log(f"🛰️ [DEBUG GATE 1]: Цикл while активен. Текущий размер RAM active_pos: {len(memor y.active_pos)}")
-#            log(f"🛰️ [DEBUG GATE 2]: Сырые ключи в памяти active_pos: {list(memory.active_pos.keys ())}")
+#            log(f"🛰️ [DEBUG GATE 2]: Сырые ключи в памяти active_pos: {list(me mory.active_pos.keys())}")
 
         # Микро-пауза 200мс для предотвращения зависания процессора
         await asyncio.sleep(0.2)
