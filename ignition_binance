@@ -5,6 +5,11 @@ LOG_FILE = "ignition_log.txt"
 # --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
 MAX_ACCOUNT_LEVERAGE = 25  # Выставляем 5х (аппаратный потолок субаккаунта)
 
+# --- [ГЛОБАЛЬНЫЙ КВАНТОВЫЙ КОНФИГ ТРАНСМИССИИ V80.5] ---
+transmission_mode = "AUTO"      # Режимы: "AUTO" (Автомат сессий) или "MANUAL" (Ручной режим)
+manual_gear_select = "DRIVE"    # Передачи для MANUAL: "DRIVE" (Скальпинг) / "CRUISE" (Трендовый) / "ECO" (Защита)
+#================================================================================================
+
 # --- ТУМБЛЕР РЕЖИМА ДЕБАГА (ВКЛ / ВЫКЛ) ---
 DEBUG_BEACONS = False   # Сделай False, чтобы полностью выключить маяки в консоли
 
@@ -167,17 +172,29 @@ async def limit_orders_cleaner_loop(exchange):
     while True:
         try:
             # Поочередно зачищаем лимитные стаканы 33 монет ДНК раз в 45 секунд
-            for dna_sym in list(memory.all_dna.keys()):
-                binance_market_id = str(dna_sym).replace('/', '').replace(':USDT', '')
-                try:
-                    # Нативный шлюз Бинанса: сносит только пассивные лимитки внутри монеты за 0.001 сек!
-                    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
-                except:
-                    pass
+            # 1. Запрашиваем нативный эндпоинт Бинанса, который гарантированно вернет ВСЕ ордера
+            raw_orders = await exchange.fapiPrivateGetOpenOrders()
 
-            # Стерильно обнуляем счетчик занятых слотов маржи, оживляя новые входы сканера!
-            memory.slots_occupied = 0
-#============================================================================
+            if raw_orders and len(raw_orders) > 0:
+                orders_count = 0
+                for o_data in raw_orders:
+                    o_sym = str(o_data.get('symbol'))   # Нативный тикер ('OPUSDT')
+                    o_id = o_data.get('orderId')
+                    o_type = str(o_data.get('type')).upper()
+
+                    # Фильтруем и намертво сносим и лимитки, и условные стоп-триггеры
+                    if 'LIMIT' in o_type or 'STOP' in o_type or 'TAKE_PROFIT' in o_type:
+                        try:
+                            p_params = {'symbol': o_sym, 'orderId': o_id}
+                            await exchange.fapiPrivateDeleteOrder(p_params)
+                            orders_count += 1
+                        except Exception as inner_err:
+                            log(f"⚠ [ВЕHИК ОШИБКА]: Сбой нативного удаления ордера {o_sym} ID {o_id}: {inner_err}")
+
+                if orders_count > 0:
+                    log(f"🧹🔥 [ЯДЕРНЫЙ ВЕHИК]: Намертво выжжено {orders_count} протухших лимиток и  условных стопов!")
+                    memory.slots_occupied = 0
+
             await asyncio.sleep(45)
         except Exception as loop_ord_err:
             log(f"⚠ [КРИТ ВЕНИКА]: Сбой автономного сканера лимиток ДНК: {loop_ord_err}")
@@ -194,6 +211,43 @@ async def check_signal(exchange, symbol, last_beacon_t):
         cur_p = memory.prices.get(symbol)
         if not dna or not cur_p:
             return None, last_beacon_t
+
+#==========================   ФИКС V80.5: АВТОМАТИЧЕСКАЯ КОРОБКА ПЕРЕДАЧ ДНК   ==================
+        # Вызываем глобальные тумблеры управления скоростью из кода бота
+        global transmission_mode, manual_gear_select
+
+        # Извлекаем базовую g1-передачу из JSON для текущей монеты
+        gd = dna['g1'] if 'g1' in dna else dna
+
+        # Контур авто-определения фазы рынка по времени сервера (UTC)
+        current_hour = int(time.strftime("%H", time.gmtime()))
+        is_weekend = int(time.strftime("%w", time.gmtime())) in [0, 6] # 0-Воскресенье, 6-Суббота
+
+        active_gear = manual_gear_select
+        if transmission_mode == 'AUTO':
+            # Окна HFT-волатильности: Азия (03:30-06:00 МСК) и Америка (16:30-19:00 МСК)
+#==========================   ФИКС V82.0: ЖЕСТКИЙ ПРИОРИТЕТ ЕСО В ВЫХОДНЫЕ И ОПТИМИЗАЦИЯ СТОПОВ   =
+            # 1. Если сегодня выходной — намертво держим оборонительный режим ECO, игнорируя часы
+            if is_weekend:
+                active_gear = 'ECO'
+            # 2. Азиатские и Американские окна DRIVE включаются строго в рабочие дни будней
+            elif (0 <= current_hour <= 3) or (13 <= current_hour <= 16):
+                active_gear = 'DRIVE'
+            else:
+                active_gear = 'CRUISE'
+
+        # Ювелирная калибровка параметров под реальную физику проскальзывания Бинанса
+        if active_gear == 'DRIVE':
+            # Скальпинг: тейк микро-импульсов +0.45%, но стоп расширяем до -1.15% (защита от сквизов)
+            gd['risk'], gd['tp1'], gd['sl'], gd['time'] = 0.75, 0.0045, -0.0115, 180
+        elif active_gear == 'ECO':
+            # Выходные: берем только глубокие откаты лимиток, тейк +0.80%, стоп широкий -1.45%
+            gd['risk'], gd['tp1'], gd['sl'], gd['time'] = 0.45, 0.0080, -0.0145, 450
+        else:
+            # Режим CRUISE — оставляет твои первозданные проектные настройки из JSON пульта
+            pass
+#================================================================================================
+
 
         # --- [ШТУЧНЫЙ ФИКС V34.2: ТОТАЛЬНЫЙ ЗАПРЕТ ПОВТОРНЫХ ВХОДОВ В ОДИН АКТИВ] ---
         if symbol in memory.active_pos or symbol.split(':')[0] in memory.active_pos:
@@ -439,34 +493,36 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
         log(f"⚙️ [DEBUG 2Перед ретурном параметров. Всё прошли.")
 
-        return {
-            'symbol': raw_symbol, 'side': 'buy' if is_buy_candidate else 'sell',
-            'price': target_price, 'gear_type': sig_gear,
-            'gear': 'g2' if is_g2 else 'g1', 'gear_data': gd, 'dna': current_dna
-        }, last_beacon_t
-
+        # Сверяем код: возвращаем строго те переменные, которые реально объявлены в check_signal!
+        payload = {
+            'symbol': symbol,
+            'side': 'buy' if is_buy_candidate else 'sell',
+            'gear': gear,
+            'price': cur_p,
+            'dna': dna,
+            'gear_data': dna[gear]
+        }
+        return payload, last_beacon_t
     except Exception as err:
-        # Полная изоляция критических сбоев расчета
+        log(f"⚠ [КРИТ CHECK_SIGNAL]: Скрытый обрыв входа по {symbol}: {err}")
         return None, last_beacon_t
 
 async def execute_entry(exchange, sig):
     """
-    Импульсный захват позиции по рынку на фьючерсах Binance V40.0.
-    Безошибочный монолит с проверкой маржи и фиксом косой черты плеч.
+    Импульсный захват позиции по маркету/лимиту на фьючерсах Binance V72.0.
     """
-    # 1. АППАРАТНЫЙ ПРЕДОХРАНИТЕЛЬ: Выполняется до любых расчетов маржи кошелька
+    #global exchange
+    raw_symbol = sig['symbol']
+    symbol = raw_symbol.split(':')[0]
+
     try:
         bal_info = await exchange.fetch_balance()
         live_available = float(bal_info.get('info', {}).get('availableBalance', 0))
         if live_available < 2.0:
-            # Бесшумный выход, если Бинанс лагает или маржи реально мало
             return
-    except:
+    except Exception as bal_err:
+        log(f"⚠ [ВХOД КРАШ]: Сбой чтения баланса для {symbol}: {bal_err}")
         return
-
-    raw_symbol = sig['symbol']
-    # Очищаем тикер для внутренних RAM флагов ('LINK/USDT')
-    symbol = raw_symbol.split(':')[0]
 
     if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos:
         return
@@ -880,9 +936,12 @@ async def main():
         while memory.is_running:
             for s in memory.all_dna.keys():
                 sig, last_beacon_t = await check_signal(exchange, s, last_beacon_t)
+#                log(f"🚫 [DEBUG HUNTER]: Перед проверкой сигнала по {s} ! last_beacon_t= {last_beacon_t} sig = {sig}.")
                 if sig:
                     # Посекундно вскрываем состояние предохранителей в RAM для этой монеты, используя переменную цикла s
-                    log(f"🕵️‍♂️ [DEBUG HUNTER]: Поймали сигнал по {s}! Текущие слоты: {memory.slots _occupied}/{MAX_SLOTS} | Есть в RAM: {s in memory.active_pos}")
+#                    log(f"🕵️‍♂️ [DEBUG HUNTER]: Поймали сигнал по {s}! Текущие слоты: {memory.slot s_occupied}/{MAX_SLOTS} | Есть в RAM: {s in memory.active_pos}")
+                    log(f"🕵️‍♂️ [DEBUG HUNTER]: СИГНАЛ по {s}! Передача: {sig.get('gear', 'ECO')} |  Слоты: {memory.slots_occupied}/{MAX_SLOTS} | В RAM: {s in memory.active_pos}")
+
 
                     if memory.slots_occupied >= MAX_SLOTS:
                         log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Превышен лимит параллельных слотов MAX_SLOTS.")
@@ -892,21 +951,8 @@ async def main():
                         log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Монета уже удерживается в оперативной памяти.")
                         continue
 
-                    # Высчитываем истинный лот маржи, используя параметры из валидного пакета sig
-                    gd = sig['gear_data']
-                    current_dna = sig['dna']
-                    cur_p = sig['price']
-
-                    # Безопасно запрашиваем свободный кэш кошелька Бинанса прямо из ОЗУ балансов CCXT
-                    bal_data = await exchange.fetch_balance()
-                    free_cash = float(bal_data.get('free', {}).get('USDT', 0))
-
-                    # Математический синтез лота под плечо и ДНК-риск
-                    qty_raw = (free_cash * float(gd['risk']) * float(current_dna['m'])) / cur_p
-                    qty = float(exchange.amount_to_precision(s, qty_raw))
-
-                    log(f"🎯 [DEBUG HUNTER]: Все шлюзы пройдены! Передаю ордер по {s} весом {qty} в execute_entry...")
-                    await execute_entry(s, sig, qty)
+                    log(f"🎯 [DEBUG HUNTER]: Все шлюзы пройдены! Передаю сигнал по {s} в execute_entry...")
+                    await execute_entry(exchange, sig)
 #================================================================================================
 
                     #await execute_entry(exchange, sig)
