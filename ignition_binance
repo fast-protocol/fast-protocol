@@ -444,6 +444,45 @@ async def check_signal(exchange, symbol, last_beacon_t):
         # Истинный взрыв нитки: канал узкий, скорость бешеная, спот подтверждает базисом
         is_nitka_explosion = (channel_width < 0.65 and w_growth >= 1.25 and df['v'].iloc[-1] > df['v'].mean() * 2.0 and s_basis < 0.25)
 
+#==========================   ФИКС V89.0: ГИБРИДНАЯ КРOСС-КOРOБКА И БЛОКИРОВКА НИТКИ   ==========
+        # Вызываем глобальные тумблеры управления скоростью из кода бота
+#        global transmission_mode, manual_gear_select
+
+        # Извлекаем индивидуальный g1-блок параметров монеты из JSON пульта
+        gd = dna['g1'] if 'g1' in dna else dna
+
+        # Контур авто-определения фазы рынка по времени сервера (UTC)
+        current_hour = int(time.strftime("%H", time.gmtime()))
+        is_weekend = int(time.strftime("%w", time.gmtime())) in [0, 6] # 0-Воскресенье, 6-Суббота
+
+        active_gear = manual_gear_select
+        if transmission_mode == 'AUTO':
+            if is_weekend:
+                active_gear = 'ECO'    # Выходной день — режим защиты маржи коэффициентами
+            elif (0 <= current_hour <= 3) or (13 <= current_hour <= 16):
+                active_gear = 'DRIVE'  # Будни, HFT-сессии — режим быстрого скальпинга
+            else:
+                active_gear = 'CRUISE' # Стандартные будни — чистый исходный ДНК-тренд
+
+        # Динамическое перемножение коэффициентов параметров под активную фазу
+        if active_gear == 'DRIVE':
+            gd['risk'] = float(gd.get('risk', 0.70)) * 1.15
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 0.60
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 0.85
+            gd['time'] = 180
+        elif active_gear == 'ECO':
+            gd['risk'] = float(gd.get('risk', 0.70)) * 0.65
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 1.10
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 1.30
+            gd['time'] = 450
+
+        # Блокировка маркет-входов «Нитки» Боллинджера в пассивные ECO-часы выходных
+        if active_gear == 'ECO':
+            sig_gear = 'LIMIT'
+        else:
+            sig_gear = 'MARKET' if (channel_width >= rocket_threshold and w_growth >= 1.25) or is_nitka_explosion else 'LIMIT'
+#--------------------------------------
+
         if not is_nitka_explosion:
             # ПОКАНАЛЬНЫЙ РАЗЖИМ: Мемы летят свободно (5%), тяжелые Якоря зажимаем жестко (15%)
             is_meme = any(m in symbol.upper() for m in ['1000PEPE', 'WIF', 'POPCAT', '1000SHIB', '1000BONK', '1000FLOKI', 'DOGE'])
@@ -479,7 +518,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
             rocket_threshold, rebound_pct = 1.8, 0.0030
 
         # Выбираем режим ордера: MARKET для истинного взрыва, LIMIT для отката
-        sig_gear = 'MARKET' if (channel_width >= rocket_threshold and w_growth >= 1.25) else 'LIMIT'
+        #sig_gear = 'MARKET' if (channel_width >= rocket_threshold and w_growth >= 1.25) else 'LIMIT'
 
         target_price = cur_p
         if sig_gear == 'LIMIT':
@@ -548,14 +587,23 @@ async def execute_entry(exchange, sig):
 #        amount_usdt = float(live_available) * RISK_GEAR * effective_leverage
 #==========================   ФИКС V83.0: ИНТЕГРАЦИЯ РИСКА ТРАНСМИССИИ ИЗ ОЗУ   ================
         # Читаем адаптивный риск текущей передачи скорости (DRIVE / ECO / CRUISE)
+#        adaptive_risk = float(sig['gear_data']['risk'])
+#        amount_usdt = float(live_available) * adaptive_risk * effective_leverage
+
+        # Читаем адаптивный риск текущей передачи скорости (DRIVE / ECO / CRUISE)
         adaptive_risk = float(sig['gear_data']['risk'])
         amount_usdt = float(live_available) * adaptive_risk * effective_leverage
+
+        # Аппаратный щит Бинанса: если номинал меньше $21, принудительно тянем его до лимита биржи
+        if amount_usdt < 21.0:
+            amount_usdt = 21.0
 
         # Переводим объем в эквивалент базовых монет
         raw_qty = amount_usdt / sig['price']
 
         # Округляем строго по фьючерсным шагам Бинанса, используя стандартный тикер
-        qty = float(exchange.amount_to_precision(symbol, raw_qty))
+#        qty = float(exchange.amount_to_precision(symbol, raw_qty))
+        qty = float(exchange.amount_to_precision(raw_symbol, raw_qty))
         if qty <= 0:
             return
 
@@ -583,13 +631,25 @@ async def execute_entry(exchange, sig):
           except Exception as market_err:
             log(f"🚨 [ОШИБКА БИРЖИ MARKET]: Бинанс отклонил рыночный ордер по symbol {symbol}: {market_err}")
         else:
-          try:
-            log(f"📥 [DEBUG ENTRY]: Выставляю пассивную лимитку LIMIT по {symbol} по цене {sig['price']}...")
-            # Скармливаем CCXT чистый тикер symbol ("LINK/USDT") вместо raw_symbol с двоеточием
-            order = await exchange.create_order(symbol, 'LIMIT', sig['side'], qty, price=sig['price'])
-            log(f"📥 [DEBUG ENTRY]: Лимитка LIMIT по {symbol} успешно упала в стакан! ID: {order.get('id') if order else 'None'}")
-          except Exception as limit_err:
-            log(f"🚨 [ОШИБКА БИРЖИ LIMIT]: Бинанс отклонил лимитную заявку по symbol {symbol}: {limit_err}")
+            try:
+                binance_side = str(sig['side']).upper()
+                binance_market_id = str(symbol).replace('/', '') # Из "BNB/USDT" делаем "BNBUSDT"
+
+                log(f"📥 [DEBUG ENTRY]: Выставляю нативную лимитку LIMIT по {binance_market_id} по цене {sig['price']}...")
+
+                p_params = {
+                    'symbol': binance_market_id,
+                    'side': binance_side,
+                    'type': 'LIMIT',
+                    'quantity': qty,
+                    'price': sig['price'],
+                    'timeInForce': 'GTC'
+                }
+                order = await exchange.fapiPrivatePostOrder(p_params)
+                log(f"📥 [DEBUG ENTRY]: Нативная лимитка по {binance_market_id} успешно в стакане! ID: {order.get('orderId')}")
+            except Exception as limit_err:
+                log(f"🚨 [ОШИБКА БИРЖИ LIMIT]: Нативный шлюз Бинанса отклонил заявку по {symbol}: {limit_err}")
+
 #================================================================================================
         if order:
           try:
@@ -618,7 +678,7 @@ async def monitor_logic(exchange):
         # --- [ВРЕЗКА V28.4: СКВОЗНОЙ ДЕБАГ ШЛЮЗА ВЫХОДОВ] ---
 #        if int(time.time()) % 5 == 0:
 #            log(f"🛰️ [DEBUG GATE 1]: Цикл while активен. Текущий размер RAM active_pos: {len(memor y.active_pos)}")
-#            log(f"🛰️ [DEBUG GATE 2]: Сырые ключи в памяти active_pos: {list(me mory.active_pos.keys())}")
+#            log(f"🛰️ [DEBUG GATE 2]: Сырые ключи в памяти active_pos: {list(memory.active_pos.keys ())}")
 
         # Микро-пауза 200мс для предотвращения зависания процессора
         await asyncio.sleep(0.2)
