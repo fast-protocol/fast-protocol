@@ -114,6 +114,24 @@ async def update_balance(exchange):
                                     continue
                                 else:
                                     live_symbols.append(p_raw_sym)
+#================================   ФИКС V104.5: СИНХРОНИЗАЦИЯ ЧАСТИЧНОГО НАЛИВА ЛИМИТOК   ============
+                                    # Если монета уже торгуется ботом — жестко выравниваем лот ОЗУ по факту биржи
+                                    if p_raw_sym in memory.active_pos:
+                                        memory.active_pos[p_raw_sym]['vol'] = p_vol
+                                        # Если позиция появилась в списке реальных контрактов — включаем ведение!
+#==========================   ФИКС V108.0: РАЗДЕЛЬНЫЙ ПРАВДИВЫЙ ЛОГ ТИПОВ ОРДЕРОВ   =============
+                                        # Если позиция появилась в списке реальных контрактов — включаем ведение!
+                                        if not memory.active_pos[p_raw_sym]['is_live']:
+                                            # Извлекаем стартовый тип ордера из ОЗУ сигнала
+                                            parent_gear_type = memory.active_pos[p_raw_sym].get('gear_type', 'LIMIT')
+
+                                            if parent_gear_type == 'MARKET':
+                                                #log(f"🔥🛰️ [КОНВЕЙЕР]: Ордер MARKET по {p_raw_sym}  ПОДТВЕРЖДЕН биржей! Включаю зрячий Трейлинг.")
+                                                pass
+                                            else:
+                                                log(f"🔥🛰️ [КОНВЕЙЕР]: Пассивная лимитка по {p_raw_ sym} НАЛИТА на Бинансе! Включаю зрячий Трейлинг.")
+
+                                            memory.active_pos[p_raw_sym]['is_live'] = True
 
                                     # Жесткое усыновление тяжелых позиций строго по знаку объема
                                     # --- ЖЕСТКИЙ ФИКС V43.8: СИНХРОНИЗАЦИЯ КЛЮЧЕЙ С ДНК-ПУЛЬТОМ ---
@@ -133,7 +151,8 @@ async def update_balance(exchange):
                                         memory.active_pos[p_raw_sym] = {
                                             'side': side, 'vol': p_vol, 'price': entry_p,
                                             'gear': 'g1', 'gear_data': dna['g1'], 'dna': dna,
-                                            'entry_time': time.time()
+                                            'entry_time': time.time(),
+                                            'is_live': True  # Сирота с биржи легитимен, врубаем трейлинг сразу!
                                         }
                                         memory.tp_fixed[p_raw_sym] = False
                                         memory.be_fixed[p_raw_sym] = False
@@ -207,6 +226,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
     Полностью очищен от слепых зон и ложных стопов на хаях.
     """
     try:
+
         dna = memory.all_dna.get(symbol)
         cur_p = memory.prices.get(symbol)
         if not dna or not cur_p:
@@ -480,7 +500,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
         if active_gear == 'ECO':
             sig_gear = 'LIMIT'
         else:
-            sig_gear = 'MARKET' if (channel_width >= rocket_threshold and w_growth >= 1.25) or is_nitka_explosion else 'LIMIT'
+            sig_gear = 'MARKET' if (channel_width >= float(dna.get('rocket', 1.5)) and w_growth >= 1.25) or is_nitka_explosion else 'LIMIT'
 #--------------------------------------
 
         if not is_nitka_explosion:
@@ -534,15 +554,26 @@ async def check_signal(exchange, symbol, last_beacon_t):
 
         log(f"⚙️ [DEBUG 2Перед ретурном параметров. Всё прошли.")
 
+
+        # Жестко отсекаем ложные фантомные шорты, если условия входа не выполнены
+        if not is_buy_candidate and not is_sell_candidate:
+            return None, last_beacon_t
+
+        trade_side = 'buy' if is_buy_candidate else 'sell'
+
         # Сверяем код: возвращаем строго те переменные, которые реально объявлены в check_signal!
         payload = {
-            'symbol': symbol,
-            'side': 'buy' if is_buy_candidate else 'sell',
-            'gear': gear,
-            'price': cur_p,
-            'dna': dna,
-            'gear_data': dna[gear]
+            'symbol': symbol, 'side': trade_side,
+            'price': target_price, 'gear_type': sig_gear,
+            'gear': gear, 'gear_data': gd, 'dna': dna
         }
+#            'symbol': symbol,
+#            'side': 'buy' if is_buy_candidate else 'sell',
+#            'gear': gear,
+#            'price': cur_p,
+#            'dna': dna,
+#            'gear_data': dna[gear]
+#        }
         return payload, last_beacon_t
     except Exception as err:
         log(f"⚠ [КРИТ CHECK_SIGNAL]: Скрытый обрыв входа по {symbol}: {err}")
@@ -557,13 +588,22 @@ async def execute_entry(exchange, sig):
     symbol = raw_symbol.split(':')[0]
 
     try:
-        bal_info = await exchange.fetch_balance()
-        live_available = float(bal_info.get('info', {}).get('availableBalance', 0))
+        # Читаем легитимный атрибут memory.available, подтвержденный системным grep-фильтром
+        live_available = float(memory.available)
         if live_available < 2.0:
+            log(f"🚫 [ВХОД ОТКЛОНЕН]: Слишком маленький баланс в ОЗУ: ${round(live_available, 2)}")
             return
     except Exception as bal_err:
-        log(f"⚠ [ВХOД КРАШ]: Сбой чтения баланса для {symbol}: {bal_err}")
+        log(f"⚠ [ВХOД КРАШ БАЛАНСА]: Сбой локального чтения ОЗУ для {symbol}: {bal_err}")
         return
+
+#        bal_info = await exchange.fetch_balance()
+#        live_available = float(bal_info.get('info', {}).get('availableBalance', 0))
+#        if live_available < 2.0:
+#            return
+#    except Exception as bal_err:
+#        log(f"⚠ [ВХOД КРАШ]: Сбой чтения баланса для {symbol}: {bal_err}")
+#        return
 
     if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos:
         return
@@ -590,14 +630,20 @@ async def execute_entry(exchange, sig):
 #        adaptive_risk = float(sig['gear_data']['risk'])
 #        amount_usdt = float(live_available) * adaptive_risk * effective_leverage
 
-        # Читаем адаптивный риск текущей передачи скорости (DRIVE / ECO / CRUISE)
+        # Считываем риск текущей передачи скорости
         adaptive_risk = float(sig['gear_data']['risk'])
+
+        # Рассчитываем номинал, жестко завязанный на реальный свободный баланс и плечо
         amount_usdt = float(live_available) * adaptive_risk * effective_leverage
 
-        # Аппаратный щит Бинанса: если номинал меньше $21, принудительно тянем его до лимита биржи
+        # Аппаратный предохранитель залога: ордер физически не может требовать маржи больше, чем есть на кошельке!
+        max_safe_notional = float(live_available) * 0.90 * effective_leverage  # Оставляем 10% буфера на комиссию биржи
+        if amount_usdt > max_safe_notional:
+            amount_usdt = max_safe_notional
+
+        # Защита снизу: если объем упал меньше лимита Бинанса в $21 — подтягиваем вверх
         if amount_usdt < 21.0:
             amount_usdt = 21.0
-
         # Переводим объем в эквивалент базовых монет
         raw_qty = amount_usdt / sig['price']
 
@@ -633,16 +679,28 @@ async def execute_entry(exchange, sig):
         else:
             try:
                 binance_side = str(sig['side']).upper()
-                binance_market_id = str(symbol).replace('/', '') # Из "BNB/USDT" делаем "BNBUSDT"
 
-                log(f"📥 [DEBUG ENTRY]: Выставляю нативную лимитку LIMIT по {binance_market_id} по цене {sig['price']}...")
+                # Сначала берем первый элемент сплита ("XRP/USDT"), а уже затем вычищаем косую черту
+                #binance_market_id = str(raw_symbol.split(':')[0]).replace('/', '')
+                binance_market_id = str(raw_symbol).split(':')[0].replace('/', '')
+                # Округляем цену строго по фьючерсному шагу Бинанса, используя полный контракт raw_symbol
+                rounded_price = float(exchange.price_to_precision(raw_symbol, sig['price']))
+                log(f"📥 [DEBUG ENTRY]: Выставляю нативную лимитку LIMIT по {binance_market_id} по цене {rounded_price}...")
+
+                # Извлекаем сырой raw_symbol ("WIF/USDT:USDT") и зряче вычищаем его под нативный фланговый эндпоинт 'WIFUSDT'
+#                binance_market_id = str(raw_symbol).split(':')[0].replace('/', '')
+
+                # Округляем цену строго по фьючерсному шагу Бинанса, используя полный контракт raw_symbol
+#                rounded_price = float(exchange.price_to_precision(raw_symbol, sig['price']))
+
+#                log(f"📥 [DEBUG ENTRY]: Выставляю нативную лимитку LIMIT по {binance_market_id} по цене {rounded_price}...")
 
                 p_params = {
                     'symbol': binance_market_id,
                     'side': binance_side,
                     'type': 'LIMIT',
                     'quantity': qty,
-                    'price': sig['price'],
+                    'price': rounded_price,
                     'timeInForce': 'GTC'
                 }
                 order = await exchange.fapiPrivatePostOrder(p_params)
@@ -659,7 +717,9 @@ async def execute_entry(exchange, sig):
             memory.active_pos[raw_symbol] = {
                 'side': sig['side'], 'vol': qty, 'price': sig['price'],
                 'gear': sig['gear'], 'gear_data': sig['gear_data'], 'dna': sig['dna'],
-                'entry_time': time.time()
+                'entry_time': time.time(),
+                'is_live': False  # Лимитка выставлена, но позиция на бирже еще не налилась!
+
             }
             memory.tp_fixed[symbol] = False
             memory.be_fixed[symbol] = False
@@ -696,6 +756,11 @@ async def monitor_logic(exchange):
                 raw_symbol = symbol
                 clean_symbol = raw_symbol.split(':')[0]
 
+#==========================   ФИКС V107.0: БЛОКИРОВКА СЛEПОГО ТРЕЙЛИНГА ФАНТОМОВ   ==============
+                # Если лимитка еще висит в стакане и не налилась — Веник пропускает этот тик сопровождения
+                if not pos.get('is_live', False):
+                    continue
+#=====================================
                 # --- [ВРЕЗКА V28.9: ПРЯМОЙ REST-ПРОРЫВ К ЦЕНАМ БИНАНСА] ---
                 cur_p = memory.prices.get(clean_symbol)
 
@@ -820,7 +885,9 @@ async def monitor_logic(exchange):
                         try:
                             await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                             exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
-                            await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
+                            # Универсальный метод CCXT гарантирует стопроцентную доставку флага reduceOnly на Бинанс
+                            p_params = {'reduceOnly': True}
+                            await exchange.create_order(raw_symbol, 'MARKET', exit_side, exact_clean_vol, params=p_params)
                         except Exception as t_err:
                             log(f"⚠ Сбой катапультирования {clean_symbol}: {t_err}")
 
@@ -845,12 +912,20 @@ async def monitor_logic(exchange):
 #                            await exchange.create_order(raw_symbol, 'MARKET', exit_side, half_qty, params=p_params)
 #===
                             #await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol, half_qty))
-                            await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol.split(':')[0], half_qty))
+#                            await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol.split(':')[0], half_qty))
+                            # Передаем Бинансу жесткий параметр reduceOnly, исключающий перевороты
+                            p_params = {'reduceOnly': True}
+                            await exchange.create_order(raw_symbol, 'MARKET', exit_side, half_qty, params=p_params)
 
 #                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
-                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol.split(':')[0], pos['vol'] - half_qty))
+#                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol.split(':')[0], pos['vol'] - half_qty))
 
+#                            memory.tp_fixed[raw_symbol] = True
+                            # Принудительно списываем 50% объема из RAM, чтобы Катапульта не перевернула позу
+                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol, pos['vol'] - half_qty))
                             memory.tp_fixed[raw_symbol] = True
+
+
                             pass
                         else:
                             # Защита дробления мелкого лота
