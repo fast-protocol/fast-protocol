@@ -1,6 +1,6 @@
 # --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
 RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
-MAX_SLOTS = 4          # Максимум 4 параллельных сделки
+MAX_SLOTS = 5          # Максимум 4 параллельных сделки
 LOG_FILE = "ignition_log.txt"
 # --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
 MAX_ACCOUNT_LEVERAGE = 25  # Выставляем 5х (аппаратный потолок субаккаунта)
@@ -158,7 +158,11 @@ async def update_balance(exchange):
                                         log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Направление {side} Успешно подхвачен ядром выходов!")
                 except Exception as sync_err:
                     log(f"⚠ Ошибка синхронизации позиций при старте: {sync_err}")
+#==========================   ФИКС V166.5: ГАРАНТИРОВАННОЕ СНЯТИЕ ЗАМКА ПРОГРЕВА   ==============
+                # Снимаем блокировку сканера строго после окончания первого круга синхронизации
+                memory.is_warmup = False
                 first_run_sync = False
+#--------------------------------------
             # Контур круглосуточной авто-очистки стаканов. Работает в фоновом потоке баланса!
             # Контрольная пауза тика опроса баланса и удержания шлюзов
             await asyncio.sleep(15)
@@ -376,6 +380,10 @@ async def check_signal(exchange, symbol, last_beacon_t):
             return None, last_beacon_t
 
         prev_w = (p_up_prev - p_dn_prev) / ma[-3] * 100
+        # Если канал Боллинджера был сжат в абсолютный ноль — наносекундно отменяем ложный импульс
+        if prev_w == 0:
+            return None, last_beacon_t
+
         w_growth = curr_w / prev_w
 
         # 3. ФИЛЬТР 1: TREND ALTITUDE SHIELD (Запрет перегретых хаев)
@@ -650,16 +658,13 @@ async def execute_entry(exchange, sig):
         log(f"⚠ [ВХOД КРАШ БАЛАНСА]: Сбой локального чтения ОЗУ для {symbol}: {bal_err}")
         return
 
-#        bal_info = await exchange.fetch_balance()
-#        live_available = float(bal_info.get('info', {}).get('availableBalance', 0))
-#        if live_available < 2.0:
-#            return
-#    except Exception as bal_err:
-#        log(f"⚠ [ВХOД КРАШ]: Сбой чтения баланса для {symbol}: {bal_err}")
-#        return
-
-    if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos:
+#==========================   ФИКС V165.5: СТЕРИЛЬНЫЙ КОНТРОЛЬ ЕМКОСТИ СЛОТОВ В ИСПОЛНИТЕЛЕ ==
+    # Защищаем вход: считываем живую длину RAM-памяти, но сохраняем твой чистый ключ symbol
+    if len(memory.active_pos) >= MAX_SLOTS or symbol in memory.active_pos:
         return
+#------------------------------------
+   # if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos:
+   #     return
 
     try:
         # СБОР ЖЕСТКОГО БИРЖЕВОГО ID КОНТРАКТА ДЛЯ МЕТОДОВ ПЛЕЧА BINANCE ('ADAUSDT')
@@ -683,11 +688,20 @@ async def execute_entry(exchange, sig):
 #        adaptive_risk = float(sig['gear_data']['risk'])
 #        amount_usdt = float(live_available) * adaptive_risk * effective_leverage
 
-        # Считываем риск текущей передачи скорости
+#==========================   ФИКС V162.0: ТОЧНАЯ КАЛИБРОВКА СЛОТА ПОД 20% МАРЖИ   ==============
         global transmission_risk_mult
-        # Ма монолитно перемножаем базовый RISK_GEAR на адаптивный множитель Коробки
-        amount_usdt = float(live_available) * RISK_GEAR * transmission_risk_mult * effective_leverage
+        current_gear_name = sig.get('gear', 'g1')
 
+        if transmission_risk_mult <= 0.5:
+            slot_allocation = 0.15   # Режим ECO (Выходные)
+        elif current_gear_name == 'g2':
+            slot_allocation = 0.40   # Режим DRIVE (Импульсный взрыв)
+        else:
+            slot_allocation = 0.20   # Режим CRUISE (Будни): строго 20% маржи на один слот (5 слотов!)
+
+        # Расширяем объем лота под 5 независимых каскадных слотов сложного процента
+        amount_usdt = float(live_available) * slot_allocation * effective_leverage
+#-------------------------------------
 
 
         # Аппаратный предохранитель залога: ордер физически не может требовать маржи больше, чем есть на кошельке!
@@ -897,10 +911,10 @@ async def monitor_logic(exchange):
                         log(f"⚡ [БЕЗУБЫТOК БИНАНС V25.0]: {clean_symbol} набрал +1.5% хода. Переношу стоп в ноль.")
                         try:
                             # Смещаем защитный стоп-маркет ровно на цену нашего входа
-                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                        #    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                             #stop_params = {'stopPrice': price, 'reduceOnly': True}
-                            stop_params = {'stopPrice': float(pos['price']), 'reduceOnly': True}
-                            await exchange.create_order(raw_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
+                        #    stop_params = {'stopPrice': float(pos['price']), 'reduceOnly': True}
+                        #    await exchange.create_order(raw_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
                             memory.be_fixed[raw_symbol] = True
                         except Exception as be_err:
                             log(f"⚠️ Сбой выставления БУ для {clean_symbol}: {be_err}")
@@ -1120,10 +1134,10 @@ async def monitor_logic(exchange):
         await asyncio.sleep(0.5)
 
 async def main():
-#    exchange = ccxt.binance({
-#        'apiKey': API_KEY, 'secret': API_SECRET,
-#        'options': {'defaultType': 'future'}, 'enableRateLimit': True
-#    })
+#==========================   ФИКС V166.0: ФЛАГ АППАРАТНОГО ПРОГРЕВА СИСТЕМЫ   ==================
+    # Блокируем сканер на старте, пока не завершится усыновление позиций с биржи
+    memory.is_warmup = True
+#======================================
 #==========================   ФИКС V152.0: ВЗВЕДЕНИЕ ПОСТОЯННОГО HFT KEEP-ALIVE ТУННЕЛЯ   =======
     # Аппаратно заставляем HTTP-клиент не закрывать сессию, убирая 2 секунды лага открытий TCP
     exchange = ccxt.binance({
@@ -1136,15 +1150,19 @@ async def main():
             'Keep-Alive': 'timeout=60, max=10000'
         }
     })
-#--------------------------------------  УДАЛЯЕМ СТАРУЮ СЛEПУЮ ИНИЦИАЛИЗАЦИЮ  -------------------
-    exchange = ccxt.binance({
+#==========================   ФИКС V162.0: ИЗОЛИРОВАННЫЙ БРОНИРОВАННЫЙ ШЛЮЗ ВЫХОДОВ   ===========
+    # ШЛЮЗ №2: Абсолютно независимый порт строго для Трейлинга, Стопов и Таймеров выходов
+    exchange_monitor = ccxt.binance({
         'apiKey': API_KEY, 'secret': API_SECRET,
-        'options': {'defaultType': 'future'}, 'enableRateLimit': True
+        'options': {'defaultType': 'future'}, 'enableRateLimit': True,
+        'headers': {'Connection': 'keep-alive', 'Keep-Alive': 'timeout=60, max=10000'}
     })
+
+    await exchange.load_markets()
+    await exchange_monitor.load_markets() # Загружаем рынки для второго шлюза
+#--------------------------------------
 #================================================================================
     # --- ШТУЧНЫЙ ФИКС V24.9: АСИНХРОННЫЙ ПРОГРЕВ МАКРО-СПЕЦИФИКАЦИЙ БИНАНСА ---
-    await exchange.load_markets()
-
     with open('dna_ignition.json', 'r') as f:
         memory.all_dna = json.load(f)
 
@@ -1278,6 +1296,12 @@ async def main():
 #=============================================================================
 
         while memory.is_running:
+#==========================   ФИКС V166.0: ЗАПРЕТ НА СТРЕЛЬБУ ЛИМИТКАМИ ВО ВРЕМЯ ПРОГРЕВА   ====
+            # Если система находится в фазе прогрева — наносекундно спим и ждем сбора позиций
+            if getattr(memory, 'is_warmup', True):
+                await asyncio.sleep(0.5)
+                continue
+#===============================================================================
             for s in memory.all_dna.keys():
                 try:
                     current_time_now = time.time()
@@ -1294,10 +1318,12 @@ async def main():
                     sig, last_beacon_t = await check_signal(exchange, s, last_beacon_t)
 #                log(f"🚫 [DEBUG HUNTER]: Перед проверкой сигнала по {s} ! last_beacon_t= {last_beacon_t} sig = {sig}.")
                     if sig:
-
-                        if memory.slots_occupied >= MAX_SLOTS:
+#==========================   ФИКС V165.0: ЖЕСТКИЙ ПРЯМОЙ КОНТРОЛЬ ЕМКОСТИ СЛОТОВ В ХАНТЕРЕ   ===
+                        # Проверяем лимит слотов напрямую по реальному числу открытых позиций в RAM
+                        if len(memory.active_pos) >= MAX_SLOTS:
                             #log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Превышен лимит параллельных слотов MAX_SLOTS.")
                             continue
+#-------------------------------------
 
                         if s in memory.active_pos:
                             #log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Монета уже удерживается в оперативной памяти.")
