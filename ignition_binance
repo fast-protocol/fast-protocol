@@ -1094,7 +1094,6 @@ async def main():
     with open('dna_ignition.json', 'r') as f:
         memory.all_dna = json.load(f)
 
-        url = f"wss://fstream.binance.com/market/stream?streams={'/'.join(streams)}"
 #==========================   ФИКС V141.0: СКOЛЬЗЯЩИЙ ОЗУ-ГЕНЕРАТОР 30 СВЕЧЕЙ ДЛЯ PANDAS   ======
     memory.raw_buffer = {}
     if not hasattr(memory, 'candles'): memory.candles = {}
@@ -1106,9 +1105,11 @@ async def main():
             clean_ticker = str(c).replace('/USDT:USDT', '').replace('/USDT', '').lower()
             streams.append(f"{clean_ticker}@markPrice")
             streams.append(f"{clean_ticker}@kline_1m")
-
+#==========================   ФИКС V143.0: ЖЕСТКОЕ ВЫРАВНИВАНИЕ ОТСТУПОВ (8 ПРОБЕЛОВ)   ==========
+        # Эти две строки обязаны стоять строго на уровне 8 пробелов от левого края!
         url = f"wss://fstream.binance.com/market/stream?streams={'/'.join(streams)}"
         log(f"🛰️ [HFT МOНОЛИТ]: Запускаю сокет-магистраль по {len(memory.all_dna)} секторам...")
+#================================================================================================
 
         async with aiohttp.ClientSession() as session:
             while memory.is_running:
