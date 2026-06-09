@@ -199,7 +199,7 @@ async def limit_orders_cleaner_loop(exchange):
                     o_time = int(o_data.get('time', 0)) # Время выставления ордера биржей
 
                     # Проверяем жестко: ордер имеет право подлежать сносу ТОЛЬКО если пробыл в стакане более 45 сек (45000 мс)
-                    if (current_server_time - o_time) >= 45000:
+                    if (current_server_time - o_time) >= 180000:
                         try:
                             p_params = {'symbol': o_sym, 'orderId': o_id}
                             await exchange.fapiPrivateDeleteOrder(p_params)
@@ -228,16 +228,17 @@ async def check_signal(exchange, symbol, last_beacon_t):
         cur_p = memory.prices.get(symbol)
         if not dna or not cur_p:
             return None, last_beacon_t
-#==========================   ФИКС V141.0: ЧТЕНИЕ СВЕЧЕЙ ИЗ ОЗУ ЗА 0 МИЛЛИСЕКУНД   ==============
-        # Берем готовую сокет-свечу из памяти вместо тяжелого интернет-запроса fetch_ohlcv
-        cached_kline = memory.candles.get(symbol)
-        if not cached_kline:
+#==========================   ФИКС V149.0: ИСТИННЫЕ ЦИФРОВЫЕ ИНДЕКСЫ МАССИВА OHLCV   ============
+        # Забираем скользящий 30-свечной массив из памяти сокета мимо виснущей сети интернет
+        ohlcv = memory.candles.get(symbol)
+        if not ohlcv or len(ohlcv) < 21:
             return None, last_beacon_t
 
-        # Матрица Боллинджера пересчитывается мгновенно по живым хаям и лоям сокет-бара
-        b_high = cached_kline['high']
-        b_low  = cached_kline['low']
-#--------------------------------------
+        # Берем самую последнюю свечу из массива [-1] и извлекаем High [2] и Low [3] по HFT-индексам
+        last_bar = ohlcv[-1]
+        b_high = last_bar[2]
+        b_low  = last_bar[3]
+#----------------------------------
 
 #==========================   ФИКС V85.0: ГИБРИДНАЯ КРOСС-КOРOБКА DNA MULTIPLIERS   ============
         global transmission_mode, manual_gear_select
@@ -336,9 +337,9 @@ async def check_signal(exchange, symbol, last_beacon_t):
         # 1. ЗАГРУЗКА И ВЕРИФИКАЦИЯ СВЕЧНОГО МАССИВА
 #==========================   ФИКС V141.0: ЧТЕНИЕ МАССИВА OHLCV ИЗ ОЗУ ЗА 0 МС   ===============
         # Забираем скользящий 30-свечной массив из памяти сокета мимо виснущей сети интернет
-        ohlcv = memory.candles.get(symbol)
-        if not ohlcv or len(ohlcv) < 21:
-            return None, last_beacon_t
+#        ohlcv = memory.candles.get(symbol)
+#        if not ohlcv or len(ohlcv) < 21:
+#            return None, last_beacon_t
 
         # Твой Pandas Dataframe собирается мгновенно из локальной RAM памяти!
         df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
@@ -346,7 +347,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
         # --- КОНТУР 3: СКОРОСТЬ ДЕЛЬТЫ ОБЪЕМА (VOLUME VELOCITY DELTA V34.0) ---
         v_now = float(df['v'].iloc[-1])
         v_mean = float(df['v'].mean())
-        if v_now < (v_mean * 1.8):
+        if v_now < (v_mean * 0.8):
             # Если объем первого тика вялый — ММ гонит цену искусственно. Отмена!
 #           log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену чере з вакуум. Vo l: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
            return None, last_beacon_t
@@ -517,9 +518,9 @@ async def check_signal(exchange, symbol, last_beacon_t):
         # Компенсируем 2 секунды лага REST API: сдвигаем цену лимитки на 0.04% вглубь стакана для 100% налива
         if sig_gear == 'LIMIT':
             if is_buy_candidate:
-                target_price = cur_p * 1.0004  # Ставим лимитку покупки чуть выше, ближе к наливу
+                target_price = cur_p * 1.0001  # Ставим лимитку покупки чуть выше, ближе к наливу
             else:
-                target_price = cur_p * 0.9996  # Ставим лимитку продажи чуть ниже
+                target_price = cur_p * 0.9999  # Ставим лимитку продажи чуть ниже
         else:
             target_price = cur_p
 #-------------------------------
@@ -586,6 +587,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
         payload = {
             'symbol': symbol, 'side': trade_side,
             'price': target_price, 'gear_type': sig_gear,
+            'actual_price': cur_p,  # Запечатываем чистую живую цену ОЗУ для логов дебага
             'gear': gear, 'gear_data': gd, 'dna': dna
         }
 #            'symbol': symbol,
@@ -675,12 +677,16 @@ async def execute_entry(exchange, sig):
         if qty <= 0:
             return
 
-        # --- ШТУЧНЫЙ КВАНТОВЫЙ ДЕБАГ V40.0: ВСКРЫТИЕ МАРЖИНАЛЬНОЙ СЛЕПОТЫ ---
-        log(f"🔍 [Debug entry]: Available Margin: ${round(live_available, 4)} | RISK_GEAR: {RISK_GEAR}")
-        log(f"🔍 [Debug entry]: Target Leverage: {sig['dna']['lev']}x | Price: {sig['price']}")
-        log(f"🔍 [Debug entry]: Calculated Nom Volume (with leverage): ${round(amount_usdt, 2)}")
-        log(f"🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: {qty} монет")
+#==========================   ФИКС V154.0: ПЕРЕНОС РАСЧЕТА СТЕРИЛЬНОЙ ЦЕНЫ ОРДЕРА ВВЕРХ   =======
+        # Округляем цену по спецификации шага Бинанса ЗАРАНЕЕ, до вывода в логи дебага панели
+        rounded_price = float(exchange.price_to_precision(raw_symbol, sig['price']))
+        actual_market_price = float(sig.get('actual_price', sig['price']))
 
+        log(f"🔍 [Debug entry]: Available Margin: ${round(live_available, 4)} | RISK_GEAR: {RISK_GEAR}")
+        log(f"🔍 [Debug entry]: Target Leverage: {effective_leverage}x | Actual Price: {actual_market_price}")
+        log(f"🔍 [Debug entry]: Limit Order Price: {rounded_price} | Nom Vol: ${round(amount_usdt, 2)}")
+        log(f"🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: {qty} монет")
+#------------------------------------------------------------------------------
         # ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Рыночный приказ входа
 
 #        order = await exchange.create_market_order(symbol, sig['side'], qty)
@@ -715,7 +721,7 @@ async def execute_entry(exchange, sig):
                 #binance_market_id = str(raw_symbol.split(':')[0]).replace('/', '')
                 binance_market_id = str(raw_symbol).split(':')[0].replace('/', '')
                 # Округляем цену строго по фьючерсному шагу Бинанса, используя полный контракт raw_symbol
-                rounded_price = float(exchange.price_to_precision(raw_symbol, sig['price']))
+
                 log(f"📥 [DEBUG ENTRY]: Выставляю нативную лимитку LIMIT по {binance_market_id} по цене {rounded_price}...")
 
                 # Извлекаем сырой raw_symbol ("WIF/USDT:USDT") и зряче вычищаем его под нативный фланговый эндпоинт 'WIFUSDT'
@@ -912,10 +918,10 @@ async def monitor_logic(exchange):
                     if int(time.time()) % 15 == 0:
                         p_pct = round(pnl * 100, 2)
                         pk_pct = round(current_peak * 100, 2)
-                        log(f"⚙️ [ДЕБАГ ТРЕЙЛИНГА {clean_symbol}]: PNL: {p_pct}% | Пик: {pk_pct}% | Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
+#                        log(f"⚙️ [ДЕБАГ ТРЕЙЛИНГА {clean_symbol}]: PNL: {p_pct}% | Пик: {pk_pct}% | Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
 
                     if is_catapult_fired:
-                        log(f"🏁 [КАТАПУЛЬТА]: Снос {clean_symbol} по откату от пика! Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
+                        log(f"🏁 [КАТАПУЛЬТА]: Снос {clean_symbol} по откату от пика! PNL: {p_pct}% | Пик: {pk_pct}% |  Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
                         try:
                             await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
                             exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
@@ -1084,10 +1090,28 @@ async def monitor_logic(exchange):
         await asyncio.sleep(0.5)
 
 async def main():
+#    exchange = ccxt.binance({
+#        'apiKey': API_KEY, 'secret': API_SECRET,
+#        'options': {'defaultType': 'future'}, 'enableRateLimit': True
+#    })
+#==========================   ФИКС V152.0: ВЗВЕДЕНИЕ ПОСТОЯННОГО HFT KEEP-ALIVE ТУННЕЛЯ   =======
+    # Аппаратно заставляем HTTP-клиент не закрывать сессию, убирая 2 секунды лага открытий TCP
+    exchange = ccxt.binance({
+        'apiKey': API_KEY,
+        'secret': API_SECRET,
+        'options': {'defaultType': 'future'},
+        'enableRateLimit': True,
+        'headers': {
+            'Connection': 'keep-alive',
+            'Keep-Alive': 'timeout=60, max=10000'
+        }
+    })
+#--------------------------------------  УДАЛЯЕМ СТАРУЮ СЛEПУЮ ИНИЦИАЛИЗАЦИЮ  -------------------
     exchange = ccxt.binance({
         'apiKey': API_KEY, 'secret': API_SECRET,
         'options': {'defaultType': 'future'}, 'enableRateLimit': True
     })
+#================================================================================
     # --- ШТУЧНЫЙ ФИКС V24.9: АСИНХРОННЫЙ ПРОГРЕВ МАКРО-СПЕЦИФИКАЦИЙ БИНАНСА ---
     await exchange.load_markets()
 
@@ -1102,8 +1126,13 @@ async def main():
         """ Поток 1: Наносекундный приемник WebSocket-пакетов /market/stream """
         streams = []
         for c in list(memory.all_dna.keys()):
-            clean_ticker = str(c).replace('/USDT:USDT', '').replace('/USDT', '').lower()
-            streams.append(f"{clean_ticker}@markPrice")
+#==========================   ФИКС V151.0: СТЕРИЛЬНОЕ ФЬЮЧЕРСНОЕ РАЗДЕЛЕНИЕ ТИКЕРОВ   ===========
+            # Вырезаем базовое имя монеты (например, "1000PEPE" или "BTC") для стрима цен
+            coin_base = str(c).split('/')[0].lower()
+            streams.append(f"{coin_base}@markPrice")
+
+            # Вырезаем полный фьючерсный контракт (например, "1000pepeusdt") для стрима свечей
+            clean_ticker = str(c).replace('/', '').replace(':USDT', '').lower()
             streams.append(f"{clean_ticker}@kline_1m")
 #==========================   ФИКС V143.0: ЖЕСТКОЕ ВЫРАВНИВАНИЕ ОТСТУПОВ (8 ПРОБЕЛОВ)   ==========
         # Эти две строки обязаны стоять строго на уровне 8 пробелов от левого края!
@@ -1121,14 +1150,23 @@ async def main():
                                 data = packet.get('data', {})
                                 r_sym = str(data.get('s', '')).upper()
                                 if r_sym:
-                                    formatted_key = f"{r_sym[:3]}/{r_sym[3:]}:USDT" if "1000" not in r_sym else f"{r_sym[:4]}/{r_sym[4:]}:USDT"
+#==========================   ФИКС V143.0: СТЕРИЛЬНЫЙ ДИНАМИЧЕСКИЙ КЛЮЧ ДЛЯ ВСЕХ МОНЕТ ДНК   ====
+                                    # Универсальная HFT-подмена гарантирует идеальный ключ для NEAR, LINK и BNB
+                                    formatted_key = r_sym.replace('USDT', '/USDT:USDT')
                                     memory.raw_buffer[formatted_key] = data
                 except:
                     await asyncio.sleep(2)
 
     async def hft_packet_processor():
         """ Поток 2: Наносекундный скользящий накопитель массивов OHLCV в ОЗУ """
+        #last_ws_debug_time = time.time()
         while memory.is_running:
+            # === ВЖИВЛЕНИЕ ЖИВОГО СОКЕТ-ДЕБАГА ДЛЯ АРХИТЕКТОРА ===
+          #  if time.time() - last_ws_debug_time > 45:
+          #      log(f"🛰️ [ДЕБАГ СОКЕТОВ]: ОЗУ-Буфер стабилен. В кэше: {len(memory.raw_buffer)} сек торов. Цены летят.")
+          #      last_ws_debug_time = time.time()
+           #--------------------------------------------------------
+
             for sym, data in list(memory.raw_buffer.items()):
                 try:
                     event_type = data.get('e', '')
