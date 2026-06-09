@@ -451,7 +451,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
         is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
         is_3_red   = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
 
-        log(f"⚙️ [DEBUG 2перед ниткой..")
+        #log(f"⚙️ [DEBUG 2перед ниткой..")
 
 
         # --- [ВРЕЗКА V39.5: ПОКАНАЛЬНЫЙ НОЖ И ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ] ---
@@ -525,15 +525,45 @@ async def check_signal(exchange, symbol, last_beacon_t):
             target_price = cur_p
 #-------------------------------
 
+#        if not is_nitka_explosion:
+            # ПОКАНАЛЬНЫЙ РАЗЖИМ: Мемы летят свободно (5%), тяжелые Якоря зажимаем жестко (15%)
+#            is_meme = any(m in symbol.upper() for m in ['1000PEPE', 'WIF', 'POPCAT', '1000SHIB', '1000BONK', '1000FLOKI', 'DOGE'])
+#            adaptive_offset = 0.05 if is_meme else 0.15
+
+#            long_barrier = ma_prev * (1.0 - adaptive_offset)
+#            short_barrier = ma_prev * (1.0 + adaptive_offset)
+#---------------------------------
+#==========================   ФИКС V158.0: ТРEХКОНТУРНАЯ МАТРИЦА СЕССИЙ С УЧЕТОМ ПЯТНИЦЫ   ======
         if not is_nitka_explosion:
+            # Определение текущего часа и дня недели сервера (0=Пн, 4=Пт, 5=Сб, 6=Вс)
+            local_time_struct = time.localtime()
+            current_hour = local_time_struct.tm_hour
+            current_wday = local_time_struct.tm_wday
+
+            if current_wday >= 5:
+                # 🏖️ РЕЖИМ ВЫХОДНЫХ (Суббота - Воскресенье): Глухой расширенный барьер круглые сутк и
+                session_mult = 1.40
+            elif current_wday == 4 and current_hour >= 19:
+                # 🩸 РЕЖИМ ПЯТНИЧНОГО ВЕЧЕРА (Закрытие CME): Защитное расширение от уикенд-сквизов
+                session_mult = 1.35
+            else:
+                # 📅 РЕЖИМ БУДНЕЙ (Понедельник - Пятница день): Пулеметная матрица
+                if 1 <= current_hour <= 7:
+                    session_mult = 0.70   # Азия: поджимаем лимитки ближе к рынку
+                elif 15 <= current_hour <= 18:
+                    session_mult = 1.50   # Открытие США: уводим лимитки в глубокий тыл
+                else:
+                    session_mult = 1.00   # Время CRUISE: стандартный рабочий отступ будней
+
             # ПОКАНАЛЬНЫЙ РАЗЖИМ: Мемы летят свободно (5%), тяжелые Якоря зажимаем жестко (15%)
             is_meme = any(m in symbol.upper() for m in ['1000PEPE', 'WIF', 'POPCAT', '1000SHIB', '1000BONK', '1000FLOKI', 'DOGE'])
-            adaptive_offset = 0.05 if is_meme else 0.15
+            base_offset = 0.05 if is_meme else 0.15
+            adaptive_offset = base_offset * session_mult
 
             long_barrier = ma_prev * (1.0 - adaptive_offset)
             short_barrier = ma_prev * (1.0 + adaptive_offset)
-
-            # Точечная блокировка Ножей с учетом Шлюза Паритета Дельты
+#==========================================================================
+           # Точечная блокировка Ножей с учетом Шлюза Паритета Дельты
             if is_buy_candidate and is_3_red:
                 if cur_p <= long_barrier or not is_delta_safe:
                     log(f"🪓 [KNIFE BLOCK]: Отмена Лонга по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
@@ -567,14 +597,14 @@ async def check_signal(exchange, symbol, last_beacon_t):
             target_price = cur_p * (1.0 - rebound_pct) if is_buy_candidate else cur_p * (1.0 + rebound_pct)
 
         # Контур Ножа Боллинджера: страхует только рыночные ордера
-        adaptive_offset = 0.05 if is_meme else 0.15
-        long_barrier, short_barrier = ma_prev * (1.0 - adaptive_offset), ma_prev * (1.0 + adaptive_offset)
+#        adaptive_offset = 0.05 if is_meme else 0.15
+#        long_barrier, short_barrier = ma_prev * (1.0 - adaptive_offset), ma_prev * (1.0 + adaptive_offset)
 
         if sig_gear == 'MARKET':
             if is_buy_candidate and is_3_red and cur_p <= long_barrier: return None, last_beacon_t
             if is_sell_candidate and is_3_green and cur_p >= short_barrier: return None, last_beacon_t
 
-        log(f"⚙️ [DEBUG 2Перед ретурном параметров. Всё прошли.")
+        #log(f"⚙️ [DEBUG 2Перед ретурном параметров. Всё прошли.")
 
 
         # Жестко отсекаем ложные фантомные шорты, если условия входа не выполнены
@@ -614,7 +644,7 @@ async def execute_entry(exchange, sig):
         # Читаем легитимный атрибут memory.available, подтвержденный системным grep-фильтром
         live_available = float(memory.available)
         if live_available < 2.0:
-            log(f"🚫 [ВХОД ОТКЛОНЕН]: Слишком маленький баланс в ОЗУ: ${round(live_available, 2)}")
+            #log(f"🚫 [ВХОД ОТКЛОНЕН]: Слишком маленький баланс в ОЗУ: ${round(live_available, 2)}")
             return
     except Exception as bal_err:
         log(f"⚠ [ВХOД КРАШ БАЛАНСА]: Сбой локального чтения ОЗУ для {symbol}: {bal_err}")
@@ -1122,23 +1152,17 @@ async def main():
     memory.raw_buffer = {}
     if not hasattr(memory, 'candles'): memory.candles = {}
 
+#================================================================================================
     async def hft_market_stream():
-        """ Поток 1: Наносекундный приемник WebSocket-пакетов /market/stream """
+        """ Поток 1: Наносекундный прямой зрячий приемник и парсер WebSocket-пакетов /market/stream """
         streams = []
         for c in list(memory.all_dna.keys()):
-#==========================   ФИКС V151.0: СТЕРИЛЬНОЕ ФЬЮЧЕРСНОЕ РАЗДЕЛЕНИЕ ТИКЕРОВ   ===========
-            # Вырезаем базовое имя монеты (например, "1000PEPE" или "BTC") для стрима цен
-            coin_base = str(c).split('/')[0].lower()
-            streams.append(f"{coin_base}@markPrice")
-
-            # Вырезаем полный фьючерсный контракт (например, "1000pepeusdt") для стрима свечей
             clean_ticker = str(c).replace('/', '').replace(':USDT', '').lower()
+            # Берем только kline_1m, из него вытащим и свечу, и живую цену!
             streams.append(f"{clean_ticker}@kline_1m")
-#==========================   ФИКС V143.0: ЖЕСТКОЕ ВЫРАВНИВАНИЕ ОТСТУПОВ (8 ПРОБЕЛОВ)   ==========
-        # Эти две строки обязаны стоять строго на уровне 8 пробелов от левого края!
+
         url = f"wss://fstream.binance.com/market/stream?streams={'/'.join(streams)}"
-        log(f"🛰️ [HFT МOНОЛИТ]: Запускаю сокет-магистраль по {len(memory.all_dna)} секторам...")
-#================================================================================================
+        log(f"🛰️ [HFT МOНОЛИТ V159.0]: Запускаю сокет-магистраль по {len(memory.all_dna)} секторам. ..")
 
         async with aiohttp.ClientSession() as session:
             while memory.is_running:
@@ -1150,13 +1174,36 @@ async def main():
                                 data = packet.get('data', {})
                                 r_sym = str(data.get('s', '')).upper()
                                 if r_sym:
-#==========================   ФИКС V143.0: СТЕРИЛЬНЫЙ ДИНАМИЧЕСКИЙ КЛЮЧ ДЛЯ ВСЕХ МОНЕТ ДНК   ====
-                                    # Универсальная HFT-подмена гарантирует идеальный ключ для NEAR, LINK и BNB
-                                    formatted_key = r_sym.replace('USDT', '/USDT:USDT')
-                                    memory.raw_buffer[formatted_key] = data
+#==========================   ФИКС V162.0: ЖЕСТКАЯ СИНХРОНИЗАЦИЯ БИРЖЕВЫХ КЛЮЧЕЙ ОЗУ   ==========
+                                    # Строим чистый канонический ключ на базе реальной структуры ДНК, убирая наслоения
+                                    sym = None
+                                    if r_sym.endswith('USDT'):
+                                        base_coin = r_sym[:-4]
+                                        sym = f"{base_coin}/USDT:USDT"
+
+                                    if sym and sym in memory.all_dna:
+                                        kline = data.get('k', {})
+                                        if kline:
+                                            t_ms = int(kline.get('t', 0))
+                                            cur_close = float(kline.get('c', 0))
+
+                                            # Записываем чистую фьючерсную цену строго в свой слот
+                                            memory.prices[sym] = cur_close
+
+                                            bar = [t_ms, float(kline.get('o', 0)), float(kline.get('h', 0)), float(kline.get('l', 0)), cur_close, float(kline.get('v', 0))]
+                                            if sym not in memory.candles:
+                                                memory.candles[sym] = [bar]
+                                            else:
+                                                history = memory.candles[sym]
+                                                if history[-1] == t_ms:
+                                                    history[-1] = bar
+                                                else:
+                                                    history.append(bar)
+                                                if len(history) > 30:
+                                                    memory.candles[sym] = history[-30:]
+#--------------------------------------
                 except:
                     await asyncio.sleep(2)
-
     async def hft_packet_processor():
         """ Поток 2: Наносекундный скользящий накопитель массивов OHLCV в ОЗУ """
         #last_ws_debug_time = time.time()
@@ -1223,39 +1270,48 @@ async def main():
     async def hunter_loop():
         await asyncio.sleep(5)
         last_beacon_t = 0
+
+#==========================   ФИКС V161.0: АНТИ-СПАМ ФИЛЬТР ПОВТОРНЫХ СИГНАЛОВ ОЗУ   ============
+        # Хранилище временных меток последних сигналов, чтобы выжечь пулеметный спам
+        if not hasattr(memory, 'last_signal_time'):
+            memory.last_signal_time = {}
+#=============================================================================
+
         while memory.is_running:
             for s in memory.all_dna.keys():
-                sig, last_beacon_t = await check_signal(exchange, s, last_beacon_t)
-#                log(f"🚫 [DEBUG HUNTER]: Перед проверкой сигнала по {s} ! last_beacon_t= {last_beacon_t} sig = {sig}.")
-                if sig:
-                    # Посекундно вскрываем состояние предохранителей в RAM для этой монеты, используя переменную цикла s
-#                    log(f"🕵️‍♂️ [DEBUG HUNTER]: Поймали сигнал по {s}! Текущие слоты: {memory.slot s_occupied}/{MAX_SLOTS} | Есть в RAM: {s in memory.active_pos}")
-                    log(f"🕵️‍♂️ [DEBUG HUNTER]: СИГНАЛ по {s}! Передача: {sig.get('gear', 'ECO')} |  Слоты: {memory.slots_occupied}/{MAX_SLOTS} | В RAM: {s in memory.active_pos}")
+                try:
+                    current_time_now = time.time()
 
-
-                    if memory.slots_occupied >= MAX_SLOTS:
-                        log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Превышен лимит параллельных слотов MAX_SLOTS.")
+#==========================   ФИКС V161.5: АHТИ-СПАM ЗАМОК ОТ ОШИБОК И ОТМЕН TREND SHIELD   ====
+                    # Если по этой монете опрос уже был меньше 5 секунд назад — наносекундно пропускаем тик!
+                    if current_time_now - memory.last_signal_time.get(s, 0) < 5.0:
                         continue
 
-                    if s in memory.active_pos:
-                        log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Монета уже удерживается в оперативной памяти.")
-                        continue
-
-                    log(f"🎯 [DEBUG HUNTER]: Все шлюзы пройдены! Передаю сигнал по {s} в execute_entry...")
-                    await execute_entry(exchange, sig)
+                    # Фиксируем время попытки ДО входа в check_signal, полностью глуша спам отмен
+                    memory.last_signal_time[s] = current_time_now
 #================================================================================================
 
-                    #await execute_entry(exchange, sig)
-            await asyncio.sleep(0.4)
+                    sig, last_beacon_t = await check_signal(exchange, s, last_beacon_t)
+#                log(f"🚫 [DEBUG HUNTER]: Перед проверкой сигнала по {s} ! last_beacon_t= {last_beacon_t} sig = {sig}.")
+                    if sig:
 
+                        if memory.slots_occupied >= MAX_SLOTS:
+                            #log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Превышен лимит параллельных слотов MAX_SLOTS.")
+                            continue
+
+                        if s in memory.active_pos:
+                            #log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Монета уже удерживается в оперативной памяти.")
+                            continue
+                        #log(f"🎯 [DEBUG HUNTER]: Все шлюзы пройдены! Передаю сигнал по {s} в execute_entry...")
+                        await execute_entry(exchange, sig)
+#================================================================================================
+
+                        #await execute_entry(exchange, sig)
+                except:
+                    pass
+            # Возвращаем твой каноничный HFT-шаг сна цикла (0.4 секунды) для идеального баланса процессора
+            await asyncio.sleep(0.4)
     try:
-       # await asyncio.gather(
-       #     update_balance(exchange),
-       #     price_stream(),
-       #     hunter_loop(),
-       #     monitor_logic(exchange)
-       # )
-        # --- [ФИКС V43.2: АСИНХРОННЫЙ ЗАМОК СТЕРИЛИЗАЦИИ ОЗУ СИРОТ] ---
         # 1. Сначала жестко запускаем фоновый съем балансов и Пылесос
         asyncio.create_task(update_balance(exchange))
 
@@ -1266,7 +1322,7 @@ async def main():
         await asyncio.gather(
 #==========================   ФИКС V141.0: ЗАПУСК НОВЫХ ДВИГАТЕЛЕЙ В КОНВЕЙЕР   =================
             hft_market_stream(),
-            hft_packet_processor(),
+#            hft_packet_processor(),
 #===============================================================================
             price_stream(),
             hunter_loop(),
