@@ -176,7 +176,7 @@ async def update_balance(exchange):
 #--------------------------------------
             # Контур круглосуточной авто-очистки стаканов. Работает в фоновом потоке баланса!
             # Контрольная пауза тика опроса баланса и удержания шлюзов
-            await asyncio.sleep(15)
+            await asyncio.sleep(30)
 
         except Exception as e:
             log(f"⚠ Balance Error: {e}")
@@ -184,66 +184,59 @@ async def update_balance(exchange):
 
 #==========================   ФИКС V58.0: АВТОНОМНЫЙ ПЫЛЕСОС ЛИМИТОК ДНК С ВЫВОДОМ ОШИБОК   =====
 async def limit_orders_cleaner_loop(exchange):
-    """Изолированный круглосуточный патруль и снос протухших лимиток ДНК"""
-    # Намертво глушим предупреждение CCXT оRate Limit сквозного запроса ордеров
-    exchange.options["warnOnFetchOpenOrdersWithoutSymbol"] = False
-#==========================   ФИКС V63.0: НАТИВНЫЙ ОДНОЗАПРОСНЫЙ СНОС БЕЗ СИМВОЛА   =============
-    # Жестко подгружаем справочник контрактов CCXT в ОЗУ, чтобы избежать KeyError
-    await exchange.load_markets()
+    """ Наносекундный зрячий локальный Веник ОЗУ: чистит лимитки с выводом логов V184.0 """
+    while memory.is_running:
+        await asyncio.sleep(10)
 
-    # Прямо в секунду включения бота принудительно обнуляем слоты и выжигаем зависшие хвосты RAM
-    memory.slots_occupied = 0
-    memory.active_pos.clear()
-    memory.tp_fixed.clear()
-    memory.be_fixed.clear()
-    log("🧹🚀 [КВАНТОВЫЙ ВЕHИК]: Оперативная память RAM стерилизована! Слоты открыты на 100%.")
+        if not hasattr(memory, 'placed_orders') or not memory.placed_orders:
+            continue
 
+        current_server_time = int(time.time() * 1000)
+        orders_count = 0
 
-    while True:
-        try:
-            # 1. Запрашиваем одним быстрым запросом ВСЕ висящие ордера аккаунта
-            raw_orders = await exchange.fapiPrivateGetOpenOrders()
+        for o_id, o_data in list(memory.placed_orders.items()):
+            try:
+                o_time = int(o_data['time'])
+                time_passed_sec = (current_server_time - o_time) / 1000
 
-            if raw_orders and len(raw_orders) > 0:
-                current_server_time = int(time.time() * 1000) # Переводим время в миллисекунды
-                orders_count = 0
+                # Ранний зрячий лог-дебаг: бот сообщает, какие ордера он удерживает в RAM
+#                log(f"⏳ [ВЕHИК ДЕБАГ]: Вижу ордер {o_id} по {o_data['symbol']} (Возраст: {round(time_passed_sec, 1)} сек)")
 
-                for o_data in raw_orders:
-                    o_sym = str(o_data.get('symbol'))
-                    o_id = o_data.get('orderId')
-                    o_time = int(o_data.get('time', 0)) # Время выставления ордера биржей
+                if (current_server_time - o_time) >= 180000:
+                    log(f"🧹 [ВЕHИК СНОС]: Ордер {o_id} по {o_data['symbol']} устарел ({round(time_p assed_sec, 1)} сек). Попытка удаления...")
+                    try:
+                        clean_binance_ticker = str(o_data['binance_id']).upper().strip()
+                        await asyncio.wait_for(
+                            exchange.fapiPrivateDeleteOrder({'symbol': clean_binance_ticker, 'orderId': int(o_id)}),
+                            timeout=5.0
+                        )
+                        log(f"✅ [ЛОКАЛЬНЫЙ ВЕHИК]: Лимитка {o_id} по {o_data['symbol']} успешно выжжена из стакана.")
+                        orders_count += 1
+#==========================   ФИКС V188.0: ТОТАЛЬНЫЙ РАСКРЫТИЕ СЛЕПЫХ ОШИБОК ВЕНИКА   ===========
+                    except asyncio.TimeoutError:
+                        log(f"⚠️ [ВЕHИК КРАХ]: СЕТЕВОЙ ТАЙМАУТ! Бинанс не ответил за 2.0 сек при сносе ордера {o_id} по {o_data['symbol']}.")
+                    except Exception as binance_err:
+                        log(f"ℹ️ [ВЕHИК ОТКАЗ БИРЖИ]: Бинанс отклонил запрос на отмену ордера {o_id}: {binance_err}")
+                    finally:
+#==========================   ФИКС V198.0: СИНХРОННОЕ ВЫЧИЩЕНИЕ ФАНТОМНЫХ СЛОТОВ АКТИВНЫХ ПОЗИЦИЙ ===
+                        # Если лимитка удалена или отменена — намертво стираем ее из активных слотов RAM выходов!
+                        # Это мгновенно освобождает место для новых каскадных входов сканера
+                        if o_id in memory.placed_orders:
+                            target_raw_symbol = memory.placed_orders[o_id].get('symbol')
+                            if target_raw_symbol and target_raw_symbol in memory.active_pos:
+                                # Если ордер не успел налиться (был стерт веником) — убираем его из активных слотов позиций
+                                if memory.active_pos[target_raw_symbol].get('gear_type') == 'LIMIT':
+                                    del memory.active_pos[target_raw_symbol]
+                                    log(f"🧹 [ОЗУ ВЕНИК]: Фантомный слот по {target_raw_symbol} успе шно очищен из RAM активных позиций.")
 
-                    # Проверяем жестко: ордер имеет право подлежать сносу ТОЛЬКО если пробыл в стакане более 45 сек (45000 мс)
-                    if (current_server_time - o_time) >= 180000:
-                        try:
-#==========================   ФИКС V172.0: ЖЕСТКИЙ АСИНХРОННЫЙ ТАЙМАУТ ДЛЯ ВЕHИКА   =============
-                            # Ограничиваем удаление ордера 4 секундами таймаута, спасая Event Loop от комы
-                            await asyncio.wait_for(
-                                exchange.fapiPrivateDeleteOrder({'symbol': binance_id, 'orderId': o_id}),
-                                timeout=4.0
-                            )
-                            log(f"🧹 [КВАНТОВЫЙ ВЕHИК]: Старый ордер {o_id} по {symbol} успешно стер т.")
-                            orders_count += 1
-                        except asyncio.TimeoutError:
-                            log(f"⚠️ [ВЕHИК ТАЙМАУТ]: Бинанс не ответил за 4 сек при удалении ордера по {symbol}. Пропускаю.")
-                        except Exception as cleaner_err:
-                            log(f"🚨 [ВЕHИК КРИТ]: Ошибка удаления ордера по {symbol}: {cleaner_err}")
-#--------------------------------------
-                  #          p_params = {'symbol': o_sym, 'orderId': o_id}
-                  #          await exchange.fapiPrivateDeleteOrder(p_params)
-                  #          orders_count += 1
-                  #      except:
-                  #          pass
+                        if o_id in memory.placed_orders:
+                            del memory.placed_orders[o_id]
+#--------------------------------
+            except Exception as loop_err:
+                log(f"🚨 [ВЕHИК СБОЙ ЦИКЛА]: Критическая коллизия обхода: {loop_err}")
 
-                if orders_count > 0:
-                    log(f"🧹🔥 [ЯДЕРНЫЙ ВЕHИК V124.0]: Намертво выжжено {orders_count} реально проту хших лимиток (>45 сек)!")
-                    memory.slots_occupied = 0
-
-            await asyncio.sleep(10) # Сокращаем сон Веника до 10 сек для высокой точности патруля
-        except Exception as loop_ord_err:
-            await asyncio.sleep(10)
-
-#================================================================================================
+        if orders_count > 0:
+            log(f"🧹🔥 [ЯДЕРНЫЙ ВЕHИК V184.0]: Успешно стерто {orders_count} протухших лимиток из ст акана!")
 
 async def check_signal(exchange, symbol, last_beacon_t):
     """
@@ -256,12 +249,20 @@ async def check_signal(exchange, symbol, last_beacon_t):
         cur_p = memory.prices.get(symbol)
         if not dna or not cur_p:
             return None, last_beacon_t
+
 #==========================   ФИКС V149.0: ИСТИННЫЕ ЦИФРОВЫЕ ИНДЕКСЫ МАССИВА OHLCV   ============
         # Забираем скользящий 30-свечной массив из памяти сокета мимо виснущей сети интернет
         ohlcv = memory.candles.get(symbol)
         if not ohlcv or len(ohlcv) < 21:
             return None, last_beacon_t
 
+#==========================   ФИКС V193.0: АППАРАТНЫЙ ФИЛЬТР СЖАТЫХ ФАНТОМНЫХ ПОЛОС   ===========
+        # Защита от эффекта "пустого ОЗУ": если хай равен лоу — полосы мертвы, отменяем ложный импульс!
+        recent_highs = [float(b[2]) for b in ohlcv[-10:]]
+        recent_lows = [float(b[3]) for b in ohlcv[-10:]]
+        if max(recent_highs) == min(recent_lows):
+            return None, last_beacon_t
+#----------------------------------
         # Берем самую последнюю свечу из массива [-1] и извлекаем High [2] и Low [3] по HFT-индексам
         last_bar = ohlcv[-1]
         b_high = last_bar[2]
@@ -691,26 +692,56 @@ async def execute_entry(exchange, sig):
    #     return
 
     try:
-        # СБОР ЖЕСТКОГО БИРЖЕВОГО ID КОНТРАКТА ДЛЯ МЕТОДОВ ПЛЕЧА BINANCE ('ADAUSDT')
-        binance_id_clean = str(symbol).replace('/', '')
+#==========================   ШТУЧНЫЙ ФИКС V197.5: БЛОКИРОВКА ДУБЛЕЙ В САМОЙ ШАПКЕ ТRY   ========
+        # Защита 1: Проверяем, нет ли монеты в активных позициях RAM
+        if len(memory.active_pos) >= MAX_SLOTS or symbol in memory.active_pos:
+            return
 
-        # Динамическое определение эффективного плеча с учетом лимита субаккаунта
-        dna_lev = int(sig['dna']['lev'])
+        # Защита 2: Проверяем, не висит ли по этой монете пассивный ордер в ОЗУ Веника прямо сейчас
+        if hasattr(memory, 'placed_orders') and memory.placed_orders:
+            for v_id, v_data in memory.placed_orders.items():
+                if v_data.get('symbol') == raw_symbol:
+                    return
+#-----------------------------------
+#==========================   ФИКС V192.0: ПОДНЯТИЕ РАСЧЕТА ПЛЕЧА ДЛЯ ВИРТУАЛЬНОЙ МАРЖИ   =======
+        # Первым делом пулей рассчитываем эффективное плечо из ДНК-сигнала, убирая UnboundLocalError
+        dna_lev = int(sig['dna']['lev']) if 'dna' in sig and 'lev' in sig['dna'] else 25
         effective_leverage = min(dna_lev, MAX_ACCOUNT_LEVERAGE)
 
-        # Очищаем тикер от косой черты специально для API Бинанса
-  #      binance_id_clean = str(symbol).replace('/', '')
-  #      try: await exchange.set_leverage(effective_leverage, binance_id_clean)
-  #      except: pass
-  #      try: await exchange.set_margin_mode('ISOLATED', binance_id_clean)
-  #      except: pass
+#==========================   ФИКС V193.0: АТОМАРНЫЙ СВОБОДНЫЙ ВЫЧЕТ МАРЖИ БЕЗ ЗАМКОВ   =========
+        # Выжигаем опасный замок Lock(). Списываем виртуальную маржу в RAM свободно и атомарно!
+        live_available = float(memory.available) if hasattr(memory, 'available') else 10.0
 
-        # МАТЕМАТИЧЕСКИЙ РАСЧЕТ НОМИНАЛЬНОГО ОБЪЕМА ПОД ОБНОВЛЕННУЮ МАРЖУ ОЗУ
-#        amount_usdt = float(live_available) * RISK_GEAR * effective_leverage
-#==========================   ФИКС V83.0: ИНТЕГРАЦИЯ РИСКА ТРАНСМИССИИ ИЗ ОЗУ   ================
-        # Читаем адаптивный риск текущей передачи скорости (DRIVE / ECO / CRUISE)
-#        adaptive_risk = float(sig['gear_data']['risk'])
-#        amount_usdt = float(live_available) * adaptive_risk * effective_leverage
+        slot_allocation = 0.20
+        amount_usdt = float(live_available) * slot_allocation * effective_leverage
+
+        if amount_usdt <= 0:
+            return
+
+#==========================   ФИКС V195.0: КОМФОРТНЫЙ БУФЕР ЗАЛОГА МАРЖИ   ======================
+        # Высчитываем реальный залог с учетом 25х плеча: ордер заберет всего пару десятков центов
+        virtual_fee_margin = amount_usdt / effective_leverage * 1.5
+        if hasattr(memory, 'available'):
+                # Вычитаем только чистый залог, оставляя остальную маржу свободной для лавины!
+                memory.available = max(0.0, float(memory.available) - virtual_fee_margin)
+#==========================   ФИКС V185.0: ЧИСТАЯ СТРОКА ТИКЕРА ИЗ КЛАССА BINANCE_MARKET_ID   ===
+        # Намертво приравниваем к готовому биржевому идентификатору CCXT, убирая любые коллизии строк
+        binance_id_clean = str(raw_symbol).replace('/', '').split(':')[0]
+
+#==========================   ФИКС V199.0: ПРЕЦИЗИОННЫЙ ПОДСЧЕТ ТОЛЬКО РЕАЛЬНЫХ СЛОТОВ   =======
+        # Считаем емкость Империи строго по живым контрактам (is_live == True), игнорируя пассивные лимитки
+        live_slots_count = len([k for k, v in memory.active_pos.items() if v.get('is_live') == True])
+
+        if live_slots_count >= MAX_SLOTS or symbol in memory.active_pos:
+           return
+#------------------------------------
+        # Защита 2: Проверяем, не висит ли по этой монете пассивный ордер в ОЗУ Веника прямо сейчас
+        if hasattr(memory, 'placed_orders') and memory.placed_orders:
+          for v_id, v_data in memory.placed_orders.items():
+            if v_data.get('symbol') == raw_symbol:
+                # log(f"🚫 [ДУБЛЬ БЛОК]: Ордер по {raw_symbol} уже висит в стакане. Сигнал отклонен.")
+                return
+#--------------------------------------
 
 #==========================   ФИКС V162.0: ТОЧНАЯ КАЛИБРОВКА СЛОТА ПОД 20% МАРЖИ   ==============
         global transmission_risk_mult
@@ -811,6 +842,17 @@ async def execute_entry(exchange, sig):
                 }
                 order = await exchange.fapiPrivatePostOrder(p_params)
                 log(f"📥 [DEBUG ENTRY]: Нативная лимитка по {binance_market_id} успешно в стакане! ID: {order.get('orderId')}")
+
+                if not hasattr(memory, 'placed_orders'):
+                    memory.placed_orders = {}
+
+                if order and order.get('orderId'):
+                    memory.placed_orders[str(order.get('orderId'))] = {
+                        'symbol': raw_symbol,
+                        'binance_id': binance_id_clean,
+                        'time': int(time.time() * 1000)
+                    }
+#--------------------------
             except Exception as limit_err:
                 log(f"🚨 [ОШИБКА БИРЖИ LIMIT]: Сокет-шлюз  Бинанса отклонил заявку по {symbol}: {limit_err}")
                 order = None
@@ -820,15 +862,16 @@ async def execute_entry(exchange, sig):
             log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty} | Общий баланс: ${round(memory.total_wallet, 2)}")
 
             is_order_live = True if g_type == 'MARKET' else False
-            # Записываем сделку в RAM под чистым биржевым ключом
+#==========================   ШТУЧНЫЙ ФИКС V197.5: СТЕРИЛЬНЫЙ ВОЗВРАТ ЗАПИСИ В ACTIVE_POS   ====
+            # Возвращаем запись лимиток обратно в ОЗУ, убирая слепоту налива!
             memory.active_pos[raw_symbol] = {
                 'side': sig['side'], 'vol': qty, 'price': sig['price'],
                 'gear': sig['gear'], 'gear_data': sig['gear_data'], 'dna': sig['dna'],
                 'entry_time': time.time(),
-                'gear_type': g_type,  # Жестко запечатываем тип ордера в ОЗУ для контроля
-                'is_live': is_order_live  # Лимитка выставлена, но позиция на бирже еще не налилась!
-
+                'gear_type': g_type,
+                'is_live': is_order_live # Для лимиток здесь запишется False, и трейлинг ждет налития
             }
+#-------------------------------
             memory.tp_fixed[symbol] = False
             memory.be_fixed[symbol] = False
             memory.stop_placed[symbol] = None
@@ -843,6 +886,11 @@ async def execute_entry(exchange, sig):
 async def monitor_logic(exchange):
     """Асинхронный бронированный контроль выходов и адаптивного пре-трейлинга V22.0 [ФИКС NEAR]"""
     while memory.is_running:
+#==========================   ФИКС V193.0: РАСКОММЕНТИРОВАНИЕ СКВОЗНОГО ДЕБАГА ВЫХОДОВ   ========
+        # Включаем зрячий ежесекундный дебаг-логгер емкости RAM активных позиций
+        if int(time.time()) % 10 == 0:
+            log(f"🛰️ [МОНИТОР ДЕБАГ]: Патруль активен. Живых позиций в RAM: {len(memory.active_pos) } | Ключи: {list(memory.active_pos.keys())}")
+#-------------------------------------
         # --- [ВРЕЗКА V28.4: СКВОЗНОЙ ДЕБАГ ШЛЮЗА ВЫХОДОВ] ---
 #        if int(time.time()) % 5 == 0:
 #            log(f"🛰️ [DEBUG GATE 1]: Цикл while активен. Текущий размер RAM active_pos: {len(memor y.active_pos)}")
@@ -1160,10 +1208,35 @@ async def monitor_logic(exchange):
         #await asyncio.sleep(0.5)
 
 async def main():
-#==========================   ФИКС V166.0: ФЛАГ АППАРАТНОГО ПРОГРЕВА СИСТЕМЫ   ==================
-    # Блокируем сканер на старте, пока не завершится усыновление позиций с биржи
+#==========================   ФИКС V181.0: ЦИКЛИЧЕСКИЙ ТОТАЛЬНЫЙ ПРЕДСТАРТОВЫЙ КЛИНИНГ СТАКАНОВ =
+    # 1. Аппаратно переводим систему в режим стартового прогрева ОЗУ
     memory.is_warmup = True
-#======================================
+
+    # 2. Подгружаем ДНК-пульт в память ЗАРАНЕЕ, чтобы вытащить список всех наших 33 монет
+    with open('dna_ignition.json', 'r') as f:
+        memory.all_dna = json.load(f)
+
+    # 3. Подключаем предстартовый коннектор для зачистки старых лимиток-сирот
+    init_ex = ccxt.binance({'apiKey': API_KEY, 'secret': API_SECRET, 'options': {'defaultType': 'future'}})
+    try:
+        log("🧹🔥 [ЯДЕРНЫЙ КЛИНИНГ V181.0]: Начинаю тотальную стерилизацию стаканов по всем секторам ...")
+        # Пробегаем быстрым каскадом по всем монетам и принудительно отменяем пассивные лимитки
+        for target_coin in list(memory.all_dna.keys()):
+            try:
+                coin_market_id = str(target_coin).replace('/', '').split(':')[0]
+                await init_ex.fapiPrivateDeleteAllOpenOrders({'symbol': coin_market_id})
+            except:
+                pass
+        log("✅ [КЛИНИНГ ЗАВЕРШЕН]: Все протухшие лимитки успешно выжжены с серверов Бинанса!")
+    except Exception as clear_err:
+        log(f"⚠️ Предупреждение предстартового клининга: {clear_err}")
+    finally:
+        await init_ex.close() # Намертво закрываем предстартовую сессию
+
+    # 4. Инициализируем асинхронный замок для защиты каскадных ордеров в RAM
+    if not hasattr(memory, 'orders_lock'):
+        memory.orders_lock = asyncio.Lock()
+
 #==========================   ФИКС V152.0: ВЗВЕДЕНИЕ ПОСТОЯННОГО HFT KEEP-ALIVE ТУННЕЛЯ   =======
     # Аппаратно заставляем HTTP-клиент не закрывать сессию, убирая 2 секунды лага открытий TCP
     exchange = ccxt.binance({
@@ -1398,7 +1471,7 @@ async def main():
 #===============================================================================
             price_stream(),
             hunter_loop(),
-            monitor_logic(exchange),
+            monitor_logic(exchange_monitor),
             limit_orders_cleaner_loop(exchange)
         )
     finally:
