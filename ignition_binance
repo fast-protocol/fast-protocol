@@ -158,8 +158,19 @@ async def update_balance(exchange):
                                         log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Направление {side} Успешно подхвачен ядром выходов!")
                 except Exception as sync_err:
                     log(f"⚠ Ошибка синхронизации позиций при старте: {sync_err}")
-#==========================   ФИКС V166.5: ГАРАНТИРОВАННОЕ СНЯТИЕ ЗАМКА ПРОГРЕВА   ==============
-                # Снимаем блокировку сканера строго после окончания первого круга синхронизации
+#==========================   ФИКС V172.0: ЧЕСТНЫЙ ПРОГРЕВ МАССИВА OHLCV ИЗ REST API   ==========
+                # Скачиваем реальную историю баров один раз при старте, полностью выжигая ложные сигналы
+                log(f"🛰️ [HFT ПРОГРЕВ V172.0]: Закачиваю реальную историю 30 свечей для Pandas по { len(memory.all_dna)} секторам...")
+                for s_coin in list(memory.all_dna.keys()):
+                    try:
+                        history_bars = await exchange.fetch_ohlcv(s_coin, '1m', limit=30)
+                        if history_bars and len(history_bars) >= 21:
+                            memory.candles[s_coin] = history_bars
+                            memory.prices[s_coin] = float(history_bars[-1][4]) # Честная цена закрытия
+                        await asyncio.sleep(0.1) # Защитный зазор от бана весов API
+                    except:
+                        pass
+
                 memory.is_warmup = False
                 first_run_sync = False
 #--------------------------------------
@@ -205,11 +216,24 @@ async def limit_orders_cleaner_loop(exchange):
                     # Проверяем жестко: ордер имеет право подлежать сносу ТОЛЬКО если пробыл в стакане более 45 сек (45000 мс)
                     if (current_server_time - o_time) >= 180000:
                         try:
-                            p_params = {'symbol': o_sym, 'orderId': o_id}
-                            await exchange.fapiPrivateDeleteOrder(p_params)
+#==========================   ФИКС V172.0: ЖЕСТКИЙ АСИНХРОННЫЙ ТАЙМАУТ ДЛЯ ВЕHИКА   =============
+                            # Ограничиваем удаление ордера 4 секундами таймаута, спасая Event Loop от комы
+                            await asyncio.wait_for(
+                                exchange.fapiPrivateDeleteOrder({'symbol': binance_id, 'orderId': o_id}),
+                                timeout=4.0
+                            )
+                            log(f"🧹 [КВАНТОВЫЙ ВЕHИК]: Старый ордер {o_id} по {symbol} успешно стер т.")
                             orders_count += 1
-                        except:
-                            pass
+                        except asyncio.TimeoutError:
+                            log(f"⚠️ [ВЕHИК ТАЙМАУТ]: Бинанс не ответил за 4 сек при удалении ордера по {symbol}. Пропускаю.")
+                        except Exception as cleaner_err:
+                            log(f"🚨 [ВЕHИК КРИТ]: Ошибка удаления ордера по {symbol}: {cleaner_err}")
+#--------------------------------------
+                  #          p_params = {'symbol': o_sym, 'orderId': o_id}
+                  #          await exchange.fapiPrivateDeleteOrder(p_params)
+                  #          orders_count += 1
+                  #      except:
+                  #          pass
 
                 if orders_count > 0:
                     log(f"🧹🔥 [ЯДЕРНЫЙ ВЕHИК V124.0]: Намертво выжжено {orders_count} реально проту хших лимиток (>45 сек)!")
@@ -1129,9 +1153,11 @@ async def monitor_logic(exchange):
                         pass
 #======
             except Exception as e:
-                pass
+                log(f"🚨 [ОШИБКА ТРЕЙЛИНГА]: Сбой главного цикла monitor_logic: {e}")
+                await asyncio.sleep(1)
+               # pass
 
-        await asyncio.sleep(0.5)
+        #await asyncio.sleep(0.5)
 
 async def main():
 #==========================   ФИКС V166.0: ФЛАГ АППАРАТНОГО ПРОГРЕВА СИСТЕМЫ   ==================
@@ -1145,6 +1171,7 @@ async def main():
         'secret': API_SECRET,
         'options': {'defaultType': 'future'},
         'enableRateLimit': True,
+        'timeout': 5000, # <--- ФИКС V170.0: НЕТ ВЕЧНЫМ ЗАВИСАНИЯМ REST!
         'headers': {
             'Connection': 'keep-alive',
             'Keep-Alive': 'timeout=60, max=10000'
@@ -1155,6 +1182,7 @@ async def main():
     exchange_monitor = ccxt.binance({
         'apiKey': API_KEY, 'secret': API_SECRET,
         'options': {'defaultType': 'future'}, 'enableRateLimit': True,
+        'timeout': 5000, # <--- ФИКС V170.0: НЕТ ВЕЧНЫМ ЗАВИСАНИЯМ REST!
         'headers': {'Connection': 'keep-alive', 'Keep-Alive': 'timeout=60, max=10000'}
     })
 
@@ -1183,17 +1211,25 @@ async def main():
         log(f"🛰️ [HFT МOНОЛИТ V159.0]: Запускаю сокет-магистраль по {len(memory.all_dna)} секторам. ..")
 
         async with aiohttp.ClientSession() as session:
+#==========================   ФИКС V169.0: ЭКСПОНЕНЦИАЛЬНЫЙ СЕТЕВОЙ ОТКАТ И ТАЙМАУТ КОННЕКТА   ==
+            # Инициализируем динамический счетчик задержки сети перед входом в цикл
+            retry_delay = 2.0
+
             while memory.is_running:
                 try:
-                    async with session.ws_connect(url) as ws:
+                    # Ограничиваем время самого рукопожатия до 3 секунд, вживляем фоновый heartbeat пинг
+                    async with session.ws_connect(url, receive_timeout=7.0, heartbeat=15.0) as ws:
+                        # При успешном коннекте мгновенно сбрасываем задержку до базовых 2 секунд
+                        retry_delay = 2.0
+                        print("✅ [HFT МOНОЛИТ]: Сквозной сокет-туннель пробит.")
+
                         async for msg in ws:
                             if msg.type == aiohttp.WSMsgType.TEXT:
                                 packet = json.loads(msg.data)
                                 data = packet.get('data', {})
                                 r_sym = str(data.get('s', '')).upper()
                                 if r_sym:
-#==========================   ФИКС V162.0: ЖЕСТКАЯ СИНХРОНИЗАЦИЯ БИРЖЕВЫХ КЛЮЧЕЙ ОЗУ   ==========
-                                    # Строим чистый канонический ключ на базе реальной структуры ДНК, убирая наслоения
+                                    # Твоя каноничная посимвольная маска выпрямления ключей ОЗУ
                                     sym = None
                                     if r_sym.endswith('USDT'):
                                         base_coin = r_sym[:-4]
@@ -1205,7 +1241,7 @@ async def main():
                                             t_ms = int(kline.get('t', 0))
                                             cur_close = float(kline.get('c', 0))
 
-                                            # Записываем чистую фьючерсную цену строго в свой слот
+                                            # Записываем чистую цену строго в свой слот
                                             memory.prices[sym] = cur_close
 
                                             bar = [t_ms, float(kline.get('o', 0)), float(kline.get('h', 0)), float(kline.get('l', 0)), cur_close, float(kline.get('v', 0))]
@@ -1219,9 +1255,12 @@ async def main():
                                                     history.append(bar)
                                                 if len(history) > 30:
                                                     memory.candles[sym] = history[-30:]
-#--------------------------------------
-                except:
-                    await asyncio.sleep(2)
+                except Exception as connect_err:
+                    log(f"🚨 [СЕТЕВАЯ АВАРИЯ БИРЖИ]: Ошибка сокет-шлюза: {connect_err}. Защитный откат на {retry_delay} сек...")
+                    await asyncio.sleep(retry_delay)
+                    # Плавно увеличиваем паузу в 2 раза, защищая IP от бана Бинанса
+                    retry_delay = min(retry_delay * 2, 30.0)
+
     async def hft_packet_processor():
         """ Поток 2: Наносекундный скользящий накопитель массивов OHLCV в ОЗУ """
         #last_ws_debug_time = time.time()
@@ -1329,12 +1368,19 @@ async def main():
                             #log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Монета уже удерживается в оперативной памяти.")
                             continue
                         #log(f"🎯 [DEBUG HUNTER]: Все шлюзы пройдены! Передаю сигнал по {s} в execute_entry...")
-                        await execute_entry(exchange, sig)
+#==========================   ФИКС V173.0: АСИНХРОННЫЙ ФОНОВЫЙ ПУСК ОРДЕРОВ CREATE_TASK   =======
+                        # Отвязываем отправку ордера от сканера! Хантер идет дальше, не дожидаясь ответа Бинанса
+                        asyncio.create_task(execute_entry(exchange, sig))
+#--------------------------------------
+                        #await execute_entry(exchange, sig)
 #================================================================================================
 
                         #await execute_entry(exchange, sig)
-                except:
-                    pass
+#==========================   ФИКС V172.0: ЗРЯЧИЙ ДЕБАГ КРИТОВ СКАHЕРA В ОЗУ   ==================
+                except Exception as hunter_err:
+                    log(f"🚨 [ОШИБКА ХАНТЕРА]: Сбой патруля на монете {s}: {hunter_err}")
+                    await asyncio.sleep(0.1)
+#--------------------------------------
             # Возвращаем твой каноничный HFT-шаг сна цикла (0.4 секунды) для идеального баланса процессора
             await asyncio.sleep(0.4)
     try:
