@@ -1,0 +1,1596 @@
+# --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
+RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
+MAX_SLOTS = 5          # Максимум 4 параллельных сделки
+LOG_FILE = "ignition_log.txt"
+# --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
+MAX_ACCOUNT_LEVERAGE = 25  # Выставляем 5х (аппаратный потолок субаккаунта)
+
+# --- [ГЛОБАЛЬНЫЙ КВАНТОВЫЙ КОНФИГ ТРАНСМИССИИ V80.5] ---
+transmission_mode = "AUTO"      # Режимы: "AUTO" (Автомат сессий) или "MANUAL" (Ручной режим)
+manual_gear_select = "DRIVE"    # Передачи для MANUAL: "DRIVE" (Скальпинг) / "CRUISE" (Трендовый) / "ECO" (Защита)
+transmission_risk_mult = 1.0    # Множитель риска: DRIVE (*1.15) / ECO (*0.65) / CRUISE (*1.0)
+#================================================================================================
+
+# --- ТУМБЛЕР РЕЖИМА ДЕБАГА (ВКЛ / ВЫКЛ) ---
+DEBUG_BEACONS = False   # Сделай False, чтобы полностью выключить маяки в консоли
+
+class GlobalMemory:
+    def __init__(self):
+        self.prices = {}
+        self.active_pos = {}
+        self.all_dna = {}
+        self.is_running = True
+        self.slots_occupied = 0
+        self.available = 0.0
+        self.start_balance = 0.0
+        self.total_wallet = 0.0
+
+        self.be_fixed = {}
+        self.stop_placed = {}
+        self.tp_fixed = {}
+
+memory = GlobalMemory()
+
+def log(msg):
+    t = time.strftime('%Y-%m-%d %H:%M:%S')
+    formatted = f"[{t}] 🚀 {msg}"
+    print(formatted)
+    try:
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(formatted + "\n")
+    except:
+        pass
+
+async def update_balance(exchange):
+    """Фоновое обновление баланса, ЖЕСТКИЙ переключатель ISOLATED и усыновление сирот V22.4"""
+    global first_run_sync
+    first_run_sync = True
+    while memory.is_running:
+        try:
+            # 1. Запрашиваем баланс кошелька фьючерсов
+
+            # --- ШТУЧНЫЙ ФИКС V24.9: КВАНТОВЫЙ СЪЕМ ДОСТУПНОЙ МАРЖИ BINANCE ---
+            bal = await exchange.fetch_balance()
+
+            # Извлекаем аппаратный availableBalance фьючерсного шлюза Binance
+            m_info = bal.get('info', {})
+            assets = m_info.get('assets', [])
+
+            # Ищем чистую доступную маржу Isolated-активов среди JSON-массива биржи
+            usdt_asset = next((a for a in assets if a.get('asset') == 'USDT'), {})
+            #avail_margin = float(usdt_asset.get('availableBalance', bal.get('free', {}).get('USDT', 0)))
+            # --- [ШТУЧНЫЙ ФИКС V37.2: ИСТИННЫЙ СВОБОДНЫЙ БАЛАНС ФЬЮЧЕРСОВ] ---
+            avail_margin = float(m_info.get('availableBalance', usdt_asset.get('availableBalance', bal.get('free', {}).get('USDT', 0))))
+
+            # Возвращаем переменную free для предотвращения NameError ниже по коду
+            free = avail_margin
+
+            # Резервируем скрытый 3% буфер на Slippage проскальзывание рыночного ордера Taker
+            memory.available = avail_margin * 0.97
+            memory.total_wallet = float(bal.get('total', {}).get('USDT', 0))
+
+            if memory.start_balance == 0:
+                memory.start_balance = memory.total_wallet
+                log(f"!!! С Т А Р Т !!!  Общий баланс кошелька: ${round(memory.total_wallet, 2)} | Свободно для HFT: ${round(free, 2)}")
+
+            # --- [ЖЕСТКИЙ ФИКС V22.4: ПРИНУДИТЕЛЬНЫЙ ФОНОВЫЙ КЛУБ ИЗОЛЯЦИИ БИНАНСА] ---
+            # При каждом тике баланса бот намертво забивает режим ISOLATED для всей обоймы
+            for sym in memory.all_dna.keys():
+                try:
+                    await exchange.set_margin_mode('ISOLATED', sym)
+                except:
+                    pass # Если позиция уже изолирована, биржа пропустит шаг без краша
+
+            positions = await exchange.fetch_positions()
+            # --- [ШЛЮЗ СИНХРОНИЗАЦИИ ПОЗИЦИЙ ПОСЛЕ РЕСТАРТА (УСЫНОВЛЕНИЕ СИРОТ)] ---
+            if first_run_sync:
+                try:
+#                    positions = await exchange.fetch_positions()
+                    # --- [ТОТАЛЬНЫЙ ДЕБАГ-РАДАР V45.0: ВСКРЫТИЕ СЛЕПОТЫ СИРОТ] ---
+                    log(f"🕵️‍♂️ [DEBUG BALANCE]: Биржа вернула всего {len(positions)} позиций из AP I.")
+                    for testing_p in positions:
+                        t_vol = abs(float(testing_p.get('contracts', testing_p.get('positionAmt', 0))))
+                        if t_vol > 0.00001:
+                            t_sym = str(testing_p['symbol'])
+                            t_price = float(testing_p.get('entryPrice', testing_p.get('markPrice', 1.0)))
+                            is_in_dna = t_sym in memory.all_dna
+                            is_in_active = t_sym in memory.active_pos
+                            log(f"🔍 [DEBUG POSITION]: Монета: {t_sym} | Vol: {t_vol} | USD: {round(t_vol*t_price, 2)} | Есть в ДНК: {is_in_dna} | Есть в RAM: {is_in_active}")
+#==========================   ФИКС V280.0: АБСОЛЮТНЫЙ МАТЕМАТИЧЕСКИЙ ЗНАК НАПРАВЛЕНИЯ БИРЖИ   ===
+                            t_ram_key = str(t_sym).strip()
+
+                            if t_ram_key not in memory.active_pos:
+                                # Лезем в самое сердце нативного JSON Бинанса и смотрим на знак объема positionAmt
+                                native_amt = float(testing_p.get('info', {}).get('positionAmt', 0))
+
+                                # Если знак отрицательный — это ЖЕЛЕЗHО Шорт (sell), иначе — Лонг (buy)
+                                true_exchange_side = 'buy' if native_amt >= 0 else 'sell'
+
+                                memory.active_pos[t_ram_key] = {
+                                    'side': true_exchange_side, # Записываем чистые buy/sell в нижнем регистре под Трейлинг
+                                    'vol': t_vol,
+                                    'price': t_price,
+                                    'gear': 'g1',
+                                    'gear_data': memory.all_dna.get(t_ram_key, {}).get('g1', {}),
+                                    'dna': memory.all_dna.get(t_ram_key, {}),
+                                    'entry_time': time.time(),
+                                    'gear_type': 'MARKET',
+                                    'is_live': True
+                                }
+                                log(f"🔗 🔥 [ВЗВОД V280.0]: Контракт {t_ram_key} усыновлен! Истинный Side по знаку positionAmt: {true_exchange_side}")
+#------------------------------
+                    # --- [ВРЕЗКА V40.5: АППАРАТНЫЙ УТРЕННИЙ ПЫЛЕСОС ПЕРВОГО ТИКА] ---
+                    live_symbols = []
+                    for p in positions:
+#-----------------------------------
+                            p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
+
+#==========================   ФИКС V207.0: МОНОЛИТНЫЙ БАРЬЕР ОТ ФАНТОМНЫХ УСЫНОВЛЕНИЙ   ========
+                            # Бронированная HFT-отсечка: если объема на бирже нет, бот пулей переходит к следующей монете, вообще не читая код ниже!
+                            if p_vol <= 0.00001:
+                                continue
+
+                            p_price = float(p.get('entryPrice', p.get('markPrice', 1.0)))
+                            p_raw_sym = str(p['symbol'])
+
+                            # Если общая стоимость позы меньше $1.0 — уничтожаем мусорный остаток
+                            if (p_vol * p_price) < 1.0:
+                                try:
+                                    p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
+                                    p_exact_vol = float(exchange.amount_to_precision(p_raw_sym, p_vol))
+                                    p_params = {'reduceOnly': True}
+                                    await exchange.create_order(p_raw_sym, 'MARKET', p_exit_side, p_exact_vol, params=p_params)
+                                    log(f"🧹🔥 [УТРЕННИЙ ПЫЛЕСОС]: Намертво уничтожен мусорный остат ок {p_raw_sym} весом ${round(p_vol * p_price, 2)}!")
+                                except: pass
+                                continue # Этот контур сносит пыль и летит на следующий круг
+
+                            # Если позиция крупная и легитимная — добавляем в список живых тикеров биржи
+                            live_symbols.append(p_raw_sym)
+#================================   ФИКС V104.5: СИНХРОНИЗАЦИЯ ЧАСТИЧНОГО НАЛИВА ЛИМИТOК   ============
+                                    # Если монета уже торгуется ботом — жестко выравниваем лот ОЗУ по факту биржи
+                            if p_raw_sym in memory.active_pos:
+                                    memory.active_pos[p_raw_sym]['vol'] = p_vol
+
+#==========================   ФИКС V138.0: СКВОЗНАЯ АКТИВАЦИЯ ТРЕЙЛИНГА ДЛЯ ВСЕХ ФАЗ   ==========
+                                        # Аппаратно включаем зрячесть позиции на любых передачах (CRUISE / DRIVE / ECO)
+                                    if 'is_live' in memory.active_pos[p_raw_sym]:
+                                            if not memory.active_pos[p_raw_sym]['is_live']:
+                                                parent_gear_type = memory.active_pos[p_raw_sym].get('gear_type', 'LIMIT')
+                                                if parent_gear_type != 'MARKET':
+                                                    log(f"🔥🛰️ [КОНВЕЙЕР]: Пассивная лимитка по {p_ raw_sym} НАЛИТА на Бинансе! Включаю зрячий Трейлинг.")
+                                                memory.active_pos[p_raw_sym]['is_live'] = True
+
+                                    # Жесткое усыновление тяжелых позиций строго по знаку объема
+                                    # --- ЖЕСТКИЙ ФИКС V43.8: СИНХРОНИЗАЦИЯ КЛЮЧЕЙ С ДНК-ПУЛЬТОМ ---
+                                    clean_dna_key = p_raw_sym.split(':')[0]
+                                    #if p_raw_sym not in memory.active_pos and clean_dna_key in memory.all_dna:
+                                    if p_raw_sym not in memory.active_pos and p_raw_sym in memory.all_dna:
+                                        # --- УЛЬТИМАТИВНЫЙ ФИКС V48.0: ЧТЕНИЕ ЗHАКА ИЗ СЫРOГO API БИHАHСА ---
+                                        raw_info_amt = float(p.get('info', {}).get('positionAmt', 0))
+                                        if raw_info_amt == 0:
+                                            continue
+                                        side = 'buy' if raw_info_amt > 0 else 'sell'
+
+
+                                        entry_p = float(p.get('entryPrice', p.get('price', 0)))
+                                        #dna = memory.all_dna[clean_dna_key]
+                                        dna = memory.all_dna[p_raw_sym]
+                                        memory.active_pos[p_raw_sym] = {
+                                            'side': side, 'vol': p_vol, 'price': entry_p,
+                                            'gear': 'g1', 'gear_data': dna['g1'], 'dna': dna,
+                                            'entry_time': time.time(),
+                                            'is_live': True  # Сирота с биржи легитимен, врубаем трейлинг сразу!
+                                        }
+                                        memory.tp_fixed[p_raw_sym] = False
+                                        memory.be_fixed[p_raw_sym] = False
+                                        memory.stop_placed[p_raw_sym] = entry_p
+                                        memory.slots_occupied += 1
+                                        #log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Успешно подхвачен ядром выходов!")
+                                        log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Направление {side} Успешно подхвачен ядром выходов!")
+                except Exception as sync_err:
+                    log(f"⚠ Ошибка синхронизации позиций при старте: {sync_err}")
+#==========================   ФИКС V210.0: БЕЗОПАСНЫЙ ПЕРЕНОС ПРОГРЕВА В САМЫЙ ПОДВАЛ СТАРТА   ===
+                # Опускаем прогрев сюда! Позиции УЖЕ усыновлены в ОЗУ и защищены Трейлингом, теперь можно качать историю баров
+                log(f"🛰️ [HFT ПРОГРЕВ V210.0]: Закачиваю реальную историю 30 свечей для Pandas по 3 3 секторам...")
+                for s_coin in list(memory.all_dna.keys()):
+                    try:
+                        history_bars = await exchange.fetch_ohlcv(s_coin, '1m', limit=30)
+                        if history_bars and len(history_bars) >= 21:
+                            memory.candles[s_coin] = history_bars
+                            memory.prices[s_coin] = float(history_bars[-1][4])
+                        await asyncio.sleep(0.1)
+                    except:
+                        pass
+
+                memory.is_warmup = False
+                first_run_sync = False
+#--------------------------------------
+#--------------------------------------
+            # Этот контур работает круглосуточно раз в 30 секунд. Он проверяет, что налилось на бирже!
+#==========================   ФИКС V295.5: МОНОЛИТНЫЙ ЗРЯЧИЙ КРУГЛОСУТОЧНЫЙ КОНТУР ОЗУ-СИНХРОНИЗАЦИИ ===
+#==========================   ФИКС V300.0: СТЕРИЛЬНЫЙ КРУГЛОСУТОЧНЫЙ ПОДХВАТ СИРОТ В ОЗУ   ======
+            # Этот контур шуршит круглосуточно каждые 30 секунд, защищая RAM от лагов кэша Бинанса
+            if not first_run_sync and memory.is_running:
+                try:
+                    current_live_keys = []
+
+                    for p in positions:
+                        p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
+
+                        # Если контракт реально открыта на бирже (объем физически больше нуля)
+                        if p_vol > 0.00001:
+                            # Намертво забираем чистый готовый ОЗУ-ключ из API ("FIL/USDT:USDT")
+                            ram_key = str(p['symbol']).strip()
+                            current_live_keys.append(ram_key)
+
+                            # СЦЕНАРИЙ А: Лимитка налилась на бирже, переводим её в боевой режим Трейлинга
+                            if ram_key in memory.active_pos and memory.active_pos[ram_key].get('is_live') == False:
+                                memory.active_pos[ram_key]['is_live'] = True
+                                memory.active_pos[ram_key]['gear_type'] = 'MARKET'
+                                log(f"🔗 [ОЗУ АКТИВАЦИЯ]: Лимитка по {ram_key} НАЛИЛАСЬ на бирже! Трейлинг выходов взведен.")
+
+                            # СЦЕНАРИЙ Б: Монета выпала из RAM из-за лага сети/кэша — жестко возвращаем её в строй по знаку объема!
+                            elif ram_key not in memory.active_pos:
+                                n_amt = float(p.get('info', {}).get('positionAmt', 0))
+                                true_exchange_side = 'buy' if n_amt >= 0 else 'sell'
+
+                                # Прецизионно достаем ДНК-карту и параметры первой передачи 'g1'
+                                coin_dna_matrix = memory.all_dna.get(ram_key, {})
+                                extracted_g1_recovered = coin_dna_matrix.get('g1', coin_dna_matrix.get('g2', coin_dna_matrix))
+
+                                memory.active_pos[ram_key] = {
+                                    'side': true_exchange_side,
+                                    'vol': p_vol,
+                                    'price': float(p.get('entryPrice', 1.0)),
+                                    'gear': 'g1',
+                                    'gear_data': extracted_g1_recovered, # Зашиваем наполненный g1 под Трейлинг!
+                                    'dna': coin_dna_matrix,
+                                    'entry_time': time.time(),
+                                    'gear_type': 'MARKET',
+                                    'is_live': True
+                                }
+                                log(f"🛰️ 🧲 [ПЫЛЕСОС ПОДХВАТ V300.0]: Потерянная монета {ram_key} У  СПЕШНО ВЕРНУЛАСЬ в ОЗУ! Side: {true_exchange_side}")
+
+                    # СЦЕНАРИЙ В: Синхронизация закрытия. Если позиция закрылась стопом/руками на бирже — выметаем из ОЗУ
+                    for r_key in list(memory.active_pos.keys()):
+                        if memory.active_pos[r_key].get('is_live') == True and r_key not in current_live_keys:
+                            del memory.active_pos[r_key]
+                            log(f"🧹 [ОЗУ СИНХРОНИЗАЦИЯ]: Позиция {r_key} закрылась на бирже. Слот о чищен.")
+                except Exception as sync_loop_err:
+                    pass
+#-----------------------------
+#=======================================
+            # Контур круглосуточной авто-очистки стаканов. Работает в фоновом потоке баланса!
+            # Контрольная пауза тика опроса баланса и удержания шлюзов
+            await asyncio.sleep(30)
+
+        except Exception as e:
+            log(f"⚠ Balance Error: {e}")
+            await asyncio.sleep(20)
+
+#==========================   ФИКС V58.0: АВТОНОМНЫЙ ПЫЛЕСОС ЛИМИТОК ДНК С ВЫВОДОМ ОШИБОК   =====
+async def limit_orders_cleaner_loop(exchange):
+    """ Наносекундный зрячий локальный Веник ОЗУ: чистит лимитки с выводом логов V184.0 """
+    while memory.is_running:
+        await asyncio.sleep(10)
+
+        if not hasattr(memory, 'placed_orders') or not memory.placed_orders:
+            continue
+
+        current_server_time = int(time.time() * 1000)
+        orders_count = 0
+
+        for o_id, o_data in list(memory.placed_orders.items()):
+            try:
+                o_time = int(o_data['time'])
+                time_passed_sec = (current_server_time - o_time) / 1000
+
+                # Ранний зрячий лог-дебаг: бот сообщает, какие ордера он удерживает в RAM
+#                log(f"⏳ [ВЕHИК ДЕБАГ]: Вижу ордер {o_id} по {o_data['symbol']} (Возраст: {round(time_passed_sec, 1)} сек)")
+
+                if (current_server_time - o_time) >= 180000:
+                    log(f"🧹 [ВЕHИК СНОС]: Ордер {o_id} по {o_data['symbol']} устарел ({round(time_p assed_sec, 1)} сек). Попытка удаления...")
+                    try:
+                        clean_binance_ticker = str(o_data['binance_id']).upper().strip()
+                        await asyncio.wait_for(
+                            exchange.fapiPrivateDeleteOrder({'symbol': clean_binance_ticker, 'orderId': int(o_id)}),
+                            timeout=5.0
+                        )
+                        log(f"✅ [ЛОКАЛЬНЫЙ ВЕHИК]: Лимитка {o_id} по {o_data['symbol']} успешно выжжена из стакана.")
+                        orders_count += 1
+#==========================   ФИКС V188.0: ТОТАЛЬНЫЙ РАСКРЫТИЕ СЛЕПЫХ ОШИБОК ВЕНИКА   ===========
+                    except asyncio.TimeoutError:
+                        log(f"⚠️ [ВЕHИК КРАХ]: СЕТЕВОЙ ТАЙМАУТ! Бинанс не ответил за 2.0 сек при сносе ордера {o_id} по {o_data['symbol']}.")
+                    except Exception as binance_err:
+                        log(f"ℹ️ [ВЕHИК ОТКАЗ БИРЖИ]: Бинанс отклонил запрос на отмену ордера {o_id}: {binance_err}")
+#==========================   ФИКС V208.0: ПЕРЕХВАТ НАЛИТИЯ ОРДЕРА ПРИ ОТКАЗЕ ОТМЕНЫ   ==========
+                        # Если Бинанс говорит Unknown order — значит, лимитка налилась в эту же миллисекунду!
+                        # Мы ПРИНУДИТЕЛЬНО переводим её в статус живого контракта, запрещая Венику стирать слот!
+                        if "Unknown order" in str(binance_err) and target_raw_symbol in memory.active_pos:
+                            memory.active_pos[target_raw_symbol]['is_live'] = True
+                            memory.active_pos[target_raw_symbol]['gear_type'] = 'MARKET'
+                            log(f"⚡ [ВЕHИК СВЕРХ-ПОДХВАТ]: Ордер {o_id} по {target_raw_symbol} НАЛИТ! Спасаю позицию от слепоты.")
+#----------------------------------------------------------------
+                    finally:
+#==========================   ФИКС V285.0: ЖЕЛЕЗОБЕТОННЫЙ СЕЙФ ИНИЦИАЛИЗАЦИИ ТИКЕРА ВЕНИКА   ====
+                        # Гарантированно извлекаем имя тикера из буфера ОЗУ, полностью ликвидируя UnboundLocalError
+                        target_raw_symbol = memory.placed_orders[o_id].get('symbol') if o_id in memory.placed_orders else None
+
+                        # Веник имеет право стереть монету из RAM позиций ТОЛЬКО если ордер реально БЫЛ УДАЛЕН на бирже
+                        if target_raw_symbol and target_raw_symbol in memory.active_pos:
+                            if memory.active_pos[target_raw_symbol].get('is_live') == False:
+                                del memory.active_pos[target_raw_symbol]
+                                log(f"🧹 [ОЗУ ВЕНИК]: Пассивный ордер по {target_raw_symbol} стерт и з RAM позиций.")
+
+                        if o_id in memory.placed_orders:
+                            del memory.placed_orders[o_id]
+#--------------------------------
+            except Exception as loop_err:
+                log(f"🚨 [ВЕHИК СБОЙ ЦИКЛА]: Критическая коллизия обхода: {loop_err}")
+
+        if orders_count > 0:
+            log(f"🧹🔥 [ЯДЕРНЫЙ ВЕHИК V184.0]: Успешно стерто {orders_count} протухших лимиток из ст акана!")
+
+async def check_signal(exchange, symbol, last_beacon_t):
+    """
+    Сканирование импульсов V24.0: Сплав скоростей G1/G2, Trend Altitude и 3M Volume.
+    Полностью очищен от слепых зон и ложных стопов на хаях.
+    """
+    try:
+
+        dna = memory.all_dna.get(symbol)
+        cur_p = memory.prices.get(symbol)
+        if not dna or not cur_p:
+            return None, last_beacon_t
+
+#==========================   ФИКС V149.0: ИСТИННЫЕ ЦИФРОВЫЕ ИНДЕКСЫ МАССИВА OHLCV   ============
+        # Забираем скользящий 30-свечной массив из памяти сокета мимо виснущей сети интернет
+        ohlcv = memory.candles.get(symbol)
+        if not ohlcv or len(ohlcv) < 21:
+            return None, last_beacon_t
+
+#==========================   ФИКС V193.0: АППАРАТНЫЙ ФИЛЬТР СЖАТЫХ ФАНТОМНЫХ ПОЛОС   ===========
+        # Защита от эффекта "пустого ОЗУ": если хай равен лоу — полосы мертвы, отменяем ложный импульс!
+        recent_highs = [float(b[2]) for b in ohlcv[-10:]]
+        recent_lows = [float(b[3]) for b in ohlcv[-10:]]
+        if max(recent_highs) == min(recent_lows):
+            return None, last_beacon_t
+#----------------------------------
+        # Берем самую последнюю свечу из массива [-1] и извлекаем High [2] и Low [3] по HFT-индексам
+        last_bar = ohlcv[-1]
+        b_high = last_bar[2]
+        b_low  = last_bar[3]
+#----------------------------------
+
+#==========================   ФИКС V85.0: ГИБРИДНАЯ КРOСС-КOРOБКА DNA MULTIPLIERS   ============
+        global transmission_mode, manual_gear_select
+
+        # Извлекаем индивидуальный g1-блок параметров монеты из JSON пульта
+        gd = dna['g1'] if 'g1' in dna else dna
+
+        # Контур авто-определения фазы рынка по времени сервера (UTC)
+        current_hour = int(time.strftime("%H", time.gmtime()))
+        is_weekend = int(time.strftime("%w", time.gmtime())) in [0, 6] # 0-Воскресенье, 6-Суббота
+
+        active_gear = manual_gear_select
+        if transmission_mode == 'AUTO':
+            if is_weekend:
+                active_gear = 'ECO'    # Выходной день — режим защиты маржи коэффициентами
+            elif (0 <= current_hour <= 3) or (13 <= current_hour <= 16):
+                active_gear = 'DRIVE'  # Будни, HFT-сессии — режим быстрого скальпинга
+            else:
+                active_gear = 'CRUISE' # Стандартные будни — чистый исходный ДНК-тренд
+
+        # Наносекундное динамическое перемножение коэффициентов ОЗУ под активную фазу
+        global transmission_risk_mult
+        if active_gear == 'DRIVE':
+            # Сжимаем тейк-1 (*0.6), поджимаем стоп (*0.8), увеличиваем риск-нагрузку
+            transmission_risk_mult = 1.15
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 0.60
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 0.85
+            gd['time'] = 180
+        elif active_gear == 'ECO':
+            # Расширяем тейк-1 (*1.1), раздвигаем стоп (*1.3) для защиты от шпилек ММ, режем риск
+            transmission_risk_mult = 0.65
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 1.10
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 1.30
+            gd['time'] = 450
+
+        else:
+            transmission_risk_mult = 1
+            # Режим CRUISE — оставляет твои первозданные проектные настройки из JSON пульта
+            pass
+#================================================================================================
+
+
+        # --- [ШТУЧНЫЙ ФИКС V34.2: ТОТАЛЬНЫЙ ЗАПРЕТ ПОВТОРНЫХ ВХОДОВ В ОДИН АКТИВ] ---
+        if symbol in memory.active_pos or symbol.split(':')[0] in memory.active_pos:
+            return None, last_beacon_t
+
+        # ==================================================================================
+        # --- [ВРЕЗКА V32.2 МОНОЛИТ: ИСПРАВЛЕННЫЙ И ЗРЯЧИЙ ДЕТЕКТОР ЛЖИ МАРКЕТ-МЕЙКЕРА] ---
+        # ==================================================================================
+        try:
+            # --- КОНТУР 1: СПОТ-ФЬЮЧЕРСНЫЙ АРБИТРАЖНЫЙ ШЛЮЗ (SPOOFING DETECTOR) ---
+            # Извлекаем легитимный спотовый тикер CCXT стандарта Бинанса (например, "SOL/USDT")
+            spot_symbol = str(symbol).split(':')[0]
+
+            # Вытягиваем живую спотовую цену из нашей RAM-памяти сокетов
+            spot_price_raw = memory.prices.get(spot_symbol, memory.prices.get(spot_symbol.replace('/', '')))
+
+            if spot_price_raw and float(spot_price_raw) > 0:
+                spot_price = float(spot_price_raw)
+                # Рассчитываем наносекундный рассинхрон цены фьючерса и спота
+                basis_pct = abs(cur_p / spot_price - 1.0) * 100.0
+
+                # Если фьючерс оторвался от реального спота более чем на 0.25% — это фантомный сквиз ММ
+                if basis_pct >= 0.25:
+                    log(f"🛑 [SPOOFING SHIELD]: Отмена входа по {symbol}! Обнаружен фантомный сквиз фьючерса. Фьюч: {cur_p} | Спот: {spot_price} | Базис: {round(basis_pct, 3)}% > 0.25%")
+                    return None, last_beacon_t
+
+#            log(f"⚙️ [DEBUG 2]: {symbol} прошел Спот-Шлюз. Запрашиваю стакан...")
+
+
+            # --- КОНТУР 2: СВЕРХСКОРОСТНОЙ ШЛЮЗ ПЛОТНОСТИ ОЗУ (БЕЗ СЕТЕВЫХ ЛАГОВ BINANCE) ---
+            # Измеряем спред на основе живого сокет-пакета, полностью заменяя fetch_order_book
+            # Если ММ выдернет лимитки (воздушная яма), сокет-спред мгновенно расширится
+            spot_ticker_key = str(symbol).split(':')[0].replace('/', '')
+            live_ticker_data = memory.prices.get(spot_ticker_key + "_full", {})
+
+            # Если биржа передает расширенный спред между лучшим Bid и Ask в сокетах более 0.4%
+            if live_ticker_data:
+                bid = float(live_ticker_data.get('b', 0))
+                ask = float(live_ticker_data.get('a', 0))
+                if bid > 0 and ask > 0:
+                    spread_pct = abs(ask / bid - 1.0) * 100.0
+                    if spread_pct >= 0.40:
+                        log(f"🧹 [DELTA DEPTH SHIELD]: Отмена входа по {symbol}! Воздушная яма спред а в сокетах ММ. Спред: {round(spread_pct, 3)}% >= 0.4%")
+                        return None, last_beacon_t
+
+
+        except Exception as mm_detect_err:
+            # Аварийный шлюз: если API Бинанса лагает на запросе стакана, не рискуем маржой
+            return None, last_beacon_t
+        # ==================================================================================
+
+  #      log(f"⚙️ [DEBUG 4]: {symbol} прошел все ММ-фильтры! Проверяю Динамический Нож...")
+
+
+        # 1. ЗАГРУЗКА И ВЕРИФИКАЦИЯ СВЕЧНОГО МАССИВА
+#==========================   ФИКС V141.0: ЧТЕНИЕ МАССИВА OHLCV ИЗ ОЗУ ЗА 0 МС   ===============
+        # Забираем скользящий 30-свечной массив из памяти сокета мимо виснущей сети интернет
+#        ohlcv = memory.candles.get(symbol)
+#        if not ohlcv or len(ohlcv) < 21:
+#            return None, last_beacon_t
+
+        # Твой Pandas Dataframe собирается мгновенно из локальной RAM памяти!
+        df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+
+        # --- КОНТУР 3: СКОРОСТЬ ДЕЛЬТЫ ОБЪЕМА (VOLUME VELOCITY DELTA V34.0) ---
+        v_now = float(df['v'].iloc[-1])
+        v_mean = float(df['v'].mean())
+        if v_now < (v_mean * 0.8):
+            # Если объем первого тика вялый — ММ гонит цену искусственно. Отмена!
+#           log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену чере з вакуум. Vo l: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
+           return None, last_beacon_t
+
+
+        # 2. РАСЧЕТ ИНДИКАТОРОВ БОЛЛИНДЖЕРА НА NUMPY
+        ma_series = df['c'].rolling(20).mean()
+        std_series = df['c'].rolling(20).std()
+
+        ma = ma_series.to_numpy()
+        std = std_series.to_numpy()
+
+        ma_prev = ma[-2]
+        std_prev = std[-2]
+
+        if std_prev == 0 or ma_prev == 0 or pd.isna(ma_prev) or pd.isna(std_prev):
+            return None, last_beacon_t
+
+        p_up = ma_prev + (2.1 * std_prev)
+        p_dn = ma_prev - (2.1 * std_prev)
+        curr_w = (p_up - p_dn) / ma_prev * 100
+
+        p_up_prev = ma[-3] + (2.1 * std[-3])
+        p_dn_prev = ma[-3] - (2.1 * std[-3])
+        if ma[-3] == 0:
+            return None, last_beacon_t
+
+        prev_w = (p_up_prev - p_dn_prev) / ma[-3] * 100
+        # Если канал Боллинджера был сжат в абсолютный ноль — наносекундно отменяем ложный импульс
+        if prev_w == 0:
+            return None, last_beacon_t
+
+        w_growth = curr_w / prev_w
+
+        # 3. ФИЛЬТР 1: TREND ALTITUDE SHIELD (Запрет перегретых хаев)
+        # Динамически вычисляем класс риска монеты по её тикеру
+        sym_upper = symbol.upper()
+        if any(mem in sym_upper for mem in ['1000PEPE', 'WIF', '1000SHIB', '1000BONK', '1000FLOKI','DOGE', 'NOT', 'POPCAT', 'JASMY']):
+            max_alt_pct = 2.5   # Класс 1: Мемы (Предел отрыва от MA20 2.5%)
+        elif any(tech in sym_upper for tech in ['SOL', 'NEAR', 'SUI', 'FET', 'TIA', 'APT', 'OP', 'RENDER']):
+            max_alt_pct = 1.4   # Класс 2: Технологичная альта (Предел 1.4%)
+        else:
+            max_alt_pct = 0.8   # Класс 3: Тяжелые якоря (Предел 0.8%)
+
+        # Измеряем текущую высоту (отрыв) живой цены от средней линии MA20
+        current_altitude = abs(cur_p / ma_prev - 1) * 100
+
+        # Если монета улетела в космос выше лимита класса — глухая блокировка ордера
+        if current_altitude > max_alt_pct:
+            if int(time.time()) % 30 == 0:
+                log(f"🔍 [Trend shield {symbol}]: Отмена! Монета перегрета ({round(current_altitude, 2)}% > {max_alt_pct}%). Пропускаем хаи.")
+            return None, last_beacon_t
+
+        # 4. ТВОЙ ОРИГИНАЛЬНЫЙ ТУМБЛЕР ДВУХ СКОРОСТЕЙ G1 / G2
+        open_p = df['o'].iloc[-1]
+        change = abs(cur_p / open_p - 1)
+        gear = None
+
+        if 'g2' in dna and change >= dna['g2']['speed']:
+            gear = 'g2'
+        elif 'g1' in dna and change >= dna['g1']['speed']:
+            gear = 'g1'
+
+        # --- [ТУМБЛЕРНЫЙ МАЯК ОХОТНИКА: ДЕБАГ-ТРАНСЛЯЦИЯ] ---
+        if DEBUG_BEACONS and (time.time() - last_beacon_t > 60):
+            vol_last = df['v'].iloc[-1]
+            vol_avg = df['v'].mean()
+            clean_name = symbol.split(':')[0]
+            beacon_msg = f"🔍 МАЯК СКАНЕРА [{clean_name}]: Цена: {cur_p} | Взрыв BB: {round(w_growth,3)}x | Высота: {round(current_altitude,2)}% | Скорость: {round(change*100,3)}% "
+            if gear:
+                beacon_msg += f"| Передача: {gear.upper()} ✅ | Объем тика: {round(vol_last,1)} (Нужно: {round(vol_avg*dna[gear]['vol'],1)})"
+            else:
+                beacon_msg += f"| Скорость мала ❌"
+            # log(beacon_msg)
+            last_beacon_t = time.time()
+
+        # Базовая проверка на наличие взрыва волатильности и взвода передачи
+        if w_growth < dna['w_grow'] or not gear:
+            return None, last_beacon_t
+
+        # 5. ФИЛЬТР 2: НАКОПИТЕЛЬНЫЙ 3-МИНУТНЫЙ ОБЪЕМ (Уничтожение висяков)
+        v_now = float(df['v'].iloc[-1])
+        v_p1 = float(df['v'].iloc[-2])
+        v_p2 = float(df['v'].iloc[-3])
+
+        if v_now < v_p1 and v_p1 < v_p2:
+            if int(time.time()) % 45 == 0:
+                log(f"🔍 [Volume shield {symbol}]: Отмена! Прорыв на затухающем объеме (Вялый закисающий импульс).")
+            return None, last_beacon_t
+
+        # Твоя оригинальная проверка плотности тикового объема под конкретную передачу
+        if df['v'].iloc[-1] < df['v'].mean() * dna[gear]['vol']:
+            return None, last_beacon_t
+
+        # 6. ВЫЧИСЛЕНИЕ НАПРАВЛЕНИЯ КАНOНИЧЕСКОГО ИМПУЛЬСА
+        is_buy_candidate = (cur_p > open_p)
+        is_sell_candidate = (cur_p < open_p)
+
+
+#=====  # 7. ТВОЙ ОРИГИНАЛЬНЫЙ КАСКАДНЫЙ НOЖ (PRE-CANDLE SHIELD)
+        p_c1 = df.iloc[-2]
+        p_c2 = df.iloc[-3]
+        p_c3 = df.iloc[-4]
+
+        is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
+        is_3_red   = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+
+        #log(f"⚙️ [DEBUG 2перед ниткой..")
+
+
+        # --- [ВРЕЗКА V39.5: ПОКАНАЛЬНЫЙ НОЖ И ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ] ---
+        channel_width = abs(p_up - p_dn) / ma_prev * 100.0
+
+        # 1. СHАЙПЕРСКИЙ СБOР СПOТ-ТИКЕРА ИЗ СТРОКИ СКАHЕРА
+        s_ticker_clean = str(symbol).split(':')[0].replace('/', '')
+        s_price_raw = memory.prices.get(s_ticker_clean)
+        s_price = float(s_price_raw) if s_price_raw else cur_p
+        s_basis = abs(cur_p / s_price - 1.0) * 100.0
+
+        # 2. ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ ОБЪЕМОВ (ЗАЩИТА ОТ АЙСБЕРГ-РАЗВОРОТОВ ММ)
+        live_ticker_data = memory.prices.get(s_ticker_clean + "_full", {})
+        is_delta_safe = True
+        if live_ticker_data:
+            # Считываем кумулятивные объемы Taker Buy/Sell за последние тики сокетов
+            t_buy_vol = float(live_ticker_data.get('v', 0))
+            t_sell_vol = float(live_ticker_data.get('q', 1))
+            if is_buy_candidate and (t_sell_vol > t_buy_vol * 1.65): is_delta_safe = False # Скрытые продажи китов
+            if is_sell_candidate and (t_buy_vol > t_sell_vol * 1.65): is_delta_safe = False # Скрытый откуп китов
+
+        # Истинный взрыв нитки: канал узкий, скорость бешеная, спот подтверждает базисом
+        is_nitka_explosion = (channel_width < 0.65 and w_growth >= 1.25 and df['v'].iloc[-1] > df['v'].mean() * 2.0 and s_basis < 0.25)
+
+#==========================   ФИКС V89.0: ГИБРИДНАЯ КРOСС-КOРOБКА И БЛОКИРОВКА НИТКИ   ==========
+        # Вызываем глобальные тумблеры управления скоростью из кода бота
+#        global transmission_mode, manual_gear_select
+
+        # Извлекаем индивидуальный g1-блок параметров монеты из JSON пульта
+        gd = dna['g1'] if 'g1' in dna else dna
+
+        # Контур авто-определения фазы рынка по времени сервера (UTC)
+        current_hour = int(time.strftime("%H", time.gmtime()))
+        is_weekend = int(time.strftime("%w", time.gmtime())) in [0, 6] # 0-Воскресенье, 6-Суббота
+
+        active_gear = manual_gear_select
+        if transmission_mode == 'AUTO':
+            if is_weekend:
+                active_gear = 'ECO'    # Выходной день — режим защиты маржи коэффициентами
+            elif (0 <= current_hour <= 3) or (13 <= current_hour <= 16):
+                active_gear = 'DRIVE'  # Будни, HFT-сессии — режим быстрого скальпинга
+            else:
+                active_gear = 'CRUISE' # Стандартные будни — чистый исходный ДНК-тренд
+
+        # Динамическое перемножение коэффициентов параметров под активную фазу
+        if active_gear == 'DRIVE':
+            gd['risk'] = float(gd.get('risk', 0.70)) * 1.15
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 0.60
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 0.85
+            gd['time'] = 180
+        elif active_gear == 'ECO':
+            gd['risk'] = float(gd.get('risk', 0.70)) * 0.65
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 1.10
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 1.30
+            gd['time'] = 450
+
+        # Блокировка маркет-входов «Нитки» Боллинджера в пассивные ECO-часы выходных
+        if active_gear == 'ECO':
+            sig_gear = 'LIMIT'
+        else:
+            sig_gear = 'MARKET' if (channel_width >= float(dna.get('rocket', 1.5)) and w_growth >= 1.25) or is_nitka_explosion else 'LIMIT'
+#--------------------------------------
+#==========================   ФИКС V125.0: АДАПТИВНЫЙ КОМПЕНСАТОР СЕТЕВОГО ЛАГА БИHАHСА   =======
+        # Компенсируем 2 секунды лага REST API: сдвигаем цену лимитки на 0.04% вглубь стакана для 100% налива
+        if sig_gear == 'LIMIT':
+            if is_buy_candidate:
+                target_price = cur_p * 1.0001  # Ставим лимитку покупки чуть выше, ближе к наливу
+            else:
+                target_price = cur_p * 0.9999  # Ставим лимитку продажи чуть ниже
+        else:
+            target_price = cur_p
+#-------------------------------
+
+#        if not is_nitka_explosion:
+            # ПОКАНАЛЬНЫЙ РАЗЖИМ: Мемы летят свободно (5%), тяжелые Якоря зажимаем жестко (15%)
+#            is_meme = any(m in symbol.upper() for m in ['1000PEPE', 'WIF', 'POPCAT', '1000SHIB', '1000BONK', '1000FLOKI', 'DOGE'])
+#            adaptive_offset = 0.05 if is_meme else 0.15
+
+#            long_barrier = ma_prev * (1.0 - adaptive_offset)
+#            short_barrier = ma_prev * (1.0 + adaptive_offset)
+#---------------------------------
+#==========================   ФИКС V158.0: ТРEХКОНТУРНАЯ МАТРИЦА СЕССИЙ С УЧЕТОМ ПЯТНИЦЫ   ======
+        if not is_nitka_explosion:
+            # Определение текущего часа и дня недели сервера (0=Пн, 4=Пт, 5=Сб, 6=Вс)
+            local_time_struct = time.localtime()
+            current_hour = local_time_struct.tm_hour
+            current_wday = local_time_struct.tm_wday
+
+            if current_wday >= 5:
+                # 🏖️ РЕЖИМ ВЫХОДНЫХ (Суббота - Воскресенье): Глухой расширенный барьер круглые сутк и
+                session_mult = 1.40
+            elif current_wday == 4 and current_hour >= 19:
+                # 🩸 РЕЖИМ ПЯТНИЧНОГО ВЕЧЕРА (Закрытие CME): Защитное расширение от уикенд-сквизов
+                session_mult = 1.35
+            else:
+                # 📅 РЕЖИМ БУДНЕЙ (Понедельник - Пятница день): Пулеметная матрица
+                if 1 <= current_hour <= 7:
+                    session_mult = 0.70   # Азия: поджимаем лимитки ближе к рынку
+                elif 15 <= current_hour <= 18:
+                    session_mult = 1.50   # Открытие США: уводим лимитки в глубокий тыл
+                else:
+                    session_mult = 1.00   # Время CRUISE: стандартный рабочий отступ будней
+
+            # ПОКАНАЛЬНЫЙ РАЗЖИМ: Мемы летят свободно (5%), тяжелые Якоря зажимаем жестко (15%)
+            is_meme = any(m in symbol.upper() for m in ['1000PEPE', 'WIF', 'POPCAT', '1000SHIB', '1000BONK', '1000FLOKI', 'DOGE'])
+            base_offset = 0.05 if is_meme else 0.15
+            adaptive_offset = base_offset * session_mult
+
+            long_barrier = ma_prev * (1.0 - adaptive_offset)
+            short_barrier = ma_prev * (1.0 + adaptive_offset)
+#==========================================================================
+           # Точечная блокировка Ножей с учетом Шлюза Паритета Дельты
+            if is_buy_candidate and is_3_red:
+                if cur_p <= long_barrier or not is_delta_safe:
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Лонга по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
+                    return None, last_beacon_t
+
+            if is_sell_candidate and is_3_green:
+                if cur_p >= short_barrier or not is_delta_safe:
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Шорта по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
+                    return None, last_beacon_t
+
+
+        # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
+        # --- [ВРЕЗКА V43.0: АДАПТИВНЫЕ ПОЛОСЫ ДНК И ТУМБЛЕР РЕЖИМА ОРДЕРА] ---
+        channel_width = abs(p_up - p_dn) / ma_prev * 100.0
+        is_meme = any(m in symbol.upper() for m in ['PEPE', 'WIF', 'POPCAT', 'SHIB', 'BONK', 'FLOKI', 'DOGE'])
+        is_anchor = any(a in symbol.upper() for a in ['BNB', 'LINK', 'AVAX', 'ADA', 'CRV'])
+
+        # Настраиваем индивидуальные пороги Ракета/Откат под классы монет
+        if is_meme:
+            rocket_threshold, rebound_pct = 3.5, 0.0048
+        elif is_anchor:
+            rocket_threshold, rebound_pct = 1.1, 0.0018
+        else:
+            rocket_threshold, rebound_pct = 1.8, 0.0030
+
+        # Выбираем режим ордера: MARKET для истинного взрыва, LIMIT для отката
+        #sig_gear = 'MARKET' if (channel_width >= rocket_threshold and w_growth >= 1.25) else 'LIMIT'
+
+#        target_price = cur_p
+        if sig_gear == 'LIMIT':
+            target_price = cur_p * (1.0 - rebound_pct) if is_buy_candidate else cur_p * (1.0 + rebound_pct)
+
+        # Контур Ножа Боллинджера: страхует только рыночные ордера
+#        adaptive_offset = 0.05 if is_meme else 0.15
+#        long_barrier, short_barrier = ma_prev * (1.0 - adaptive_offset), ma_prev * (1.0 + adaptive_offset)
+
+        if sig_gear == 'MARKET':
+            if is_buy_candidate and is_3_red and cur_p <= long_barrier: return None, last_beacon_t
+            if is_sell_candidate and is_3_green and cur_p >= short_barrier: return None, last_beacon_t
+
+        #log(f"⚙️ [DEBUG 2Перед ретурном параметров. Всё прошли.")
+
+
+        # Жестко отсекаем ложные фантомные шорты, если условия входа не выполнены
+        if not is_buy_candidate and not is_sell_candidate:
+            return None, last_beacon_t
+
+        trade_side = 'buy' if is_buy_candidate else 'sell'
+
+        # Сверяем код: возвращаем строго те переменные, которые реально объявлены в check_signal!
+        payload = {
+            'symbol': symbol, 'side': trade_side,
+            'price': target_price, 'gear_type': sig_gear,
+            'actual_price': cur_p,  # Запечатываем чистую живую цену ОЗУ для логов дебага
+            'gear': gear, 'gear_data': gd, 'dna': dna
+        }
+#            'symbol': symbol,
+#            'side': 'buy' if is_buy_candidate else 'sell',
+#            'gear': gear,
+#            'price': cur_p,
+#            'dna': dna,
+#            'gear_data': dna[gear]
+#        }
+        return payload, last_beacon_t
+    except Exception as err:
+        log(f"⚠ [КРИТ CHECK_SIGNAL]: Скрытый обрыв входа по {symbol}: {err}")
+        return None, last_beacon_t
+
+async def execute_entry(exchange, sig):
+    """
+    Импульсный захват позиции по маркету/лимиту на фьючерсах Binance V72.0.
+    """
+    #global exchange
+    raw_symbol = sig['symbol']
+    symbol = raw_symbol.split(':')[0]
+
+    try:
+        # Читаем легитимный атрибут memory.available, подтвержденный системным grep-фильтром
+        live_available = float(memory.available)
+        if live_available < 2.0:
+            #log(f"🚫 [ВХОД ОТКЛОНЕН]: Слишком маленький баланс в ОЗУ: ${round(live_available, 2)}")
+            return
+    except Exception as bal_err:
+        log(f"⚠ [ВХOД КРАШ БАЛАНСА]: Сбой локального чтения ОЗУ для {symbol}: {bal_err}")
+        return
+
+#==========================   ФИКС V165.5: СТЕРИЛЬНЫЙ КОНТРОЛЬ ЕМКОСТИ СЛОТОВ В ИСПОЛНИТЕЛЕ ==
+    # Защищаем вход: считываем живую длину RAM-памяти, но сохраняем твой чистый ключ symbol
+    if len(memory.active_pos) >= MAX_SLOTS or symbol in memory.active_pos:
+        return
+#------------------------------------
+   # if memory.slots_occupied >= MAX_SLOTS or symbol in memory.active_pos:
+   #     return
+
+    try:
+#==========================   ШТУЧНЫЙ ФИКС V197.5: БЛОКИРОВКА ДУБЛЕЙ В САМОЙ ШАПКЕ ТRY   ========
+        # Защита 1: Проверяем, нет ли монеты в активных позициях RAM
+        if len(memory.active_pos) >= MAX_SLOTS or symbol in memory.active_pos:
+            return
+
+        # Защита 2: Проверяем, не висит ли по этой монете пассивный ордер в ОЗУ Веника прямо сейчас
+        if hasattr(memory, 'placed_orders') and memory.placed_orders:
+            for v_id, v_data in memory.placed_orders.items():
+                if v_data.get('symbol') == raw_symbol:
+                    return
+#-----------------------------------
+#==========================   ФИКС V192.0: ПОДНЯТИЕ РАСЧЕТА ПЛЕЧА ДЛЯ ВИРТУАЛЬНОЙ МАРЖИ   =======
+        # Первым делом пулей рассчитываем эффективное плечо из ДНК-сигнала, убирая UnboundLocalError
+        dna_lev = int(sig['dna']['lev']) if 'dna' in sig and 'lev' in sig['dna'] else 25
+        effective_leverage = min(dna_lev, MAX_ACCOUNT_LEVERAGE)
+
+#==========================   ФИКС V193.0: АТОМАРНЫЙ СВОБОДНЫЙ ВЫЧЕТ МАРЖИ БЕЗ ЗАМКОВ   =========
+        # Выжигаем опасный замок Lock(). Списываем виртуальную маржу в RAM свободно и атомарно!
+        live_available = float(memory.available) if hasattr(memory, 'available') else 10.0
+
+        slot_allocation = 0.20
+        amount_usdt = float(live_available) * slot_allocation * effective_leverage
+
+        if amount_usdt <= 0:
+            return
+
+#==========================   ФИКС V195.0: КОМФОРТНЫЙ БУФЕР ЗАЛОГА МАРЖИ   ======================
+        # Высчитываем реальный залог с учетом 25х плеча: ордер заберет всего пару десятков центов
+        virtual_fee_margin = amount_usdt / effective_leverage
+        if hasattr(memory, 'available'):
+                # Вычитаем только чистый залог, оставляя остальную маржу свободной для лавины!
+                memory.available = max(0.0, float(memory.available) - virtual_fee_margin)
+#==========================   ФИКС V185.0: ЧИСТАЯ СТРОКА ТИКЕРА ИЗ КЛАССА BINANCE_MARKET_ID   ===
+        # Намертво приравниваем к готовому биржевому идентификатору CCXT, убирая любые коллизии строк
+        binance_id_clean = str(raw_symbol).replace('/', '').split(':')[0]
+
+#==========================   ФИКС V199.0: ПРЕЦИЗИОННЫЙ ПОДСЧЕТ ТОЛЬКО РЕАЛЬНЫХ СЛОТОВ   =======
+        # Считаем емкость Империи строго по живым контрактам (is_live == True), игнорируя пассивные лимитки
+        live_slots_count = len([k for k, v in memory.active_pos.items() if v.get('is_live') == True])
+
+        if live_slots_count >= MAX_SLOTS or symbol in memory.active_pos:
+           return
+#------------------------------------
+        # Защита 2: Проверяем, не висит ли по этой монете пассивный ордер в ОЗУ Веника прямо сейчас
+        if hasattr(memory, 'placed_orders') and memory.placed_orders:
+          for v_id, v_data in memory.placed_orders.items():
+            if v_data.get('symbol') == raw_symbol:
+                # log(f"🚫 [ДУБЛЬ БЛОК]: Ордер по {raw_symbol} уже висит в стакане. Сигнал отклонен.")
+                return
+#--------------------------------------
+
+#==========================   ФИКС V162.0: ТОЧНАЯ КАЛИБРОВКА СЛОТА ПОД 20% МАРЖИ   ==============
+        global transmission_risk_mult
+        current_gear_name = sig.get('gear', 'g1')
+
+        if transmission_risk_mult <= 0.5:
+            slot_allocation = 0.15   # Режим ECO (Выходные)
+        elif current_gear_name == 'g2':
+            slot_allocation = 0.40   # Режим DRIVE (Импульсный взрыв)
+        else:
+            slot_allocation = 0.20   # Режим CRUISE (Будни): строго 20% маржи на один слот (5 слотов!)
+
+        # Расширяем объем лота под 5 независимых каскадных слотов сложного процента
+        amount_usdt = float(live_available) * slot_allocation * effective_leverage
+#-------------------------------------
+
+
+        # Аппаратный предохранитель залога: ордер физически не может требовать маржи больше, чем есть на кошельке!
+        max_safe_notional = float(live_available) * 0.90 * effective_leverage  # Оставляем 10% буфера на комиссию биржи
+        if amount_usdt > max_safe_notional:
+            amount_usdt = max_safe_notional
+
+        # Защита снизу: если объем упал меньше лимита Бинанса в $21 — подтягиваем вверх
+        if amount_usdt < 21.0:
+            amount_usdt = 21.0
+        # Переводим объем в эквивалент базовых монет
+        raw_qty = amount_usdt / sig['price']
+
+        # Округляем строго по фьючерсным шагам Бинанса, используя стандартный тикер
+#        qty = float(exchange.amount_to_precision(symbol, raw_qty))
+        qty = float(exchange.amount_to_precision(raw_symbol, raw_qty))
+        if qty <= 0:
+            return
+
+#==========================   ФИКС V154.0: ПЕРЕНОС РАСЧЕТА СТЕРИЛЬНОЙ ЦЕНЫ ОРДЕРА ВВЕРХ   =======
+        # Округляем цену по спецификации шага Бинанса ЗАРАНЕЕ, до вывода в логи дебага панели
+        rounded_price = float(exchange.price_to_precision(raw_symbol, sig['price']))
+        actual_market_price = float(sig.get('actual_price', sig['price']))
+
+        log(f"🔍 [Debug entry]: Available Margin: ${round(live_available, 4)} | RISK_GEAR: {RISK_GEAR}")
+        log(f"🔍 [Debug entry]: Target Leverage: {effective_leverage}x | Actual Price: {actual_market_price}")
+        log(f"🔍 [Debug entry]: Limit Order Price: {rounded_price} | Nom Vol: ${round(amount_usdt, 2)}")
+        log(f"🔍 [Debug entry]: FINAL ROUNDED QTY TO BINANCE: {qty} монет")
+#------------------------------------------------------------------------------
+        # ИСПОЛНИТЕЛЬНЫЙ КАНАЛ: Рыночный приказ входа
+
+#        order = await exchange.create_market_order(symbol, sig['side'], qty)
+
+        # ИСПОЛНИТЕЛЬНЫЙ ШЛЮЗ V43.0: МАРКЕТ В РАКЕТУ / ПАССИВНЫЙ ЛИМИТ В ОТКАТ
+        g_type = sig.get('gear_type', 'MARKET')
+#==========================   ФИКС V69.0: СКВОЗНОЙ ДЕБАГ-РЕНТГЕН КАНАЛА ВХОДОВ   ================
+
+        # Жестко объявляем переменную order в глобальном теле функции, убирая UnboundLocalError
+        order = None
+
+        # Усиливаем буфер: урезаем максимальный номинал до 70% от свободных ОЗУ долларов для параллельных слотов
+        max_safe_notional = float(live_available) * 0.70 * effective_leverage
+        if amount_usdt > max_safe_notional:
+            amount_usdt = max_safe_notional
+
+        log(f"⚡ [DEBUG EXECUTE]: Попытка входа по {symbol} | Тип ордера: {g_type} | Направление: {sig['side']} | Лот: {qty}")
+
+        if g_type == 'MARKET':
+          try:
+            log(f"🚀 [DEBUG ENTRY]: Отправляю рыночный ордер MARKET по {symbol}...")
+            order = await exchange.create_market_order(symbol, sig['side'], qty)
+            log(f"🚀 [DEBUG ENTRY]: Ордер MARKET по {symbol} успешно принят биржей! ID: {order.get('id') if order else 'None'}")
+#==========================   ФИКС V83.0: ЧИСТЫЙ ТИКЕР ЛИМИТКИ И ЗРЯЧИЙ ДЕБАГ   =================
+          except Exception as market_err:
+            log(f"🚨 [ОШИБКА БИРЖИ MARKET]: Бинанс отклонил рыночный ордер по symbol {symbol}: {market_err}")
+        else:
+            try:
+                binance_side = str(sig['side']).upper()
+
+                # Сначала берем первый элемент сплита ("XRP/USDT"), а уже затем вычищаем косую черту
+                #binance_market_id = str(raw_symbol.split(':')[0]).replace('/', '')
+                binance_market_id = str(raw_symbol).split(':')[0].replace('/', '')
+                # Округляем цену строго по фьючерсному шагу Бинанса, используя полный контракт raw_symbol
+
+                log(f"📥 [DEBUG ENTRY]: Выставляю нативную лимитку LIMIT по {binance_market_id} по цене {rounded_price}...")
+
+                # Извлекаем сырой raw_symbol ("WIF/USDT:USDT") и зряче вычищаем его под нативный фланговый эндпоинт 'WIFUSDT'
+#                binance_market_id = str(raw_symbol).split(':')[0].replace('/', '')
+
+                # Округляем цену строго по фьючерсному шагу Бинанса, используя полный контракт raw_symbol
+#                rounded_price = float(exchange.price_to_precision(raw_symbol, sig['price']))
+
+#                log(f"📥 [DEBUG ENTRY]: Выставляю нативную лимитку LIMIT по {binance_market_id} по цене {rounded_price}...")
+
+
+                p_params = {
+                    'symbol': binance_market_id,
+                    'side': binance_side,
+                    'type': 'LIMIT',
+                    'quantity': qty,
+                    'price': rounded_price,
+                    'timeInForce': 'GTC'
+                }
+                order = await exchange.fapiPrivatePostOrder(p_params)
+                log(f"📥 [DEBUG ENTRY]: Нативная лимитка по {binance_market_id} успешно в стакане! ID: {order.get('orderId')}")
+
+                if not hasattr(memory, 'placed_orders'):
+                    memory.placed_orders = {}
+
+                if order and order.get('orderId'):
+                    memory.placed_orders[str(order.get('orderId'))] = {
+                        'symbol': raw_symbol,
+                        'binance_id': binance_id_clean,
+                        'time': int(time.time() * 1000)
+                    }
+#--------------------------
+            except Exception as limit_err:
+                log(f"🚨 [ОШИБКА БИРЖИ LIMIT]: Сокет-шлюз  Бинанса отклонил заявку по {symbol}: {limit_err}")
+                order = None
+#================================================================================================
+        if order:
+          try:
+            log(f"🔥 ВХОД [{sig['gear'].upper()}]: {symbol} {sig['side'].upper()} | Price: {sig['price']} | Vol: {qty} | Общий баланс: ${round(memory.total_wallet, 2)}")
+
+            is_order_live = True if g_type == 'MARKET' else False
+#==========================   ШТУЧНЫЙ ФИКС V197.5: СТЕРИЛЬНЫЙ ВОЗВРАТ ЗАПИСИ В ACTIVE_POS   ====
+            # Возвращаем запись лимиток обратно в ОЗУ, убирая слепоту налива!
+            memory.active_pos[raw_symbol] = {
+                'side': sig['side'], 'vol': qty, 'price': sig['price'],
+                'gear': sig['gear'], 'gear_data': sig['gear_data'], 'dna': sig['dna'],
+                'entry_time': time.time(),
+                'gear_type': g_type,
+                'is_live': is_order_live # Для лимиток здесь запишется False, и трейлинг ждет налития
+            }
+#-------------------------------
+            memory.tp_fixed[symbol] = False
+            memory.be_fixed[symbol] = False
+            memory.stop_placed[symbol] = None
+            memory.slots_occupied += 1
+          except Exception as ram_err:
+            log(f"🚨 [ОШИБКА ОЗУ]: Сбой записи позиции в оперативную память: {ram_err}")
+
+#==========================   ФИКС V83.0: ЗРЯЧИЙ ВЫВОД КРАШЕЙ КАНАЛА ВХОДОВ   ===================
+    except Exception as e:
+        log(f"🚨 [КРИТ ИСПОЛHИТЕЛЯ]: Тотальный срыв входа по монете {symbol}: {e}")
+
+async def monitor_logic(exchange):
+    """Асинхронный бронированный контроль выходов и адаптивного пре-трейлинга V22.0 [ФИКС NEAR]"""
+    last_debug_ts = 0
+    while memory.is_running:
+#==========================   ФИКС V193.0: РАСКОММЕНТИРОВАНИЕ СКВОЗНОГО ДЕБАГА ВЫХОДОВ   ========
+        # Включаем зрячий ежесекундный дебаг-логгер емкости RAM активных позиций
+        current_ts = int(time.time())
+        if current_ts % 150 == 0 and current_ts != last_debug_ts:
+            last_debug_ts = current_ts
+            log(f"🛰️ [МОНИТОР ДЕБАГ]: Патруль активен. Живых позиций в RAM: {len(memory.active_pos) } | Ключи: {list(memory.active_pos.keys())}")
+#-------------------------------------
+        # --- [ВРЕЗКА V28.4: СКВОЗНОЙ ДЕБАГ ШЛЮЗА ВЫХОДОВ] ---
+#        if int(time.time()) % 5 == 0:
+#            log(f"🛰️ [DEBUG GATE 1]: Цикл while активен. Текущий размер RAM active_pos: {len(memor y.active_pos)}")
+#            log(f"🛰️ [DEBUG GATE 2]: Сырые ключи в памяти active_pos: {list(memory.active_pos.keys ())}")
+
+        # Микро-пауза 200мс для предотвращения зависания процессора
+        await asyncio.sleep(0.2)
+
+        for symbol, pos in list(memory.active_pos.items()):
+            # --- [DEBUG GATE 3]: Прорвались внутрь цикла обхода конкретного тикера! ---
+#            if int(time.time()) % 5 == 0:
+#                log(f"🛰️ [DEBUG GATE 3]: Вошли в цикл. Текущий symbol={symbol} | pos.keys={list(po s.keys()) if isinstance(pos, dict) else 'NOT_A_DICT'}")
+            try:
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 1]: Начинаем расчет параметров для {clean_symbol}. Текущая цена cur_p={cur_p}")
+
+#==========================   ФИКС V217.0: ВРЕМЕННЫЙ ДЕБАГ КЛЮЧЕЙ ДНК МАТРИЦЫ   ================
+                # Бот намертво выведет в консоль всю начинку словаря dna до того, как упадет!
+#                dna_data = pos.get('dna', {})
+
+#                if int(time.time()) % 10 == 0:
+#                    log(f"🕵 ️‍♂️ [ДЕБАГ ДНК СЛОВАРЯ] по {symbol}: Тип данных: {type(dna_data)} | Доступные ключи: {list(dna_data.keys()) if hasattr(dna_data, 'keys') else 'НЕТ КЛЮЧЕЙ'} | Значение: {str(dna_data)[:120]}")
+#------------------------------------------------------------------------------------------------
+
+                # --- ШТУЧНЫЙ ФИКС V27.5: НАМЕРТВО СИНХРОНИЗИРУЕМ RAW И CLEAN КЛЮЧИ ---
+                raw_symbol = symbol
+                clean_symbol = raw_symbol.split(':')[0]
+
+#==========================   ФИКС V107.0: БЛОКИРОВКА СЛEПОГО ТРЕЙЛИНГА ФАНТОМОВ   ==============
+                # Если лимитка еще висит в стакане и не налилась — Веник пропускает этот тик сопровождения
+                if not pos.get('is_live', False):
+                    continue
+#=====================================
+                # --- [ВРЕЗКА V28.9: ПРЯМОЙ REST-ПРОРЫВ К ЦЕНАМ БИНАНСА] ---
+                cur_p = memory.prices.get(clean_symbol)
+
+                # Если в RAM памяти сокетов пусто или ноль — пробиваем прямой запрос на биржу
+                if not cur_p or float(cur_p) <= 0:
+                    try:
+                        # Собираем жесткий биржевой ID контракта (XRPUSDT)
+                        #binance_ticker_id = str(raw_symbol).replace('/', '').replace(':USDT', '')
+                        binance_ticker_id = str(raw_symbol).split(':')[0].replace('/', '')
+                        # Запрашиваем живую цену маркировки напрямую через REST шлюз
+                        rest_resp = await exchange.fapiPublicGetTickerPrice({'symbol': binance_ticker_id})
+                        if isinstance(rest_resp, dict) and 'price' in rest_resp:
+                            cur_p = float(rest_resp['price'])
+                        elif isinstance(rest_resp, list) and len(rest_resp) > 0:
+                            cur_p = float(rest_resp[0].get('price', 0))
+                    except Exception as rest_price_err:
+                        pass
+
+                # Если цена все еще не найдена в сокетах и REST — пробуем старый марк-прайс из pos
+                if not cur_p or float(cur_p) <= 0:
+                    cur_p = float(pos.get('markPrice')) if pos.get('markPrice') else float(pos.get('info', {}).get('markPrice', 0))
+
+                # Если тотальный глухой вакуум — аварийно пропускаем тик во избежание ZeroDivisionError
+                if not cur_p or float(cur_p) <= 0:
+                    continue
+
+                cur_p = float(cur_p) # Жестко гарантируем float тип данных
+
+                # Вычисляем чистый PNL без учета плеча в зависимости от направления сделки
+
+                # --- ШТУЧНЫЙ ФИКС V28.3: ЗАЩИТА СИРОТ RECOVERED ОТ КРАША KEYERROR ---
+                pnl = (cur_p / pos['price'] - 1) if pos['side'] == 'buy' else (pos['price'] / cur_p - 1)
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 2]: PNL успешно рассчитан: {round(pnl*100, 4)}%")
+                # Принудительно дублируем значение в p_pct для защиты нижних контуров Катапульты
+                p_pct = pnl
+                #pk_pct = 0.0
+                # Безопасное извлечение ДНК-параметров без падения в KeyError
+                gd = pos.get('gear_data', memory.all_dna.get(clean_symbol, {}).get('G1', {'time': 2700, 'tp1': 0.03}))
+
+#==========================   ФИКС V310.0: ЖЕЛЕЗОБЕТОННЫЙ ЗАЩИТНЫЙ БУФЕР ОТ КРАША 'TP1'   =======
+                # Если из-за микро-задержки асинхронности gd пришел пустым — на ходу вшиваем дефолтные цели, выжигая краш!
+                if not isinstance(gd, dict) or 'tp1' not in gd:
+                    gd = {'time': 2700, 'tp1': 0.006, 'tp2': 0.015, 'sl': -0.012}
+#--------------------------------------------------------------------
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 3]: ДНК успешно извлечена. Лимит времени: {gd.get('time')}с")
+
+
+                # Если позиция подхвачена через RECOVERED и висит со вчерашнего дня — взрываем таймер утилизации принудительно
+                if pos.get('is_recovered', True) or (time.time() - pos['entry_time'] < 60 and pnl < 0):
+                    age = gd.get('time', 2700) + 100  # Намертво выставляем возраст > 45 минут
+                else:
+                    age = time.time() - pos['entry_time']
+
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 4]: Возраст сделки посчитан: {round(age, 1)}с")
+
+
+                exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
+                binance_market_id = raw_symbol.replace('/', '').replace(':USDT', '')
+
+#==========================   ФИКС V310.0: ЦЕНТРАЛИЗОВАННЫЙ СЕЙФ ПЕРЕМЕННЫХ P_PCT И PK_PCT   ====
+                # Гарантированно объявляем переменные PNL и Пика на самом верхнем уровне итерации цикла
+                p_pct = round(pnl * 100, 2)
+                pk_pct = round(pos.get('current_peak', 0.0) * 100, 2)
+#---------------------------------------------
+#                if int(time.time()) % 5 == 0:
+#                    log(f"📍 [STEP 5]: Все переменные собраны. Переходим к дебагу утилизации...")
+
+                # А. КОHТУР РАHHЕГО СHАЙПЕРСКОГО БЕЗУБЫТКА (До выполнения Тейка-1)
+                # Если позиция набрала +1.5% чистого хода цены, но Тейк-1 еще не взят — защищаем залог!
+                if not memory.be_fixed.get(raw_symbol, False) and not memory.tp_fixed.get(raw_symbol, False):
+                    if pnl >= 0.015:
+                        log(f"⚡ [БЕЗУБЫТOК БИНАНС V25.0]: {clean_symbol} набрал +1.5% хода. Переношу стоп в ноль.")
+                        try:
+                            # Смещаем защитный стоп-маркет ровно на цену нашего входа
+                        #    await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            #stop_params = {'stopPrice': price, 'reduceOnly': True}
+                        #    stop_params = {'stopPrice': float(pos['price']), 'reduceOnly': True}
+                        #    await exchange.create_order(raw_symbol, 'stop_market', exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']), None, stop_params)
+                            memory.be_fixed[raw_symbol] = True
+                        except Exception as be_err:
+                            log(f"⚠️ Сбой выставления БУ для {clean_symbol}: {be_err}")
+
+                # Б. КОHТУР АДАПТИВНОГО ТРЕЙЛИHГА НА БАЗЕ ДНК МОHЕТЫ
+                # Определяем шаг отката в зависимости от класса риска (Мемы дышат свободнее)
+                is_meme_coin = any(m_n in clean_symbol.upper() for m_n in ['1000PEPE', '1000SHIB', '1000FLOKI', '1000BONK', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+
+                # --- [ВРЕЗКА V39.6: АБСОЛЮТНО ЗРЯЧИЙ HFT-ТРЕЙЛИНГ И ФИКС ШОРТ-КАТАПУЛЬТЫ] ---
+                optimal_trail_step = 0.0055 if is_meme_coin else 0.0035
+                trail_key = f"{raw_symbol}_trail"
+                peak_memory_key = f"{raw_symbol}_max_peak_observed"
+
+                if pnl >= (gd['tp1'] * 0.75) or memory.tp_fixed.get(trail_key, False):
+                    if not memory.tp_fixed.get(trail_key, False):
+                        memory.tp_fixed[trail_key] = True
+                        memory.prices[peak_memory_key] = pnl
+                        log(f"⚙️ [ТРЕЙЛИHГ]: Взведен по {clean_symbol}!")
+
+                    current_peak = memory.prices.get(peak_memory_key, pnl)
+                    if pnl > current_peak:
+                        memory.prices[peak_memory_key] = pnl
+                        current_peak = pnl
+
+                    entry_price_f = float(pos['price'])
+
+                    # Проверяем направление строго по CCXT-стандарту фьючерсов Binance (long/short)
+                    is_pos_long = str(pos.get('side', '')).lower() in ['long', 'buy']
+
+                    if is_pos_long:
+                        peak_geo = entry_price_f * (1.0 + current_peak)
+                        catapult_trigger_raw = peak_geo * (1.0 - optimal_trail_step)
+#                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
+                        catapult_trigger = float(exchange.price_to_precision(raw_symbol.split(':')[0], catapult_trigger_raw))
+                        is_catapult_fired = (cur_p <= catapult_trigger)
+                    else:
+                        # Корректная тригонометрия шорта: откат вверх от дна прибыли
+                        peak_geo = entry_price_f * (1.0 - current_peak)
+                        catapult_trigger_raw = peak_geo * (1.0 + optimal_trail_step)
+#                        catapult_trigger = float(exchange.price_to_precision(clean_symbol, catapult_trigger_raw))
+                        catapult_trigger = float(exchange.price_to_precision(raw_symbol.split(':')[0], catapult_trigger_raw))
+                        is_catapult_fired = (cur_p >= catapult_trigger)
+
+                    # Выводим дебаг в консоль раз в 15 секунд
+                    if int(time.time()) % 15 == 0:
+                        p_pct = round(pnl * 100, 2)
+                        pk_pct = round(current_peak * 100, 2)
+#                        log(f"⚙️ [ДЕБАГ ТРЕЙЛИНГА {clean_symbol}]: PNL: {p_pct}% | Пик: {pk_pct}% | Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
+
+                    if is_catapult_fired:
+                        log(f"🏁 [КАТАПУЛЬТА]: Снос {clean_symbol} по откату от пика! PNL: {p_pct}% | Пик: {pk_pct}% |  Trigger Цена: {catapult_trigger} | Текущая: {cur_p}")
+                        try:
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            exact_clean_vol = float(exchange.amount_to_precision(clean_symbol, float(pos['vol'])))
+                            # Универсальный метод CCXT гарантирует стопроцентную доставку флага reduceOnly на Бинанс
+                            p_params = {'reduceOnly': True}
+                            await exchange.create_order(raw_symbol, 'MARKET', exit_side, exact_clean_vol, params=p_params)
+                        except Exception as t_err:
+                            log(f"⚠ Сбой катапультирования {clean_symbol}: {t_err}")
+
+                        if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                        if trail_key in memory.tp_fixed: del memory.tp_fixed[trail_key]
+                        if peak_memory_key in memory.prices: del memory.prices[peak_memory_key]
+                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                        continue
+
+                # В. КОHТУР КАСКАДHЫХ ТЕЙК-ПОИHТОВ (Если трейлинг пролетел мимо импульсом)
+                # ТЕЙК-1: Фиксация 50% объема позиции при достижении главной цели ДНК
+                if not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1']:
+                    log(f"🎯 [ТЕЙК-1 БИHАHС]: Цель по {clean_symbol} взята (+{round(pnl*100, 2)}%). Крою 50% объема.")
+                    try:
+            #            half_qty = float(exchange.amount_to_precision(raw_symbol, pos['vol'] / 2))
+                        half_qty = float(exchange.amount_to_precision(raw_symbol.split(':')[0], pos['vol'] / 2))
+                        # --- [ВРЕЗКА V37.0: ПЫЛЕСОС МЕЛОЧИ В ТЕЙКЕ-1] ---
+                        total_pos_usd = pos['vol'] * cur_p
+                        if total_pos_usd > 2.0 and half_qty > 0 and half_qty < pos['vol']:
+#===
+#                            p_params = {'reduceOnly': True}
+#                            await exchange.create_order(raw_symbol, 'MARKET', exit_side, half_qty, params=p_params)
+#===
+                            #await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol, half_qty))
+#                            await exchange.create_market_order(raw_symbol, exit_side, exchange.amount_to_precision(raw_symbol.split(':')[0], half_qty))
+                            # Передаем Бинансу жесткий параметр reduceOnly, исключающий перевороты
+                            p_params = {'reduceOnly': True}
+                            await exchange.create_order(raw_symbol, 'MARKET', exit_side, half_qty, params=p_params)
+
+#                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol, pos['vol'] - half_qty))  # Списываем объем остатка в RAM
+#                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol.split(':')[0], pos['vol'] - half_qty))
+
+#                            memory.tp_fixed[raw_symbol] = True
+                            # Принудительно списываем 50% объема из RAM, чтобы Катапульта не перевернула позу
+                            pos['vol'] = float(exchange.amount_to_precision(raw_symbol, pos['vol'] - half_qty))
+                            memory.tp_fixed[raw_symbol] = True
+
+
+                            pass
+                        else:
+                            # Защита дробления мелкого лота
+                            await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                            await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']))
+                            if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                            continue
+                    except Exception as tp1_err:
+                        log(f"⚠️ Сбой исполнения Тейка-1 для {clean_symbol}: {tp1_err}")
+
+                # ТЕЙК-2: Финальное закрытие остатка позиции при достижении экстремума
+                if memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp2']:
+                    log(f"🏆 [ТЕЙК-2 ФИHАЛ]: Позиция {clean_symbol} полностью отработала ДНК-цели (+{round(pnl*100, 2)}%)")
+                    try:
+                        await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+                        await exchange.create_market_order(clean_symbol, exit_side, exchange.amount_to_precision(clean_symbol, pos['vol']))
+                        if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
+                        if raw_symbol in memory.be_fixed: del memory.be_fixed[raw_symbol]
+                        if raw_symbol in memory.stop_placed: del memory.stop_placed[raw_symbol]
+                        if raw_symbol in memory.tp_fixed: del memory.tp_fixed[raw_symbol]
+                        if f"{raw_symbol}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{raw_symbol}_trail"]
+                        memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                        continue
+                    except Exception as tp2_err:
+                        log(f"⚠️ Сбой исполнения Тейка-2 для {clean_symbol}: {tp2_err}")
+#======
+
+                # 4. ЛОГИКА ЗАТУХАНИЯ ИМПУЛЬСА ПО ТАЙМЕРУ (Если застряли в болоте)
+
+                # 4. КОНТУР УТИЛИЗАЦИИ И ЖЕСТКОГО СНОСА ПО МАТРИЦЕ ДНК-КЛАССОВ V31.0
+                gd = memory.all_dna.get(clean_symbol, {}).get(pos['gear'], {'time': 2700, 'tp1': 0.03})
+
+                # --- [ВРЕЗКА V31.0: ИНТЕЛЛЕКТУАЛЬНЫЙ КЛАССИФИКАТОР ВОЛАТИЛЬНОСТИ] ---
+                # Принудительно определяем параметры стопа и Храповика в зависимости от генетики монеты
+                token_upper = clean_symbol.upper()
+
+                if any(meme in token_upper for meme in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME']):
+                    # Класс «МЕМЫ»
+                    class_sl = -0.0074
+                    class_trigger_pct = 0.81
+                elif any(tech in token_upper for tech in ['SOL', 'TRB', 'APT', 'FIL', 'RENDER', 'FET', 'OP', 'STORJ', 'GLM', 'TIA', 'AEVO', 'C98']):
+                    # Класс «ТЕХ-ДРАЙВЕРЫ»
+                    class_sl = -0.0053
+                    class_trigger_pct = 0.77
+                else:
+                    # Класс «ЯКОРЯ» (Все остальные монеты по дефолту)
+                    class_sl = -0.0038
+                    class_trigger_pct = 0.72
+
+                # --- ВЫЧИСЛИТЕЛЬНОЕ ЯДРО СНОСА ПО КОНТУРАМ ЗАЩИТЫ ---
+                # Контур 1: Таймер флэта (Если прошло 45 минут, а Тейка-1 еще не было)
+#                is_time_out = (age > gd['time'] and pnl < gd['tp1'])
+                is_time_out = ((time.time() - pos['entry_time']) > gd['time'] and pnl < gd['tp1'])
+
+                # Контур 2: Досрочный Программный Храповик RAM (Взводится до Тейка-1 при прохождении Х% пути к цели)
+        #        is_bu_triggered = (pnl >= gd['tp1'] * class_trigger_pct) and (pnl <= 0.0009)
+                # Контур 2: Досрочный Храповик RAM (До Тейка-1 взводится на 77% пути, после Тейка-1 защищает остаток в +0.09%)
+                is_bu_triggered = (not memory.tp_fixed.get(raw_symbol, False) and pnl >= gd['tp1'] * class_trigger_pct and pnl <= 0.0009) or (memory.tp_fixed.get(raw_symbol, False) and pnl <= 0.0009)
+
+                # Контур 3: Жесткий Стоп смерти импульса первой фазы (Если ракета сразу летит против нас)
+                is_momentum_dead = (pnl <= class_sl)
+
+                if is_time_out or is_bu_triggered or is_momentum_dead:
+                    log(f"⏱️🚨 [МАTРИЦА V31.0 ИСПOЛHЕHA]: Снос {clean_symbol} | PNL: {round(pnl*100, 3)}% | Триггер: T={is_time_out}/BU={is_bu_triggered}/SL={is_momentum_dead}")
+                    action_triggered_decay = False
+                    try:
+                        # Наносекундно зачищаем сопутствующие лимитки на Бинансе
+                        binance_market_id = raw_symbol.replace('/', '').replace(':USDT', '')
+                        await exchange.fapiPrivateDeleteAllOpenOrders({'symbol': binance_market_id})
+
+                        # Извлекаем прецизионный float-объем напрямую из CCXT пакета позиции
+                        exact_clean_vol = float(exchange.amount_to_precision(raw_symbol, float(pos['vol'])))
+
+                        # Бьем встречным маркетом с флагом reduceOnly для моментального схлопывания контракта
+                        await exchange.create_market_order(raw_symbol, exit_side, exact_clean_vol, {'reduceOnly': True})
+#                        p_params = {'reduceOnly': True}
+#                        await exchange.create_order(raw_symbol, 'MARKET', exit_side, exact_clean_vol, params=p_params)
+
+                        action_triggered_decay = True
+                    except Exception as decay_err:
+                        log(f"⚠ Ошибка маркет-сноса матрицы классов для {clean_symbol}: {decay_err}")
+
+                    # Тотальное каскадное выжигание RAM-памяти для полного освобождения маржинального слота
+                    for k in [raw_symbol, clean_symbol, f"{clean_symbol}:USDT"]:
+                        if k in memory.active_pos: del memory.active_pos[k]
+                        if k in memory.be_fixed: del memory.be_fixed[k]
+                        if k in memory.stop_placed: del memory.stop_placed[k]
+                        if k in memory.tp_fixed: del memory.tp_fixed[k]
+
+                    memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                    continue
+
+
+                # 5. ТОТАЛЬНО ЗРЯЧИЙ ВЕНИК-ОПРОС BINANCE FUTURES (Реставрация старого канона V27.8)
+                if int(time.time()) % 15 == 0 and age > 90:
+                    try:
+                        live_symbols = list(memory.active_pos.keys())
+
+                        # --- [КОНТУР 2: ОЧИСТКА RAM ОТ ЗАКРЫТЫХ ИЗВНЕ ПОЗИЦИЙ] ---
+                        if raw_symbol not in live_symbols:
+                            log(f"🧹 [ВЕНИК V43.5]: Позиция {clean_symbol} реально закрыта извне (Ст оп/БУ/Маркет). Очистка RAM.")
+
+                            # Намертво выжигаем позицию из ОЗУ по всем маскам ключей
+                            short_key = str(raw_symbol).split(':')[0]
+                            for key_to_del in [raw_symbol, short_key]:
+                                if key_to_del in memory.active_pos: del memory.active_pos[key_to_del]
+                                if key_to_del in memory.be_fixed: del memory.be_fixed[key_to_del]
+                                if key_to_del in memory.stop_placed: del memory.stop_placed[key_to_del]
+                                if key_to_del in memory.tp_fixed: del memory.tp_fixed[key_to_del]
+
+                            if f"{raw_symbol}_trail" in memory.tp_fixed: del memory.tp_fixed[f"{raw_symbol}_trail"]
+                            if f"{raw_symbol}_max_peak_observed" in memory.prices: del memory.prices[f"{raw_symbol}_max_peak_observed"]
+                            memory.slots_occupied = max(0, memory.slots_occupied - 1)
+                            continue
+                    except Exception as venik_err:
+                        pass
+#======
+            except Exception as e:
+                log(f"🚨 [ОШИБКА ТРЕЙЛИНГА]: Сбой главного цикла monitor_logic: {e}")
+                await asyncio.sleep(1)
+               # pass
+
+        #await asyncio.sleep(0.5)
+
+async def main():
+#==========================   ФИКС V181.0: ЦИКЛИЧЕСКИЙ ТОТАЛЬНЫЙ ПРЕДСТАРТОВЫЙ КЛИНИНГ СТАКАНОВ =
+    # 1. Аппаратно переводим систему в режим стартового прогрева ОЗУ
+    memory.is_warmup = True
+
+    # 2. Подгружаем ДНК-пульт в память ЗАРАНЕЕ, чтобы вытащить список всех наших 33 монет
+    with open('dna_ignition.json', 'r') as f:
+        memory.all_dna = json.load(f)
+
+    # 3. Подключаем предстартовый коннектор для зачистки старых лимиток-сирот
+    init_ex = ccxt.binance({'apiKey': API_KEY, 'secret': API_SECRET, 'options': {'defaultType': 'future'}})
+    try:
+        log("🧹🔥 [ЯДЕРНЫЙ КЛИНИНГ V181.0]: Начинаю тотальную стерилизацию стаканов по всем секторам ...")
+        # Пробегаем быстрым каскадом по всем монетам и принудительно отменяем пассивные лимитки
+        for target_coin in list(memory.all_dna.keys()):
+            try:
+                coin_market_id = str(target_coin).replace('/', '').split(':')[0]
+                await init_ex.fapiPrivateDeleteAllOpenOrders({'symbol': coin_market_id})
+            except:
+                pass
+        log("✅ [КЛИНИНГ ЗАВЕРШЕН]: Все протухшие лимитки успешно выжжены с серверов Бинанса!")
+    except Exception as clear_err:
+        log(f"⚠️ Предупреждение предстартового клининга: {clear_err}")
+    finally:
+        await init_ex.close() # Намертво закрываем предстартовую сессию
+
+    # 4. Инициализируем асинхронный замок для защиты каскадных ордеров в RAM
+    if not hasattr(memory, 'orders_lock'):
+        memory.orders_lock = asyncio.Lock()
+
+#==========================   ФИКС V152.0: ВЗВЕДЕНИЕ ПОСТОЯННОГО HFT KEEP-ALIVE ТУННЕЛЯ   =======
+    # Аппаратно заставляем HTTP-клиент не закрывать сессию, убирая 2 секунды лага открытий TCP
+    exchange = ccxt.binance({
+        'apiKey': API_KEY,
+        'secret': API_SECRET,
+        'options': {'defaultType': 'future'},
+        'enableRateLimit': True,
+        'timeout': 5000, # <--- ФИКС V170.0: НЕТ ВЕЧНЫМ ЗАВИСАНИЯМ REST!
+        'headers': {
+            'Connection': 'keep-alive',
+            'Keep-Alive': 'timeout=60, max=10000'
+        }
+    })
+#==========================   ФИКС V162.0: ИЗОЛИРОВАННЫЙ БРОНИРОВАННЫЙ ШЛЮЗ ВЫХОДОВ   ===========
+    # ШЛЮЗ №2: Абсолютно независимый порт строго для Трейлинга, Стопов и Таймеров выходов
+    exchange_monitor = ccxt.binance({
+        'apiKey': API_KEY, 'secret': API_SECRET,
+        'options': {'defaultType': 'future'}, 'enableRateLimit': True,
+        'timeout': 5000, # <--- ФИКС V170.0: НЕТ ВЕЧНЫМ ЗАВИСАНИЯМ REST!
+        'headers': {'Connection': 'keep-alive', 'Keep-Alive': 'timeout=60, max=10000'}
+    })
+
+    await exchange.load_markets()
+    await exchange_monitor.load_markets() # Загружаем рынки для второго шлюза
+#--------------------------------------
+#================================================================================
+    # --- ШТУЧНЫЙ ФИКС V24.9: АСИНХРОННЫЙ ПРОГРЕВ МАКРО-СПЕЦИФИКАЦИЙ БИНАНСА ---
+    with open('dna_ignition.json', 'r') as f:
+        memory.all_dna = json.load(f)
+
+#==========================   ФИКС V141.0: СКOЛЬЗЯЩИЙ ОЗУ-ГЕНЕРАТОР 30 СВЕЧЕЙ ДЛЯ PANDAS   ======
+    memory.raw_buffer = {}
+    if not hasattr(memory, 'candles'): memory.candles = {}
+
+#================================================================================================
+    async def hft_market_stream():
+        """ Поток 1: Наносекундный прямой зрячий приемник и парсер WebSocket-пакетов /market/stream """
+        streams = []
+        for c in list(memory.all_dna.keys()):
+            clean_ticker = str(c).replace('/', '').replace(':USDT', '').lower()
+            # Берем только kline_1m, из него вытащим и свечу, и живую цену!
+            streams.append(f"{clean_ticker}@kline_1m")
+
+        url = f"wss://fstream.binance.com/market/stream?streams={'/'.join(streams)}"
+        log(f"🛰️ [HFT МOНОЛИТ V159.0]: Запускаю сокет-магистраль по {len(memory.all_dna)} секторам. ..")
+
+        async with aiohttp.ClientSession() as session:
+#==========================   ФИКС V169.0: ЭКСПОНЕНЦИАЛЬНЫЙ СЕТЕВОЙ ОТКАТ И ТАЙМАУТ КОННЕКТА   ==
+            # Инициализируем динамический счетчик задержки сети перед входом в цикл
+            retry_delay = 2.0
+
+            while memory.is_running:
+                try:
+                    # Ограничиваем время самого рукопожатия до 3 секунд, вживляем фоновый heartbeat пинг
+                    async with session.ws_connect(url, receive_timeout=7.0, heartbeat=15.0) as ws:
+                        # При успешном коннекте мгновенно сбрасываем задержку до базовых 2 секунд
+                        retry_delay = 2.0
+                        print("✅ [HFT МOНОЛИТ]: Сквозной сокет-туннель пробит.")
+
+                        async for msg in ws:
+                            if msg.type == aiohttp.WSMsgType.TEXT:
+                                packet = json.loads(msg.data)
+                                data = packet.get('data', {})
+                                r_sym = str(data.get('s', '')).upper()
+                                if r_sym:
+                                    # Твоя каноничная посимвольная маска выпрямления ключей ОЗУ
+                                    sym = None
+                                    if r_sym.endswith('USDT'):
+                                        base_coin = r_sym[:-4]
+                                        sym = f"{base_coin}/USDT:USDT"
+
+                                    if sym and sym in memory.all_dna:
+                                        kline = data.get('k', {})
+                                        if kline:
+                                            t_ms = int(kline.get('t', 0))
+                                            cur_close = float(kline.get('c', 0))
+
+                                            # Записываем чистую цену строго в свой слот
+                                            memory.prices[sym] = cur_close
+
+                                            bar = [t_ms, float(kline.get('o', 0)), float(kline.get('h', 0)), float(kline.get('l', 0)), cur_close, float(kline.get('v', 0))]
+                                            if sym not in memory.candles:
+                                                memory.candles[sym] = [bar]
+                                            else:
+                                                history = memory.candles[sym]
+                                                if history[-1] == t_ms:
+                                                    history[-1] = bar
+                                                else:
+                                                    history.append(bar)
+                                                if len(history) > 30:
+                                                    memory.candles[sym] = history[-30:]
+                except Exception as connect_err:
+                    log(f"🚨 [СЕТЕВАЯ АВАРИЯ БИРЖИ]: Ошибка сокет-шлюза: {connect_err}. Защитный откат на {retry_delay} сек...")
+                    await asyncio.sleep(retry_delay)
+                    # Плавно увеличиваем паузу в 2 раза, защищая IP от бана Бинанса
+                    retry_delay = min(retry_delay * 2, 30.0)
+
+    async def hft_packet_processor():
+        """ Поток 2: Наносекундный скользящий накопитель массивов OHLCV в ОЗУ """
+        #last_ws_debug_time = time.time()
+        while memory.is_running:
+            # === ВЖИВЛЕНИЕ ЖИВОГО СОКЕТ-ДЕБАГА ДЛЯ АРХИТЕКТОРА ===
+          #  if time.time() - last_ws_debug_time > 45:
+          #      log(f"🛰️ [ДЕБАГ СОКЕТОВ]: ОЗУ-Буфер стабилен. В кэше: {len(memory.raw_buffer)} сек торов. Цены летят.")
+          #      last_ws_debug_time = time.time()
+           #--------------------------------------------------------
+
+            for sym, data in list(memory.raw_buffer.items()):
+                try:
+                    event_type = data.get('e', '')
+                    if event_type == 'markPriceUpdate':
+                        p_val = data.get('p')
+                        if p_val is not None and float(p_val) > 0:
+                            memory.prices[sym] = float(p_val)
+                    elif event_type == 'kline':
+                        kline = data.get('k', {})
+                        t_ms = int(kline.get('t', 0))
+                        bar = [
+                            t_ms, float(kline.get('o', 0)), float(kline.get('h', 0)),
+                            float(kline.get('l', 0)), float(kline.get('c', 0)), float(kline.get('v', 0))
+                        ]
+                        if sym not in memory.candles:
+                            memory.candles[sym] = [bar]
+                        else:
+                            # Обновляем или добавляем свечу в скользящий массив ОЗУ
+                            history = memory.candles[sym]
+                            if history[-1][0] == t_ms:
+                                history[-1] = bar  # Обновляем живой текущий бар
+                            else:
+                                history.append(bar)  # Добавляем новый закрывшийся бар
+                            # Жестко держим лимит в 30 свечей в памяти для Pandas
+                            if len(history) > 30:
+                                memory.candles[sym] = history[-30:]
+                        # Страхуем цену
+                        if memory.prices.get(sym, 0) == 0:
+                            memory.prices[sym] = bar[4]
+                except: pass
+            await asyncio.sleep(0.001)
+#--------------------------------------
+    log(f"✅ TITAN IGNITION V21.8 ONLINE. Охота на {len(memory.all_dna)} секторов.")
+
+    async def price_stream():
+        symbols = list(memory.all_dna.keys())
+        last_prices_beacon = time.time()
+        while memory.is_running:
+            try:
+                tickers = await exchange.fetch_tickers()
+                for s in symbols:
+                    if s in tickers and tickers[s].get('last'):
+                        memory.prices[s] = float(tickers[s]['last'])
+
+                # --- [ТУМБЛЕРНЫЙ МАЯК ПОТOKA ЦЕН: РАБОТАЕТ ПРИ TRUE] ---
+                if DEBUG_BEACONS and (time.time() - last_prices_beacon > 120):
+                    log(f"📡 МАЯК ЦЕН: Поток стабилен. На связи {len(memory.prices)}/{len(symbols)} секторов фьючерсного стакана.")
+                    last_prices_beacon = time.time()
+
+                await asyncio.sleep(1)
+            except Exception:
+                await asyncio.sleep(5)
+
+    async def hunter_loop():
+        await asyncio.sleep(5)
+        last_beacon_t = 0
+
+#==========================   ФИКС V161.0: АНТИ-СПАМ ФИЛЬТР ПОВТОРНЫХ СИГНАЛОВ ОЗУ   ============
+        # Хранилище временных меток последних сигналов, чтобы выжечь пулеметный спам
+        if not hasattr(memory, 'last_signal_time'):
+            memory.last_signal_time = {}
+#=============================================================================
+
+        while memory.is_running:
+#==========================   ФИКС V166.0: ЗАПРЕТ НА СТРЕЛЬБУ ЛИМИТКАМИ ВО ВРЕМЯ ПРОГРЕВА   ====
+            # Если система находится в фазе прогрева — наносекундно спим и ждем сбора позиций
+            if getattr(memory, 'is_warmup', True):
+                await asyncio.sleep(0.5)
+                continue
+#===============================================================================
+            for s in memory.all_dna.keys():
+                try:
+                    current_time_now = time.time()
+
+#==========================   ФИКС V161.5: АHТИ-СПАM ЗАМОК ОТ ОШИБОК И ОТМЕН TREND SHIELD   ====
+                    # Если по этой монете опрос уже был меньше 5 секунд назад — наносекундно пропускаем тик!
+                    if current_time_now - memory.last_signal_time.get(s, 0) < 5.0:
+                        continue
+
+                    # Фиксируем время попытки ДО входа в check_signal, полностью глуша спам отмен
+                    memory.last_signal_time[s] = current_time_now
+#================================================================================================
+
+                    sig, last_beacon_t = await check_signal(exchange, s, last_beacon_t)
+#                log(f"🚫 [DEBUG HUNTER]: Перед проверкой сигнала по {s} ! last_beacon_t= {last_beacon_t} sig = {sig}.")
+                    if sig:
+#==========================   ФИКС V165.0: ЖЕСТКИЙ ПРЯМОЙ КОНТРОЛЬ ЕМКОСТИ СЛОТОВ В ХАНТЕРЕ   ===
+                        # Проверяем лимит слотов напрямую по реальному числу открытых позиций в RAM
+                        if len(memory.active_pos) >= MAX_SLOTS:
+                            #log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Превышен лимит параллельных слотов MAX_SLOTS.")
+                            continue
+#-------------------------------------
+
+                        if s in memory.active_pos:
+                            #log(f"🚫 [DEBUG HUNTER]: Сигнал по {s} ОТКЛОНЕН! Монета уже удерживается в оперативной памяти.")
+                            continue
+                        #log(f"🎯 [DEBUG HUNTER]: Все шлюзы пройдены! Передаю сигнал по {s} в execute_entry...")
+#==========================   ФИКС V173.0: АСИНХРОННЫЙ ФОНОВЫЙ ПУСК ОРДЕРОВ CREATE_TASK   =======
+                        # Отвязываем отправку ордера от сканера! Хантер идет дальше, не дожидаясь ответа Бинанса
+                        asyncio.create_task(execute_entry(exchange, sig))
+#--------------------------------------
+                        #await execute_entry(exchange, sig)
+#================================================================================================
+
+                        #await execute_entry(exchange, sig)
+#==========================   ФИКС V172.0: ЗРЯЧИЙ ДЕБАГ КРИТОВ СКАHЕРA В ОЗУ   ==================
+                except Exception as hunter_err:
+                    log(f"🚨 [ОШИБКА ХАНТЕРА]: Сбой патруля на монете {s}: {hunter_err}")
+                    await asyncio.sleep(0.1)
+#--------------------------------------
+            # Возвращаем твой каноничный HFT-шаг сна цикла (0.4 секунды) для идеального баланса процессора
+            await asyncio.sleep(0.4)
+    try:
+        # 1. Сначала жестко запускаем фоновый съем балансов и Пылесос
+        asyncio.create_task(update_balance(exchange))
+
+        # 2. Даем шлюзам Бинанса 5 секунд форы обновиться и усыновить контракты
+        await asyncio.sleep(5)
+
+        # 3. Безопасно врубаем круглосуточные стримы, сканер и мониторинг выходов
+        await asyncio.gather(
+#==========================   ФИКС V141.0: ЗАПУСК НОВЫХ ДВИГАТЕЛЕЙ В КОНВЕЙЕР   =================
+            hft_market_stream(),
+#            hft_packet_processor(),
+#===============================================================================
+            price_stream(),
+            hunter_loop(),
+            monitor_logic(exchange_monitor),
+            limit_orders_cleaner_loop(exchange)
+        )
+    finally:
+        await exchange.close()
+
+if __name__ == "__main__":
+    asyncio.run(main())
