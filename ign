@@ -96,7 +96,27 @@ async def update_balance(exchange):
                             is_in_dna = t_sym in memory.all_dna
                             is_in_active = t_sym in memory.active_pos
                             log(f"🔍 [DEBUG POSITION]: Монета: {t_sym} | Vol: {t_vol} | USD: {round(t_vol*t_price, 2)} | Есть в ДНК: {is_in_dna} | Есть в RAM: {is_in_active}")
+#==========================   ФИКС V218.0: ПРЕЦИЗИОННЫЙ ЗАХВАТ ПОДПАКЕТА ПАРАМЕТРОВ G1   =======
+                            # Восстанавливаем эталонный строковый ключ ОЗУ ("FIL/USDT:USDT")
+                            t_ram_key = str(t_sym).strip()
 
+                            # Если при рестарте монеты нет в ОЗУ — намертво усыновляем её в RAM выходов!
+                            if t_ram_key not in memory.active_pos:
+                                # Извлекаем верхнеуровневый корень ДНК-параметров из ОЗУ
+                                raw_dna_pulse = memory.all_dna.get(t_ram_key, {})
+
+                                # Проваливаемся строго внутрь подсловаря 'g1', полностью выравнивая типы данных!
+                                extracted_g1_dna = raw_dna_pulse.get('g1', raw_dna_pulse)
+
+                                memory.active_pos[t_ram_key] = {
+                                    'side': 'BUY' if float(testing_p.get('positionAmt', 0)) > 0 else 'SELL',
+                                    'vol': t_vol, 'price': t_price,
+                                    'gear': 'g1', 'gear_data': {},
+                                    'dna': extracted_g1_dna, # Передаем чистые внутренние параметры ('tp1', 'tp2'!)
+                                    'entry_time': time.time(), 'gear_type': 'MARKET', 'is_live': True
+                                }
+                                log(f"🔗 🔥 [РЕСТАРТ ПОДХВАТ V218.0]: Контракт {t_ram_key} успешно взведен под защиту Трейлинга!")
+#----------------------------
                     # --- [ВРЕЗКА V40.5: АППАРАТНЫЙ УТРЕННИЙ ПЫЛЕСОС ПЕРВОГО ТИКА] ---
                     live_symbols = []
                     for p in positions:
@@ -128,6 +148,17 @@ async def update_balance(exchange):
                                     # Если монета уже торгуется ботом — жестко выравниваем лот ОЗУ по факту биржи
                             if p_raw_sym in memory.active_pos:
                                     memory.active_pos[p_raw_sym]['vol'] = p_vol
+
+#================================   ФИКС V208.0: ЖЕСТКИЙ СИНХРОН НАПРАВЛЕНИЯ СДЕЛКИ (SIDE MATCH)   ====
+                                    # Считываем реальное направление позиции на бирже
+                                    exchange_side = 'BUY' if float(p.get('positionAmt', 0)) > 0 else 'SELL'
+
+                                    # Если направление в ОЗУ не совпадает с биржей — стираем ложный ОЗУ-ключ
+                                    if memory.active_pos[p_raw_sym].get('side', '').upper() != exchange_side:
+                                            del memory.active_pos[p_raw_sym]
+                                            log(f"⚠️ [ПОДХВАТ КОЛЛИЗИЯ]: Направление ОЗУ не совпало с биржей по {p_raw_sym}! Слот сброшен.")
+                                            continue
+
                                         # Если позиция появилась в списке реальных контрактов — включаем ведение!
 #==========================   ФИКС V138.0: СКВОЗНАЯ АКТИВАЦИЯ ТРЕЙЛИНГА ДЛЯ ВСЕХ ФАЗ   ==========
                                         # Аппаратно включаем зрячесть позиции на любых передачах (CRUISE / DRIVE / ECO)
@@ -167,21 +198,22 @@ async def update_balance(exchange):
                                         log(f"🔗 RECOVERED IGNITION: Обнаружен живой контракт по {p_raw_sym} ({p_vol} единиц). Направление {side} Успешно подхвачен ядром выходов!")
                 except Exception as sync_err:
                     log(f"⚠ Ошибка синхронизации позиций при старте: {sync_err}")
-#==========================   ФИКС V172.0: ЧЕСТНЫЙ ПРОГРЕВ МАССИВА OHLCV ИЗ REST API   ==========
-                # Скачиваем реальную историю баров один раз при старте, полностью выжигая ложные сигналы
-                log(f"🛰️ [HFT ПРОГРЕВ V172.0]: Закачиваю реальную историю 30 свечей для Pandas по { len(memory.all_dna)} секторам...")
+#==========================   ФИКС V210.0: БЕЗОПАСНЫЙ ПЕРЕНОС ПРОГРЕВА В САМЫЙ ПОДВАЛ СТАРТА   ===
+                # Опускаем прогрев сюда! Позиции УЖЕ усыновлены в ОЗУ и защищены Трейлингом, теперь можно качать историю баров
+                log(f"🛰️ [HFT ПРОГРЕВ V210.0]: Закачиваю реальную историю 30 свечей для Pandas по 3 3 секторам...")
                 for s_coin in list(memory.all_dna.keys()):
                     try:
                         history_bars = await exchange.fetch_ohlcv(s_coin, '1m', limit=30)
                         if history_bars and len(history_bars) >= 21:
                             memory.candles[s_coin] = history_bars
-                            memory.prices[s_coin] = float(history_bars[-1][4]) # Честная цена закрытия
-                        await asyncio.sleep(0.1) # Защитный зазор от бана весов API
+                            memory.prices[s_coin] = float(history_bars[-1][4])
+                        await asyncio.sleep(0.1)
                     except:
                         pass
 
                 memory.is_warmup = False
-                #first_run_sync = False
+                first_run_sync = False
+#--------------------------------------
 #--------------------------------------
             # Этот контур работает круглосуточно раз в 30 секунд. Он проверяет, что налилось на бирже!
             if not first_run_sync and memory.is_running:
@@ -258,6 +290,14 @@ async def limit_orders_cleaner_loop(exchange):
                         log(f"⚠️ [ВЕHИК КРАХ]: СЕТЕВОЙ ТАЙМАУТ! Бинанс не ответил за 2.0 сек при сносе ордера {o_id} по {o_data['symbol']}.")
                     except Exception as binance_err:
                         log(f"ℹ️ [ВЕHИК ОТКАЗ БИРЖИ]: Бинанс отклонил запрос на отмену ордера {o_id}: {binance_err}")
+#==========================   ФИКС V208.0: ПЕРЕХВАТ НАЛИТИЯ ОРДЕРА ПРИ ОТКАЗЕ ОТМЕНЫ   ==========
+                        # Если Бинанс говорит Unknown order — значит, лимитка налилась в эту же миллисекунду!
+                        # Мы ПРИНУДИТЕЛЬНО переводим её в статус живого контракта, запрещая Венику стирать слот!
+                        if "Unknown order" in str(binance_err) and target_raw_symbol in memory.active_pos:
+                            memory.active_pos[target_raw_symbol]['is_live'] = True
+                            memory.active_pos[target_raw_symbol]['gear_type'] = 'MARKET'
+                            log(f"⚡ [ВЕHИК СВЕРХ-ПОДХВАТ]: Ордер {o_id} по {target_raw_symbol} НАЛИТ! Спасаю позицию от слепоты.")
+#----------------------------------------------------------------
                     finally:
 #==========================   ФИКС V198.0: СИНХРОННОЕ ВЫЧИЩЕНИЕ ФАНТОМНЫХ СЛОТОВ АКТИВНЫХ ПОЗИЦИЙ ===
                         # Если лимитка удалена или отменена — намертво стираем ее из активных слотов RAM выходов!
@@ -619,7 +659,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
             current_wday = local_time_struct.tm_wday
 
             if current_wday >= 5:
-                # 🏖️ РЕЖИМ ВЫХОДНЫХ (Суббота - Воскресенье): Глух ой расширенный барьер круглые сутки
+                # 🏖️ РЕЖИМ ВЫХОДНЫХ (Суббота - Воскресенье): Глухой расширенный барьер круглые сутк и
                 session_mult = 1.40
             elif current_wday == 4 and current_hour >= 19:
                 # 🩸 РЕЖИМ ПЯТНИЧНОГО ВЕЧЕРА (Закрытие CME): Защитное расширение от уикенд-сквизов
@@ -930,10 +970,13 @@ async def execute_entry(exchange, sig):
 
 async def monitor_logic(exchange):
     """Асинхронный бронированный контроль выходов и адаптивного пре-трейлинга V22.0 [ФИКС NEAR]"""
+    last_debug_ts = 0
     while memory.is_running:
 #==========================   ФИКС V193.0: РАСКОММЕНТИРОВАНИЕ СКВОЗНОГО ДЕБАГА ВЫХОДОВ   ========
         # Включаем зрячий ежесекундный дебаг-логгер емкости RAM активных позиций
-        if int(time.time()) % 10 == 0:
+        current_ts = int(time.time())
+        if current_ts % 150 == 0 and current_ts != last_debug_ts:
+            last_debug_ts = current_ts
             log(f"🛰️ [МОНИТОР ДЕБАГ]: Патруль активен. Живых позиций в RAM: {len(memory.active_pos) } | Ключи: {list(memory.active_pos.keys())}")
 #-------------------------------------
         # --- [ВРЕЗКА V28.4: СКВОЗНОЙ ДЕБАГ ШЛЮЗА ВЫХОДОВ] ---
@@ -952,6 +995,13 @@ async def monitor_logic(exchange):
 #                if int(time.time()) % 5 == 0:
 #                    log(f"📍 [STEP 1]: Начинаем расчет параметров для {clean_symbol}. Текущая цена cur_p={cur_p}")
 
+#==========================   ФИКС V217.0: ВРЕМЕННЫЙ ДЕБАГ КЛЮЧЕЙ ДНК МАТРИЦЫ   ================
+                # Бот намертво выведет в консоль всю начинку словаря dna до того, как упадет!
+                dna_data = pos.get('dna', {})
+
+                if int(time.time()) % 10 == 0:
+                    log(f"🕵️‍♂️ [ДЕБАГ ДНК СЛОВАРЯ] по {symbol}: Тип данных: {type(dna_data)} | Дос тупные ключи: {list(dna_data.keys()) if hasattr(dna_data, 'keys') else 'НЕТ КЛЮЧЕЙ'} | Значение: {str(dna_data)[:120]}")
+#------------------------------------------------------------------------------------------------
 
                 # --- ШТУЧНЫЙ ФИКС V27.5: НАМЕРТВО СИНХРОНИЗИРУЕМ RAW И CLEAN КЛЮЧИ ---
                 raw_symbol = symbol
