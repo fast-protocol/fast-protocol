@@ -43,6 +43,7 @@ def log(msg):
 
 async def update_balance(exchange):
     """Фоновое обновление баланса, ЖЕСТКИЙ переключатель ISOLATED и усыновление сирот V22.4"""
+    global first_run_sync
     first_run_sync = True
     while memory.is_running:
         try:
@@ -80,10 +81,11 @@ async def update_balance(exchange):
                 except:
                     pass # Если позиция уже изолирована, биржа пропустит шаг без краша
 
+            positions = await exchange.fetch_positions()
             # --- [ШЛЮЗ СИНХРОНИЗАЦИИ ПОЗИЦИЙ ПОСЛЕ РЕСТАРТА (УСЫНОВЛЕНИЕ СИРОТ)] ---
             if first_run_sync:
                 try:
-                    positions = await exchange.fetch_positions()
+#                    positions = await exchange.fetch_positions()
                     # --- [ТОТАЛЬНЫЙ ДЕБАГ-РАДАР V45.0: ВСКРЫТИЕ СЛЕПОТЫ СИРОТ] ---
                     log(f"🕵️‍♂️ [DEBUG BALANCE]: Биржа вернула всего {len(positions)} позиций из AP I.")
                     for testing_p in positions:
@@ -98,31 +100,38 @@ async def update_balance(exchange):
                     # --- [ВРЕЗКА V40.5: АППАРАТНЫЙ УТРЕННИЙ ПЫЛЕСОС ПЕРВОГО ТИКА] ---
                     live_symbols = []
                     for p in positions:
+#-----------------------------------
                             p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
-                            if p_vol > 0.00001:
-                                p_price = float(p.get('entryPrice', p.get('markPrice', 1.0)))
-                                p_raw_sym = str(p['symbol'])
 
-                                # Если общая стоимость позы меньше $1.0 — уничтожаем мгновенно
-                                if (p_vol * p_price) < 1.0:
-                                    try:
-                                        p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
-                                        p_exact_vol = float(exchange.amount_to_precision(p_raw_sym, p_vol))
-                                        p_params = {'reduceOnly': True}
-                                        await exchange.create_order(p_raw_sym, 'MARKET', p_exit_side, p_exact_vol, params=p_params)
-                                        log(f"🧹🔥 [УТРЕННИЙ ПЫЛЕСОС]: Намертво уничтожен мусорный о статок {p_raw_sym} весом ${round(p_vol * p_price, 2)}!")
-                                    except: pass
-                                    continue
-                                else:
-                                    live_symbols.append(p_raw_sym)
+#==========================   ФИКС V207.0: МОНОЛИТНЫЙ БАРЬЕР ОТ ФАНТОМНЫХ УСЫНОВЛЕНИЙ   ========
+                            # Бронированная HFT-отсечка: если объема на бирже нет, бот пулей переходит к следующей монете, вообще не читая код ниже!
+                            if p_vol <= 0.00001:
+                                continue
+
+                            p_price = float(p.get('entryPrice', p.get('markPrice', 1.0)))
+                            p_raw_sym = str(p['symbol'])
+
+                            # Если общая стоимость позы меньше $1.0 — уничтожаем мусорный остаток
+                            if (p_vol * p_price) < 1.0:
+                                try:
+                                    p_exit_side = 'sell' if float(p.get('positionAmt', 0)) > 0 else 'buy'
+                                    p_exact_vol = float(exchange.amount_to_precision(p_raw_sym, p_vol))
+                                    p_params = {'reduceOnly': True}
+                                    await exchange.create_order(p_raw_sym, 'MARKET', p_exit_side, p_exact_vol, params=p_params)
+                                    log(f"🧹🔥 [УТРЕННИЙ ПЫЛЕСОС]: Намертво уничтожен мусорный остат ок {p_raw_sym} весом ${round(p_vol * p_price, 2)}!")
+                                except: pass
+                                continue # Этот контур сносит пыль и летит на следующий круг
+
+                            # Если позиция крупная и легитимная — добавляем в список живых тикеров биржи
+                            live_symbols.append(p_raw_sym)
 #================================   ФИКС V104.5: СИНХРОНИЗАЦИЯ ЧАСТИЧНОГО НАЛИВА ЛИМИТOК   ============
                                     # Если монета уже торгуется ботом — жестко выравниваем лот ОЗУ по факту биржи
-                                    if p_raw_sym in memory.active_pos:
-                                        memory.active_pos[p_raw_sym]['vol'] = p_vol
+                            if p_raw_sym in memory.active_pos:
+                                    memory.active_pos[p_raw_sym]['vol'] = p_vol
                                         # Если позиция появилась в списке реальных контрактов — включаем ведение!
 #==========================   ФИКС V138.0: СКВОЗНАЯ АКТИВАЦИЯ ТРЕЙЛИНГА ДЛЯ ВСЕХ ФАЗ   ==========
                                         # Аппаратно включаем зрячесть позиции на любых передачах (CRUISE / DRIVE / ECO)
-                                        if 'is_live' in memory.active_pos[p_raw_sym]:
+                                    if 'is_live' in memory.active_pos[p_raw_sym]:
                                             if not memory.active_pos[p_raw_sym]['is_live']:
                                                 parent_gear_type = memory.active_pos[p_raw_sym].get('gear_type', 'LIMIT')
                                                 if parent_gear_type != 'MARKET':
@@ -172,8 +181,40 @@ async def update_balance(exchange):
                         pass
 
                 memory.is_warmup = False
-                first_run_sync = False
+                #first_run_sync = False
 #--------------------------------------
+            # Этот контур работает круглосуточно раз в 30 секунд. Он проверяет, что налилось на бирже!
+            if not first_run_sync and memory.is_running:
+                try:
+                    live_positions = await exchange.fetch_positions()
+                    current_live_keys = []
+
+                    for p in live_positions:
+                        p_vol = abs(float(p.get('contracts', p.get('positionAmt', 0))))
+
+                        # Если позиция реально открыта на бирже (объем больше нуля)
+                        if p_vol > 0.00001:
+                            p_raw_sym = str(p['symbol'])
+                            if p_raw_sym.endswith('USDT'):
+                                base = p_raw_sym[:-4]
+                                ram_key = f"{base}/USDT:USDT"
+                                current_live_keys.append(ram_key)
+
+                                # Если лимитка налилась на бирже, но в ОЗУ висит как неживая — активируем!
+                                if ram_key in memory.active_pos and memory.active_pos[ram_key].get('is_live') == False:
+                                    memory.active_pos[ram_key]['is_live'] = True
+                                    memory.active_pos[ram_key]['gear_type'] = 'MARKET'
+                                    log(f"🔗 [ОЗУ ПОДХВАТ V202.0]: Лимитка по {ram_key} НАЛИЛАСЬ на бирже! Трейлинг выходов взведен.")
+
+                    # Синхронизация: если позиция закрылась стопом/руками на бирже — выметаем из ОЗУ
+                    for r_key in list(memory.active_pos.keys()):
+                        # Проверяем только реальные маркет-позиции
+                        if memory.active_pos[r_key].get('is_live') == True and r_key not in current_live_keys:
+                            del memory.active_pos[r_key]
+                            log(f"🧹 [ОЗУ СИНХРОНИЗАЦИЯ]: Позиция {r_key} закрылась на бирже. Слот о чищен.")
+                except:
+                    pass
+
             # Контур круглосуточной авто-очистки стаканов. Работает в фоновом потоке баланса!
             # Контрольная пауза тика опроса баланса и удержания шлюзов
             await asyncio.sleep(30)
@@ -225,9 +266,13 @@ async def limit_orders_cleaner_loop(exchange):
                             target_raw_symbol = memory.placed_orders[o_id].get('symbol')
                             if target_raw_symbol and target_raw_symbol in memory.active_pos:
                                 # Если ордер не успел налиться (был стерт веником) — убираем его из активных слотов позиций
-                                if memory.active_pos[target_raw_symbol].get('gear_type') == 'LIMIT':
+#==========================   ФИКС V206.0: ЗАЩИТА НАЛИТЫХ КОНТРАКТОВ ОТ СТИРАНИЯ ВЕНИКОМ   ======
+                                # Веник имеет право стереть слот из ОЗУ ТОЛЬКО если лимитка РЕАЛЬНО НЕ НАЛИЛАСЬ (is_live == False)
+                                # Если is_live == True (её уже усыновил Пылесос) — Веник хладнокровно проходит мимо!
+                                if memory.active_pos[target_raw_symbol].get('is_live') == False:
                                     del memory.active_pos[target_raw_symbol]
                                     log(f"🧹 [ОЗУ ВЕНИК]: Фантомный слот по {target_raw_symbol} успе шно очищен из RAM активных позиций.")
+#-------------------------------------
 
                         if o_id in memory.placed_orders:
                             del memory.placed_orders[o_id]
@@ -574,7 +619,7 @@ async def check_signal(exchange, symbol, last_beacon_t):
             current_wday = local_time_struct.tm_wday
 
             if current_wday >= 5:
-                # 🏖️ РЕЖИМ ВЫХОДНЫХ (Суббота - Воскресенье): Глухой расширенный барьер круглые сутк и
+                # 🏖️ РЕЖИМ ВЫХОДНЫХ (Суббота - Воскресенье): Глух ой расширенный барьер круглые сутки
                 session_mult = 1.40
             elif current_wday == 4 and current_hour >= 19:
                 # 🩸 РЕЖИМ ПЯТНИЧНОГО ВЕЧЕРА (Закрытие CME): Защитное расширение от уикенд-сквизов
@@ -720,7 +765,7 @@ async def execute_entry(exchange, sig):
 
 #==========================   ФИКС V195.0: КОМФОРТНЫЙ БУФЕР ЗАЛОГА МАРЖИ   ======================
         # Высчитываем реальный залог с учетом 25х плеча: ордер заберет всего пару десятков центов
-        virtual_fee_margin = amount_usdt / effective_leverage * 1.5
+        virtual_fee_margin = amount_usdt / effective_leverage
         if hasattr(memory, 'available'):
                 # Вычитаем только чистый залог, оставляя остальную маржу свободной для лавины!
                 memory.available = max(0.0, float(memory.available) - virtual_fee_margin)
