@@ -1,0 +1,426 @@
+async def check_signal(exchange, symbol, last_beacon_t):
+    """
+    Сканирование импульсов V24.0: Сплав скоростей G1/G2, Trend Altitude и 3M Volume.
+    Полностью очищен от слепых зон и ложных стопов на хаях.
+    """
+    try:
+
+        dna = memory.all_dna.get(symbol)
+        cur_p = memory.prices.get(symbol)
+        if not dna or not cur_p:
+            return None, last_beacon_t
+
+#==========================   ФИКС V149.0: ИСТИННЫЕ ЦИФРОВЫЕ ИНДЕКСЫ МАССИВА OHLCV   ============
+        # Забираем скользящий 30-свечной массив из памяти сокета мимо виснущей сети интернет
+        ohlcv = memory.candles.get(symbol)
+        if not ohlcv or len(ohlcv) < 21:
+            return None, last_beacon_t
+
+#==========================   ФИКС V193.0: АППАРАТНЫЙ ФИЛЬТР СЖАТЫХ ФАНТОМНЫХ ПОЛОС   ===========
+        # Защита от эффекта "пустого ОЗУ": если хай равен лоу — полосы мертвы, отменяем ложный импульс!
+        recent_highs = [float(b[2]) for b in ohlcv[-10:]]
+        recent_lows = [float(b[3]) for b in ohlcv[-10:]]
+        if max(recent_highs) == min(recent_lows):
+            return None, last_beacon_t
+#----------------------------------
+        # Берем самую последнюю свечу из массива [-1] и извлекаем High [2] и Low [3] по HFT-индексам
+        last_bar = ohlcv[-1]
+        b_high = last_bar[2]
+        b_low  = last_bar[3]
+#----------------------------------
+
+#==========================   ФИКС V85.0: ГИБРИДНАЯ КРOСС-КOРOБКА DNA MULTIPLIERS   ============
+        global transmission_mode, manual_gear_select
+
+        # Извлекаем индивидуальный g1-блок параметров монеты из JSON пульта
+        gd = dna['g1'] if 'g1' in dna else dna
+
+        # Контур авто-определения фазы рынка по времени сервера (UTC)
+        current_hour = int(time.strftime("%H", time.gmtime()))
+        is_weekend = int(time.strftime("%w", time.gmtime())) in [0, 6] # 0-Воскресенье, 6-Суббота
+
+        active_gear = manual_gear_select
+        if transmission_mode == 'AUTO':
+            if is_weekend:
+                active_gear = 'ECO'    # Выходной день — режим защиты маржи коэффициентами
+            elif (0 <= current_hour <= 3) or (13 <= current_hour <= 16):
+                active_gear = 'DRIVE'  # Будни, HFT-сессии — режим быстрого скальпинга
+            else:
+                active_gear = 'CRUISE' # Стандартные будни — чистый исходный ДНК-тренд
+
+        # Наносекундное динамическое перемножение коэффициентов ОЗУ под активную фазу
+        global transmission_risk_mult
+        if active_gear == 'DRIVE':
+            # Сжимаем тейк-1 (*0.6), поджимаем стоп (*0.8), увеличиваем риск-нагрузку
+            transmission_risk_mult = 1.15
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 0.60
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 0.85
+            gd['time'] = 180
+        elif active_gear == 'ECO':
+            # Расширяем тейк-1 (*1.1), раздвигаем стоп (*1.3) для защиты от шпилек ММ, режем риск
+            transmission_risk_mult = 0.65
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 1.10
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 1.30
+            gd['time'] = 450
+
+        else:
+            transmission_risk_mult = 1
+            # Режим CRUISE — оставляет твои первозданные проектные настройки из JSON пульта
+            pass
+#================================================================================================
+
+
+        # --- [ШТУЧНЫЙ ФИКС V34.2: ТОТАЛЬНЫЙ ЗАПРЕТ ПОВТОРНЫХ ВХОДОВ В ОДИН АКТИВ] ---
+        if symbol in memory.active_pos or symbol.split(':')[0] in memory.active_pos:
+            return None, last_beacon_t
+
+        # ==================================================================================
+        # --- [ВРЕЗКА V32.2 МОНОЛИТ: ИСПРАВЛЕННЫЙ И ЗРЯЧИЙ ДЕТЕКТОР ЛЖИ МАРКЕТ-МЕЙКЕРА] ---
+        # ==================================================================================
+        try:
+            # --- КОНТУР 1: СПОТ-ФЬЮЧЕРСНЫЙ АРБИТРАЖНЫЙ ШЛЮЗ (SPOOFING DETECTOR) ---
+            # Извлекаем легитимный спотовый тикер CCXT стандарта Бинанса (например, "SOL/USDT")
+            spot_symbol = str(symbol).split(':')[0]
+
+            # Вытягиваем живую спотовую цену из нашей RAM-памяти сокетов
+            spot_price_raw = memory.prices.get(spot_symbol, memory.prices.get(spot_symbol.replace('/', '')))
+
+            if spot_price_raw and float(spot_price_raw) > 0:
+                spot_price = float(spot_price_raw)
+                # Рассчитываем наносекундный рассинхрон цены фьючерса и спота
+                basis_pct = abs(cur_p / spot_price - 1.0) * 100.0
+
+                # Если фьючерс оторвался от реального спота более чем на 0.25% — это фантомный сквиз ММ
+                if basis_pct >= 0.25:
+                    log(f"🛑 [SPOOFING SHIELD]: Отмена входа по {symbol}! Обнаружен фантомный сквиз фьючерса. Фьюч: {cur_p} | Спот: {spot_price} | Базис: {round(basis_pct, 3)}% > 0.25%")
+                    return None, last_beacon_t
+
+#            log(f"⚙️ [DEBUG 2]: {symbol} прошел Спот-Шлюз. Запрашиваю стакан...")
+
+
+            # --- КОНТУР 2: СВЕРХСКОРОСТНОЙ ШЛЮЗ ПЛОТНОСТИ ОЗУ (БЕЗ СЕТЕВЫХ ЛАГОВ BINANCE) ---
+            # Измеряем спред на основе живого сокет-пакета, полностью заменяя fetch_order_book
+            # Если ММ выдернет лимитки (воздушная яма), сокет-спред мгновенно расширится
+            spot_ticker_key = str(symbol).split(':')[0].replace('/', '')
+            live_ticker_data = memory.prices.get(spot_ticker_key + "_full", {})
+
+            # Если биржа передает расширенный спред между лучшим Bid и Ask в сокетах более 0.4%
+            if live_ticker_data:
+                bid = float(live_ticker_data.get('b', 0))
+                ask = float(live_ticker_data.get('a', 0))
+                if bid > 0 and ask > 0:
+                    spread_pct = abs(ask / bid - 1.0) * 100.0
+                    if spread_pct >= 0.40:
+                        log(f"🧹 [DELTA DEPTH SHIELD]: Отмена входа по {symbol}! Воздушная яма спред а в сокетах ММ. Спред: {round(spread_pct, 3)}% >= 0.4%")
+                        return None, last_beacon_t
+
+
+        except Exception as mm_detect_err:
+            # Аварийный шлюз: если API Бинанса лагает на запросе стакана, не рискуем маржой
+            return None, last_beacon_t
+        # ==================================================================================
+
+  #      log(f"⚙️ [DEBUG 4]: {symbol} прошел все ММ-фильтры! Проверяю Динамический Нож...")
+
+
+        # 1. ЗАГРУЗКА И ВЕРИФИКАЦИЯ СВЕЧНОГО МАССИВА
+#==========================   ФИКС V141.0: ЧТЕНИЕ МАССИВА OHLCV ИЗ ОЗУ ЗА 0 МС   ===============
+        # Забираем скользящий 30-свечной массив из памяти сокета мимо виснущей сети интернет
+#        ohlcv = memory.candles.get(symbol)
+#        if not ohlcv or len(ohlcv) < 21:
+#            return None, last_beacon_t
+
+        # Твой Pandas Dataframe собирается мгновенно из локальной RAM памяти!
+        df = pd.DataFrame(ohlcv, columns=['t','o','h','l','c','v'])
+
+        # --- КОНТУР 3: СКОРОСТЬ ДЕЛЬТЫ ОБЪЕМА (VOLUME VELOCITY DELTA V34.0) ---
+        v_now = float(df['v'].iloc[-1])
+        v_mean = float(df['v'].mean())
+        if v_now < (v_mean * 0.8):
+            # Если объем первого тика вялый — ММ гонит цену искусственно. Отмена!
+#           log(f"🧹 [VOLUME VELOCITY]: Отмена входа по {symbol}! Импульс пустой, ММ гонит цену чере з вакуум. Vo l: {round(v_now,1)} < Требуемого: {round(v_mean * 1.8, 1)}")
+           return None, last_beacon_t
+
+
+        # 2. РАСЧЕТ ИНДИКАТОРОВ БОЛЛИНДЖЕРА НА NUMPY
+        ma_series = df['c'].rolling(20).mean()
+        std_series = df['c'].rolling(20).std()
+
+        ma = ma_series.to_numpy()
+        std = std_series.to_numpy()
+
+        ma_prev = ma[-2]
+        std_prev = std[-2]
+
+        if std_prev == 0 or ma_prev == 0 or pd.isna(ma_prev) or pd.isna(std_prev):
+            return None, last_beacon_t
+
+        p_up = ma_prev + (2.1 * std_prev)
+        p_dn = ma_prev - (2.1 * std_prev)
+        curr_w = (p_up - p_dn) / ma_prev * 100
+
+        p_up_prev = ma[-3] + (2.1 * std[-3])
+        p_dn_prev = ma[-3] - (2.1 * std[-3])
+        if ma[-3] == 0:
+            return None, last_beacon_t
+
+        prev_w = (p_up_prev - p_dn_prev) / ma[-3] * 100
+        # Если канал Боллинджера был сжат в абсолютный ноль — наносекундно отменяем ложный импульс
+        if prev_w == 0:
+            return None, last_beacon_t
+
+        w_growth = curr_w / prev_w
+
+        # 3. ФИЛЬТР 1: TREND ALTITUDE SHIELD (Запрет перегретых хаев)
+        # Динамически вычисляем класс риска монеты по её тикеру
+        sym_upper = symbol.upper()
+        if any(mem in sym_upper for mem in ['1000PEPE', 'WIF', '1000SHIB', '1000BONK', '1000FLOKI','DOGE', 'NOT', 'POPCAT', 'JASMY']):
+            max_alt_pct = 2.5   # Класс 1: Мемы (Предел отрыва от MA20 2.5%)
+        elif any(tech in sym_upper for tech in ['SOL', 'NEAR', 'SUI', 'FET', 'TIA', 'APT', 'OP', 'RENDER']):
+            max_alt_pct = 1.4   # Класс 2: Технологичная альта (Предел 1.4%)
+        else:
+            max_alt_pct = 0.8   # Класс 3: Тяжелые якоря (Предел 0.8%)
+
+        # Измеряем текущую высоту (отрыв) живой цены от средней линии MA20
+        current_altitude = abs(cur_p / ma_prev - 1) * 100
+
+        # Если монета улетела в космос выше лимита класса — глухая блокировка ордера
+        if current_altitude > max_alt_pct:
+            if int(time.time()) % 30 == 0:
+                log(f"🔍 [Trend shield {symbol}]: Отмена! Монета перегрета ({round(current_altitude, 2)}% > {max_alt_pct}%). Пропускаем хаи.")
+            return None, last_beacon_t
+
+        # 4. ТВОЙ ОРИГИНАЛЬНЫЙ ТУМБЛЕР ДВУХ СКОРОСТЕЙ G1 / G2
+        open_p = df['o'].iloc[-1]
+        change = abs(cur_p / open_p - 1)
+        gear = None
+
+        if 'g2' in dna and change >= dna['g2']['speed']:
+            gear = 'g2'
+        elif 'g1' in dna and change >= dna['g1']['speed']:
+            gear = 'g1'
+
+        # --- [ТУМБЛЕРНЫЙ МАЯК ОХОТНИКА: ДЕБАГ-ТРАНСЛЯЦИЯ] ---
+        if DEBUG_BEACONS and (time.time() - last_beacon_t > 60):
+            vol_last = df['v'].iloc[-1]
+            vol_avg = df['v'].mean()
+            clean_name = symbol.split(':')[0]
+            beacon_msg = f"🔍 МАЯК СКАНЕРА [{clean_name}]: Цена: {cur_p} | Взрыв BB: {round(w_growth,3)}x | Высота: {round(current_altitude,2)}% | Скорость: {round(change*100,3)}% "
+            if gear:
+                beacon_msg += f"| Передача: {gear.upper()} ✅ | Объем тика: {round(vol_last,1)} (Нужно: {round(vol_avg*dna[gear]['vol'],1)})"
+            else:
+                beacon_msg += f"| Скорость мала ❌"
+            # log(beacon_msg)
+            last_beacon_t = time.time()
+
+        # Базовая проверка на наличие взрыва волатильности и взвода передачи
+        if w_growth < dna['w_grow'] or not gear:
+            return None, last_beacon_t
+
+        # 5. ФИЛЬТР 2: НАКОПИТЕЛЬНЫЙ 3-МИНУТНЫЙ ОБЪЕМ (Уничтожение висяков)
+        v_now = float(df['v'].iloc[-1])
+        v_p1 = float(df['v'].iloc[-2])
+        v_p2 = float(df['v'].iloc[-3])
+
+        if v_now < v_p1 and v_p1 < v_p2:
+            if int(time.time()) % 45 == 0:
+                log(f"🔍 [Volume shield {symbol}]: Отмена! Прорыв на затухающем объеме (Вялый закисающий импульс).")
+            return None, last_beacon_t
+
+        # Твоя оригинальная проверка плотности тикового объема под конкретную передачу
+        if df['v'].iloc[-1] < df['v'].mean() * dna[gear]['vol']:
+            return None, last_beacon_t
+
+        # 6. ВЫЧИСЛЕНИЕ НАПРАВЛЕНИЯ КАНOНИЧЕСКОГО ИМПУЛЬСА
+        is_buy_candidate = (cur_p > open_p)
+        is_sell_candidate = (cur_p < open_p)
+
+
+#=====  # 7. ТВОЙ ОРИГИНАЛЬНЫЙ КАСКАДНЫЙ НOЖ (PRE-CANDLE SHIELD)
+        p_c1 = df.iloc[-2]
+        p_c2 = df.iloc[-3]
+        p_c3 = df.iloc[-4]
+
+        is_3_green = (p_c1['c'] > p_c1['o']) and (p_c2['c'] > p_c2['o']) and (p_c3['c'] > p_c3['o'])
+        is_3_red   = (p_c1['c'] < p_c1['o']) and (p_c2['c'] < p_c2['o']) and (p_c3['c'] < p_c3['o'])
+
+        #log(f"⚙️ [DEBUG 2перед ниткой..")
+
+
+        # --- [ВРЕЗКА V39.5: ПОКАНАЛЬНЫЙ НОЖ И ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ] ---
+        channel_width = abs(p_up - p_dn) / ma_prev * 100.0
+
+        # 1. СHАЙПЕРСКИЙ СБOР СПOТ-ТИКЕРА ИЗ СТРОКИ СКАHЕРА
+        s_ticker_clean = str(symbol).split(':')[0].replace('/', '')
+        s_price_raw = memory.prices.get(s_ticker_clean)
+        s_price = float(s_price_raw) if s_price_raw else cur_p
+        s_basis = abs(cur_p / s_price - 1.0) * 100.0
+
+        # 2. ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ ОБЪЕМОВ (ЗАЩИТА ОТ АЙСБЕРГ-РАЗВОРОТОВ ММ)
+        live_ticker_data = memory.prices.get(s_ticker_clean + "_full", {})
+        is_delta_safe = True
+        if live_ticker_data:
+            # Считываем кумулятивные объемы Taker Buy/Sell за последние тики сокетов
+            t_buy_vol = float(live_ticker_data.get('v', 0))
+            t_sell_vol = float(live_ticker_data.get('q', 1))
+            if is_buy_candidate and (t_sell_vol > t_buy_vol * 1.65): is_delta_safe = False # Скрытые продажи китов
+            if is_sell_candidate and (t_buy_vol > t_sell_vol * 1.65): is_delta_safe = False # Скрытый откуп китов
+
+        # Истинный взрыв нитки: канал узкий, скорость бешеная, спот подтверждает базисом
+        is_nitka_explosion = (channel_width < 0.65 and w_growth >= 1.25 and df['v'].iloc[-1] > df['v'].mean() * 2.0 and s_basis < 0.25)
+
+#==========================   ФИКС V89.0: ГИБРИДНАЯ КРOСС-КOРOБКА И БЛОКИРОВКА НИТКИ   ==========
+        # Вызываем глобальные тумблеры управления скоростью из кода бота
+#        global transmission_mode, manual_gear_select
+
+        # Извлекаем индивидуальный g1-блок параметров монеты из JSON пульта
+        gd = dna['g1'] if 'g1' in dna else dna
+
+        # Контур авто-определения фазы рынка по времени сервера (UTC)
+        current_hour = int(time.strftime("%H", time.gmtime()))
+        is_weekend = int(time.strftime("%w", time.gmtime())) in [0, 6] # 0-Воскресенье, 6-Суббота
+
+        active_gear = manual_gear_select
+        if transmission_mode == 'AUTO':
+            if is_weekend:
+                active_gear = 'ECO'    # Выходной день — режим защиты маржи коэффициентами
+            elif (0 <= current_hour <= 3) or (13 <= current_hour <= 16):
+                active_gear = 'DRIVE'  # Будни, HFT-сессии — режим быстрого скальпинга
+            else:
+                active_gear = 'CRUISE' # Стандартные будни — чистый исходный ДНК-тренд
+
+        # Динамическое перемножение коэффициентов параметров под активную фазу
+        if active_gear == 'DRIVE':
+            gd['risk'] = float(gd.get('risk', 0.70)) * 1.15
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 0.60
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 0.85
+            gd['time'] = 180
+        elif active_gear == 'ECO':
+            gd['risk'] = float(gd.get('risk', 0.70)) * 0.65
+            gd['tp1']  = float(gd.get('tp1', 0.0080)) * 1.10
+            gd['sl']   = float(gd.get('sl', -0.0130)) * 1.30
+            gd['time'] = 450
+
+        # Блокировка маркет-входов «Нитки» Боллинджера в пассивные ECO-часы выходных
+        if active_gear == 'ECO':
+            sig_gear = 'LIMIT'
+        else:
+            sig_gear = 'MARKET' if (channel_width >= float(dna.get('rocket', 1.5)) and w_growth >= 1.25) or is_nitka_explosion else 'LIMIT'
+#--------------------------------------
+#==========================   ФИКС V125.0: АДАПТИВНЫЙ КОМПЕНСАТОР СЕТЕВОГО ЛАГА БИHАHСА   =======
+        # Компенсируем 2 секунды лага REST API: сдвигаем цену лимитки на 0.04% вглубь стакана для 100% налива
+        if sig_gear == 'LIMIT':
+            if is_buy_candidate:
+                target_price = cur_p * 1.0001  # Ставим лимитку покупки чуть выше, ближе к наливу
+            else:
+                target_price = cur_p * 0.9999  # Ставим лимитку продажи чуть ниже
+        else:
+            target_price = cur_p
+#-------------------------------
+
+#        if not is_nitka_explosion:
+            # ПОКАНАЛЬНЫЙ РАЗЖИМ: Мемы летят свободно (5%), тяжелые Якоря зажимаем жестко (15%)
+#            is_meme = any(m in symbol.upper() for m in ['1000PEPE', 'WIF', 'POPCAT', '1000SHIB', '1000BONK', '1000FLOKI', 'DOGE'])
+#            adaptive_offset = 0.05 if is_meme else 0.15
+
+#            long_barrier = ma_prev * (1.0 - adaptive_offset)
+#            short_barrier = ma_prev * (1.0 + adaptive_offset)
+#---------------------------------
+#==========================   ФИКС V158.0: ТРEХКОНТУРНАЯ МАТРИЦА СЕССИЙ С УЧЕТОМ ПЯТНИЦЫ   ======
+        if not is_nitka_explosion:
+            # Определение текущего часа и дня недели сервера (0=Пн, 4=Пт, 5=Сб, 6=Вс)
+            local_time_struct = time.localtime()
+            current_hour = local_time_struct.tm_hour
+            current_wday = local_time_struct.tm_wday
+
+            if current_wday >= 5:
+                # 🏖️ РЕЖИМ ВЫХОДНЫХ (Суббота - Воскресенье): Глухой расширенный барьер круглые сутк и
+                session_mult = 1.40
+            elif current_wday == 4 and current_hour >= 19:
+                # 🩸 РЕЖИМ ПЯТНИЧНОГО ВЕЧЕРА (Закрытие CME): Защитное расширение от уикенд-сквизов
+                session_mult = 1.35
+            else:
+                # 📅 РЕЖИМ БУДНЕЙ (Понедельник - Пятница день): Пулеметная матрица
+                if 1 <= current_hour <= 7:
+                    session_mult = 0.70   # Азия: поджимаем лимитки ближе к рынку
+                elif 15 <= current_hour <= 18:
+                    session_mult = 1.50   # Открытие США: уводим лимитки в глубокий тыл
+                else:
+                    session_mult = 1.00   # Время CRUISE: стандартный рабочий отступ будней
+
+            # ПОКАНАЛЬНЫЙ РАЗЖИМ: Мемы летят свободно (5%), тяжелые Якоря зажимаем жестко (15%)
+            is_meme = any(m in symbol.upper() for m in ['1000PEPE', 'WIF', 'POPCAT', '1000SHIB', '1000BONK', '1000FLOKI', 'DOGE'])
+            base_offset = 0.05 if is_meme else 0.15
+            adaptive_offset = base_offset * session_mult
+
+            long_barrier = ma_prev * (1.0 - adaptive_offset)
+            short_barrier = ma_prev * (1.0 + adaptive_offset)
+#==========================================================================
+           # Точечная блокировка Ножей с учетом Шлюза Паритета Дельты
+            if is_buy_candidate and is_3_red:
+                if cur_p <= long_barrier or not is_delta_safe:
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Лонга по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
+                    return None, last_beacon_t
+
+            if is_sell_candidate and is_3_green:
+                if cur_p >= short_barrier or not is_delta_safe:
+                    log(f"🪓 [KNIFE BLOCK]: Отмена Шорта по {symbol}! Адаптивный барьер или скрытый  Айсберг ММ.")
+                    return None, last_beacon_t
+
+
+        # Финальный шлюз выдачи заполненного пакета сигнала на исполнение
+        # --- [ВРЕЗКА V43.0: АДАПТИВНЫЕ ПОЛОСЫ ДНК И ТУМБЛЕР РЕЖИМА ОРДЕРА] ---
+        channel_width = abs(p_up - p_dn) / ma_prev * 100.0
+        is_meme = any(m in symbol.upper() for m in ['PEPE', 'WIF', 'POPCAT', 'SHIB', 'BONK', 'FLOKI', 'DOGE'])
+        is_anchor = any(a in symbol.upper() for a in ['BNB', 'LINK', 'AVAX', 'ADA', 'CRV'])
+
+        # Настраиваем индивидуальные пороги Ракета/Откат под классы монет
+        if is_meme:
+            rocket_threshold, rebound_pct = 3.5, 0.0048
+        elif is_anchor:
+            rocket_threshold, rebound_pct = 1.1, 0.0018
+        else:
+            rocket_threshold, rebound_pct = 1.8, 0.0030
+
+        # Выбираем режим ордера: MARKET для истинного взрыва, LIMIT для отката
+        #sig_gear = 'MARKET' if (channel_width >= rocket_threshold and w_growth >= 1.25) else 'LIMIT'
+
+#        target_price = cur_p
+        if sig_gear == 'LIMIT':
+            target_price = cur_p * (1.0 - rebound_pct) if is_buy_candidate else cur_p * (1.0 + rebound_pct)
+
+        # Контур Ножа Боллинджера: страхует только рыночные ордера
+#        adaptive_offset = 0.05 if is_meme else 0.15
+#        long_barrier, short_barrier = ma_prev * (1.0 - adaptive_offset), ma_prev * (1.0 + adaptive_offset)
+
+        if sig_gear == 'MARKET':
+            if is_buy_candidate and is_3_red and cur_p <= long_barrier: return None, last_beacon_t
+            if is_sell_candidate and is_3_green and cur_p >= short_barrier: return None, last_beacon_t
+
+        #log(f"⚙️ [DEBUG 2Перед ретурном параметров. Всё прошли.")
+
+
+        # Жестко отсекаем ложные фантомные шорты, если условия входа не выполнены
+        if not is_buy_candidate and not is_sell_candidate:
+            return None, last_beacon_t
+
+        trade_side = 'buy' if is_buy_candidate else 'sell'
+
+        # Сверяем код: возвращаем строго те переменные, которые реально объявлены в check_signal!
+        payload = {
+            'symbol': symbol, 'side': trade_side,
+            'price': target_price, 'gear_type': sig_gear,
+            'actual_price': cur_p,  # Запечатываем чистую живую цену ОЗУ для логов дебага
+            'gear': gear, 'gear_data': gd, 'dna': dna
+        }
+#            'symbol': symbol,
+#            'side': 'buy' if is_buy_candidate else 'sell',
+#            'gear': gear,
+#            'price': cur_p,
+#            'dna': dna,
+#            'gear_data': dna[gear]
+#        }
+        return payload, last_beacon_t
+    except Exception as err:
+        log(f"⚠ [КРИТ CHECK_SIGNAL]: Скрытый обрыв входа по {symbol}: {err}")
+        return None, last_beacon_t
