@@ -1,6 +1,8 @@
 # --- КВАНТОВЫЕ НАСТРОЙКИ ЯДРА ---
-RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
-MAX_SLOTS = 5          # Максимум 4 параллельных сделки
+RISK_GEAR = 0.90       # Доля депо на одну сделку (12%)
+MAX_SLOTS = 3          # Максимум 4 параллельных сделки
+#RISK_GEAR = 0.70       # Доля депо на одну сделку (12%)
+#MAX_SLOTS = 5          # Максимум 4 параллельных сделки
 LOG_FILE = "ignition_log.txt"
 # --- ЖЕСТКИЙ ЛИМИТ КРЕДИТНОГО ПЛЕЧА СУБАККАУНТА BINANCE ---
 MAX_ACCOUNT_LEVERAGE = 25  # Выставляем 5х (аппаратный потолок субаккаунта)
@@ -398,6 +400,24 @@ async def check_signal(exchange, symbol, last_beacon_t):
         token_upper = str(symbol).upper()
         clean_symbol = str(symbol)[:str(symbol).find('/')] if '/' in str(symbol) else str(symbol)
 
+#==========================   ФИКС V1025.0: ТОЧКА №2 — КОНТУР КВОТИРОВАНИЯ МЕМЕ-СЛОТОВ В RAM =======
+        is_meme = any(meme in token_upper for meme in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+        is_tech = any(tech in token_upper for tech in ['SOL', 'TRB', 'APT', 'FIL', 'RENDER', 'FET', 'OP', 'STORJ', 'GLM', 'TIA', 'AEVO', 'C98'])
+
+        # Бронированное квотирование: если монета — МЕМ, проверяем, сколько мемов уже сидит в активных слотах ОЗУ
+        if is_meme:
+            active_meme_count = 0
+            for active_symbol in list(memory.active_pos.keys()):
+                act_upper = str(active_symbol).upper()
+                if any(m in act_upper for m in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME']):
+                    active_meme_count += 1
+
+            # Жесткий лимит: Мемы не имеют права занимать больше 2 слотов одновременно!
+            if active_meme_count >= 2:
+                # log(f"🧹 [MEME SLOT LIMIT]: Отмена по {symbol}. Все 2 меме-квоты заполнены.")
+                return None, last_beacon_t
+#-----------------------------------
+
         is_meme = any(meme in token_upper for meme in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
         is_tech = any(tech in token_upper for tech in ['SOL', 'TRB', 'APT', 'FIL', 'RENDER', 'FET', 'OP', 'STORJ', 'GLM', 'TIA', 'AEVO', 'C98'])
 
@@ -515,37 +535,28 @@ async def check_signal(exchange, symbol, last_beacon_t):
         is_buy_candidate = (trade_side == 'buy')
         is_sell_candidate = (trade_side == 'sell')
 
-#==========================   ФИКС V960.0: УКРЕПЛЕНИЕ КОНТУРА 1 — КВАНТОВЫЙ BTC TREND SHIELD ===
-        # Мощнейший HFT-фильтр поводыря: блокируем лонги, если Биткоин падает, и шорты, если Биткоин растет!
+#==========================   ФИКС V1100.0: ПОЛНОСТЬЮ АВТОНОМНЫЙ ЗРЯЧИЙ БИТКОИН-РАДАР ИЗ ОЗУ =====
         try:
-            btc_df = memory.candles.get('BTC/USDT:USDT')
-            if btc_df and len(btc_df) >= 2:
-                last_btc_bar = btc_df[-1]
-                btc_open = float(last_btc_bar)
-                btc_cur = float(memory.prices.get('BTC/USDT:USDT', btc_open))
+            # Считываем живую Close-цену и цену Open текущей минуты BTC по эталонным ключам ign1506
+            btc_candles = memory.candles.get('BTC/USDT:USDT')
+            btc_cur = float(memory.prices.get('BTC/USDT:USDT', 0))
+            log(f"🚫 [BTC LOG]: Проверяем BTC для {symbol}. btc_cur: {btc_cur} и btc_candles: {btc_candles}")
+            if btc_candles and len(btc_candles) >= 1 and btc_cur > 0:
+                # Индекс 1 внутри плоского ОЗУ-бара — это нативная цена открытия минуты (Open) Биткоина
+                btc_open_m = float(btc_candles[-1])
 
                 # Если альта идет в ЛОНГ, а Биткоин минутной свечой давит вниз — намертво режем Bull Trap!
-                if is_buy_candidate and (btc_cur < btc_open):
-                    log(f"🚫 [BTC L-SHIELD]: Отмена BUY по {symbol}. Биткоин льют: {btc_cur} < {btc_open}")
+                if is_buy_candidate and (btc_cur < btc_open_m):
+                    log(f"🚫 [BTC L-SHIELD V1100.0]: Отмена BUY по {symbol}. Биткоин льют: {btc_cur} < {btc_open_m}")
                     return None, last_beacon_t
 
                 # Если альта идет в ШОРТ, а Биткоин минутной свечой прет вверх — намертво режем Bear Trap!
-                if is_sell_candidate and (btc_cur > btc_open):
-                    log(f"🚫 [BTC S-SHIELD]: Отмена SELL по {symbol}. Биткоин растет: {btc_cur} > {btc_open}")
+                if is_sell_candidate and (btc_cur > btc_open_m):
+                    log(f"🚫 [BTC S-SHIELD V1100.0]: Отмена SELL по {symbol}. Биткоин растет: {btc_cur} > {btc_open_m}")
                     return None, last_beacon_t
         except Exception as btc_shield_err:
-            pass # Страхуем ядро, если сокет BTC локально моргнул
-#----------------------------------------------------
-        # --- КОНТУР 3: ШЛЮЗ ПАРИТЕТА МАРКЕТ-ДЕЛЬТЫ ОБЪЕМОВ (ЗАЩИТА ОТ АЙСБЕРГОВ ИЗ VOLUMES ПО СЫРОМУ КЛЮЧУ) ---
- #       t_buy_vol = float(memory.prices.get(f"{clean_symbol}USDT_buy", 0))
- #       t_sell_vol = float(memory.prices.get(f"{clean_symbol}USDT_sell", 1))
- #       if is_buy_candidate and (t_sell_vol > t_buy_vol * 1.65):
- #           log(f"🐋 [ICEBERG SHIELD]: Отмена BUY по {symbol}! Скрытые продажи китов: {t_sell_vol} > {t_buy_vol}")
- #           return None, last_beacon_t
- #       if is_sell_candidate and (t_buy_vol > t_sell_vol * 1.65):
- #           log(f"🐋 [ICEBERG SHIELD]: Отмена SELL по {symbol}! Скрытые покупки китов: {t_buy_vol} > {t_sell_vol}")
- #           return None, last_beacon_t
-
+            log(f"⚠️ [БАГ БИТКОИН-ЩИТА V1100.0]: {btc_shield_err}")
+#----------------------------------------------------------
         # --- ЭТАП 5: Канонический Пре-Свечной Каскадный Нож (Защита от излета тренда) ---
         bar_1 = df[-2]
         bar_2 = df[-3]
@@ -840,7 +851,7 @@ async def monitor_logic(exchange):
         current_ts = int(time.time())
         if current_ts % 300 == 0 and current_ts != last_debug_ts:
             last_debug_ts = current_ts
-            log(f"🛰️ [МОНИТОР ДЕБАГ]: Патруль активен. Живых позиций в RAM: {len(memory.active_pos) } | Ключи: {list(memory.active_pos.keys())}")
+            log(f"🛰 ️ [МОНИТОР ДЕБАГ]: Патруль активен. Живых позиций в RAM: {len(memory.active_pos)} | Ключи: {list(memory.active_pos.keys())}")
 #-------------------------------------
         # --- [ВРЕЗКА V28.4: СКВОЗНОЙ ДЕБАГ ШЛЮЗА ВЫХОДОВ] ---
 #        if int(time.time()) % 5 == 0:
@@ -937,31 +948,25 @@ async def monitor_logic(exchange):
 
 
                 # Если позиция подхвачена через RECOVERED и висит со вчерашнего дня — взрываем таймер утилизации принудительно
-                if pos.get('is_recovered', True) or (time.time() - pos['entry_time'] < 60 and pnl < 0):
+                #==========================   ФИКС V1045.0: ЖЕЛЕЗОБЕТОННАЯ НОРМАЛИЗАЦИЯ И СИНХРОНИЗАЦИЯ ВРЕМЕНИ AGE ===
+                # Если позиция подхвачена через RECOVERED и висит со вчерашнего дня — взрываем таймер утилизации принудительно
+                if pos.get('is_recovered', True) or (time.time() - pos.get('entry_time', time.time()) < 60 and pnl < 0):
                     age = gd.get('time', 2700) + 100  # Намертво выставляем возраст > 45 минут
                 else:
-                    age = time.time() - pos['entry_time']
-
-#                if int(time.time()) % 5 == 0:
-#                    log(f"📍 [STEP 4]: Возраст сделки посчитан: {round(age, 1)}с")
-
+                    # Извлекаем время входа, автоматически переводя миллисекунды Бинанса в секунды Python!
+                    raw_entry_time = float(pos.get('entry_time', pos.get('timestamp', time.time())))
+                    clean_entry_seconds = raw_entry_time / 1000.0 if raw_entry_time > 5000000000.0 else raw_entry_time
+                    age = int(time.time()) - int(clean_entry_seconds)
 
                 exit_side = 'sell' if pos['side'] == 'buy' else 'buy'
                 binance_market_id = raw_symbol.replace('/', '').replace(':USDT', '')
 
-#==========================   ФИКС V310.0: ЦЕНТРАЛИЗОВАННЫЙ СЕЙФ ПЕРЕМЕННЫХ P_PCT И PK_PCT   ====
-                # Гарантированно объявляем переменные PNL и Пика на самом верхнем уровне итерации цикла
+                # Централизованный сейф переменных P_PCT и PK_PCT
                 p_pct = round(pnl * 100, 2)
-                #pk_pct = round(pos.get('current_peak', 0.0) * 100, 2)
-#---------------------------------------------
-#                if int(time.time()) % 5 == 0:
-#                    log(f"📍 [STEP 5]: Все переменные собраны. Переходим к дебагу утилизации...")
-#==========================   ФИКС V360.0: ПРЕЦИЗИОННЫЙ УТИЛИЗАТОР ВЯЛЫХ ФЛЭТОВ ПО ВРЕМЕНИ   ====
-                # Фильтр сползания: если монета застряла во флэте более 15 минут (900 сек)
-                # и не может дойти до Тейка-1 — эвакуируем её по рынку при любом микро-PNL (до +0.25%)!
-#==========================   ФИКС V365.0: АППАРАТНЫЙ МАРКЕТ-ВЫЛЕТ ПО ТАЙМАУТУ ВРЕМЕНИ   =======
-#==========================   ФИКС V410.0: КЛАССОВАЯ УТИЛИЗАЦИЯ ДНК ПО ТРЕМ ГРУППАМ МОНЕТ   ====
+
+                # Классовая утилизация по трем группам монет
                 token_upper = str(clean_symbol).upper()
+#-------------------------------------
 
                 # МЕМЫ (Эвакуация через 10 минут / 600с)
                 if any(meme in token_upper for meme in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME']):
@@ -974,23 +979,14 @@ async def monitor_logic(exchange):
                     allowed_time_window = 2700
 
                 # Если лимит удержания класса исчерпан — экстренный маркет-снос
-                if age > allowed_time_window and pnl < 0.0025 and not memory.tp_fixed.get(raw_symbol, False):
+                if age > allowed_time_window and pnl < 0.0025:
                     try:
                         log(f"⏱️ 🧲 [КЛАССОВАЯ УТИЛИЗАЦИЯ V410.0]: Лимит {allowed_time_window}с исче рпан для {token_upper}. Маркет-снос.")
-#==========================   ФИКС V1000.5: ТОЧКА №2 — ВЫЖИГАНИЕ ФАНТОМОВ ПРИ ЭВАКУАЦИИ ПО ВРЕМЕНИ ==
-                        # Начисто стираем память пиков, чтобы утилизированная монета не ослепила следующий вход!
-#                        for pk in [f"{symbol}_max_peak", f"{clean_symbol}_max_peak", f"{raw_symbol}_max_peak"]:
-#                            if hasattr(memory, 'max_peaks') and pk in memory.max_peaks:
-#                                del memory.max_peaks[pk]
-#                        for tr in [f"{symbol}_trail", f"{clean_symbol}_trail", f"{raw_symbol}_trail"]:
-#                            if hasattr(memory, 'tp_fixed') and tr in memory.tp_fixed:
-#                                del memory.tp_fixed[tr]
-#-----------------------------------------------------
 #==========================   ФИКС V1000.5: ТОТАЛЬНОЕ ОБНУЛЕНИЕ ПИКОВ ПРИ ЭВАКУАЦИИ ПО ВРЕМЕНИ =====
-                        if hasattr(memory, 'max_peaks') and peak_memory_key in memory.max_peaks:
-                            del memory.max_peaks[peak_memory_key]
-                        if hasattr(memory, 'tp_fixed') and trail_key in memory.tp_fixed:
-                            del memory.tp_fixed[trail_key]
+#                        if hasattr(memory, 'max_peaks') and peak_memory_key in memory.max_peaks:
+#                            del memory.max_peaks[peak_memory_key]
+#                        if hasattr(memory, 'tp_fixed') and trail_key in memory.tp_fixed:
+#                            del memory.tp_fixed[trail_key]
 
                         alt_peak_key = f"{symbol}_max_peak"
                         alt_trail_key = f"{symbol}_trail"
@@ -1003,8 +999,9 @@ async def monitor_logic(exchange):
                         await exchange.create_order(raw_symbol, 'MARKET', exit_side, exact_exit_vol, params={'reduceOnly': True})
                         if raw_symbol in memory.active_pos: del memory.active_pos[raw_symbol]
                         continue
-                    except:
-                        pass
+                    except Exception as evac_err:
+                        log(f"⚠️ [СБОЙ ЭВАКУАЦИИ {token_upper}]: Биржа отклонила маркет-снос по времени: {evac_err}")
+                        continue
 #-------------------------------------------------------------
 
                 # А. КОHТУР РАHHЕГО СHАЙПЕРСКОГО БЕЗУБЫТКА (До выполнения Тейка-1)
@@ -1415,6 +1412,10 @@ async def main():
     async def hft_market_stream():
         """ Поток 1: Наносекундный прямой зрячий приемник и парсер WebSocket-пакетов /market/stream """
         streams = []
+#==========================   ФИКС V1110.0: ПРИНУДИТЕЛЬНАЯ СЕТЕВАЯ ПОДПИСКА НА БИТКОИН В ОЗУ ===
+        # Насильно подписываем сокет-менеджер на поток Биткоина, полностью исцеляя Нано-Щит!
+        streams.append("btcusdt@kline_1m")
+#----------------------------------------------
         for c in list(memory.all_dna.keys()):
             clean_ticker = str(c).replace('/', '').replace(':USDT', '').lower()
             # Берем только kline_1m, из него вытащим и свечу, и живую цену!
@@ -1448,7 +1449,8 @@ async def main():
                                         base_coin = r_sym[:-4]
                                         sym = f"{base_coin}/USDT:USDT"
 
-                                    if sym and sym in memory.all_dna:
+                                    #if sym and sym in memory.all_dna:
+                                    if sym and (sym in memory.all_dna or "BTC/USDT" in sym):
                                         kline = data.get('k', {})
                                         if kline:
                                             t_ms = int(kline.get('t', 0))
