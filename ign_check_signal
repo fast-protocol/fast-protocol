@@ -1,0 +1,366 @@
+async def check_signal(exchange, symbol, last_beacon_t):
+    """
+    6-этапный импульсный сканер с раскомментированными логами всех HFT-фильтров V650.0
+    """
+    last_debug_ts2 = 0
+    try:
+#==========================   ФИКС V2610.0: ТОЧЕЧНЫЙ ФИЛЬТР ДУБЛИКАТОВ ПО МАСКЕ ТОКЕНА БЕЗ МУТАЦИИ SYMBOL ===
+        # Находим чистый токен до слэша локально ("NEAR", "TIA"), предотвращая дубли в RAM и сохраняя сквозной symbol!
+#        pure_token = str(symbol).split('/')[0].strip().upper()
+#==========================   ФИКС V3120.0: КАНOНИЧEСКAЯ СТЕРИЛИЗАЦИЯ И УНИФИКАЦИЯ ШАПКИ ЯДРА =======
+        # Забираем чистокровную одиночную СТРОКУ токена до слэша, полностью выжигая AttributeError и TypeError!
+        pure_token = str(symbol).split('/')[0].strip().upper() if '/' in str(symbol) else str(symbol).split(':')[0].strip().upper()
+
+        # Контур дубликатов: железобетонно блокируем ордер, если базовый токен ("ADA", "FET") уже удерживается в RAM
+        if any(pure_token in str(k).upper() for k in list(memory.active_pos.keys())):
+            return None, last_beacon_t
+#==========================   ФИКС V2550.0: ПРЕЦИЗИОННОЕ ВЫПРЯМЛЕНИЕ КЛЮЧА SYMBOL ДО МОНОЛИТНОГО СТАНДАРТА ===
+        # Насильно доклеиваем фьючерсный хвост к symbol, приводя всю 1600-строчную ОЗУ-карту к единому знаменателю!
+        #if symbol and not str(symbol).endswith(':USDT'):
+        #    symbol = f"{symbol}:USDT"
+#-------------------------------------
+#==========================   ФИКС V760.0: ЖЕСТКИЙ ПРЕДОХРАНИТЕЛЬ ОТ ДУБЛИРОВАНИЯ ОРДЕРОВ В ОЗУ ===
+        # Бронированная HFT-отсечка: если монета УЖЕ открыта на бирже и висит в RAM —
+        # намертво запрещаем генерировать новые ордера, полностью ликвидируя затык -2022 ReduceOnly!
+        if symbol in memory.active_pos:
+            return None, last_beacon_t
+
+#==========================   ФИКС V860.0: ДВУХКОНТУРНЫЙ КВАНТОВЫЙ ЩИТ (МАКРО-ПЕРЕГРЕВ + 5М ИММУНИТЕТ) ===
+        # КОНТУР А: Быстрый HFT-Иммунитет на 5 минут (300 секунд) после случайного Стоп-Лосса
+#        if hasattr(memory, 'blacklist_coins') and symbol in memory.blacklist_coins:
+#            time_passed_after_sl = time.time() - memory.blacklist_coins[symbol]
+
+#==========================   ФИКС V2610.5: ТОЧЕЧНЫЙ СКВОЗНОЙ ИММУНИТЕТ БЛЭКЛИСТА ПО МАСКЕ ТОКЕНА =======
+        if hasattr(memory, 'blacklist_coins') and any(pure_token in str(k).upper() for k in list(memory.blacklist_coins.keys())):
+            # Локально определяем точный ключ фантома, под которым застрял штраф в памяти ОЗУ
+            found_key = [k for k in list(memory.blacklist_coins.keys()) if pure_token in str(k).upper()][0]
+            time_passed_after_sl = time.time() - memory.blacklist_coins[found_key]
+            if time_passed_after_sl < 300:
+                return None, last_beacon_t
+            else:
+                if found_key in memory.blacklist_coins: del memory.blacklist_coins[found_key]
+#----------------------------------
+#            if time_passed_after_sl < 300:
+#                return None, last_beacon_t
+#            else:
+#                if symbol in memory.blacklist_coins:
+#                    del memory.blacklist_coins[symbol]
+
+        # КОНТУР Б: Макро-Фильтр Перегрева ДНК (Анализ изменения цены за последние 2 часа / 120 баров)
+#==========================   ФИКС V1510.0: ТОЧЕЧНОЕ ИЗВЛЕЧЕНИЕ DF НА САМОМ ВХОДЕ В СКАHЕР =======
+        # Извлекаем массив минутных баров на самом верхнем уровне функции для всех макро-фильтров
+        df = memory.candles.get(symbol)
+        if df is None or len(df) < 30: return None, last_beacon_t
+#--------------------------------------
+        try:
+            recent_120_closes = [float(b[4]) for b in df[-120:]] if len(df) >= 120 else [float(b[4]) for b in df]
+            macro_high = max(recent_120_closes)
+            macro_low = min(recent_120_closes)
+            macro_change_pct = (macro_high - macro_low) / macro_low if macro_low > 0 else 0.0
+
+            #token_upper = str(symbol).upper()
+            token_upper = str(symbol).split('/')[0].upper()
+            is_meme_coin = any(meme in token_upper for meme in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+            is_tech_coin = any(tech in token_upper for tech in ['SOL', 'TRB', 'APT', 'FIL', 'RENDER', 'FET', 'OP', 'STORJ', 'GLM', 'TIA', 'AEVO', 'C98'])
+
+            # Назначение прецизионных макро-порогов по твоим трем классам ДНК
+            max_macro_allowed = 0.0750 if is_meme_coin else (0.0450 if is_tech_coin else 0.0280)
+
+            if macro_change_pct > max_macro_allowed:
+                #log(f"🛡️ ⏳ [MACRO OVERHEAT BLOCK]: {symbol} заблокирован. Вылет за 2 часа {round(m acro_change_pct*100,2)}% > {round(max_macro_allowed*100,2)}%")
+                return None, last_beacon_t
+        except Exception as macro_shield_err:
+            log(f"🚨 [КРАШ МАКРО-ФИЛЬТРА ПЕРЕГРЕВА]: {macro_shield_err}")
+#--------------------------------------------
+        # Намертво вытаскиваем ДНК-карту монеты из ОЗУ-пульта
+        dna = memory.all_dna.get(symbol, {})
+        if not dna:
+            return None, last_beacon_t
+
+        # Извлекаем плоский список ОЗУ-баров
+        df = memory.candles.get(symbol)
+        if df is None or len(df) < 30:
+            return None, last_beacon_t
+
+        last_bar = df[-1]
+        # Читаем живую цену фьючерса напрямую по полному, сырому ключу symbol
+        cur_p = memory.prices.get(symbol)
+        if not cur_p or float(cur_p) <= 0:
+            return None, last_beacon_t
+        cur_p = float(cur_p)
+
+        #token_upper = str(symbol).upper()
+        token_upper = str(symbol).split('/')[0].upper()
+        clean_symbol = str(symbol)[:str(symbol).find('/')] if '/' in str(symbol) else str(symbol)
+
+#==========================   ФИКС V1025.0: ТОЧКА №2 — КОНТУР КВОТИРОВАНИЯ МЕМЕ-СЛОТОВ В RAM =======
+        is_meme = any(meme in token_upper for meme in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+        is_tech = any(tech in token_upper for tech in ['SOL', 'TRB', 'APT', 'FIL', 'RENDER', 'FET', 'OP', 'STORJ', 'GLM', 'TIA', 'AEVO', 'C98'])
+
+        # Бронированное квотирование: если монета — МЕМ, проверяем, сколько мемов уже сидит в активных слотах ОЗУ
+        if is_meme:
+            active_meme_count = 0
+            for active_symbol in list(memory.active_pos.keys()):
+                act_upper = str(active_symbol).upper()
+                if any(m in act_upper for m in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME']):
+                    active_meme_count += 1
+
+            # Жесткий лимит: Мемы не имеют права занимать больше 2 слотов одновременно!
+            if active_meme_count >= 2:
+                # log(f"🧹 [MEME SLOT LIMIT]: Отмена по {symbol}. Все 2 меме-квоты заполнены.")
+                return None, last_beacon_t
+#-----------------------------------
+
+        is_meme = any(meme in token_upper for meme in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI', 'WIF', 'POPCAT', 'DOGE', 'MEME'])
+        is_tech = any(tech in token_upper for tech in ['SOL', 'TRB', 'APT', 'FIL', 'RENDER', 'FET', 'OP', 'STORJ', 'GLM', 'TIA', 'AEVO', 'C98'])
+
+        # --- КОНТУР 1: СПОТ-ФЬЮЧЕРСНЫЙ АРБИТРАЖНЫЙ ШЛЮЗ (SPOOFING DETECTOR) ---
+#==========================   ФИКС V2900.0: СВЕРХБЫСТРЫЙ REST-ЗАПРОС ЦЕНЫ СПОТА БИHАНСА ДЛЯ ШИЛДА =======
+#==========================   ФИКС V2970.0: ТОТАЛЬНАЯ КАНOНИЧEСКAЯ ОЧИСТКА ТИКЕРА СПОТА ============
+        try:
+#==========================   ФИКС V3020.0: СВЕРХБЕЗОПАСНЫЙ МОНОЛИТНЫЙ КОНТУР РАСЧЕТА ЦЕНЫ СПОТА ===
+            # Вырезаем базовый тикер. Если это копеечный мем — убираем 1000 и сносим слэш для спота Бинанса!
+            raw_base_id = str(symbol).split(':')[0].upper()
+            if any(m in raw_base_id for m in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI']):
+                spot_clean = raw_base_id.replace('1000', '').replace('/', '')
+            else:
+                spot_clean = raw_base_id
+
+            # Наносекундно выдергиваем живой спот из REST API Бинанса strictly в момент сигнала по ВСЕМ монетам!
+            spot_data = await exchange.fetch_ticker(spot_clean)
+
+            # Прямая, защищенная от NoneType и NameError десериализация цены спота
+            if spot_data and spot_data.get('last') is not None:
+                spot_price = float(spot_data.get('last'))
+#==========================   ФИКС V3050.0: МАТЕМАТИЧЕСКОЕ ВЫРАВНИВАНИЕ МАСШТАБОВ ЦЕН МЕМОВ X1000 ======
+                # Если пара является фьючерсным мемом группы 1000 — восстанавливаем масштаб спота для верного базиса!
+                if any(m in raw_base_id for m in ['1000PEPE', '1000SHIB', '1000BONK', '1000FLOKI']):
+                    spot_price = spot_price * 1000.0
+            else:
+                spot_price = float(cur_p)
+#---------------------------
+            if spot_price > 0:
+                basis_pct = abs(cur_p / spot_price - 1.0) * 100.0
+                if basis_pct >= 0.25:
+                    #log(f"🛑 [SPOOFING SHIELD V2900.0]: Отмена по {symbol}! Фьючерс оторвался от Спота! Базис: {round(basis_pct, 3)}% >= 0.25%")
+                    return None, last_beacon_t
+        except Exception as spot_api_err:
+            log(f"🛑 [КРАШ SPOOFING SHIELD V2900.0]: Ошибка: {spot_api_err}")
+            pass
+
+#==========================   ФИКС V3360.0: ТОЧНЫЙ ЗАБОР ИНДЕКСОВ ОБЪЕМОВ ЗАКРЫТЫХ СВЕЧЕЙ BTC/ALTS =======
+        try:
+            # Забираем шестой элемент (индекс 5) из закрытых массивов ОЗУ, полностью уничтожая TypeError!
+            v_now = float(df[-2][5]) if (df and len(df) >= 2) else 0
+            v_p1 = float(df[-3][5]) if (df and len(df) >= 3) else 1
+
+            if v_now < (v_p1 * 1.25):
+                #log(f"🚫 [VOLUME DELTA SHIELD V3360.0]: Отмена по {symbol}! Пустой сквиз ММ без реальных торгов: v_now={round(v_now,1)} < v_p1*2.5={round(v_p1*2.5,1)}")
+                return None, last_beacon_t
+        except Exception as vol_shield_crash:
+            log(f"🚨 [КРАШ VOLUME DELTA SHIELD V3360.0] по {symbol}: Ошибка чтения ОЗУ-массива свечей: {vol_shield_crash}")
+            return None, last_beacon_t
+#---------------------------------
+#---------------------------------
+        # --- КОНТУР 2: СВЕРХСКОРОСТНОЙ ШЛЮЗ ПЛОТНОСТИ ОЗУ (СПРЕД МАРКЕТ-МЕЙКЕРОВ ПО СЫРОМУ TICKER КЛЮЧУ) ---
+        # Запрашиваем Bid/Ask строго по полному сырому ключу symbol, который гарантированно наполняется сокетами!
+#        bid = float(memory.prices.get(f"{clean_symbol}USDT_bid", 0))
+#        ask = float(memory.prices.get(f"{clean_symbol}USDT_ask", 0))
+
+        # ВРЕМЕННЫЙ ЖИВОЙ ДЕБАГ В КОНСОЛЬ - УБЕРИ КОММЕНТ ЕСЛИ НУЖНО
+#        current_ts2 = int(time.time())
+#        if current_ts2 % 300 == 0 and current_ts2 != last_debug_ts2:
+#            last_debug_ts2 = current_ts2
+#            log(f"📍 [ДЕБАГ СПРЕДА {symbol}]: bid={bid} | ask={ask} | cur_p={cur_p}")
+
+#        if bid > 0 and ask > 0:
+#            spread_pct = abs(ask / bid - 1.0) * 100.0
+#            if spread_pct >= 0.40:
+#                log(f"🧹 [DELTA DEPTH SHIELD]: Отмена по {symbol}! Воздушная яма спреда: {round(spr ead_pct, 3)}% >= 0.4%")
+#                return None, last_beacon_t
+
+        # --- ЭТАП 1: Оценка накопления и сжатия пружины (Ленты Боллинджера) ---
+#==========================   ФИКС V770.0: ЧЕСТНЫЙ МАТЕМАТИЧЕСКИЙ РАСЧЕТ ШИРИНЫ ИЗ ОЗУ-СПИСКА ===
+#==========================   ПРАВКА V850.0: АДАПТИВНЫЙ ФИЛЬТР ВОЛАТИЛЬНОСТИ ПО ШИРИНЕ BB =======
+        # Рассчитываем честную текущую ширину Боллинджера по последним 20 сокет-свечам из списка Close (индекс 4)
+        try:
+            recent_closes = [float(b[4]) for b in df[-20:]]
+            sma_20 = sum(recent_closes) / len(recent_closes)
+            variance = sum((x - sma_20) ** 2 for x in recent_closes) / len(recent_closes)
+            std_dev = variance ** 0.5
+            bb_upper = sma_20 + (2 * std_dev)
+            bb_lower = sma_20 - (2 * std_dev)
+            w_growth = (bb_upper - bb_lower) / bb_lower if bb_lower > 0 else 0.035
+        except:
+            w_growth = 0.0
+
+#        if w_growth >= float(dna.get('w_grow', 0.035)):
+#            return None, last_beacon_t
+        # Динамические макро-пороги сжатия пружины Боллинджера перед взрывом импульса
+        # Мемы требуют больше воздуха, Тех-драйверы обязаны быть жестко зажаты во флэт!
+        max_bb_allowed = 0.0550 if is_meme else (0.0240 if is_tech else 0.0160)
+
+        # Если канал шире адаптивного порога — монета уже находится в фазе мясорубки, отмена!
+        if w_growth >= max_bb_allowed:
+            # log(f"💤 [BB_WIDTH OVERHEAT]: Отмена по {clean_symbol}. Канал расширен: {round(w_growth*100,2)}% >= {round(max_bb_allowed*100,2)}%")
+            return None, last_beacon_t
+
+        # Жесткие HFT-пороги минимальной волатильности по классам ДНК для отсечки ночного мертвого флэта
+        min_required_volatility = 0.0080 if is_meme else (0.0035 if is_tech else 0.0020)
+
+        # Если рынок спит и ширина канала Боллинджера меньше порога — наглухо блокируем ложные входы!
+        if w_growth < min_required_volatility:
+            # log(f"💤 [FLAT DROP V850.0]: Отмена по {clean_symbol}. Рынок спит: {round(w_growth*100,3)}% < {min_required_volatility*100}%")
+            return None, last_beacon_t
+#---------------------------------
+
+        # --- ЭТАП 2: Твой оригинальный тумблер двух скоростей (G1 / G2) — Взлет Ракеты! ---
+        open_p = float(last_bar[1]) # Индекс 1 — это цена Open минутного баре
+        change = abs(cur_p / open_p - 1)
+        gear = None
+
+        if 'g2' in dna and change >= float(dna['g2'].get('speed', 0.0120)):
+            gear = 'g2'
+#==========================   ФИКС V1010.0: РАЗЖАТИЕ МЕМЕ-ШЛЮЗОВ СКОРОСТИ G1 ПО КЛАССАМ ДНК =======
+        elif 'g1' in dna:
+            import datetime
+            is_weekend = datetime.datetime.now().weekday() in [5, 6]
+
+            # Разделяем пороги: Мемы требуют большего импульса, чтобы отсечь сокетный шум!
+            if is_meme:
+                speed_threshold = 0.0045 if is_weekend else 0.0075
+            else:
+                speed_threshold = 0.0025 if is_weekend else float(dna['g1'].get('speed', 0.0040))
+
+            if change >= speed_threshold:
+                gear = 'g1'
+#-----------------------------------
+#==========================   ФИКС V825.0: ТОЧКА №1 — АДАПТИВНАЯ СКОРОСТЬ КЛАССА G1 ПОД ВЫХОДНЫЕ ===
+#        elif 'g1' in dna:
+#            import datetime
+#            # На лету определяем день недели в ОЗУ: 5 — Суббота, 6 — Воскресенье
+#            is_weekend = datetime.datetime.now().weekday() in [5, 6]
+#            speed_threshold = 0.0025 if is_weekend else float(dna['g1'].get('speed', 0.0040))
+
+#            if change >= speed_threshold:
+#                gear = 'g1'
+#----------------------------------
+
+#        elif 'g1' in dna and change >= float(dna['g1'].get('speed', 0.0040)):
+#            gear = 'g1'
+
+        if not gear:
+            # log(f"⏱️ [SPEED BLOCK]: {symbol} не пробил скорость. Текущая: {round(change*100,3)}%")
+            return None, last_beacon_t
+
+        gd = dna.get(gear, {})
+
+        # --- ЭТАП 3: Фильтр 3-минутного накопительного объема (Топливо ракеты) ---
+        v_now = float(df[-1][5]) # Индекс 5 — это объем Volume
+        v_p1 = float(df[-2][5])
+        v_p2 = float(df[-3][5])
+        if v_now < v_p1 and v_p1 < v_p2:
+            #log(f"🔍 [VOLUME SHIELD]: Отмена по {symbol}! Вялый закисающий импульс объема. v_now={v_now} < v_p1={v_p1}")
+            return None, last_beacon_t
+
+        # --- ЭТАП 4: Определение направления (Куда летим?) ---
+        trade_side = 'buy' if cur_p > open_p else 'sell'
+        is_buy_candidate = (trade_side == 'buy')
+        is_sell_candidate = (trade_side == 'sell')
+#==========================   ФИКС V1650.5: ТОЧКА №2 — КВАНТОВЫЙ ВЕКТОРНЫЙ РАДАР (15S MOMENTUM) ===
+        try:
+            btc_cur = float(memory.prices.get('BTC/USDT:USDT', 0))
+            if btc_cur > 0 and hasattr(memory, 'btc_buffer_15s') and memory.btc_buffer_15s:
+                # Извлекаем цену Биткоина ровно 15 секунд назад из начала буфера
+                btc_15s_ago = float(memory.btc_buffer_15s[0][1])
+                btc_momentum = btc_cur - btc_15s_ago
+
+                # Берем индекс [5] — чистый объем минутного бара, полностью выжигая TypeError!
+                is_alpha_volume = float(df[-1][5]) > (float(df[-2][5]) * 3.5) if len(df) >= 2 else False
+#--------------------------------------
+#==========================   ФИКС V2000.0: ПЕРЕВОД ВЕКТОРОВ НА СТАНДАРТ ЧИСТЫХ ПРОЦЕНТОВ ХОДА ==========
+                # Переводим обе дельты в проценты изменения цены, полностью выжигая коллизию масштабов!
+                alts_minute_pct = (cur_p / open_p - 1.0) * 100.0 if open_p > 0 else 0
+                btc_open_val = float(memory.prices.get('BTC_OPEN', btc_cur))
+                btc_minute_pct = (btc_cur / btc_open_val - 1.0) * 100.0 if btc_open_val > 0 else 0
+
+                # Блокируем ШОРТ, если Биткоин падает более чем на -0.03%, а альта при этом прет в плюс!
+                if is_sell_candidate and (btc_minute_pct < -0.03) and (alts_minute_pct > 0.005):
+                    log(f"🚫 [ALTS STRENGTH Shield V2000.0]: Отмена SELL по {symbol}. Монета сильнее падающего BTC: {round(alts_minute_pct,3)}% vs {round(btc_minute_pct,3)}%")
+                    return None, last_beacon_t
+
+                # Блокируем ЛОНГ, если Биткоин прет вверх более чем на +0.03%, а альта при этом льется в минус!
+                if is_buy_candidate and (btc_minute_pct > 0.03) and (alts_minute_pct < -0.005):
+                    log(f"🚫 [ALTS WEAKNESS Shield V2000.0]: Отмена BUY по {symbol}. Монета слабее растущего BTC: {round(alts_minute_pct,3)}% vs {round(btc_minute_pct,3)}%")
+                    return None, last_beacon_t
+#--------------------------------
+#==========================   ФИКС V1730.0: КВАНТОВЫЙ ЩИТ СВЕЧНОГО ПОГЛОЩЕНИЯ BTC (ENGULFING BARRIER) ===
+                # Вытягиваем из ОЗУ-массива Биткоина предыдущую закрытую минутную свечу
+                btc_candles = memory.candles.get('BTC/USDT:USDT')
+                prev_btc_bar = btc_candles[-2] if btc_candles and len(btc_candles) >= 2 else None
+                prev_btc_high = float(prev_btc_bar[2]) if prev_btc_bar else btc_cur
+                prev_btc_low = float(prev_btc_bar[3]) if prev_btc_bar else btc_cur
+
+                # Блокируем ЛОНГ, если Биткоин льется за 15с И при этом текущая цена пробила ЛОУ предыдущей закрытой свечи Биткоина
+                if is_buy_candidate and (btc_momentum < -35.0) and (btc_cur < prev_btc_low) and not is_alpha_volume:
+                    #log(f"🚫 [BTC ENGULF-L V1730.0]: Отмена BUY по {symbol}. Истинное поглощение лоу BTC: {btc_cur} < {prev_btc_low}")
+                    return None, last_beacon_t
+
+                # Блокируем ШОРТ, если Биткоин прет вверх за 15с И при этом текущая цена пробила ХАЙ предыдущей закрытой свечи Биткоина
+                if is_sell_candidate and (btc_momentum > 35.0) and (btc_cur > prev_btc_high) and not is_alpha_volume:
+                    #log(f"🚫 [BTC ENGULF-S V1730.0]: Отмена SELL по {symbol}. Истинное поглощение хай BTC: {btc_cur} > {prev_btc_high}")
+                    return None, last_beacon_t
+#--------------------------------
+        except Exception as btc_shield_err:
+            log(f"🚨 [КРАШ ВЕКТОРНОГО РАДАРА]: {btc_shield_err}")
+#---------------------------------
+        # --- ЭТАП 5: Канонический Пре-Свечной Каскадный Нож (Защита от излета тренда) ---
+        bar_1 = df[-2]
+        bar_2 = df[-3]
+        bar_3 = df[-4]
+        is_3_green = (float(bar_1[4]) > float(bar_1[1])) and (float(bar_2[4]) > float(bar_2[1])) and (float(bar_3[4]) > float(bar_3[1]))
+        is_3_red = (float(bar_1[4]) < float(bar_1[1])) and (float(bar_2[4]) < float(bar_2[1])) and (float(bar_3[4]) < float(bar_3[1]))
+
+        if is_buy_candidate and is_3_red:
+            #log(f"🚫 [CANDLE SHIELD]: Падающий нож по {symbol}. Запрет ЛОНГА.")
+            return None, last_beacon_t
+        if is_sell_candidate and is_3_green:
+            #log(f"🚫 [CANDLE SHIELD]: Растущая ракета по {symbol}. Запрет ШОРТА.")
+            return None, last_beacon_t
+#==========================   ПРАВКА V790.0: ИНДЕКСНЫЙ ВОЗВРАТ КУПОЛА TREND ALTITUDE SHIELD ===
+        # Вычисляем истинную скользящую среднюю ma20 на лету по 20 последним Close-ценам списка (индекс 4)
+        try:
+            recent_closes = [float(b[4]) for b in df[-20:]]
+            ma20 = sum(recent_closes) / len(recent_closes)
+            current_altitude = abs(cur_p / ma20 - 1.0)
+
+            # Динамические лимиты отрыва по классам твоей ДНК
+            max_altitude = 0.0350 if is_meme else (0.0140 if is_tech else 0.0080)
+
+            if current_altitude > max_altitude:
+                #log(f"🚫 [ALTITUDE SHIELD V790.0]: {clean_symbol} перегрет! Отрыв {round(current_altitude*100,2)}% > {round(max_altitude*100,2)}%")
+                return None, last_beacon_t
+        except Exception as altitude_crash_err:
+            log(f"🚨 [КРАШ ФИЛЬТРА ALTITUDE]: {altitude_crash_err}")
+#------------------------------------
+
+        # --- АДАПТИВНЫЙ КОМПЕНСАТОР СЕТЕВОГО ЛАГА БИHАHСА (РАСЧЕТ ТАРГЕТ-ЦЕНЫ) ---
+        rebound_pct = 0.0048 if is_meme else (0.0024 if is_tech else 0.0012)
+        target_price = cur_p * (1.0 - rebound_pct) if is_buy_candidate else cur_p * (1.0 + rebound_pct)
+        target_price = float(exchange.price_to_precision(symbol, target_price))
+        sig_gear = 'LIMIT'
+
+        # БOЕВОЙ СИГHАЛ
+        #log(f"🚀 🔥 [ИМПУЛЬСНЫЙ СИГНАЛ {gear.upper()}]: {symbol} | Side: {trade_side.upper()} | Speed: {round(change*100,2)}% | BB: {round(w_growth*100,2)}%")
+
+        payload = {
+            'symbol': symbol, 'side': trade_side,
+            'price': target_price, 'gear_type': sig_gear,
+            'actual_price': cur_p,
+            'gear': gear, 'gear_data': gd, 'dna': dna
+        }
+        return payload, int(time.time() * 1000)
+
+    except Exception as signal_crash_err:
+        log(f"🚨 [КРИТ_КРАШ СКАHЕРА check_signal] по {symbol}: {signal_crash_err}")
+        return None, last_beacon_t
