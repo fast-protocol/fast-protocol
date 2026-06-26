@@ -1,0 +1,105 @@
+SYMBOL, BTC_SYMBOL = '1000PEPEUSDT', 'BTCUSDT'
+LEVERAGE, RISK_PERCENT = 10, 0.98
+STEP_MULT, OFFSET = 1.5, 0.0005
+TAKE_PROFIT_BASE, STOP_LOSS_PCT = 0.008, 0.07
+
+exchange = ccxt.bybit({
+    'apiKey': API_KEY, 'secret': SECRET_KEY,
+    'options': {'defaultType': 'future'}, 'timeout': 30000
+})
+
+def log_to_file(msg):
+    with open("trading_log.txt", "a") as f:
+        f.write(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {msg}\n")
+    print(msg)
+
+be_triggered = False
+
+def run_bot():
+    global be_triggered
+    log_to_file(f"🚀 Снайпер V4.1.7 [SUPREME] запущен! БАЛАНС ОБНОВЛЕН.")
+    stop_count = 0
+    balance, last_bal_check = 0.0, 0.0
+
+    while True:
+        try:
+            # 1. СЫРОЙ БАЛАНС
+            if time.time() - last_bal_check > 600 or balance == 0:
+                r_bal = exchange.private_get_v5_account_wallet_balance({'accountType': 'UNIFIED', 'coin': 'USDT'})
+                balance = float(r_bal['result']['list'][0]['coin'][0]['walletBalance'])
+                last_bal_check = time.time()
+
+            # 2. СЫРАЯ ЦЕНА
+            r_tick = exchange.public_get_v5_market_tickers({'category': 'linear', 'symbol': SYMBOL.replace('/', '')})
+            price = float(r_tick['result']['list'][0]['lastPrice'])
+
+            # 3. СЫРЫЕ СВЕЧИ (ТА)
+            r_klines = exchange.public_get_v5_market_kline({'category': 'linear', 'symbol': SYMBOL.replace('/', ''), 'interval': '1', 'limit': '110'})
+            df = pd.DataFrame(r_klines['result']['list'][::-1], columns=['t', 'o', 'h', 'l', 'c', 'v', 'tr'])
+            df['c'] = pd.to_numeric(df['c'], errors='coerce').astype(float)
+
+            ma_100 = df['c'].rolling(100).mean().iloc[-1]
+            ma_20, std = df['c'].rolling(20).mean().iloc[-1], df['c'].rolling(20).std().iloc[-1]
+            curr_step = float(STEP_MULT if stop_count == 0 else 3.0)
+            upper = ma_20 + (std * 2 * curr_step) * (1 + OFFSET)
+            lower = ma_20 - (std * 2 * curr_step) * (1 - OFFSET)
+
+            # 4. СЫРАЯ ПОЗИЦИЯ
+            r_pos = exchange.private_get_v5_position_list({'category': 'linear', 'symbol': SYMBOL.replace('/', '')})
+            my_pos = next((p for p in r_pos['result']['list'] if float(p['size']) > 0), None)
+
+            if my_pos:
+                size, entry, side = float(my_pos['size']), float(my_pos['avgPrice']), my_pos['side']
+                profit = (price/entry-1) if side == 'Buy' else (entry/price-1)
+
+                if profit >= 0.004 and not be_triggered:
+                    log_to_file("🛡️ БЕЗУБЫТК АКТИВИРОВАН"); be_triggered = True
+
+                tp = 0.015 if (side == 'Buy' and price > ma_100) else TAKE_PROFIT_BASE
+                if side == 'Sell' and price < ma_100: tp = 0.012
+
+                is_take = profit >= tp
+                is_be = be_triggered and (price <= entry if side == 'Buy' else price >= entry)
+                is_sl = profit <= -STOP_LOSS_PCT
+
+                if is_take or is_be or is_sl:
+                    exchange.private_post_v5_order_create({
+                        'category': 'linear', 'symbol': SYMBOL.replace('/', ''),
+                        'side': 'Sell' if side == 'Buy' else 'Buy',
+                        'orderType': 'Market', 'qty': str(size), 'reduceOnly': True
+                    })
+                    msg = "💰 ТЕЙК" if is_take else ("🛡️ БЕЗУБЫТОК" if is_be else "🛡️ СТОП")
+                    log_to_file(f"{msg}! Закрыто по {price}")
+
+                    # МГНОВЕННОЕ ОБНУЛЕНИЕ (ФИКС ФАНТОМНОЙ ПОЗЫ)
+                    my_pos = None
+                    size = 0
+                    be_triggered, stop_count = False, (0 if is_take or is_be else stop_count + 1)
+
+                    # Принудительное обновление баланса после сделки
+                    r_bal = exchange.private_get_v5_account_wallet_balance({'accountType': 'UNIFIED', 'coin': 'USDT'})
+                    balance = float(r_bal['result']['list'][0]['coin'][0]['walletBalance'])
+                    log_to_file(f"💵 Новый баланс: {balance}$")
+
+                sleep_time = 10 if profit >= 0.004 else 20
+            else:
+                be_triggered = False
+                amount = int((balance * RISK_PERCENT * LEVERAGE) / price)
+
+                if price >= upper or price <= lower:
+                    side_in = 'Sell' if price >= upper else 'Buy'
+                    exchange.private_post_v5_order_create({
+                        'category': 'linear', 'symbol': SYMBOL.replace('/', ''),
+                        'side': side_in, 'orderType': 'Market', 'qty': str(amount)
+                    })
+                    log_to_file(f"🎯 ВХОД {side_in} по {price}")
+                sleep_time = 30
+
+            print(f"📊 PEPE: {price} | Поза: {size if my_pos else 0} | Б/У: {'ВКЛ' if be_triggered else 'ВЫКЛ'} | Пауза: {sleep_time}с")
+            time.sleep(sleep_time + random.randint(1, 3))
+
+        except Exception as e:
+            log_to_file(f"⚠️ RAW CRITICAL: {e}"); time.sleep(15)
+
+if __name__ == "__main__":
+    run_bot()
